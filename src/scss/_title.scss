@@ -1,0 +1,16 @@
+.viewer-title {
+  display: inline-block;
+  max-width: 90%;
+  margin: 0 5% 5px;
+  color: $color-grey;
+  font-size: 12px;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @include opacity(.8);
+
+  &:hover {
+    @include opacity(1);
+  }
+}

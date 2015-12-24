@@ -1,0 +1,17 @@
+.viewer-button {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  @include bg-color($color-black, .5);
+
+  &:before {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+  }
+}

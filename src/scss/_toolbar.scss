@@ -1,0 +1,39 @@
+.viewer-toolbar {
+  width: 280px;
+  margin: 0 auto 5px;
+  padding: 3px 0;
+  overflow: hidden;
+
+  > li {
+    float: left;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    @include bg-color($color-black, .5);
+
+    &:hover {
+      @include bg-color($color-black, .8);
+    }
+
+    &:before {
+      margin: 2px;
+    }
+
+    + li {
+      margin-left: 1px;
+    }
+  }
+
+  > .viewer-play {
+    width: 30px;
+    height: 30px;
+    margin-top: -3px;
+    margin-bottom: -3px;
+
+    &:before {
+      margin: 5px;
+    }
+  }
+}

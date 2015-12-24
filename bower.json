@@ -1,0 +1,43 @@
+{
+  "name": "viewerjs",
+  "description": "JavaScript image viewer.",
+  "main": [
+    "dist/viewer.js",
+    "dist/viewer.css"
+  ],
+  "keywords": [
+    "image",
+    "view",
+    "viewer",
+    "viewerjs",
+    "viewer.js",
+    "html",
+    "css",
+    "javascript",
+    "front-end",
+    "web",
+    "component",
+    "development"
+  ],
+  "homepage": "https://github.com/fengyuanchen/viewer",
+  "authors": [
+    "Fengyuan Chen"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "test",
+    "assets",
+    "demo",
+    "docs",
+    "gulpfile.js",
+    "CONTRIBUTING.md"
+  ],
+  "devDependencies": {
+    "jquery": "~1.11.3",
+    "bootstrap": "~3.3.6"
+  }
+}

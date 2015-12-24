@@ -1,0 +1,33 @@
+.viewer-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+  direction: ltr !important; // Ignore global rtl
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  @include bg-color($color-black, .5);
+
+  &::selection,
+  *::selection {
+    background-color: transparent;
+  }
+
+  img {
+    // Avoid margin top issue (Occur only when margin-top <= -height)
+    display: block;
+
+    width: 100%;
+    height: auto;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+}

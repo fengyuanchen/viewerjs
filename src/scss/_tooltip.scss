@@ -1,0 +1,16 @@
+.viewer-tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 20px;
+  display: none;
+  margin-top: -10px;
+  margin-left: -25px;
+  border-radius: 10px;
+  text-align: center;
+  color: $color-white;
+  font-size: 12px;
+  line-height: 20px;
+  @include bg-color($color-black, 0.8);
+}

@@ -1,0 +1,44 @@
+// Helper classes for JavaScript
+// =========================
+
+.viewer-fixed {
+  position: fixed;
+}
+
+.viewer-open {
+  overflow: hidden;
+}
+
+.viewer-show {
+  display: block;
+}
+
+.viewer-hide {
+  display: none;
+}
+
+.viewer-invisible {
+  visibility: hidden;
+}
+
+.viewer-toggle {
+  cursor: pointer;
+  cursor: zoom-in;
+}
+
+.viewer-move {
+  cursor: move;
+  cursor: grab;
+}
+
+.viewer-fade {
+  @include opacity(0);
+}
+
+.viewer-in {
+  @include opacity(1);
+}
+
+.viewer-transition {
+  transition: all .3s ease-out;
+}
