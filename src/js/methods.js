@@ -138,6 +138,7 @@
         // Make the image visible if it fails to load within 1s
         _this.timeout = setTimeout(function () {
           removeClass(image, CLASS_INVISIBLE);
+          _this.timeout = false;
         }, 1000);
       }
 
