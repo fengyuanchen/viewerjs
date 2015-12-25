@@ -45,18 +45,13 @@
   }
 
   function toArray(obj, offset) {
-    var args = [];
+    offset = offset >= 0 ? offset : 0;
 
     if (Array.from) {
-      return Array.from(obj).slice(offset || 0);
+      return Array.from(obj).slice(offset);
     }
 
-    // This is necessary for IE8
-    if (isNumber(offset)) {
-      args.push(offset);
-    }
-
-    return args.slice.apply(obj, args);
+    return slice.call(obj, offset);
   }
 
   function inArray(value, arr) {
