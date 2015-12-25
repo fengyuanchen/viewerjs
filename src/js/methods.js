@@ -27,7 +27,7 @@
       removeClass(viewer, CLASS_HIDE);
 
       addListener(element, EVENT_SHOWN, function () {
-        _this.view((_this.target ? inArray(_this.target, toArray(_this.images)) : 0) || _this.index);
+        _this.view(_this.target ? inArray(_this.target, toArray(_this.images)) : _this.index);
         _this.target = false;
       }, true);
 
