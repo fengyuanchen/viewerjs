@@ -331,6 +331,37 @@
     return e;
   }
 
+  function getOffset(element) {
+    var doc = document.documentElement;
+    var box = element.getBoundingClientRect();
+
+    return {
+      left: box.left + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0),
+      top: box.top + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0)
+    };
+  }
+
+  function getTouchesCenter(touches) {
+    var length = touches.length;
+    var pageX = 0;
+    var pageY = 0;
+
+    if (length) {
+      each(touches, function (touch) {
+        pageX += touch.pageX;
+        pageY += touch.pageY;
+      });
+
+      pageX /= length;
+      pageY /= length;
+    }
+
+    return {
+      pageX: pageX,
+      pageY: pageY
+    };
+  }
+
   function getByTag(element, tagName, index) {
     var elements = element.getElementsByTagName(tagName);
 

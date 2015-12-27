@@ -213,7 +213,7 @@
         delta = e.detail > 0 ? 1 : -1;
       }
 
-      _this.zoom(-delta * ratio, true);
+      _this.zoom(-delta * ratio, true, e);
     },
 
     keydown: function (event) {
@@ -384,7 +384,7 @@
         _this.endX = touch ? touch.pageX : e.pageX;
         _this.endY = touch ? touch.pageY : e.pageY;
 
-        _this.change();
+        _this.change(e);
       }
     },
 

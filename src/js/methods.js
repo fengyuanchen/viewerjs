@@ -70,7 +70,7 @@
           addListener(viewer, EVENT_TRANSITIONEND, proxy(_this.hidden, _this), true);
           removeClass(viewer, CLASS_IN);
         }, true);
-        _this.zoomTo(0, false, true);
+        _this.zoomTo(0, false, false, true);
       } else {
         removeClass(viewer, CLASS_IN);
         _this.hidden();
@@ -238,8 +238,9 @@
      *
      * @param {Number} ratio
      * @param {Boolean} hasTooltip (optional)
+     * @param {Event} _originalEvent (private)
      */
-    zoom: function (ratio, hasTooltip) {
+    zoom: function (ratio, hasTooltip, _originalEvent) {
       var _this = this;
       var imageData = _this.imageData;
 
@@ -251,7 +252,7 @@
         ratio = 1 + ratio;
       }
 
-      _this.zoomTo(imageData.width * ratio / imageData.naturalWidth, hasTooltip);
+      _this.zoomTo(imageData.width * ratio / imageData.naturalWidth, hasTooltip, _originalEvent);
 
       return _this;
     },
@@ -261,9 +262,10 @@
      *
      * @param {Number} ratio
      * @param {Boolean} hasTooltip (optional)
+     * @param {Event} _originalEvent (private)
      * @param {Boolean} _zoomable (private)
      */
-    zoomTo: function (ratio, hasTooltip, _zoomable) {
+    zoomTo: function (ratio, hasTooltip, _originalEvent, _zoomable) {
       var _this = this;
       var options = _this.options;
       var minZoomRatio = 0.01;
@@ -271,6 +273,8 @@
       var imageData = _this.imageData;
       var newWidth;
       var newHeight;
+      var offset;
+      var center;
 
       ratio = max(0, ratio);
 
@@ -287,8 +291,28 @@
 
         newWidth = imageData.naturalWidth * ratio;
         newHeight = imageData.naturalHeight * ratio;
-        imageData.left -= (newWidth - imageData.width) / 2;
-        imageData.top -= (newHeight - imageData.height) / 2;
+
+        if (_originalEvent) {
+          offset = getOffset(_this.viewer);
+          center = _originalEvent.touches ? getTouchesCenter(_originalEvent.touches) : {
+            pageX: _originalEvent.pageX,
+            pageY: _originalEvent.pageY
+          };
+
+          // Zoom from the triggering point of the event
+          imageData.left -= (newWidth - imageData.width) * (
+            ((center.pageX - offset.left) - imageData.left) / imageData.width
+          );
+          imageData.top -= (newHeight - imageData.height) * (
+            ((center.pageY - offset.top) - imageData.top) / imageData.height
+          );
+        } else {
+
+          // Zoom from the center of the image
+          imageData.left -= (newWidth - imageData.width) / 2;
+          imageData.top -= (newHeight - imageData.height) / 2;
+        }
+
         imageData.width = newWidth;
         imageData.height = newHeight;
         imageData.ratio = ratio;
