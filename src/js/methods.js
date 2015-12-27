@@ -648,9 +648,9 @@
       var _this = this;
 
       if (_this.imageData.ratio === 1) {
-        _this.zoomTo(_this.initialImageData.ratio);
+        _this.zoomTo(_this.initialImageData.ratio, true);
       } else {
-        _this.zoomTo(1);
+        _this.zoomTo(1, true);
       }
 
       return _this;
