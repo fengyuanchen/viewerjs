@@ -47,12 +47,7 @@
           break;
 
         case 'one-to-one':
-          if (imageData.ratio === 1) {
-            _this.zoomTo(_this.initialImageData.ratio);
-          } else {
-            _this.zoomTo(1);
-          }
-
+          _this.toggle();
           break;
 
         case 'reset':
@@ -287,13 +282,8 @@
         // Zoom in to natural size (Key: Ctrl + 1)
         case 49:
           if (e.ctrlKey || e.shiftKey) {
-            e.preventDefault();
-
-            if (_this.imageData.ratio === 1) {
-              _this.zoomTo(_this.initialImageData.ratio);
-            } else {
-              _this.zoomTo(1);
-            }
+            preventDefault(e);
+            _this.toggle();
           }
 
           break;
