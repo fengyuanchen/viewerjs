@@ -19,16 +19,16 @@
       template.innerHTML = Viewer.TEMPLATE;
 
       _this.parent = parent = element.parentNode;
-      _this.viewer = viewer = getByClass(template, 'viewer-container', 0);
-      _this.canvas = getByClass(viewer, 'viewer-canvas', 0);
-      _this.footer = getByClass(viewer, 'viewer-footer', 0);
-      _this.title = title = getByClass(viewer, 'viewer-title', 0);
-      _this.toolbar = toolbar = getByClass(viewer, 'viewer-toolbar', 0);
-      _this.navbar = navbar = getByClass(viewer, 'viewer-navbar', 0);
-      _this.button = button = getByClass(viewer, 'viewer-button', 0);
-      _this.tooltipBox = getByClass(viewer, 'viewer-tooltip', 0);
-      _this.player = getByClass(viewer, 'viewer-player', 0);
-      _this.list = getByClass(viewer, 'viewer-list', 0);
+      _this.viewer = viewer = getByClass(template, 'viewer-container')[0];
+      _this.canvas = getByClass(viewer, 'viewer-canvas')[0];
+      _this.footer = getByClass(viewer, 'viewer-footer')[0];
+      _this.title = title = getByClass(viewer, 'viewer-title')[0];
+      _this.toolbar = toolbar = getByClass(viewer, 'viewer-toolbar')[0];
+      _this.navbar = navbar = getByClass(viewer, 'viewer-navbar')[0];
+      _this.button = button = getByClass(viewer, 'viewer-button')[0];
+      _this.tooltipBox = getByClass(viewer, 'viewer-tooltip')[0];
+      _this.player = getByClass(viewer, 'viewer-player')[0];
+      _this.list = getByClass(viewer, 'viewer-list')[0];
 
       toggleClass(title, CLASS_HIDE, !options.title);
       toggleClass(toolbar, CLASS_HIDE, !options.toolbar);
