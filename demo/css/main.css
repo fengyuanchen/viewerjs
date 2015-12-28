@@ -1,3 +1,19 @@
+/* Basic */
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.browserupgrade {
+  margin: 0;
+  padding: 5px 15px;
+  background-color: #ff851b;
+  color: #fff;
+  text-align: center;
+}
+
+
 /* Header */
 
 .docs-header {
