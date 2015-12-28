@@ -215,13 +215,13 @@
       var _this = this;
       var e = getEvent(event);
       var options = _this.options;
-      var which = e.which;
+      var key = e.keyCode || e.which || e.charCode;
 
       if (!_this.isFulled || !options.keyboard) {
         return;
       }
 
-      switch (which) {
+      switch (key) {
 
         // (Key: Esc)
         case 27:
