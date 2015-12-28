@@ -1,11 +1,11 @@
 /*!
- * Viewer v0.1.0
+ * Viewer v0.1.1
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2015-12-24T07:15:17.423Z
+ * Date: 2015-12-28T03:06:49.640Z
  */
 
 (function (global, factory) {
@@ -81,9 +81,10 @@
   var round = Math.round;
 
   // Utilities
-  var EMPTY_OBJECT = {};
-  var toString = EMPTY_OBJECT.toString;
-  var hasOwnProperty = EMPTY_OBJECT.hasOwnProperty;
+  var objectProto = Object.prototype;
+  var toString = objectProto.toString;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  var slice = Array.prototype.slice;
 
   function typeOf(obj) {
     return toString.call(obj).slice(8, -1).toLowerCase();
@@ -132,18 +133,13 @@
   }
 
   function toArray(obj, offset) {
-    var args = [];
+    offset = offset >= 0 ? offset : 0;
 
     if (Array.from) {
-      return Array.from(obj).slice(offset || 0);
+      return Array.from(obj).slice(offset);
     }
 
-    // This is necessary for IE8
-    if (isNumber(offset)) {
-      args.push(offset);
-    }
-
-    return args.slice.apply(obj, args);
+    return slice.call(obj, offset);
   }
 
   function inArray(value, arr) {
@@ -421,6 +417,37 @@
     }
 
     return e;
+  }
+
+  function getOffset(element) {
+    var doc = document.documentElement;
+    var box = element.getBoundingClientRect();
+
+    return {
+      left: box.left + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0),
+      top: box.top + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0)
+    };
+  }
+
+  function getTouchesCenter(touches) {
+    var length = touches.length;
+    var pageX = 0;
+    var pageY = 0;
+
+    if (length) {
+      each(touches, function (touch) {
+        pageX += touch.pageX;
+        pageY += touch.pageY;
+      });
+
+      pageX /= length;
+      pageY /= length;
+    }
+
+    return {
+      pageX: pageX,
+      pageY: pageY
+    };
   }
 
   function getByTag(element, tagName, index) {
@@ -1013,12 +1040,7 @@
           break;
 
         case 'one-to-one':
-          if (imageData.ratio === 1) {
-            _this.zoomTo(_this.initialImageData.ratio);
-          } else {
-            _this.zoomTo(1);
-          }
-
+          _this.toggle();
           break;
 
         case 'reset':
@@ -1179,7 +1201,7 @@
         delta = e.detail > 0 ? 1 : -1;
       }
 
-      _this.zoom(-delta * ratio, true);
+      _this.zoom(-delta * ratio, true, e);
     },
 
     keydown: function (event) {
@@ -1253,13 +1275,8 @@
         // Zoom in to natural size (Key: Ctrl + 1)
         case 49:
           if (e.ctrlKey || e.shiftKey) {
-            e.preventDefault();
-
-            if (_this.imageData.ratio === 1) {
-              _this.zoomTo(_this.initialImageData.ratio);
-            } else {
-              _this.zoomTo(1);
-            }
+            preventDefault(e);
+            _this.toggle();
           }
 
           break;
@@ -1350,7 +1367,7 @@
         _this.endX = touch ? touch.pageX : e.pageX;
         _this.endY = touch ? touch.pageY : e.pageY;
 
-        _this.change();
+        _this.change(e);
       }
     },
 
@@ -1399,7 +1416,7 @@
       removeClass(viewer, CLASS_HIDE);
 
       addListener(element, EVENT_SHOWN, function () {
-        _this.view((_this.target ? inArray(_this.target, toArray(_this.images)) : 0) || _this.index);
+        _this.view(_this.target ? inArray(_this.target, toArray(_this.images)) : _this.index);
         _this.target = false;
       }, true);
 
@@ -1442,7 +1459,7 @@
           addListener(viewer, EVENT_TRANSITIONEND, proxy(_this.hidden, _this), true);
           removeClass(viewer, CLASS_IN);
         }, true);
-        _this.zoomTo(0, false, true);
+        _this.zoomTo(0, false, false, true);
       } else {
         removeClass(viewer, CLASS_IN);
         _this.hidden();
@@ -1510,6 +1527,7 @@
         // Make the image visible if it fails to load within 1s
         _this.timeout = setTimeout(function () {
           removeClass(image, CLASS_INVISIBLE);
+          _this.timeout = false;
         }, 1000);
       }
 
@@ -1609,8 +1627,9 @@
      *
      * @param {Number} ratio
      * @param {Boolean} hasTooltip (optional)
+     * @param {Event} _originalEvent (private)
      */
-    zoom: function (ratio, hasTooltip) {
+    zoom: function (ratio, hasTooltip, _originalEvent) {
       var _this = this;
       var imageData = _this.imageData;
 
@@ -1622,7 +1641,7 @@
         ratio = 1 + ratio;
       }
 
-      _this.zoomTo(imageData.width * ratio / imageData.naturalWidth, hasTooltip);
+      _this.zoomTo(imageData.width * ratio / imageData.naturalWidth, hasTooltip, _originalEvent);
 
       return _this;
     },
@@ -1632,9 +1651,10 @@
      *
      * @param {Number} ratio
      * @param {Boolean} hasTooltip (optional)
+     * @param {Event} _originalEvent (private)
      * @param {Boolean} _zoomable (private)
      */
-    zoomTo: function (ratio, hasTooltip, _zoomable) {
+    zoomTo: function (ratio, hasTooltip, _originalEvent, _zoomable) {
       var _this = this;
       var options = _this.options;
       var minZoomRatio = 0.01;
@@ -1642,6 +1662,8 @@
       var imageData = _this.imageData;
       var newWidth;
       var newHeight;
+      var offset;
+      var center;
 
       ratio = max(0, ratio);
 
@@ -1658,8 +1680,28 @@
 
         newWidth = imageData.naturalWidth * ratio;
         newHeight = imageData.naturalHeight * ratio;
-        imageData.left -= (newWidth - imageData.width) / 2;
-        imageData.top -= (newHeight - imageData.height) / 2;
+
+        if (_originalEvent) {
+          offset = getOffset(_this.viewer);
+          center = _originalEvent.touches ? getTouchesCenter(_originalEvent.touches) : {
+            pageX: _originalEvent.pageX,
+            pageY: _originalEvent.pageY
+          };
+
+          // Zoom from the triggering point of the event
+          imageData.left -= (newWidth - imageData.width) * (
+            ((center.pageX - offset.left) - imageData.left) / imageData.width
+          );
+          imageData.top -= (newHeight - imageData.height) * (
+            ((center.pageY - offset.top) - imageData.top) / imageData.height
+          );
+        } else {
+
+          // Zoom from the center of the image
+          imageData.left -= (newWidth - imageData.width) / 2;
+          imageData.top -= (newHeight - imageData.height) / 2;
+        }
+
         imageData.width = newWidth;
         imageData.height = newHeight;
         imageData.ratio = ratio;
@@ -1995,9 +2037,9 @@
       var _this = this;
 
       if (_this.imageData.ratio === 1) {
-        _this.zoomTo(_this.initialImageData.ratio);
+        _this.zoomTo(_this.initialImageData.ratio, true);
       } else {
-        _this.zoomTo(1);
+        _this.zoomTo(1, true);
       }
 
       return _this;
@@ -2098,7 +2140,7 @@
       }
     },
 
-    change: function () {
+    change: function (originalEvent) {
       var _this = this;
       var offsetX = _this.endX - _this.startX;
       var offsetY = _this.endY - _this.startY;
@@ -2122,7 +2164,7 @@
             abs(_this.startY - _this.startY2),
             abs(_this.endX - _this.endX2),
             abs(_this.endY - _this.endY2)
-          ));
+          ), false, originalEvent);
 
           _this.startX2 = _this.endX2;
           _this.startY2 = _this.endY2;

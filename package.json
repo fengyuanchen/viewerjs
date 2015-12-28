@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/viewer.js",
   "license": "MIT",
   "repository": "fengyuanchen/viewerjs",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
-    "gulp-concat": "~2.6.0",
+    "gulp-concat": "^2.6.0",
     "gulp-csscomb": "^3.0.6",
     "gulp-csslint": "^0.2.0",
     "gulp-htmlcomb": "0.1.0",
@@ -39,7 +39,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^2.1.1",
-    "gulp-sourcemaps": "~1.6.0",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1"
   }
 }

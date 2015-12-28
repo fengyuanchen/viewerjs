@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.1.1 (Dec 28, 2015)
+
+- Supports to zoom from event triggering point.
+- Optimized "toggle" method.
+- Fixed a bug of the index of viewing image.
+
+
 ## 0.1.0 (Dec 24, 2015)
 
 - Supports 2 modes: "modal" (default), "inline"
