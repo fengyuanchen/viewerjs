@@ -116,7 +116,11 @@
       image.alt = alt;
 
       _this.image = image;
-      removeClass(_this.items[_this.index], CLASS_ACTIVE);
+
+      if (_this.isViewed) {
+        removeClass(_this.items[_this.index], CLASS_ACTIVE);
+      }
+
       addClass(item, CLASS_ACTIVE);
 
       _this.isViewed = false;
@@ -643,7 +647,7 @@
       return _this;
     },
 
-    // Toggle the image size between its natural size and initial size.
+    // Toggle the image size between its natural size and initial size
     toggle: function () {
       var _this = this;
 
@@ -656,13 +660,72 @@
       return _this;
     },
 
-    // Reset the image to its initial state.
+    // Reset the image to its initial state
     reset: function () {
       var _this = this;
 
       if (_this.isViewed && !_this.isPlayed) {
         _this.imageData = extend({}, _this.initialImageData);
         _this.renderImage();
+      }
+
+      return _this;
+    },
+
+    // Update viewer when images changed
+    update: function () {
+      var _this = this;
+      var indexes = [];
+      var index;
+
+      // Destroy viewer if the target image was deleted
+      if (_this.isImg && !_this.element.parentNode) {
+        return _this.destroy();
+      }
+
+      _this.length = _this.images.length;
+
+      if (_this.isBuilt) {
+        each(_this.items, function (item, i) {
+          var img = getByTag(item, 'img')[0];
+          var image = _this.images[i];
+
+          if (image) {
+            if (image.src !== img.src) {
+              indexes.push(i);
+            }
+          } else {
+            indexes.push(i);
+          }
+        });
+
+        setStyle(_this.list, {
+          width: 'auto'
+        });
+
+        _this.initList();
+
+        if (_this.isShown) {
+          if (_this.length) {
+            if (_this.isViewed) {
+              index = inArray(_this.index, indexes);
+
+              if (index >= 0) {
+                _this.isViewed = false;
+                _this.view(max(_this.index - (index + 1), 0));
+              } else {
+                addClass(_this.items[_this.index], CLASS_ACTIVE);
+              }
+            }
+          } else {
+            _this.image = null;
+            _this.isViewed = false;
+            _this.index = 0;
+            _this.imageData = null;
+            empty(_this.canvas);
+            empty(_this.title);
+          }
+        }
       }
 
       return _this;
