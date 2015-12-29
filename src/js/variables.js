@@ -5,7 +5,6 @@
   var NAMESPACE = 'viewer';
 
   // Classes
-  var CLASS_TOGGLE = NAMESPACE + '-toggle';
   var CLASS_FIXED = NAMESPACE + '-fixed';
   var CLASS_OPEN = NAMESPACE + '-open';
   var CLASS_SHOW = NAMESPACE + '-show';

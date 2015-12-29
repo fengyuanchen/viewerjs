@@ -52,7 +52,6 @@
           }
         });
       } else {
-        addClass(images, CLASS_TOGGLE);
         addListener(element, EVENT_CLICK, (_this._start = proxy(_this.start, _this)));
       }
     },

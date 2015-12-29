@@ -743,7 +743,6 @@
           _this.unbind();
         }
 
-        removeClass(_this.images, CLASS_TOGGLE);
         removeListener(element, EVENT_CLICK, _this._start);
       }
 

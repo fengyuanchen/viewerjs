@@ -3,7 +3,7 @@
       var e = getEvent(event);
       var target = e.target;
 
-      if (hasClass(target, CLASS_TOGGLE)) {
+      if (target.tagName.toLowerCase() === 'img') {
         _this.target = target;
         _this.show();
       }
