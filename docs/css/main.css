@@ -114,6 +114,8 @@ body {
 
 .docs-pictures > li > img {
   width: 100%;
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in;
 }
 
 .docs-toggles > .btn,
