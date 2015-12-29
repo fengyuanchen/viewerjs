@@ -75,11 +75,11 @@
           break;
 
         case 'flip-horizontal':
-          _this.scale(-imageData.scaleX || -1, imageData.scaleY || 1);
+          _this.scaleX(-imageData.scaleX || -1);
           break;
 
         case 'flip-vertical':
-          _this.scale(imageData.scaleX || 1, -imageData.scaleY || -1);
+          _this.scaleY(-imageData.scaleY || -1);
           break;
 
         default:
