@@ -2,7 +2,7 @@
 // ==================================================
 
 .viewer-title {
-  display: inline-block;
+  display: none;
   max-width: 90%;
   margin: 0 5% 5px;
   color: $color-grey;
@@ -15,5 +15,9 @@
 
   &:hover {
     @include opacity(1);
+  }
+
+  @media (min-width: $screen-sm) {
+    display: inline-block;
   }
 }

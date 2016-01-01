@@ -2,6 +2,7 @@
 // ==================================================
 
 .viewer-toolbar {
+  display: none;
   width: 280px;
   margin: 0 auto 5px;
   padding: 3px 0;
@@ -38,5 +39,9 @@
     &:before {
       margin: 5px;
     }
+  }
+
+  @media (min-width: $screen-sm) {
+    display: block;
   }
 }
