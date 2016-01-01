@@ -1,11 +1,11 @@
 /*!
- * Viewer v0.1.1
+ * Viewer.js v0.2.0
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) 2015 Fengyuan Chen
+ * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2015-12-28T03:06:49.640Z
+ * Date: 2016-01-01T04:42:55.928Z
  */
 
 (function (global, factory) {
@@ -31,7 +31,6 @@
   var NAMESPACE = 'viewer';
 
   // Classes
-  var CLASS_TOGGLE = NAMESPACE + '-toggle';
   var CLASS_FIXED = NAMESPACE + '-fixed';
   var CLASS_OPEN = NAMESPACE + '-open';
   var CLASS_SHOW = NAMESPACE + '-show';
@@ -226,7 +225,7 @@
     var style = element.style;
 
     each(styles, function (value, property) {
-      if (REGEXP_SUFFIX.test(property)) {
+      if (REGEXP_SUFFIX.test(property) && isNumber(value)) {
         value += 'px';
       }
 
@@ -450,18 +449,14 @@
     };
   }
 
-  function getByTag(element, tagName, index) {
-    var elements = element.getElementsByTagName(tagName);
-
-    return isNumber(index) ? elements[index] : elements;
+  function getByTag(element, tagName) {
+    return element.getElementsByTagName(tagName);
   }
 
-  function getByClass(element, className, index) {
-    var elements = element.getElementsByClassName ?
+  function getByClass(element, className) {
+    return element.getElementsByClassName ?
       element.getElementsByClassName(className) :
       element.querySelectorAll('.' + className);
-
-    return isNumber(index) ? elements[index] : elements;
   }
 
   function appendChild(element, elem) {
@@ -617,7 +612,6 @@
           }
         });
       } else {
-        addClass(images, CLASS_TOGGLE);
         addListener(element, EVENT_CLICK, (_this._start = proxy(_this.start, _this)));
       }
     },
@@ -653,16 +647,16 @@
       template.innerHTML = Viewer.TEMPLATE;
 
       _this.parent = parent = element.parentNode;
-      _this.viewer = viewer = getByClass(template, 'viewer-container', 0);
-      _this.canvas = getByClass(viewer, 'viewer-canvas', 0);
-      _this.footer = getByClass(viewer, 'viewer-footer', 0);
-      _this.title = title = getByClass(viewer, 'viewer-title', 0);
-      _this.toolbar = toolbar = getByClass(viewer, 'viewer-toolbar', 0);
-      _this.navbar = navbar = getByClass(viewer, 'viewer-navbar', 0);
-      _this.button = button = getByClass(viewer, 'viewer-button', 0);
-      _this.tooltipBox = getByClass(viewer, 'viewer-tooltip', 0);
-      _this.player = getByClass(viewer, 'viewer-player', 0);
-      _this.list = getByClass(viewer, 'viewer-list', 0);
+      _this.viewer = viewer = getByClass(template, 'viewer-container')[0];
+      _this.canvas = getByClass(viewer, 'viewer-canvas')[0];
+      _this.footer = getByClass(viewer, 'viewer-footer')[0];
+      _this.title = title = getByClass(viewer, 'viewer-title')[0];
+      _this.toolbar = toolbar = getByClass(viewer, 'viewer-toolbar')[0];
+      _this.navbar = navbar = getByClass(viewer, 'viewer-navbar')[0];
+      _this.button = button = getByClass(viewer, 'viewer-button')[0];
+      _this.tooltipBox = getByClass(viewer, 'viewer-tooltip')[0];
+      _this.player = getByClass(viewer, 'viewer-player')[0];
+      _this.list = getByClass(viewer, 'viewer-list')[0];
 
       toggleClass(title, CLASS_HIDE, !options.title);
       toggleClass(toolbar, CLASS_HIDE, !options.toolbar);
@@ -996,7 +990,7 @@
       var e = getEvent(event);
       var target = e.target;
 
-      if (hasClass(target, CLASS_TOGGLE)) {
+      if (target.tagName.toLowerCase() === 'img') {
         _this.target = target;
         _this.show();
       }
@@ -1068,11 +1062,11 @@
           break;
 
         case 'flip-horizontal':
-          _this.scale(-imageData.scaleX || -1, imageData.scaleY || 1);
+          _this.scaleX(-imageData.scaleX || -1);
           break;
 
         case 'flip-vertical':
-          _this.scale(imageData.scaleX || 1, -imageData.scaleY || -1);
+          _this.scaleY(-imageData.scaleY || -1);
           break;
 
         default:
@@ -1208,13 +1202,13 @@
       var _this = this;
       var e = getEvent(event);
       var options = _this.options;
-      var which = e.which;
+      var key = e.keyCode || e.which || e.charCode;
 
       if (!_this.isFulled || !options.keyboard) {
         return;
       }
 
-      switch (which) {
+      switch (key) {
 
         // (Key: Esc)
         case 27:
@@ -1505,7 +1499,11 @@
       image.alt = alt;
 
       _this.image = image;
-      removeClass(_this.items[_this.index], CLASS_ACTIVE);
+
+      if (_this.isViewed) {
+        removeClass(_this.items[_this.index], CLASS_ACTIVE);
+      }
+
       addClass(item, CLASS_ACTIVE);
 
       _this.isViewed = false;
@@ -2032,7 +2030,7 @@
       return _this;
     },
 
-    // Toggle the image size between its natural size and initial size.
+    // Toggle the image size between its natural size and initial size
     toggle: function () {
       var _this = this;
 
@@ -2045,13 +2043,72 @@
       return _this;
     },
 
-    // Reset the image to its initial state.
+    // Reset the image to its initial state
     reset: function () {
       var _this = this;
 
       if (_this.isViewed && !_this.isPlayed) {
         _this.imageData = extend({}, _this.initialImageData);
         _this.renderImage();
+      }
+
+      return _this;
+    },
+
+    // Update viewer when images changed
+    update: function () {
+      var _this = this;
+      var indexes = [];
+      var index;
+
+      // Destroy viewer if the target image was deleted
+      if (_this.isImg && !_this.element.parentNode) {
+        return _this.destroy();
+      }
+
+      _this.length = _this.images.length;
+
+      if (_this.isBuilt) {
+        each(_this.items, function (item, i) {
+          var img = getByTag(item, 'img')[0];
+          var image = _this.images[i];
+
+          if (image) {
+            if (image.src !== img.src) {
+              indexes.push(i);
+            }
+          } else {
+            indexes.push(i);
+          }
+        });
+
+        setStyle(_this.list, {
+          width: 'auto'
+        });
+
+        _this.initList();
+
+        if (_this.isShown) {
+          if (_this.length) {
+            if (_this.isViewed) {
+              index = inArray(_this.index, indexes);
+
+              if (index >= 0) {
+                _this.isViewed = false;
+                _this.view(max(_this.index - (index + 1), 0));
+              } else {
+                addClass(_this.items[_this.index], CLASS_ACTIVE);
+              }
+            }
+          } else {
+            _this.image = null;
+            _this.isViewed = false;
+            _this.index = 0;
+            _this.imageData = null;
+            empty(_this.canvas);
+            empty(_this.title);
+          }
+        }
       }
 
       return _this;
@@ -2069,7 +2126,6 @@
           _this.unbind();
         }
 
-        removeClass(_this.images, CLASS_TOGGLE);
         removeListener(element, EVENT_CLICK, _this._start);
       }
 
