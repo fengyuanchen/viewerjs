@@ -1,8 +1,8 @@
 /*!
- * Viewer v@VERSION
+ * Viewer.js v@VERSION
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) @YEAR Fengyuan Chen
+ * Copyright (c) 2015-@YEAR Fengyuan Chen
  * Released under the MIT license
  *
  * Date: @DATE
