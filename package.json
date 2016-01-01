@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "dist/viewer.js",
   "license": "MIT",
   "repository": "fengyuanchen/viewerjs",
@@ -30,7 +30,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-csscomb": "^3.0.6",
     "gulp-csslint": "^0.2.0",
-    "gulp-htmlcomb": "0.1.0",
+    "gulp-htmlcomb": "^0.1.0",
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^1.12.0",
     "gulp-load-plugins": "^1.1.0",

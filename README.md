@@ -45,8 +45,8 @@
 dist/
 ├── viewer.css     ( 8 KB)
 ├── viewer.min.css ( 7 KB)
-├── viewer.js      (56 KB)
-└── viewer.min.js  (21 KB)
+├── viewer.js      (59 KB)
+└── viewer.min.js  (22 KB)
 ```
 
 
@@ -162,9 +162,10 @@ Show the navbar.
 - Type: `Boolean`
 - Default: `true`
 
-Show the title.
+Show the current image's name and dimensions.
 
-> The title comes from the `alt` attribute of an image element or the image name parsed from URL.
+> The name comes from the `alt` attribute of an image element or the image name parsed from URL.
+> The title is visible only when the screen width great than 768 pixels.
 
 
 ### toolbar
@@ -173,6 +174,8 @@ Show the title.
 - Default: `true`
 
 Show the toolbar.
+
+> The toolbar is visible only when the screen width great than 768 pixels.
 
 
 ### tooltip

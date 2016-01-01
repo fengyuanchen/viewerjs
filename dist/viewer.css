@@ -1,11 +1,11 @@
 /*!
- * Viewer v0.1.1
+ * Viewer.js v0.2.0
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) 2015 Fengyuan Chen
+ * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2015-12-28T03:06:47.079Z
+ * Date: 2016-01-01T04:42:28.024Z
  */
 .viewer-zoom-in:before,
 .viewer-zoom-out:before,
@@ -261,6 +261,7 @@
 }
 
 .viewer-toolbar {
+  display: none;
   overflow: hidden;
 
   width: 280px;
@@ -306,6 +307,12 @@
   margin: 5px;
 }
 
+@media (min-width: 768px) {
+  .viewer-toolbar {
+    display: block;
+  }
+}
+
 .viewer-tooltip {
   font-size: 12px;
   line-height: 20px;
@@ -333,7 +340,7 @@
   font-size: 12px;
   line-height: 1;
 
-  display: inline-block;
+  display: none;
   overflow: hidden;
 
   max-width: 90%;
@@ -352,6 +359,12 @@
   opacity: 1;
 
   filter: alpha(opacity=100);
+}
+
+@media (min-width: 768px) {
+  .viewer-title {
+    display: inline-block;
+  }
 }
 
 .viewer-button {
@@ -395,12 +408,6 @@
 
 .viewer-invisible {
   visibility: hidden;
-}
-
-.viewer-toggle {
-  cursor: pointer;
-  cursor: -webkit-zoom-in;
-  cursor:         zoom-in;
 }
 
 .viewer-move {
