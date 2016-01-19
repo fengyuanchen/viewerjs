@@ -444,7 +444,7 @@
       }
 
       if (options.fullscreen) {
-        _this.fullscreen();
+        _this.requestFullscreen();
       }
 
       _this.isPlayed = true;
@@ -498,6 +498,10 @@
 
       if (!_this.isPlayed) {
         return _this;
+      }
+
+      if (_this.options.fullscreen) {
+        _this.exitFullscreen();
       }
 
       _this.isPlayed = false;
