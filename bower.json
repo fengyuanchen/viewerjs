@@ -37,7 +37,7 @@
     "CONTRIBUTING.md"
   ],
   "devDependencies": {
-    "jquery": "~1.11.3",
+    "jquery": "~1.12.0",
     "bootstrap": "~3.3.6"
   }
 }
