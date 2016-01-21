@@ -1,6 +1,14 @@
 # Changelog
 
 
+## 0.3.0 (Jan 21, 2016)
+
+- Add more available values to the "title", "toolbar" and "navbar" options.
+- Support to toggle the visibility of title, toolbar and navbar between different screen widths.
+- Exit fullscreen when stop playing.
+- Fixed title not generated bug.
+
+
 ## 0.2.0 (Jan 1, 2016)
 
 - Added "update" method for update image dynamically.

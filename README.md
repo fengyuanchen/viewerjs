@@ -45,7 +45,7 @@
 dist/
 ├── viewer.css     ( 8 KB)
 ├── viewer.min.css ( 7 KB)
-├── viewer.js      (59 KB)
+├── viewer.js      (60 KB)
 └── viewer.min.js  (22 KB)
 ```
 
@@ -151,31 +151,46 @@ Show the button on the top-right of the viewer.
 
 ### navbar
 
-- Type: `Boolean`
+- Type: `Boolean` or `Number`
 - Default: `true`
+- Options:
+  - `0` or `false`: hide the navbar
+  - `1` or `true`: show the navbar
+  - `2`: show the navbar only when screen width great then 768 pixels
+  - `3`: show the navbar only when screen width great then 992 pixels
+  - `4`: show the navbar only when screen width great then 1200 pixels
 
-Show the navbar.
+Specify the visibility of the navbar.
 
 
 ### title
 
-- Type: `Boolean`
+- Type: `Boolean` or `Number`
 - Default: `true`
+- Options:
+  - `0` or `false`: hide the title
+  - `1` or `true`: show the title
+  - `2`: show the title only when screen width great then 768 pixels
+  - `3`: show the title only when screen width great then 992 pixels
+  - `4`: show the title only when screen width great then 1200 pixels
 
-Show the current image's name and dimensions.
+Specify the visibility of the title (the current image's name and dimensions).
 
 > The name comes from the `alt` attribute of an image element or the image name parsed from URL.
-> The title is visible only when the screen width great than 768 pixels.
 
 
 ### toolbar
 
-- Type: `Boolean`
+- Type: `Boolean` or `Number`
 - Default: `true`
+- Options:
+  - `0` or `false`: hide the toolbar
+  - `1` or `true`: show the toolbar
+  - `2`: show the toolbar only when screen width great then 768 pixels
+  - `3`: show the toolbar only when screen width great then 992 pixels
+  - `4`: show the toolbar only when screen width great then 1200 pixels
 
-Show the toolbar.
-
-> The toolbar is visible only when the screen width great than 768 pixels.
+Specify the visibility of the toolbar.
 
 
 ### tooltip
