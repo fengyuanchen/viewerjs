@@ -108,10 +108,12 @@
         case 'switch':
           _this.action = 'switched';
 
-          if (offsetX > 1) {
-            _this.prev();
-          } else if (offsetX < -1) {
-            _this.next();
+          if (abs(offsetX) > abs(offsetY)) {
+            if (offsetX > 1) {
+              _this.prev();
+            } else if (offsetX < -1) {
+              _this.next();
+            }
           }
 
           break;
