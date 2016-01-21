@@ -126,9 +126,27 @@
       _this.isViewed = false;
       _this.index = index;
       _this.imageData = null;
+
       addClass(canvas, CLASS_INVISIBLE);
       empty(canvas);
       appendChild(canvas, image);
+
+      // Center current item
+      _this.renderList();
+
+      // Clear title
+      empty(title);
+
+      // Generate title after viewed
+      addListener(element, EVENT_VIEWED, function () {
+        var imageData = _this.imageData;
+        var width = imageData.naturalWidth;
+        var height = imageData.naturalHeight;
+
+        setText(title, alt + ' (' + width + ' × ' + height + ')');
+      }, true);
+
+
 
       if (image.complete) {
         _this.load();
@@ -145,20 +163,6 @@
           _this.timeout = false;
         }, 1000);
       }
-
-      empty(title);
-
-      // Center current item
-      _this.renderList();
-
-      // Show title when viewed
-      addListener(element, EVENT_VIEWED, function () {
-        var imageData = _this.imageData;
-        var width = imageData.naturalWidth;
-        var height = imageData.naturalHeight;
-
-        setText(title, alt + ' (' + width + ' × ' + height + ')');
-      }, true);
 
       return _this;
     },
