@@ -3,24 +3,30 @@
 
 .viewer-navbar {
   overflow: hidden;
+
   @include bg-color($color-black, .5);
 }
 
 .viewer-list {
-  height: 50px;
-  margin: 0;
-  padding: 1px 0;
   box-sizing: content-box;
   overflow: hidden;
 
+  height: 50px;
+  margin: 0;
+  padding: 1px 0;
+
   > li {
     float: left;
+    overflow: hidden;
+
     width: 30px;
     height: 50px;
-    overflow: hidden;
-    cursor: pointer;
+
     @include text-hide();
+
     @include opacity(.5);
+
+    cursor: pointer;
 
     + li {
       margin-left: 1px;

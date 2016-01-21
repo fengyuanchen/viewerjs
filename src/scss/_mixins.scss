@@ -3,6 +3,7 @@
 
 @mixin opacity($alpha: 1) {
   opacity: $alpha;
+
   filter: alpha(opacity=#{$alpha * 100});
 }
 
@@ -14,5 +15,6 @@
 @mixin text-hide() {
   font-size: 0;
   line-height: 0;
+
   color: transparent;
 }
