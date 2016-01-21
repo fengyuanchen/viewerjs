@@ -98,7 +98,7 @@
     renderList: function (index) {
       var _this = this;
       var i = index || _this.index;
-      var width = _this.items[i].offsetWidth;
+      var width = _this.items[i].offsetWidth || 30;
       var outerWidth = width + 1; // 1 pixel of `margin-left` width
 
       // Place the active item in the center of the screen

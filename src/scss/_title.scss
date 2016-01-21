@@ -2,22 +2,21 @@
 // ==================================================
 
 .viewer-title {
-  display: none;
+  display: inline-block;
+  overflow: hidden;
+
   max-width: 90%;
   margin: 0 5% 5px;
-  color: $color-grey;
+
   font-size: 12px;
   line-height: 1;
-  overflow: hidden;
+
+  color: $color-grey;
+  @include opacity(.8);
   text-overflow: ellipsis;
   white-space: nowrap;
-  @include opacity(.8);
 
   &:hover {
     @include opacity(1);
-  }
-
-  @media (min-width: $screen-sm) {
-    display: inline-block;
   }
 }

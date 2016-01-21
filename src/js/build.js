@@ -30,9 +30,9 @@
       _this.player = getByClass(viewer, 'viewer-player')[0];
       _this.list = getByClass(viewer, 'viewer-list')[0];
 
-      toggleClass(title, CLASS_HIDE, !options.title);
-      toggleClass(toolbar, CLASS_HIDE, !options.toolbar);
-      toggleClass(navbar, CLASS_HIDE, !options.navbar);
+      addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
+      addClass(toolbar, !options.toolbar ? CLASS_HIDE : getResponsiveClass(options.toolbar));
+      addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
 
       toggleClass(toolbar.querySelectorAll('li[class*=zoom]'), CLASS_INVISIBLE, !options.zoomable);

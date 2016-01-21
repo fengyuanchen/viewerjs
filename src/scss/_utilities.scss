@@ -37,3 +37,21 @@
 .viewer-transition {
   transition: all .3s ease-out;
 }
+
+@media (max-width: $screen-xs-max) {
+  .viewer-hide-xs-down {
+    display: none;
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .viewer-hide-sm-down {
+    display: none;
+  }
+}
+
+@media (max-width: $screen-md-max) {
+  .viewer-hide-md-down {
+    display: none;
+  }
+}

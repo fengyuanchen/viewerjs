@@ -2,20 +2,23 @@
 // ==================================================
 
 .viewer-toolbar {
-  display: none;
+  overflow: hidden;
+
   width: 280px;
   margin: 0 auto 5px;
   padding: 3px 0;
-  overflow: hidden;
 
   > li {
     float: left;
+    overflow: hidden;
+
     width: 24px;
     height: 24px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
+
     @include bg-color($color-black, .5);
+    border-radius: 50%;
+
+    cursor: pointer;
 
     &:hover {
       @include bg-color($color-black, .8);
@@ -39,9 +42,5 @@
     &:before {
       margin: 5px;
     }
-  }
-
-  @media (min-width: $screen-sm) {
-    display: block;
   }
 }

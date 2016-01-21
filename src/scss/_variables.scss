@@ -12,7 +12,16 @@ $color-grey: #ccc !default;
 // Media queries breakpoints
 // -------------------------
 
-$screen-xs: 480px; // Extra small screen / phone
-$screen-sm: 768px; // Small screen / tablet
-$screen-md: 992px; // Medium screen / desktop
-$screen-lg: 1200px; // Large screen / wide desktop
+// Large screen / wide desktop
+$screen-lg-min: 1200px;
+
+// Medium screen / desktop
+$screen-md-min: 992px;
+$screen-md-max: ($screen-lg-min - 1);
+
+// Small screen / tablet
+$screen-sm-min: 768px;
+$screen-sm-max: ($screen-md-min - 1);
+
+// Extra small screen / phone
+$screen-xs-max: ($screen-sm-min - 1);

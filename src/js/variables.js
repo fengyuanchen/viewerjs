@@ -9,6 +9,9 @@
   var CLASS_OPEN = NAMESPACE + '-open';
   var CLASS_SHOW = NAMESPACE + '-show';
   var CLASS_HIDE = NAMESPACE + '-hide';
+  var CLASS_HIDE_XS_DOWN = 'viewer-hide-xs-down';
+  var CLASS_HIDE_SM_DOWN = 'viewer-hide-sm-down';
+  var CLASS_HIDE_MD_DOWN = 'viewer-hide-md-down';
   var CLASS_FADE = NAMESPACE + '-fade';
   var CLASS_IN = NAMESPACE + '-in';
   var CLASS_MOVE = NAMESPACE + '-move';

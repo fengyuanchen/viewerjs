@@ -126,8 +126,8 @@
       var e = getEvent(event);
       var image = e.target;
       var parent = image.parentNode;
-      var parentWidth = parent.offsetWidth;
-      var parentHeight = parent.offsetHeight;
+      var parentWidth = parent.offsetWidth || 30;
+      var parentHeight = parent.offsetHeight || 50;
       var filled = !!getData(image, 'filled');
 
       getImageSize(image, function (naturalWidth, naturalHeight) {
