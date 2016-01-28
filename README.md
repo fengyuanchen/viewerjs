@@ -57,7 +57,7 @@ dist/
 
 Four quick start options are available:
 
-- [Download the latest release](https://github.com/fengyuanchen/viewer/archive/master.zip).
+- [Download the latest release](https://github.com/fengyuanchen/viewerjs/archive/master.zip).
 - Clone the repository: `git clone https://github.com/fengyuanchen/viewerjs.git`.
 - Install with [NPM](http://npmjs.org): `npm install viewerjs`.
 - Install with [Bower](http://bower.io): `bower install fengyuanchen/viewerjs`.
