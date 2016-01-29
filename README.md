@@ -101,10 +101,10 @@ Initialize with `Viewer` constructor:
 
 ```js
 // View one image
-var viewer = new Viewer(document.getElementsById('image'), options);
+var viewer = new Viewer(document.getElementById('image'), options);
 
 // View some images
-var viewer = new Viewer(document.getElementsById('images'), options);
+var viewer = new Viewer(document.getElementById('images'), options);
 ```
 
 
