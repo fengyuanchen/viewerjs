@@ -10,7 +10,15 @@
       }
 
       if (!_this.isBuilt) {
+
+        // Call the show method again after built
+        addListener(element, EVENT_BUILT, function () {
+          _this.show();
+        }, true);
+
         _this.build();
+
+        return _this;
       }
 
       viewer = _this.viewer;
