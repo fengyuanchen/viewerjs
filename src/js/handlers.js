@@ -165,9 +165,12 @@
       _this.initViewer();
       _this.renderViewer();
       _this.renderList();
-      _this.initImage(function () {
-        _this.renderImage();
-      });
+
+      if (_this.isViewed) {
+        _this.initImage(function () {
+          _this.renderImage();
+        });
+      }
 
       if (_this.isPlayed) {
         each(getByTag(_this.player, 'img'), function (image) {
