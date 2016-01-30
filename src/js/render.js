@@ -206,6 +206,9 @@
     resetImage: function () {
       var _this = this;
 
-      removeChild(_this.image);
-      _this.image = null;
+      // this.image only defined after viewed
+      if (_this.image) {
+        removeChild(_this.image);
+        _this.image = null;
+      }
     },
