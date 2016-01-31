@@ -161,6 +161,10 @@
   function addClass(element, value) {
     var className;
 
+    if (!value) {
+      return;
+    }
+
     if (isNumber(element.length)) {
       return each(element, function (elem) {
         addClass(elem, value);
@@ -181,6 +185,10 @@
   }
 
   function removeClass(element, value) {
+    if (!value) {
+      return;
+    }
+
     if (isNumber(element.length)) {
       return each(element, function (elem) {
         removeClass(elem, value);
