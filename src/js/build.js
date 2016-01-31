@@ -86,15 +86,11 @@
 
     unbuild: function () {
       var _this = this;
-      var options = _this.options;
 
       if (!_this.isBuilt) {
         return;
       }
 
-      if (options.inline) {
-        removeClass(_this.element, CLASS_HIDE);
-      }
-
+      _this.isBuilt = false;
       removeChild(_this.viewer);
     },
