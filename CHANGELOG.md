@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.3.1 (Feb 2, 2016)
+
+- Added tests.
+- Ignored invalid class name.
+- Re-render image only when viewed.
+
+
 ## 0.3.0 (Jan 21, 2016)
 
 - Add more available values to the "title", "toolbar" and "navbar" options.
@@ -26,5 +33,5 @@
 
 - Supports 2 modes: "modal" (default), "inline"
 - Supports 30 options: "inline", "button", "navbar", "title", "toolbar", "tooltip", "movable", "zoomable", "rotatable", "scalable", "transition", "fullscreen", "keyboard", "interval", "minWidth", "minHeight", "zoomRatio", "minZoomRatio", "maxZoomRatio", "zIndex", "zIndexInline", "url", "build", "built", "show", "shown", "hide", "hidden", "view", "viewed"
-- Supports 21 methods: "show", "hide", "view", "prev", "next", "move", "zoom", "zoomTo", "rotate", "rotateTo", "scale", "scaleX", "scaleY", "play", "stop", "full", "exit", "tooltip", "toggle", "reset", "destroy"
+- Supports 22 methods: "show", "hide", "view", "prev", "next", "move", "moveTo", "zoom", "zoomTo", "rotate", "rotateTo", "scale", "scaleX", "scaleY", "play", "stop", "full", "exit", "tooltip", "toggle", "reset", "destroy"
 - Supports 8 events: "build", "built", "show", "shown", "hide", "hidden", "view", "viewed"

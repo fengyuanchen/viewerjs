@@ -5,6 +5,8 @@
 - [Homepage](http://fengyuanchen.github.io/viewerjs)
 - [Viewer as jQuery plugin](https://github.com/fengyuanchen/viewer)
 
+[![Build Status Images](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs)
+
 
 
 ## Table of contents
@@ -26,9 +28,10 @@
 
 ## Features
 
-- Supports [options](#options)
-- Supports [methods](#methods)
-- Supports [events](#events)
+- Supports 30 [options](#options)
+- Supports 23 [methods](#methods)
+- Supports 8 [events](#events)
+- Supports modal and inline modes
 - Supports touch
 - Supports move
 - Supports zoom
@@ -657,18 +660,32 @@ Destroy the viewer and remove the instance.
 All events can access the viewer instance with `this.viewer` in its handler.
 
 ```js
-var viewer = new Viewer(image, {
-  viewed: function () {
-    console.log(this.viewer === viewer);
-    // > true
-  }
-});
+var viewer;
+
+image.addEventListener('viewed', function () {
+  console.log(this.viewer === viewer);
+  // > true
+}, false);
+
+viewer = new Viewer(image);
 ```
 
 ### build
 
 This event fires when a viewer instance starts to build.
 
+```js
+new Viewer(image, {
+  build: function () {
+    var viewer = this.viewer;
+
+    // Show the viewer modal manually
+    setTimeout(function () {
+      viewer.show();
+    }, 0);
+  }
+});
+```
 
 ### built
 
