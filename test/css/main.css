@@ -1,0 +1,23 @@
+.container {
+  max-width: 640px;
+  max-height: 360px;
+  margin: 20px auto;
+}
+
+.container > ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0;
+}
+
+.container > ul > li {
+  display: inline-block;
+  width: 50%;
+}
+
+.container > img,
+.container > ul > li > img {
+  max-width: 100%;
+}

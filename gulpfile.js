@@ -178,7 +178,8 @@ gulp.task('htmlcomb', ['htmlcomb:demo', 'htmlcomb:docs']);
 gulp.task('assets:js', function () {
   return gulp.src([
       'bower_components/jquery/dist/jquery.min.js',
-      'bower_components/bootstrap/dist/js/bootstrap.min.js'
+      'bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'bower_components/qunit/qunit/qunit.js'
     ])
     .pipe(gulp.dest('assets/js'));
 });
@@ -192,7 +193,8 @@ gulp.task('assets:fonts', function () {
 
 gulp.task('assets:css', ['assets:fonts'], function () {
   return gulp.src([
-      'bower_components/bootstrap/dist/css/bootstrap.min.css'
+      'bower_components/bootstrap/dist/css/bootstrap.min.css',
+      'bower_components/qunit/qunit/qunit.css'
     ])
     .pipe(gulp.dest('assets/css'));
 });
@@ -211,7 +213,12 @@ gulp.task('docs:all', function () {
 
 gulp.task('docs', ['docs:img', 'docs:all']);
 
-gulp.task('release', ['js', 'css', 'docs'], function () {
+gulp.task('test', ['js', 'css'], function () {
+  return gulp.src('test/*.html')
+    .pipe(plugins.qunit());
+});
+
+gulp.task('release', ['test', 'docs'], function () {
   return gulp.src('dist/*.{js,css}')
     .pipe(gulp.dest('_releases/' + pkg.version));
 });
