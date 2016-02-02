@@ -20,6 +20,7 @@
   "jquery": true,
   "qunit": true,
   "globals": {
-    "define": true
+    "define": true,
+    "Viewer": true
   }
 }
