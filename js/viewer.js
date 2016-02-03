@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.3.0
+ * Viewer.js v0.3.1
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-01-21T09:59:55.754Z
+ * Date: 2016-02-02T11:35:52.542Z
  */
 
 (function (global, factory) {
@@ -251,6 +251,10 @@
   function addClass(element, value) {
     var className;
 
+    if (!value) {
+      return;
+    }
+
     if (isNumber(element.length)) {
       return each(element, function (elem) {
         addClass(elem, value);
@@ -271,6 +275,10 @@
   }
 
   function removeClass(element, value) {
+    if (!value) {
+      return;
+    }
+
     if (isNumber(element.length)) {
       return each(element, function (elem) {
         removeClass(elem, value);
@@ -730,16 +738,12 @@
 
     unbuild: function () {
       var _this = this;
-      var options = _this.options;
 
       if (!_this.isBuilt) {
         return;
       }
 
-      if (options.inline) {
-        removeClass(_this.element, CLASS_HIDE);
-      }
-
+      _this.isBuilt = false;
       removeChild(_this.viewer);
     },
 
@@ -997,8 +1001,11 @@
     resetImage: function () {
       var _this = this;
 
-      removeChild(_this.image);
-      _this.image = null;
+      // this.image only defined after viewed
+      if (_this.image) {
+        removeChild(_this.image);
+        _this.image = null;
+      }
     },
 
     start: function (event) {
@@ -1168,9 +1175,12 @@
       _this.initViewer();
       _this.renderViewer();
       _this.renderList();
-      _this.initImage(function () {
-        _this.renderImage();
-      });
+
+      if (_this.isViewed) {
+        _this.initImage(function () {
+          _this.renderImage();
+        });
+      }
 
       if (_this.isPlayed) {
         each(getByTag(_this.player, 'img'), function (image) {
