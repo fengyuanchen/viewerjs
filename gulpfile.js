@@ -3,9 +3,9 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var pkg = require('./package');
+var now = new Date();
 var scripts = {
       name: 'viewer.js',
-      min: 'viewer.min.js',
       all: [
         'gulpfile.js',
         'dist/viewer.js',
@@ -38,7 +38,6 @@ var scripts = {
     };
 var styles = {
       name: 'viewer.css',
-      min: 'viewer.min.css',
       all: [
         'dist/viewer.css',
         'demo/css/main.css',
@@ -59,11 +58,11 @@ var replacement = {
             break;
 
           case '@YEAR':
-            placeholder = (new Date()).getFullYear();
+            placeholder = now.getFullYear();
             break;
 
           case '@DATE':
-            placeholder = (new Date()).toISOString();
+            placeholder = now.toISOString();
             break;
         }
 
@@ -94,7 +93,9 @@ gulp.task('js', ['jshint', 'jscs'], function () {
     .pipe(plugins.replace(replacement.regexp, replacement.filter))
     .pipe(gulp.dest(scripts.dest))
     .pipe(gulp.dest(scripts.site))
-    .pipe(plugins.rename(scripts.min))
+    .pipe(plugins.rename({
+      suffix: '.min'
+    }))
     .pipe(plugins.uglify({
       preserveComments: 'license'
     }))
@@ -142,7 +143,9 @@ gulp.task('css', ['csslint'], function () {
     .pipe(plugins.csscomb())
     .pipe(gulp.dest(styles.dest))
     .pipe(gulp.dest(styles.site))
-    .pipe(plugins.rename(styles.min))
+    .pipe(plugins.rename({
+      suffix: '.min'
+    }))
     .pipe(plugins.minifyCss({
       compatibility: 'ie8',
       keepSpecialComments: 1
