@@ -646,6 +646,11 @@ Toggle the image size between its natural size and initial size.
 Reset the image to its initial state.
 
 
+### update()
+
+Update the viewer when images changed.
+
+
 ### destroy()
 
 Destroy the viewer and remove the instance.
