@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.3.1
+ * Viewer.js v0.3.2
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-02-02T11:35:52.542Z
+ * Date: 2016-03-11T07:58:11.565Z
  */
 
 (function (global, factory) {
@@ -858,7 +858,7 @@
         if (isString(url)) {
           url = image.getAttribute(url);
         } else if (isFunction(url)) {
-          url = url.call(element, _this);
+          url = url.call(image, image);
         }
 
         items.push(
