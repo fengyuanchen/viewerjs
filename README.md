@@ -756,11 +756,12 @@ If you have to use other viewer with the same namespace, just call the `Viewer.n
 
 ## Browser support
 
-- Chrome (latest 2)
-- Firefox (latest 2)
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Opera (latest)
+- Edge (latest)
 - Internet Explorer 9+
-- Opera (latest 2)
-- Safari (latest 2)
 
 
 

@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.3.2 (Mar 11, 2016)
+
+- Fix the parameters error on the "url" option when it is a function
+
+
 ## 0.3.1 (Feb 2, 2016)
 
 - Added tests.
