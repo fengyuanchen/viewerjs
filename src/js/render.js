@@ -63,7 +63,7 @@
         if (isString(url)) {
           url = image.getAttribute(url);
         } else if (isFunction(url)) {
-          url = url.call(element, _this);
+          url = url.call(image, image);
         }
 
         items.push(
