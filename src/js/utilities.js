@@ -308,7 +308,7 @@
       return element.dispatchEvent(event);
     } else if (element.fireEvent) {
 
-      // IE6-10
+      // IE6-10 (native events only)
       return element.fireEvent('on' + type);
     }
   }
