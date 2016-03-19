@@ -1,9 +1,14 @@
 # Changelog
 
 
+## 0.3.3 (Mar 19, 2016)
+
+- Fix the issue of hiding wrong element in the "view" method (#19).
+
+
 ## 0.3.2 (Mar 11, 2016)
 
-- Fix the parameters error on the "url" option when it is a function
+- Fix the parameters error on the "url" option when it is a function.
 
 
 ## 0.3.1 (Feb 2, 2016)
