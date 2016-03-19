@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.3.2
+ * Viewer.js v0.3.3
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-03-11T07:58:11.565Z
+ * Date: 2016-03-19T03:33:40.433Z
  */
 
 (function (global, factory) {
@@ -398,7 +398,7 @@
       return element.dispatchEvent(event);
     } else if (element.fireEvent) {
 
-      // IE6-10
+      // IE6-10 (native events only)
       return element.fireEvent('on' + type);
     }
   }
@@ -1536,7 +1536,7 @@
       _this.index = index;
       _this.imageData = null;
 
-      addClass(canvas, CLASS_INVISIBLE);
+      addClass(image, CLASS_INVISIBLE);
       empty(canvas);
       appendChild(canvas, image);
 
