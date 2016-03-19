@@ -127,7 +127,7 @@
       _this.index = index;
       _this.imageData = null;
 
-      addClass(canvas, CLASS_INVISIBLE);
+      addClass(image, CLASS_INVISIBLE);
       empty(canvas);
       appendChild(canvas, image);
 
