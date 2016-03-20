@@ -5,70 +5,70 @@ var plugins = require('gulp-load-plugins')();
 var pkg = require('./package');
 var now = new Date();
 var scripts = {
-      name: 'viewer.js',
-      all: [
-        'gulpfile.js',
-        'dist/viewer.js',
-        'demo/js/main.js',
-        'docs/js/main.js',
-        'examples/*/js/main.js',
-        'test/**/*.js'
-      ],
-      list: [
-        'src/js/intro.js',
-        'src/js/variables.js',
-        'src/js/utilities.js',
-        'src/js/viewer.js',
-        'src/js/init.js',
-        'src/js/build.js',
-        'src/js/bind.js',
-        'src/js/render.js',
-        'src/js/handlers.js',
-        'src/js/methods.js',
-        'src/js/others.js',
-        'src/js/defaults.js',
-        'src/js/template.js',
-        'src/js/statics.js',
-        'src/js/outro.js'
-      ],
-      main: 'dist/viewer.js',
-      site: '_gh_pages/js',
-      src: 'src/*.js',
-      dest: 'dist'
-    };
+  name: 'viewer.js',
+  all: [
+    'gulpfile.js',
+    'dist/viewer.js',
+    'demo/js/main.js',
+    'docs/js/main.js',
+    'examples/*/js/main.js',
+    'test/**/*.js'
+  ],
+  list: [
+    'src/js/intro.js',
+    'src/js/variables.js',
+    'src/js/utilities.js',
+    'src/js/viewer.js',
+    'src/js/init.js',
+    'src/js/build.js',
+    'src/js/bind.js',
+    'src/js/render.js',
+    'src/js/handlers.js',
+    'src/js/methods.js',
+    'src/js/others.js',
+    'src/js/defaults.js',
+    'src/js/template.js',
+    'src/js/statics.js',
+    'src/js/outro.js'
+  ],
+  main: 'dist/viewer.js',
+  site: '_gh_pages/js',
+  src: 'src/*.js',
+  dest: 'dist'
+};
 var styles = {
-      name: 'viewer.css',
-      all: [
-        'dist/viewer.css',
-        'demo/css/main.css',
-        'docs/css/main.css'
-      ],
-      scss: 'src/scss/*.scss',
-      main: 'dist/viewer.css',
-      site: '_gh_pages/css',
-      src: 'src/scss/viewer.scss',
-      dest: 'dist'
-    };
+  name: 'viewer.css',
+  all: [
+    'dist/viewer.css',
+    'demo/css/main.css',
+    'docs/css/main.css'
+  ],
+  scss: 'src/scss/*.scss',
+  main: 'dist/viewer.css',
+  site: '_gh_pages/css',
+  src: 'src/scss/viewer.scss',
+  dest: 'dist'
+};
 var replacement = {
-      regexp: /@\w+/g,
-      filter: function (placeholder) {
-        switch (placeholder) {
-          case '@VERSION':
-            placeholder = pkg.version;
-            break;
+  regexp: /@\w+/g,
+  filter: function (placeholder) {
+    switch (placeholder) {
+      case '@VERSION':
+        placeholder = pkg.version;
+        break;
 
-          case '@YEAR':
-            placeholder = now.getFullYear();
-            break;
+      case '@YEAR':
+        placeholder = now.getFullYear();
+        break;
 
-          case '@DATE':
-            placeholder = now.toISOString();
-            break;
-        }
+      case '@DATE':
+        placeholder = now.toISOString();
+        break;
+    }
 
-        return placeholder;
-      }
-    };
+    return placeholder;
+  }
+};
 
 gulp.task('js+', function () {
   return gulp.src(scripts.list)
@@ -130,14 +130,7 @@ gulp.task('css', ['csslint'], function () {
     .pipe(plugins.replace(replacement.regexp, replacement.filter))
     .pipe(plugins.autoprefixer({
       browsers: [
-        'Android 2.3',
-        'Android >= 4',
-        'Chrome >= 20',
-        'Firefox >= 24',
-        'Explorer >= 8',
-        'iOS >= 6',
-        'Opera >= 12',
-        'Safari >= 6'
+        'Explorer >= 9'
       ]
     }))
     .pipe(plugins.csscomb())
@@ -147,7 +140,7 @@ gulp.task('css', ['csslint'], function () {
       suffix: '.min'
     }))
     .pipe(plugins.minifyCss({
-      compatibility: 'ie8',
+      compatibility: 'ie9',
       keepSpecialComments: 1
     }))
     .pipe(gulp.dest(styles.dest))
