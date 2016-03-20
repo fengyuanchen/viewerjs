@@ -29,10 +29,10 @@ window.onload = function () {
           console.log(e.type);
         },
         view:  function (e) {
-          console.log(e.type);
+          console.log(e.type, e.detail.index);
         },
         viewed:  function (e) {
-          console.log(e.type);
+          console.log(e.type, e.detail.index);
           // this.viewer.zoomTo(1).rotateTo(180);
         }
       };
@@ -85,10 +85,10 @@ window.onload = function () {
     console.log(e.type);
   });
   addEventListener(pictures, 'view', function (e) {
-    console.log(e.type);
+    console.log(e.type, e.detail.index);
   });
   addEventListener(pictures, 'viewed', function (e) {
-    console.log(e.type);
+    console.log(e.type, e.detail.index);
   });
   viewer = new Viewer(pictures, options);
 
