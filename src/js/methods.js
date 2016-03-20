@@ -102,10 +102,6 @@
         return _this;
       }
 
-      if (dispatchEvent(element, EVENT_VIEW) === false) {
-        return _this;
-      }
-
       item = _this.items[index];
       img = getByTag(item, 'img')[0];
       url = getData(img, 'originalUrl');
@@ -114,6 +110,14 @@
       image = document.createElement('img');
       image.src = url;
       image.alt = alt;
+
+      if (dispatchEvent(element, EVENT_VIEW, {
+        originalImage: _this.images[index],
+        index: index,
+        image: image
+      }) === false) {
+        return _this;
+      }
 
       _this.image = image;
 
@@ -145,8 +149,6 @@
 
         setText(title, alt + ' (' + width + ' × ' + height + ')');
       }, true);
-
-
 
       if (image.complete) {
         _this.load();

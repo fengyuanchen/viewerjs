@@ -93,6 +93,7 @@
       var _this = this;
       var options = _this.options;
       var image = _this.image;
+      var index = _this.index;
       var viewerData = _this.viewerData;
 
       if (_this.timeout) {
@@ -117,7 +118,11 @@
 
         _this.renderImage(function () {
           _this.isViewed = true;
-          dispatchEvent(_this.element, EVENT_VIEWED);
+          dispatchEvent(_this.element, EVENT_VIEWED, {
+            originalImage: _this.images[index],
+            index: index,
+            image: image
+          });
         });
       });
     },

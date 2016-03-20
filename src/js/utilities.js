@@ -288,20 +288,34 @@
     }
   }
 
-  function dispatchEvent(element, type) {
+  function dispatchEvent(element, type, data) {
     var event;
 
     if (element.dispatchEvent) {
 
-      // Event on IE is a global object, not a constructor
-      if (isFunction(Event)) {
-        event = new Event(type, {
-          bubbles: true,
-          cancelable: true
-        });
+      // Event and CustomEvent on IE9-11 are global objects, not constructors
+      if (isFunction(Event) && isFunction(CustomEvent)) {
+        if (isUndefined(data)) {
+          event = new Event(type, {
+            bubbles: true,
+            cancelable: true
+          });
+        } else {
+          event = new CustomEvent(type, {
+            detail: data,
+            bubbles: true,
+            cancelable: true
+          });
+        }
       } else {
-        event = document.createEvent('Event');
-        event.initEvent(type, true, true);
+        // IE9-11
+        if (isUndefined(data)) {
+          event = document.createEvent('Event');
+          event.initEvent(type, true, true);
+        } else {
+          event = document.createEvent('CustomEvent');
+          event.initCustomEvent(type, true, true, data);
+        }
       }
 
       // IE9+
