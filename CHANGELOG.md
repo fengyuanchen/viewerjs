@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.4.0 (Mar 20, 2016)
+
+- Added some properties to "event.detail" of the "view" and "viewed" events.
+
+
 ## 0.3.3 (Mar 19, 2016)
 
 - Fix the issue of hiding wrong element in the "view" method (#19).

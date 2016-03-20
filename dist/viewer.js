@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.3.3
+ * Viewer.js v0.4.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-03-19T03:33:40.433Z
+ * Date: 2016-03-20T07:17:50.179Z
  */
 
 (function (global, factory) {
@@ -378,20 +378,34 @@
     }
   }
 
-  function dispatchEvent(element, type) {
+  function dispatchEvent(element, type, data) {
     var event;
 
     if (element.dispatchEvent) {
 
-      // Event on IE is a global object, not a constructor
-      if (isFunction(Event)) {
-        event = new Event(type, {
-          bubbles: true,
-          cancelable: true
-        });
+      // Event and CustomEvent on IE9-11 are global objects, not constructors
+      if (isFunction(Event) && isFunction(CustomEvent)) {
+        if (isUndefined(data)) {
+          event = new Event(type, {
+            bubbles: true,
+            cancelable: true
+          });
+        } else {
+          event = new CustomEvent(type, {
+            detail: data,
+            bubbles: true,
+            cancelable: true
+          });
+        }
       } else {
-        event = document.createEvent('Event');
-        event.initEvent(type, true, true);
+        // IE9-11
+        if (isUndefined(data)) {
+          event = document.createEvent('Event');
+          event.initEvent(type, true, true);
+        } else {
+          event = document.createEvent('CustomEvent');
+          event.initCustomEvent(type, true, true, data);
+        }
       }
 
       // IE9+
@@ -1103,6 +1117,7 @@
       var _this = this;
       var options = _this.options;
       var image = _this.image;
+      var index = _this.index;
       var viewerData = _this.viewerData;
 
       if (_this.timeout) {
@@ -1127,7 +1142,11 @@
 
         _this.renderImage(function () {
           _this.isViewed = true;
-          dispatchEvent(_this.element, EVENT_VIEWED);
+          dispatchEvent(_this.element, EVENT_VIEWED, {
+            originalImage: _this.images[index],
+            index: index,
+            image: image
+          });
         });
       });
     },
@@ -1511,10 +1530,6 @@
         return _this;
       }
 
-      if (dispatchEvent(element, EVENT_VIEW) === false) {
-        return _this;
-      }
-
       item = _this.items[index];
       img = getByTag(item, 'img')[0];
       url = getData(img, 'originalUrl');
@@ -1523,6 +1538,14 @@
       image = document.createElement('img');
       image.src = url;
       image.alt = alt;
+
+      if (dispatchEvent(element, EVENT_VIEW, {
+        originalImage: _this.images[index],
+        index: index,
+        image: image
+      }) === false) {
+        return _this;
+      }
 
       _this.image = image;
 
@@ -1554,8 +1577,6 @@
 
         setText(title, alt + ' (' + width + ' × ' + height + ')');
       }, true);
-
-
 
       if (image.complete) {
         _this.load();

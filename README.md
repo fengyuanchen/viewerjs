@@ -2,8 +2,7 @@
 
 > JavaScript image viewer.
 
-- [Homepage](http://fengyuanchen.github.io/viewerjs)
-- [Viewer as jQuery plugin](https://github.com/fengyuanchen/viewer)
+- [Website](http://fengyuanchen.github.io/viewerjs)
 
 [![Build Status Images](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs)
 
@@ -48,8 +47,8 @@
 dist/
 ├── viewer.css     ( 8 KB)
 ├── viewer.min.css ( 7 KB)
-├── viewer.js      (60 KB)
-└── viewer.min.js  (22 KB)
+├── viewer.js      (61 KB)
+└── viewer.min.js  (23 KB)
 ```
 
 
@@ -669,7 +668,7 @@ var viewer;
 
 image.addEventListener('viewed', function () {
   console.log(this.viewer === viewer);
-  // > true
+  // -> true
 }, false);
 
 viewer = new Viewer(image);
@@ -727,10 +726,24 @@ This event fires when the viewer modal has hidden.
 
 ### view
 
+- **event.detail.originalImage**:
+  - Type: `HTMLImageElement`
+  - The original image.
+
+- **event.detail.index**:
+  - Type: `Number`
+  - The index of the original image.
+
+- **event.detail.image**:
+  - Type: `HTMLImageElement`
+  - The current image (a clone of the original image).
+
 This event fires when a viewer starts to show (view) an image.
 
 
 ### viewed
+
+- **event.detail**: the same as the `view` event.
 
 This event fires when a viewer has shown (viewed) an image.
 
