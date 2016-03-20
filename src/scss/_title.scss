@@ -1,22 +1,23 @@
 // Title for showing image's name and dimensions
-// ==================================================
+// --------------------------------------------------
 
 .viewer-title {
+  font-size: 12px;
+  line-height: 1;
+
   display: inline-block;
   overflow: hidden;
 
   max-width: 90%;
   margin: 0 5% 5px;
 
-  font-size: 12px;
-  line-height: 1;
-
-  color: $color-grey;
-  @include opacity(.8);
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  opacity: .8;
+  color: $color-grey;
+
   &:hover {
-    @include opacity(1);
+    opacity: 1;
   }
 }

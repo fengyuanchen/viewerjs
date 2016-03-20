@@ -1,23 +1,24 @@
 // Tooltip for showing image ratio when zooming
-// ==================================================
+// --------------------------------------------------
 
 .viewer-tooltip {
+  font-size: 12px;
+  line-height: 20px;
+
   position: absolute;
   top: 50%;
   left: 50%;
 
+  display: none;
+
   width: 50px;
   height: 20px;
-  display: none;
   margin-top: -10px;
   margin-left: -25px;
 
-  font-size: 12px;
-  line-height: 20px;
+  text-align: center;
 
   color: $color-white;
   border-radius: 10px;
-  text-align: center;
-
-  @include bg-color($color-black, 0.8);
+  background-color: rgba($color-black, 0.8);
 }

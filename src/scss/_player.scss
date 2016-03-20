@@ -1,5 +1,5 @@
 // Player for playing images as slideshow
-// ==================================================
+// --------------------------------------------------
 
 .viewer-player {
   position: absolute;
@@ -10,9 +10,9 @@
 
   display: none;
 
-  background-color: $color-black;
-
   cursor: none;
+
+  background-color: $color-black;
 
   > img {
     position: absolute;

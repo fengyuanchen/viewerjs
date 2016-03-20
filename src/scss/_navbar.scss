@@ -1,32 +1,32 @@
 // Navbar for listing thumbnails and navigating views
-// ==================================================
+// --------------------------------------------------
 
 .viewer-navbar {
   overflow: hidden;
 
-  @include bg-color($color-black, .5);
+  background-color: rgba($color-black, .5);
 }
 
 .viewer-list {
-  box-sizing: content-box;
   overflow: hidden;
+  box-sizing: content-box;
 
   height: 50px;
   margin: 0;
   padding: 1px 0;
 
   > li {
+    @include text-hide();
+
     float: left;
     overflow: hidden;
 
     width: 30px;
     height: 50px;
 
-    @include text-hide();
-
-    @include opacity(.5);
-
     cursor: pointer;
+
+    opacity: .5;
 
     + li {
       margin-left: 1px;
@@ -34,6 +34,6 @@
   }
 
   > .viewer-active {
-     @include opacity(1);
+     opacity: 1;
   }
 }

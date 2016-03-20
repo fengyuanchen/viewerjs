@@ -1,5 +1,5 @@
 // Helper classes for JavaScript
-// ==================================================
+// --------------------------------------------------
 
 .viewer-fixed {
   position: fixed;
@@ -27,11 +27,11 @@
 }
 
 .viewer-fade {
-  @include opacity(0);
+  opacity: 0;
 }
 
 .viewer-in {
-  @include opacity(1);
+  opacity: 1;
 }
 
 .viewer-transition {

@@ -1,7 +1,10 @@
 // Container for wrapping viewer
-// ==================================================
+// --------------------------------------------------
 
 .viewer-container {
+  font-size: 0;
+  line-height: 0;
+
   position: absolute;
   top: 0;
   right: 0;
@@ -10,14 +13,12 @@
 
   overflow: hidden;
 
-  font-size: 0;
-  line-height: 0;
+  user-select: none;
 
-  @include bg-color($color-black, .5);
+  background-color: rgba($color-black, .5);
 
   direction: ltr !important; // Ignore global rtl
   touch-action: none;
-  user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 
@@ -27,6 +28,7 @@
   }
 
   img {
+
     // Avoid margin top issue (Occur only when margin-top <= -height)
     display: block;
 
