@@ -10,6 +10,45 @@ window.onload = function () {
   var options = {
         // inline: true,
         url: 'data-original',
+        zoomable: false,
+        scalable: false,
+        toolbarCustom: {
+          override: true,
+          buttons: [{
+            clazz: 'fa fa-plus-circle',
+            action: 'zoom-in'
+          }, {
+            clazz: 'fa fa-minus-circle',
+            action: 'zoom-out'
+          }, {
+            clazz: 'fa fa-eye',
+            action: 'one-to-one'
+          }, {
+            clazz: 'fa fa-undo',
+            action: 'reset'
+          }, {
+            clazz: 'fa fa-angle-left',
+            action: 'prev'
+          }, {
+            clazz: 'fa fa-play',
+            action: 'play'
+          }, {
+            clazz: 'fa fa-angle-right',
+            action: 'next'
+          }, {
+            clazz: 'fa fa-reply',
+            action: 'rotate-left'
+          }, {
+            clazz: 'fa fa-mail-forward',
+            action: 'rotate-right'
+          }, {
+            clazz: 'fa fa-arrows-h',
+            action: 'flip-horizontal'
+          }, {
+            clazz: 'fa fa-arrows-v',
+            action: 'flip-vertical'
+          }]
+        },
         build: function (e) {
           console.log(e.type);
         },
@@ -102,6 +141,9 @@ window.onload = function () {
     if (viewer) {
       name = input.getAttribute('name');
       options[name] = name === 'inline' ? JSON.parse(input.getAttribute('data-value')) : input.checked;
+      if (name === 'customToolbar' && !input.checked) {
+        delete options.toolbarCustom;
+      }
       viewer.destroy();
       viewer = new Viewer(pictures, options);
       toggleButtons(options.inline ? 'inline' : 'modal');

@@ -182,7 +182,8 @@ gulp.task('assets:js', function () {
 
 gulp.task('assets:fonts', function () {
   return gulp.src([
-      'bower_components/bootstrap/fonts/*'
+      'bower_components/bootstrap/fonts/*',
+      'bower_components/font-awesome/fonts/*'
     ])
     .pipe(gulp.dest('assets/fonts'));
 });
@@ -190,7 +191,8 @@ gulp.task('assets:fonts', function () {
 gulp.task('assets:css', ['assets:fonts'], function () {
   return gulp.src([
       'bower_components/bootstrap/dist/css/bootstrap.min.css',
-      'bower_components/qunit/qunit/qunit.css'
+      'bower_components/qunit/qunit/qunit.css',
+      'bower_components/font-awesome/css/font-awesome.min.css'
     ])
     .pipe(gulp.dest('assets/css'));
 });
@@ -225,4 +227,4 @@ gulp.task('watch', function () {
   gulp.watch('docs/**', ['docs:all']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['js', 'css', 'watch']);

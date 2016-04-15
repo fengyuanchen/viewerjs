@@ -5,7 +5,7 @@
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-03-20T07:17:50.179Z
+ * Date: 2016-04-15T03:56:56.012Z
  */
 
 (function (global, factory) {
@@ -696,16 +696,30 @@
       _this.player = getByClass(viewer, 'viewer-player')[0];
       _this.list = getByClass(viewer, 'viewer-list')[0];
 
+      if (options.toolbarCustom) {
+        var width = options.toolbarCustom.width,
+          buttons = options.toolbarCustom.buttons;
+
+        options.toolbarCustom.override && empty(toolbar);
+
+        isArray(buttons) && each(buttons, function (item, index) {
+          var li = document.createElement('li');
+          li.className += item.clazz;
+          setData(li, 'action', item.action);
+          appendChild(toolbar, li);
+        });
+      }
+
       addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
       addClass(toolbar, !options.toolbar ? CLASS_HIDE : getResponsiveClass(options.toolbar));
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
 
-      toggleClass(toolbar.querySelectorAll('li[class*=zoom]'), CLASS_INVISIBLE, !options.zoomable);
-      toggleClass(toolbar.querySelectorAll('li[class*=flip]'), CLASS_INVISIBLE, !options.scalable);
+      toggleClass(toolbar.querySelectorAll('li[data-action*=zoom]'), CLASS_INVISIBLE, !options.zoomable);
+      toggleClass(toolbar.querySelectorAll('li[data-action*=flip]'), CLASS_INVISIBLE, !options.scalable);
 
       if (!options.rotatable) {
-        rotate = toolbar.querySelectorAll('li[class*=rotate]');
+        rotate = toolbar.querySelectorAll('li[data-action*=rotate]');
         addClass(rotate, CLASS_INVISIBLE);
         appendChild(toolbar, rotate);
       }
