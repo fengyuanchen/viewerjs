@@ -39,6 +39,7 @@
   "devDependencies": {
     "jquery": "~2.2.2",
     "bootstrap": "~3.3.6",
-    "qunit": "~1.22.0"
+    "qunit": "~1.22.0",
+    "font-awesome": "fontawesome#^4.5.0"
   }
 }

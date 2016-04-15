@@ -194,6 +194,18 @@ Specify the visibility of the title (the current image's name and dimensions).
 
 Specify the visibility of the toolbar.
 
+### toolbarCustom
+
+- Type: `Object`
+- Options:
+  - `override`: `true` or `false`, if `true` override origin toolbar, default `false`
+  - `buttons`: `Array` of toolbars, every item contains `clazz`, `action` props.
+    - clazz: the class of the button
+    - action: the click event handler of button.
+              one of `zoom-in`, `zoom-out`, `one-to-one`, `reset`, `prev`, `play`, `next`,
+              `rotate-left`, `rotate-right`, `flip-horizontal`, `flip-vertical`
+
+Custom the toolbar. If Specified, `toolbar` will be ignore.
 
 ### tooltip
 
