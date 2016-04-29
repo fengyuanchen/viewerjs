@@ -1,4 +1,4 @@
-QUnit.test('options.url', function (assert) {
+QUnit.test('options#url', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -17,7 +17,7 @@ QUnit.test('options.url', function (assert) {
   });
 });
 
-QUnit.test('options.url: function', function (assert) {
+QUnit.test('options#url: function', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

@@ -1,4 +1,4 @@
-QUnit.test('methods.update', function (assert) {
+QUnit.test('methods#update', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var imageList = util.createImageList();

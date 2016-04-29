@@ -1,4 +1,4 @@
-QUnit.test('options.zoomable', function (assert) {
+QUnit.test('options#zoomable', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -19,7 +19,7 @@ QUnit.test('options.zoomable', function (assert) {
   });
 });
 
-QUnit.test('options.zoomable: false', function (assert) {
+QUnit.test('options#zoomable: false', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

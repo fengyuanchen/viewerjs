@@ -1,4 +1,4 @@
-QUnit.test('methods.toggle', function (assert) {
+QUnit.test('methods#toggle', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

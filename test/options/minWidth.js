@@ -1,4 +1,4 @@
-QUnit.test('options.minWidth', function (assert) {
+QUnit.test('options#minWidth', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

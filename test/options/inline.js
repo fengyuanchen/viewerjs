@@ -1,4 +1,4 @@
-QUnit.test('options.inline', function (assert) {
+QUnit.test('options#inline', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

@@ -1,4 +1,4 @@
-QUnit.test('options.zIndexInline', function (assert) {
+QUnit.test('options#zIndexInline', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

@@ -1,4 +1,4 @@
-QUnit.test('options.show', function (assert) {
+QUnit.test('options#show', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -24,7 +24,7 @@ QUnit.test('options.show', function (assert) {
   });
 });
 
-QUnit.test('options.show: default prevented', function (assert) {
+QUnit.test('options#show: default prevented', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

@@ -1,4 +1,4 @@
-QUnit.test('events.hide', function (assert) {
+QUnit.test('events#hide', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -24,7 +24,7 @@ QUnit.test('events.hide', function (assert) {
   });
 });
 
-QUnit.test('events.hide: default prevented', function (assert) {
+QUnit.test('events#hide: default prevented', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

@@ -1,4 +1,4 @@
-QUnit.test('options.movable', function (assert) {
+QUnit.test('options#movable', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -21,7 +21,7 @@ QUnit.test('options.movable', function (assert) {
   });
 });
 
-QUnit.test('options.movable: false', function (assert) {
+QUnit.test('options#movable: false', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

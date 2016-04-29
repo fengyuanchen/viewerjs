@@ -1,4 +1,4 @@
-QUnit.test('options.viewed', function (assert) {
+QUnit.test('options#viewed', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();

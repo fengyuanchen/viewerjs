@@ -1,4 +1,4 @@
-QUnit.test('options.toolbar', function (assert) {
+QUnit.test('options#toolbar', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -16,7 +16,7 @@ QUnit.test('options.toolbar', function (assert) {
   });
 });
 
-QUnit.test('options.toolbar: false', function (assert) {
+QUnit.test('options#toolbar: false', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
