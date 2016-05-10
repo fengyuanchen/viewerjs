@@ -269,6 +269,22 @@ Enable keyboard support.
 Define interval of each image when playing.
 
 
+### minWidth
+
+- Type: `Number`
+- Default: 200
+
+Define the minimum width of the viewer (helpful when you want it to be the same as the container's width).
+
+
+### minHeight
+
+- Type: `Number`
+- Defualt: 100
+
+Define the minimum height of the viewer (helpful when you want it to be the same as the container's height).
+
+
 ### zoomRatio
 
 - Type: `Number`
