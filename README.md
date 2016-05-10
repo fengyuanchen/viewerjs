@@ -274,15 +274,19 @@ Define interval of each image when playing.
 - Type: `Number`
 - Default: 200
 
-Define the minimum width of the viewer (helpful when you want it to be the same as the container's width).
+Define the minimum width of the viewer.
+
+> Only available in inline mode (set the `inline` option to `true`).
 
 
 ### minHeight
 
 - Type: `Number`
-- Defualt: 100
+- Default: 100
 
-Define the minimum height of the viewer (helpful when you want it to be the same as the container's height).
+Define the minimum height of the viewer.
+
+> Only available in inline mode (set the `inline` option to `true`).
 
 
 ### zoomRatio
