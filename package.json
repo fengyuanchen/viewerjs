@@ -5,7 +5,7 @@
   "main": "dist/viewer.js",
   "license": "MIT",
   "repository": "fengyuanchen/viewerjs",
-  "homepage": "http://fengyuanchen.github.io/viewerjs",
+  "homepage": "https://fengyuanchen.github.io/viewerjs",
   "author": {
     "name": "Fengyuan Chen",
     "url": "http://chenfengyuan.com"

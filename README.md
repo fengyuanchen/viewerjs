@@ -2,7 +2,7 @@
 
 > JavaScript image viewer.
 
-- [Website](http://fengyuanchen.github.io/viewerjs)
+- [Website](https://fengyuanchen.github.io/viewerjs)
 
 [![Build Status Images](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs)
 
