@@ -5,7 +5,7 @@
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-03-20T07:17:50.179Z
+ * Date: 2016-06-03T14:05:05.215Z
  */
 
 (function (global, factory) {
@@ -309,12 +309,16 @@
     }
   }
 
+  function toHyphenCase(str) {
+      return str.replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase();
+  }
+
   function getData(element, name) {
     return isObject(element[name]) ?
       element[name] :
       element.dataset ?
         element.dataset[name] :
-        element.getAttribute('data-' + name);
+        element.getAttribute('data-' + toHyphenCase(name));
   }
 
   function setData(element, name, data) {
@@ -548,12 +552,13 @@
     var scaleX = data.scaleX;
     var scaleY = data.scaleY;
 
-    if (isNumber(rotate)) {
-      transforms.push('rotate(' + rotate + 'deg)');
-    }
-
+    // Scale should come first before rotate
     if (isNumber(scaleX) && isNumber(scaleY)) {
       transforms.push('scale(' + scaleX + ',' + scaleY + ')');
+    }
+
+    if (isNumber(rotate)) {
+      transforms.push('rotate(' + rotate + 'deg)');
     }
 
     return transforms.length ? transforms.join(' ') : 'none';
