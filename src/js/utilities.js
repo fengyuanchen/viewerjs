@@ -219,12 +219,16 @@
     }
   }
 
+  function toHyphenCase(str) {
+      return str.replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase();
+  }
+
   function getData(element, name) {
     return isObject(element[name]) ?
       element[name] :
       element.dataset ?
         element.dataset[name] :
-        element.getAttribute('data-' + name);
+        element.getAttribute('data-' + toHyphenCase(name));
   }
 
   function setData(element, name, data) {
