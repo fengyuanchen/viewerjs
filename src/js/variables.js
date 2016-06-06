@@ -43,6 +43,7 @@
 
   // RegExps
   var REGEXP_SUFFIX = /width|height|left|top|marginLeft|marginTop/;
+  var REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
   var REGEXP_TRIM = /^\s+(.*)\s+$/;
   var REGEXP_SPACES = /\s+/;
 
