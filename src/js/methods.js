@@ -23,7 +23,7 @@
         return _this;
       }
 
-      addClass(_this.body, CLASS_OPEN);
+      _this.open();
       removeClass(viewer, CLASS_HIDE);
 
       addListener(element, EVENT_SHOWN, function () {
@@ -531,7 +531,7 @@
       }
 
       _this.isFulled = true;
-      addClass(_this.body, CLASS_OPEN);
+      _this.open();
       addClass(_this.button, CLASS_FULLSCREEN_EXIT);
 
       if (options.transition) {
@@ -575,7 +575,7 @@
       }
 
       _this.isFulled = false;
-      removeClass(_this.body, CLASS_OPEN);
+      _this.close();
       removeClass(_this.button, CLASS_FULLSCREEN_EXIT);
 
       if (options.transition) {

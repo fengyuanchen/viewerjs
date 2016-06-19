@@ -38,6 +38,7 @@
       _this.count = 0;
       _this.images = images;
       _this.body = document.body;
+      _this.scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
       if (options.inline) {
         addListener(element, EVENT_BUILT, function () {

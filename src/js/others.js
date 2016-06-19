@@ -1,3 +1,17 @@
+    open: function () {
+      var body = this.body;
+
+      addClass(body, CLASS_OPEN);
+      body.style.paddingRight = this.scrollbarWidth + 'px';
+    },
+
+    close: function () {
+      var body = this.body;
+
+      removeClass(body, CLASS_OPEN);
+      body.style.paddingRight = 0;
+    },
+
     shown: function () {
       var _this = this;
       var options = _this.options;
@@ -28,7 +42,7 @@
       _this.isShown = false;
       _this.isVisible = false;
       _this.unbind();
-      removeClass(_this.body, CLASS_OPEN);
+      _this.close();
       addClass(_this.viewer, CLASS_HIDE);
       _this.resetList();
       _this.resetImage();
