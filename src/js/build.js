@@ -35,11 +35,12 @@
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
 
-      toggleClass(toolbar.querySelectorAll('li[class*=zoom]'), CLASS_INVISIBLE, !options.zoomable);
-      toggleClass(toolbar.querySelectorAll('li[class*=flip]'), CLASS_INVISIBLE, !options.scalable);
+      toggleClass(toolbar.querySelector('.viewer-one-to-one'), CLASS_INVISIBLE, !options.zoomable);
+      toggleClass(toolbar.querySelectorAll('li[class*="zoom"]'), CLASS_INVISIBLE, !options.zoomable);
+      toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), CLASS_INVISIBLE, !options.scalable);
 
       if (!options.rotatable) {
-        rotate = toolbar.querySelectorAll('li[class*=rotate]');
+        rotate = toolbar.querySelectorAll('li[class*="rotate"]');
         addClass(rotate, CLASS_INVISIBLE);
         appendChild(toolbar, rotate);
       }
