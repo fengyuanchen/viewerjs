@@ -2,4 +2,4 @@
 
 > JavaScript image viewer.
 
-- [Website](http://fengyuanchen.github.io/viewerjs)
+- [Website](https://fengyuanchen.github.io/viewerjs)
