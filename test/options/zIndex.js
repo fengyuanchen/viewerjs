@@ -6,14 +6,8 @@ QUnit.test('options#zIndex', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
+  var viewer = new Viewer(image, {
     zIndex: zIndex,
-
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
 
     shown: function () {
       var viewer = this.viewer;
@@ -25,4 +19,6 @@ QUnit.test('options#zIndex', function (assert) {
       viewer.hide();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });

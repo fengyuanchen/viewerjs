@@ -5,15 +5,7 @@ QUnit.test('methods#view', function (assert) {
 
   assert.expect(2);
 
-  return new Viewer(imageList, {
-    build: function () {
-      var viewer = this.viewer;
-
-      setTimeout(function () {
-        viewer.show();
-      }, 0);
-    },
-
+  var viewer = new Viewer(imageList, {
     shown: function () {
       var viewer = this.viewer;
 
@@ -34,4 +26,6 @@ QUnit.test('methods#view', function (assert) {
       }
     }
   });
+
+  viewer.show();
 });

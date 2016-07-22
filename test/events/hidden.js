@@ -5,13 +5,7 @@ QUnit.test('events#hidden', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     shown: function () {
       this.viewer.hide();
     },
@@ -22,4 +16,6 @@ QUnit.test('events#hidden', function (assert) {
       done();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });

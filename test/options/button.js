@@ -5,13 +5,7 @@ QUnit.test('options#button', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     shown: function () {
       var viewer = this.viewer;
 
@@ -22,6 +16,8 @@ QUnit.test('options#button', function (assert) {
       viewer.hide();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });
 
 QUnit.test('options#button: inline', function (assert) {
@@ -34,7 +30,7 @@ QUnit.test('options#button: inline', function (assert) {
   return new Viewer(image, {
     inline: true,
 
-    built: function () {
+    ready: function () {
       assert.ok(util.hasClass(this.viewer.button, 'viewer-fullscreen'));
 
       done();
@@ -53,7 +49,7 @@ QUnit.test('options#button: false', function (assert) {
     inline: true,
     button: false,
 
-    built: function () {
+    ready: function () {
       assert.ok(util.hasClass(this.viewer.button, 'viewer-hide'));
 
       done();

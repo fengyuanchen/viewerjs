@@ -20,12 +20,8 @@
         return;
       }
 
-      if (isFunction(options.build)) {
-        addListener(element, EVENT_BUILD, options.build, true);
-      }
-
-      if (dispatchEvent(element, EVENT_BUILD) === false) {
-        return;
+      if (isFunction(options.ready)) {
+        addListener(element, EVENT_READY, options.ready, true);
       }
 
       // Override `transition` option if it is not supported
@@ -41,7 +37,7 @@
       _this.scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
       if (options.inline) {
-        addListener(element, EVENT_BUILT, function () {
+        addListener(element, EVENT_READY, function () {
           _this.view();
         }, true);
 

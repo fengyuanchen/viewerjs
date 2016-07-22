@@ -10,10 +10,7 @@ window.onload = function () {
   var options = {
         // inline: true,
         url: 'data-original',
-        build: function (e) {
-          console.log(e.type);
-        },
-        built:  function (e) {
+        ready:  function (e) {
           console.log(e.type);
         },
         show:  function (e) {
@@ -66,10 +63,7 @@ window.onload = function () {
     }
   }
 
-  addEventListener(pictures, 'build', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'built', function (e) {
+  addEventListener(pictures, 'ready', function (e) {
     console.log(e.type);
   });
   addEventListener(pictures, 'show', function (e) {

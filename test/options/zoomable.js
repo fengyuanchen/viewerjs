@@ -30,7 +30,7 @@ QUnit.test('options#zoomable: false', function (assert) {
     inline: true,
     zoomable: false,
 
-    built: function () {
+    viewed: function () {
       var viewer = this.viewer;
 
       viewer.zoomTo(1);

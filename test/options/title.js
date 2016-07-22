@@ -8,7 +8,7 @@ QUnit.test('options#title', function (assert) {
   return new Viewer(image, {
     inline: true,
 
-    built: function () {
+    ready: function () {
       assert.notOk(util.hasClass(this.viewer.title, 'viewer-hide'));
 
       done();
@@ -27,7 +27,7 @@ QUnit.test('options#title: false', function (assert) {
     inline: true,
     title: false,
 
-    built: function () {
+    ready: function () {
       assert.ok(util.hasClass(this.viewer.title, 'viewer-hide'));
 
       done();

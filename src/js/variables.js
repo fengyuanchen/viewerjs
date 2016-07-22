@@ -32,8 +32,7 @@
   var EVENT_KEYDOWN = 'keydown';
   var EVENT_CLICK = 'click';
   var EVENT_RESIZE = 'resize';
-  var EVENT_BUILD = 'build';
-  var EVENT_BUILT = 'built';
+  var EVENT_READY = 'ready';
   var EVENT_SHOW = 'show';
   var EVENT_SHOWN = 'shown';
   var EVENT_HIDE = 'hide';

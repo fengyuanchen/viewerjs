@@ -8,7 +8,7 @@ QUnit.test('methods#destroy', function (assert) {
   return new Viewer(image, {
     inline: true,
 
-    built: function () {
+    ready: function () {
       assert.ok(typeof this.viewer === 'object');
 
       this.viewer.destroy();

@@ -30,7 +30,7 @@ QUnit.test('options#rotatable: false', function (assert) {
     inline: true,
     rotatable: false,
 
-    built: function () {
+    viewed: function () {
       var viewer = this.viewer;
 
       viewer.rotateTo(90);

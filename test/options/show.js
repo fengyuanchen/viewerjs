@@ -5,13 +5,7 @@ QUnit.test('options#show', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     show: function (e) {
       assert.ok(e.type === 'show');
 
@@ -22,6 +16,8 @@ QUnit.test('options#show', function (assert) {
       this.viewer.hide();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });
 
 QUnit.test('options#show: default prevented', function (assert) {
@@ -31,13 +27,7 @@ QUnit.test('options#show: default prevented', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     show: function (e) {
       e.preventDefault();
 
@@ -50,4 +40,6 @@ QUnit.test('options#show: default prevented', function (assert) {
       assert.ok(false);
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });

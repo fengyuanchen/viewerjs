@@ -11,17 +11,13 @@ QUnit.test('events#show', function (assert) {
     done();
   }, false);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     shown: function () {
       this.viewer.hide();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });
 
 QUnit.test('events#show: default prevented', function (assert) {
@@ -43,11 +39,7 @@ QUnit.test('events#show: default prevented', function (assert) {
     assert.ok(false);
   }, false);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    }
-  });
+  var viewer = new Viewer(image);
+
+  util.dispatchEvent(image, 'click');
 });

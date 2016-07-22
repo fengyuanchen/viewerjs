@@ -10,26 +10,26 @@
 
 ## Table of contents
 
-  - [Features](#features)
-  - [Main](#main)
-  - [Getting started](#getting-started)
-  - [Keyboard support](#keyboard-support)
-  - [Options](#options)
-  - [Methods](#methods)
-  - [Events](#events)
-  - [No conflict](#no-conflict)
-  - [Browser support](#browser-support)
-  - [Contributing](#contributing)
-  - [Versioning](#versioning)
-  - [License](#license)
+- [Features](#features)
+- [Main](#main)
+- [Getting started](#getting-started)
+- [Keyboard support](#keyboard-support)
+- [Options](#options)
+- [Methods](#methods)
+- [Events](#events)
+- [No conflict](#no-conflict)
+- [Browser support](#browser-support)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+- [License](#license)
 
 
 
 ## Features
 
-- Supports 30 [options](#options)
+- Supports 29 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 8 [events](#events)
+- Supports 7 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -57,12 +57,11 @@ dist/
 
 ### Quick start
 
-Four quick start options are available:
+Three quick start options are available:
 
 - [Download the latest release](https://github.com/fengyuanchen/viewerjs/archive/master.zip).
 - Clone the repository: `git clone https://github.com/fengyuanchen/viewerjs.git`.
-- Install with [NPM](http://npmjs.org): `npm install viewerjs`.
-- Install with [Bower](http://bower.io): `bower install fengyuanchen/viewerjs`.
+- Install with [NPM](https://npmjs.com): `npm install viewerjs`.
 
 
 
@@ -340,20 +339,12 @@ Define where to get the original image URL for viewing.
 > If it is a function, it will be called on each image and should return a valid image URL.
 
 
-### build
+### ready
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "build" event.
-
-
-### built
-
-- Type: `Function`
-- Default: `null`
-
-A shortcut of the "built" event.
+A shortcut of the `ready` event.
 
 
 ### show
@@ -361,7 +352,7 @@ A shortcut of the "built" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "show" event.
+A shortcut of the `show` event.
 
 
 ### shown
@@ -369,7 +360,7 @@ A shortcut of the "show" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "shown" event.
+A shortcut of the `shown` event.
 
 
 ### hide
@@ -377,7 +368,7 @@ A shortcut of the "shown" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "hide" event.
+A shortcut of the `hide` event.
 
 
 ### hidden
@@ -385,7 +376,7 @@ A shortcut of the "hide" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "hidden" event.
+A shortcut of the `hidden` event.
 
 
 ### view
@@ -393,7 +384,7 @@ A shortcut of the "hidden" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "view" event.
+A shortcut of the `view` event.
 
 
 ### viewed
@@ -401,7 +392,7 @@ A shortcut of the "view" event.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "viewed" event.
+A shortcut of the `viewed` event.
 
 
 [⬆ back to top](#table-of-contents)
@@ -694,26 +685,12 @@ image.addEventListener('viewed', function () {
 viewer = new Viewer(image);
 ```
 
-### build
 
-This event fires when a viewer instance starts to build.
+### ready
 
-```js
-new Viewer(image, {
-  build: function () {
-    var viewer = this.viewer;
+This event fires when a viewer instance is ready for viewing.
 
-    // Show the viewer modal manually
-    setTimeout(function () {
-      viewer.show();
-    }, 0);
-  }
-});
-```
-
-### built
-
-This event fires when a viewer instance has built.
+> In modal mode, this event will not be triggered until you click on one of the images.
 
 
 ### show

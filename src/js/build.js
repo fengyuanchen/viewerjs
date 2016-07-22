@@ -78,11 +78,7 @@
 
       _this.isBuilt = true;
 
-      if (isFunction(options.built)) {
-        addListener(element, EVENT_BUILT, options.built, true);
-      }
-
-      dispatchEvent(element, EVENT_BUILT);
+      dispatchEvent(element, EVENT_READY);
     },
 
     unbuild: function () {

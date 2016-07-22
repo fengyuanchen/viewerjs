@@ -5,13 +5,7 @@ QUnit.test('options#shown', function (assert) {
 
   assert.expect(1);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    },
-
+  var viewer = new Viewer(image, {
     shown: function (e) {
       assert.ok(e.type === 'shown');
 
@@ -20,4 +14,6 @@ QUnit.test('options#shown', function (assert) {
       this.viewer.hide();
     }
   });
+
+  util.dispatchEvent(image, 'click');
 });

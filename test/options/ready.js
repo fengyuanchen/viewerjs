@@ -1,4 +1,4 @@
-QUnit.test('options#built', function (assert) {
+QUnit.test('options#ready', function (assert) {
   var done = assert.async();
   var util = window.Util;
   var image = util.createImage();
@@ -8,8 +8,8 @@ QUnit.test('options#built', function (assert) {
   return new Viewer(image, {
     inline: true,
 
-    built: function (e) {
-      assert.ok(e.type === 'built');
+    ready: function (e) {
+      assert.ok(e.type === 'ready');
 
       done();
     }

@@ -13,11 +13,7 @@ QUnit.test('events#shown', function (assert) {
     this.viewer.hide();
   }, false);
 
-  return new Viewer(image, {
-    build: function () {
-      setTimeout(function () {
-        util.dispatchEvent(image, 'click');
-      }, 0);
-    }
-  });
+  var viewer = new Viewer(image);
+
+  util.dispatchEvent(image, 'click');
 });

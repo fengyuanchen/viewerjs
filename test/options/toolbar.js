@@ -8,7 +8,7 @@ QUnit.test('options#toolbar', function (assert) {
   return new Viewer(image, {
     inline: true,
 
-    built: function () {
+    ready: function () {
       assert.notOk(util.hasClass(this.viewer.toolbar, 'viewer-hide'));
 
       done();
@@ -27,7 +27,7 @@ QUnit.test('options#toolbar: false', function (assert) {
     inline: true,
     toolbar: false,
 
-    built: function () {
+    ready: function () {
       assert.ok(util.hasClass(this.viewer.toolbar, 'viewer-hide'));
 
       done();

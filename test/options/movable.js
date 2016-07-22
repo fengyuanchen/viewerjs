@@ -32,7 +32,7 @@ QUnit.test('options#movable: false', function (assert) {
     inline: true,
     movable: false,
 
-    built: function () {
+    viewed: function () {
       var viewer = this.viewer;
       var imageData = viewer.imageData;
 

@@ -10,7 +10,7 @@ QUnit.test('options#zIndexInline', function (assert) {
     inline: true,
     zIndexInline: zIndexInline,
 
-    built: function () {
+    ready: function () {
       assert.deepEqual(parseInt(this.viewer.viewer.style.zIndex, 10), zIndexInline);
 
       done();

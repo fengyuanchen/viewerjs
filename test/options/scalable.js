@@ -32,7 +32,7 @@ QUnit.test('options#scalable: false', function (assert) {
     inline: true,
     scalable: false,
 
-    built: function () {
+    viewed: function () {
       var viewer = this.viewer;
       var imageData = viewer.imageData;
 
