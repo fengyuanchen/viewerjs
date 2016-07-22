@@ -465,15 +465,15 @@
     var scaleY = data.scaleY;
 
     // Rotate should come first before scale
-    if (isNumber(rotate) && rotate !== 0) {
+    if (isNumber(rotate)) {
       transforms.push('rotate(' + rotate + 'deg)');
     }
 
-    if (isNumber(scaleX) && scaleX !== 1) {
+    if (isNumber(scaleX)) {
       transforms.push('scaleX(' + scaleX + ')');
     }
 
-    if (isNumber(scaleY) && scaleY !== 1) {
+    if (isNumber(scaleY)) {
       transforms.push('scaleY(' + scaleY + ')');
     }
 
