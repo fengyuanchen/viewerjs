@@ -1,6 +1,14 @@
 # Changelog
 
 
+## 0.5.0 (July 22, 2016)
+
+- Improve modal opening and closing.
+- Remove `build` event.
+- Rename `built` event to `ready`.
+- Fixed a bug of `data-*` attributes setting and getting (#33).
+
+
 ## 0.4.0 (Mar 20, 2016)
 
 - Added some properties to "event.detail" of the "view" and "viewed" events.
