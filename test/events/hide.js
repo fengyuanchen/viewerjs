@@ -5,7 +5,6 @@ QUnit.test('events#hide', function (assert) {
 
   assert.expect(1);
 
-  // jshint unused: false
   var viewer = new Viewer(image, {
     shown: function () {
       this.viewer.hide();

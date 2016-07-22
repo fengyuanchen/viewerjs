@@ -139,7 +139,7 @@ gulp.task('css', ['csslint'], function () {
     .pipe(plugins.rename({
       suffix: '.min'
     }))
-    .pipe(plugins.minifyCss({
+    .pipe(plugins.cleanCss({
       compatibility: 'ie9',
       keepSpecialComments: 1
     }))
