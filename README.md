@@ -407,7 +407,7 @@ As there are some **asynchronous** processes when start the viewer, you should c
 
 ```js
 new Viewer(image, {
-  built: function () {
+  ready: function () {
     // 2 methods are available here: "show" and "destroy".
   },
   shown: function () {

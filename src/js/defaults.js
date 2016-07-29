@@ -68,8 +68,7 @@
     url: 'src',
 
     // Event shortcuts
-    build: null,
-    built: null,
+    ready: null,
     show: null,
     shown: null,
     hide: null,
