@@ -145,7 +145,7 @@
       var imageData = _this.imageData;
       var viewerData = _this.viewerData;
 
-      return imageData.left >= 0 && imageData.top >= 0 &&
+      return _this.length > 1 && imageData.left >= 0 && imageData.top >= 0 &&
         imageData.width <= viewerData.width &&
         imageData.height <= viewerData.height;
     }
