@@ -343,17 +343,28 @@
 
   function getEvent(event) {
     var e = event || window.event;
+    var eventDoc;
     var doc;
+    var body;
 
     // Fix target property (IE8)
     if (!e.target) {
       e.target = e.srcElement || document;
     }
 
-    if (!isNumber(e.pageX)) {
-      doc = document.documentElement;
-      e.pageX = e.clientX + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0);
-      e.pageY = e.clientY + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0);
+    if (!isNumber(e.pageX) && isNumber(e.clientX)) {
+      eventDoc = event.target.ownerDocument || document;
+      doc = eventDoc.documentElement;
+      body = eventDoc.body;
+
+      e.pageX = e.clientX + (
+        ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
+        ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
+      );
+      e.pageY = e.clientY + (
+        ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
+        ((doc && doc.clientTop) || (body && body.clientTop) || 0)
+      );
     }
 
     return e;
