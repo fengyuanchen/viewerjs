@@ -660,6 +660,8 @@ Reset the image to its initial state.
 
 Update the viewer when images changed.
 
+> If you load images dynamically, you can use this method to add the new images to the viewer instance.
+
 
 ### destroy()
 
