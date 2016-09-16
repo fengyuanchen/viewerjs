@@ -335,7 +335,6 @@
       }
 
       if (action) {
-        preventDefault(e);
         _this.action = action;
         _this.startX = touch ? touch.pageX : e.pageX;
         _this.startY = touch ? touch.pageY : e.pageY;
@@ -392,8 +391,6 @@
       var action = _this.action;
 
       if (action) {
-        preventDefault(e);
-
         if (action === 'move' && _this.options.transition) {
           addClass(_this.image, CLASS_TRANSITION);
         }
