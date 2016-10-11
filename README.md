@@ -81,7 +81,7 @@ Include files:
 Initialize with `Viewer` constructor:
 
 - Browser: `window.Viewer`
-- CommonJS: `var Viewer = require('viewer')`
+- CommonJS: `var Viewer = require('viewerjs')`
 - NodeJS: `var Viewer = require('viewerjs')(window)`
 
 
