@@ -12,6 +12,9 @@
     // Show the title
     title: true,
 
+    // Show dimensions in the title
+    showDimensions: true,
+
     // Show the toolbar
     toolbar: true,
 

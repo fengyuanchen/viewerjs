@@ -5,7 +5,7 @@
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-07-22T08:46:05.003Z
+ * Date: 2016-10-18T08:37:49.347Z
  */
 
 (function (global, factory) {
@@ -433,17 +433,28 @@
 
   function getEvent(event) {
     var e = event || window.event;
+    var eventDoc;
     var doc;
+    var body;
 
     // Fix target property (IE8)
     if (!e.target) {
       e.target = e.srcElement || document;
     }
 
-    if (!isNumber(e.pageX)) {
-      doc = document.documentElement;
-      e.pageX = e.clientX + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0);
-      e.pageY = e.clientY + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0);
+    if (!isNumber(e.pageX) && isNumber(e.clientX)) {
+      eventDoc = event.target.ownerDocument || document;
+      doc = eventDoc.documentElement;
+      body = eventDoc.body;
+
+      e.pageX = e.clientX + (
+        ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
+        ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
+      );
+      e.pageY = e.clientY + (
+        ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
+        ((doc && doc.clientTop) || (body && body.clientTop) || 0)
+      );
     }
 
     return e;
@@ -1364,7 +1375,6 @@
       }
 
       if (action) {
-        preventDefault(e);
         _this.action = action;
         _this.startX = touch ? touch.pageX : e.pageX;
         _this.startY = touch ? touch.pageY : e.pageY;
@@ -1421,8 +1431,6 @@
       var action = _this.action;
 
       if (action) {
-        preventDefault(e);
-
         if (action === 'move' && _this.options.transition) {
           addClass(_this.image, CLASS_TRANSITION);
         }
@@ -1579,8 +1587,9 @@
         var imageData = _this.imageData;
         var width = imageData.naturalWidth;
         var height = imageData.naturalHeight;
+        var titleSize = _this.options.showDimensions ? ' (' + width + ' × ' + height + ')' : '';
 
-        setText(title, alt + ' (' + width + ' × ' + height + ')');
+        setText(title, alt + titleSize);
       }, true);
 
       if (image.complete) {
@@ -2342,7 +2351,7 @@
       var imageData = _this.imageData;
       var viewerData = _this.viewerData;
 
-      return imageData.left >= 0 && imageData.top >= 0 &&
+      return _this.length > 1 && imageData.left >= 0 && imageData.top >= 0 &&
         imageData.width <= viewerData.width &&
         imageData.height <= viewerData.height;
     }
@@ -2361,6 +2370,9 @@
 
     // Show the title
     title: true,
+
+    // Show dimensions in the title
+    showDimensions: true,
 
     // Show the toolbar
     toolbar: true,
@@ -2418,8 +2430,7 @@
     url: 'src',
 
     // Event shortcuts
-    build: null,
-    built: null,
+    ready: null,
     show: null,
     shown: null,
     hide: null,

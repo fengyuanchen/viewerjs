@@ -146,8 +146,9 @@
         var imageData = _this.imageData;
         var width = imageData.naturalWidth;
         var height = imageData.naturalHeight;
+        var titleSize = _this.options.showDimensions ? ' (' + width + ' × ' + height + ')' : '';
 
-        setText(title, alt + ' (' + width + ' × ' + height + ')');
+        setText(title, alt + titleSize);
       }, true);
 
       if (image.complete) {
