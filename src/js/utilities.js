@@ -247,7 +247,12 @@
     if (isObject(element[name])) {
       delete element[name];
     } else if (element.dataset) {
-      delete element.dataset[name];
+      // Safari not allows to delete dataset property
+      try {
+        delete element.dataset[name];
+      } catch (e) {
+        element.dataset[name] = null;
+      }
     } else {
       element.removeAttribute('data-' + hyphenate(name));
     }
