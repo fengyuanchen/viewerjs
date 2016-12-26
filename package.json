@@ -1,5 +1,5 @@
 {
-  "name": "viewerjs",
+  "name": "viewerjs-crowd",
   "description": "JavaScript image viewer.",
   "version": "0.5.0",
   "main": "dist/viewer.js",

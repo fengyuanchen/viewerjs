@@ -180,6 +180,17 @@ Specify the visibility of the title (the current image's name and dimensions).
 > The name comes from the `alt` attribute of an image element or the image name parsed from URL.
 
 
+### showDimensions
+
+- Type: `Boolean`
+- Default: `true`
+- Options:
+  - `false`: hide the image dimensions in the title
+  - `true`: show the image dimensions in the title
+
+Specify the visibility of the image dimensions in the title.
+
+
 ### toolbar
 
 - Type: `Boolean` or `Number`
