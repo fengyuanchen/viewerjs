@@ -119,13 +119,7 @@ gulp.task('css+', function () {
     .pipe(gulp.dest(styles.dest));
 });
 
-gulp.task('csslint', ['css+'], function () {
-  return gulp.src(styles.all)
-    .pipe(plugins.csslint('.csslintrc'))
-    .pipe(plugins.csslint.reporter());
-});
-
-gulp.task('css', ['csslint'], function () {
+gulp.task('css', function () {
   return gulp.src(styles.main)
     .pipe(plugins.replace(replacement.regexp, replacement.filter))
     .pipe(plugins.autoprefixer({
