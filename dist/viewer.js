@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.5.0
+ * Viewer.js v0.5.1
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) 2015-2016 Fengyuan Chen
+ * Copyright (c) 2015-2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-07-22T08:46:05.003Z
+ * Date: 2017-01-02T13:01:55.700Z
  */
 
 (function (global, factory) {
@@ -26,6 +26,7 @@
 
   var document = window.document;
   var Event = window.Event;
+  var PointerEvent = window.PointerEvent;
 
   // Constants
   var NAMESPACE = 'viewer';
@@ -49,9 +50,9 @@
   var CLASS_CLOSE = NAMESPACE + '-close';
 
   // Events
-  var EVENT_MOUSEDOWN = 'mousedown touchstart pointerdown MSPointerDown';
-  var EVENT_MOUSEMOVE = 'mousemove touchmove pointermove MSPointerMove';
-  var EVENT_MOUSEUP = 'mouseup touchend touchcancel pointerup pointercancel MSPointerUp MSPointerCancel';
+  var EVENT_MOUSEDOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+  var EVENT_MOUSEMOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
+  var EVENT_MOUSEUP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
   var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
   var EVENT_TRANSITIONEND = 'transitionend';
   var EVENT_LOAD = 'load';
@@ -337,7 +338,12 @@
     if (isObject(element[name])) {
       delete element[name];
     } else if (element.dataset) {
-      delete element.dataset[name];
+      // Safari not allows to delete dataset property
+      try {
+        delete element.dataset[name];
+      } catch (e) {
+        element.dataset[name] = null;
+      }
     } else {
       element.removeAttribute('data-' + hyphenate(name));
     }
@@ -433,17 +439,28 @@
 
   function getEvent(event) {
     var e = event || window.event;
+    var eventDoc;
     var doc;
+    var body;
 
     // Fix target property (IE8)
     if (!e.target) {
       e.target = e.srcElement || document;
     }
 
-    if (!isNumber(e.pageX)) {
-      doc = document.documentElement;
-      e.pageX = e.clientX + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0);
-      e.pageY = e.clientY + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0);
+    if (!isNumber(e.pageX) && isNumber(e.clientX)) {
+      eventDoc = event.target.ownerDocument || document;
+      doc = eventDoc.documentElement;
+      body = eventDoc.body;
+
+      e.pageX = e.clientX + (
+        ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
+        ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
+      );
+      e.pageY = e.clientY + (
+        ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
+        ((doc && doc.clientTop) || (body && body.clientTop) || 0)
+      );
     }
 
     return e;
@@ -456,27 +473,6 @@
     return {
       left: box.left + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0),
       top: box.top + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0)
-    };
-  }
-
-  function getTouchesCenter(touches) {
-    var length = touches.length;
-    var pageX = 0;
-    var pageY = 0;
-
-    if (length) {
-      each(touches, function (touch) {
-        pageX += touch.pageX;
-        pageY += touch.pageY;
-      });
-
-      pageX /= length;
-      pageY /= length;
-    }
-
-    return {
-      pageX: pageX,
-      pageY: pageY
     };
   }
 
@@ -583,6 +579,69 @@
     }
   }
 
+  function getPointer(pointer, endOnly) {
+    var end = {
+      endX: pointer.pageX,
+      endY: pointer.pageY
+    };
+
+    if (endOnly) {
+      return end;
+    }
+
+    return extend({
+      startX: pointer.pageX,
+      startY: pointer.pageY
+    }, end);
+  }
+
+  function getMaxZoomRatio(pointers) {
+    var pointers2 = extend({}, pointers);
+    var ratios = [];
+
+    each(pointers, function (pointer, pointerId) {
+      delete pointers2[pointerId];
+
+      each(pointers2, function (pointer2) {
+        var x1 = Math.abs(pointer.startX - pointer2.startX);
+        var y1 = Math.abs(pointer.startY - pointer2.startY);
+        var x2 = Math.abs(pointer.endX - pointer2.endX);
+        var y2 = Math.abs(pointer.endY - pointer2.endY);
+        var z1 = Math.sqrt((x1 * x1) + (y1 * y1));
+        var z2 = Math.sqrt((x2 * x2) + (y2 * y2));
+        var ratio = (z2 - z1) / z1;
+
+        ratios.push(ratio);
+      });
+    });
+
+    ratios.sort(function (a, b) {
+      return Math.abs(a) < Math.abs(b);
+    });
+
+    return ratios[0];
+  }
+
+  function getPointersCenter(pointers) {
+    var pageX = 0;
+    var pageY = 0;
+    var count = 0;
+
+    each(pointers, function (pointer) {
+      pageX += pointer.startX;
+      pageY += pointer.startY;
+      count += 1;
+    });
+
+    pageX /= count;
+    pageY /= count;
+
+    return {
+      pageX: pageX,
+      pageY: pageY
+    };
+  }
+
   function Viewer(element, options) {
     var _this = this;
 
@@ -604,6 +663,7 @@
     _this.timeout = false;
     _this.index = 0;
     _this.length = 0;
+    _this.pointers = {};
     _this.init();
   }
 
@@ -1332,97 +1392,79 @@
     mousedown: function (event) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = options.movable ? 'move' : false;
-      var touches = e.touches;
-      var touchesLength;
-      var touch;
 
       if (!_this.isViewed) {
         return;
       }
 
-      if (touches) {
-        touchesLength = touches.length;
-
-        if (touchesLength > 1) {
-          if (options.zoomable && touchesLength === 2) {
-            touch = touches[1];
-            _this.startX2 = touch.pageX;
-            _this.startY2 = touch.pageY;
-            action = 'zoom';
-          } else {
-            return;
-          }
-        } else {
-          if (_this.isSwitchable()) {
-            action = 'switch';
-          }
-        }
-
-        touch = touches[0];
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          pointers[touch.identifier] = getPointer(touch);
+        });
+      } else {
+        pointers[e.pointerId || 0] = getPointer(e);
       }
 
-      if (action) {
-        preventDefault(e);
-        _this.action = action;
-        _this.startX = touch ? touch.pageX : e.pageX;
-        _this.startY = touch ? touch.pageY : e.pageY;
+      if (Object.keys(pointers).length > 1) {
+        action = 'zoom';
+      } else if ((e.pointerType === 'touch' || e.type === 'touchmove') && _this.isSwitchable()) {
+        action = 'switch';
       }
+
+      _this.action = action;
     },
 
     mousemove: function (event) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = _this.action;
       var image = _this.image;
-      var touches = e.touches;
-      var touchesLength;
-      var touch;
 
-      if (!_this.isViewed) {
+      if (!_this.isViewed || !action) {
         return;
       }
 
-      if (touches) {
-        touchesLength = touches.length;
+      preventDefault(e);
 
-        if (touchesLength > 1) {
-          if (options.zoomable && touchesLength === 2) {
-            touch = touches[1];
-            _this.endX2 = touch.pageX;
-            _this.endY2 = touch.pageY;
-          } else {
-            return;
-          }
-        }
-
-        touch = touches[0];
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          extend(pointers[touch.identifier], getPointer(touch), true);
+        });
+      } else {
+        extend(pointers[e.pointerId || 0], getPointer(e, true));
       }
 
-      if (action) {
-        preventDefault(e);
-
-        if (action === 'move' && options.transition && hasClass(image, CLASS_TRANSITION)) {
-          removeClass(image, CLASS_TRANSITION);
-        }
-
-        _this.endX = touch ? touch.pageX : e.pageX;
-        _this.endY = touch ? touch.pageY : e.pageY;
-
-        _this.change(e);
+      if (action === 'move' && options.transition && hasClass(image, CLASS_TRANSITION)) {
+        removeClass(image, CLASS_TRANSITION);
       }
+
+      _this.change(e);
     },
 
     mouseup: function (event) {
       var _this = this;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = _this.action;
 
-      if (action) {
-        preventDefault(e);
+      if (!action) {
+        return;
+      }
 
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          delete pointers[touch.identifier];
+        });
+      } else {
+        delete pointers[e.pointerId || 0];
+      }
+
+      if (!Object.keys(pointers).length) {
         if (action === 'move' && _this.options.transition) {
           addClass(_this.image, CLASS_TRANSITION);
         }
@@ -1711,6 +1753,7 @@
     zoomTo: function (ratio, hasTooltip, _originalEvent, _zoomable) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var minZoomRatio = 0.01;
       var maxZoomRatio = 100;
       var imageData = _this.imageData;
@@ -1737,7 +1780,7 @@
 
         if (_originalEvent) {
           offset = getOffset(_this.viewer);
-          center = _originalEvent.touches ? getTouchesCenter(_originalEvent.touches) : {
+          center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
             pageX: _originalEvent.pageX,
             pageY: _originalEvent.pageY
           };
@@ -2286,10 +2329,12 @@
       }
     },
 
-    change: function (originalEvent) {
+    change: function (e) {
       var _this = this;
-      var offsetX = _this.endX - _this.startX;
-      var offsetY = _this.endY - _this.startY;
+      var pointers = _this.pointers;
+      var pointer = pointers[Object.keys(pointers)[0]];
+      var offsetX = pointer.endX - pointer.startX;
+      var offsetY = pointer.endY - pointer.startY;
 
       switch (_this.action) {
 
@@ -2300,20 +2345,7 @@
 
         // Zoom the current image
         case 'zoom':
-          _this.zoom(function (x1, y1, x2, y2) {
-            var z1 = sqrt(x1 * x1 + y1 * y1);
-            var z2 = sqrt(x2 * x2 + y2 * y2);
-
-            return (z2 - z1) / z1;
-          }(
-            abs(_this.startX - _this.startX2),
-            abs(_this.startY - _this.startY2),
-            abs(_this.endX - _this.endX2),
-            abs(_this.endY - _this.endY2)
-          ), false, originalEvent);
-
-          _this.startX2 = _this.endX2;
-          _this.startY2 = _this.endY2;
+          _this.zoom(getMaxZoomRatio(pointers), false, e);
           break;
 
         case 'switch':
@@ -2333,8 +2365,10 @@
       }
 
       // Override
-      _this.startX = _this.endX;
-      _this.startY = _this.endY;
+      each(pointers, function (p) {
+        p.startX = p.endX;
+        p.startY = p.endY;
+      });
     },
 
     isSwitchable: function () {
@@ -2342,7 +2376,7 @@
       var imageData = _this.imageData;
       var viewerData = _this.viewerData;
 
-      return imageData.left >= 0 && imageData.top >= 0 &&
+      return _this.length > 1 && imageData.left >= 0 && imageData.top >= 0 &&
         imageData.width <= viewerData.width &&
         imageData.height <= viewerData.height;
     }
@@ -2418,8 +2452,7 @@
     url: 'src',
 
     // Event shortcuts
-    build: null,
-    built: null,
+    ready: null,
     show: null,
     shown: null,
     hide: null,

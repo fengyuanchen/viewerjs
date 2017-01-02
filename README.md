@@ -47,7 +47,7 @@
 dist/
 ├── viewer.css     ( 8 KB)
 ├── viewer.min.css ( 7 KB)
-├── viewer.js      (61 KB)
+├── viewer.js      (62 KB)
 └── viewer.min.js  (23 KB)
 ```
 

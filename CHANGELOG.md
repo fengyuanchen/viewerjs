@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.5.1 (Jan 2, 2017)
+
+- Improved event handler for Pointer Events.
+
+
 ## 0.5.0 (July 22, 2016)
 
 - Improve modal opening and closing.
