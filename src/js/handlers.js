@@ -347,7 +347,7 @@
           extend(pointers[touch.identifier], getPointer(touch), true);
         });
       } else {
-         extend(pointers[e.pointerId || 0], getPointer(e, true));
+        extend(pointers[e.pointerId || 0], getPointer(e, true));
       }
 
       if (action === 'move' && options.transition && hasClass(image, CLASS_TRANSITION)) {
@@ -372,7 +372,7 @@
           delete pointers[touch.identifier];
         });
       } else {
-         delete pointers[e.pointerId || 0];
+        delete pointers[e.pointerId || 0];
       }
 
       if (!Object.keys(pointers).length) {

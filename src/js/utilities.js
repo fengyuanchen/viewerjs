@@ -491,7 +491,7 @@
   function getPointer(pointer, endOnly) {
     var end = {
       endX: pointer.pageX,
-      endY: pointer.pageY,
+      endY: pointer.pageY
     };
 
     if (endOnly) {
@@ -500,7 +500,7 @@
 
     return extend({
       startX: pointer.pageX,
-      startY: pointer.pageY,
+      startY: pointer.pageY
     }, end);
   }
 
@@ -547,6 +547,6 @@
 
     return {
       pageX: pageX,
-      pageY: pageY,
+      pageY: pageY
     };
   }
