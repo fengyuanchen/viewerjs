@@ -303,94 +303,79 @@
     mousedown: function (event) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = options.movable ? 'move' : false;
-      var touches = e.touches;
-      var touchesLength;
-      var touch;
 
       if (!_this.isViewed) {
         return;
       }
 
-      if (touches) {
-        touchesLength = touches.length;
-
-        if (touchesLength > 1) {
-          if (options.zoomable && touchesLength === 2) {
-            touch = touches[1];
-            _this.startX2 = touch.pageX;
-            _this.startY2 = touch.pageY;
-            action = 'zoom';
-          } else {
-            return;
-          }
-        } else {
-          if (_this.isSwitchable()) {
-            action = 'switch';
-          }
-        }
-
-        touch = touches[0];
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          pointers[touch.identifier] = getPointer(touch);
+        });
+      } else {
+        pointers[e.pointerId || 0] = getPointer(e);
       }
 
-      if (action) {
-        _this.action = action;
-        _this.startX = touch ? touch.pageX : e.pageX;
-        _this.startY = touch ? touch.pageY : e.pageY;
+      if (Object.keys(pointers).length > 1) {
+        action = 'zoom';
+      } else if ((e.pointerType === 'touch' || e.type === 'touchmove') && _this.isSwitchable()) {
+        action = 'switch';
       }
+
+      _this.action = action;
     },
 
     mousemove: function (event) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = _this.action;
       var image = _this.image;
-      var touches = e.touches;
-      var touchesLength;
-      var touch;
 
-      if (!_this.isViewed) {
+      if (!_this.isViewed || !action) {
         return;
       }
 
-      if (touches) {
-        touchesLength = touches.length;
+      preventDefault(e);
 
-        if (touchesLength > 1) {
-          if (options.zoomable && touchesLength === 2) {
-            touch = touches[1];
-            _this.endX2 = touch.pageX;
-            _this.endY2 = touch.pageY;
-          } else {
-            return;
-          }
-        }
-
-        touch = touches[0];
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          extend(pointers[touch.identifier], getPointer(touch), true);
+        });
+      } else {
+         extend(pointers[e.pointerId || 0], getPointer(e, true));
       }
 
-      if (action) {
-        preventDefault(e);
-
-        if (action === 'move' && options.transition && hasClass(image, CLASS_TRANSITION)) {
-          removeClass(image, CLASS_TRANSITION);
-        }
-
-        _this.endX = touch ? touch.pageX : e.pageX;
-        _this.endY = touch ? touch.pageY : e.pageY;
-
-        _this.change(e);
+      if (action === 'move' && options.transition && hasClass(image, CLASS_TRANSITION)) {
+        removeClass(image, CLASS_TRANSITION);
       }
+
+      _this.change(e);
     },
 
     mouseup: function (event) {
       var _this = this;
+      var pointers = _this.pointers;
       var e = getEvent(event);
       var action = _this.action;
 
-      if (action) {
+      if (!action) {
+        return;
+      }
+
+      if (e.changedTouches) {
+        each(e.changedTouches, function (touch) {
+          delete pointers[touch.identifier];
+        });
+      } else {
+         delete pointers[e.pointerId || 0];
+      }
+
+      if (!Object.keys(pointers).length) {
         if (action === 'move' && _this.options.transition) {
           addClass(_this.image, CLASS_TRANSITION);
         }

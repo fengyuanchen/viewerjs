@@ -385,27 +385,6 @@
     };
   }
 
-  function getTouchesCenter(touches) {
-    var length = touches.length;
-    var pageX = 0;
-    var pageY = 0;
-
-    if (length) {
-      each(touches, function (touch) {
-        pageX += touch.pageX;
-        pageY += touch.pageY;
-      });
-
-      pageX /= length;
-      pageY /= length;
-    }
-
-    return {
-      pageX: pageX,
-      pageY: pageY
-    };
-  }
-
   function getByTag(element, tagName) {
     return element.getElementsByTagName(tagName);
   }
@@ -507,4 +486,67 @@
       case 4:
         return CLASS_HIDE_MD_DOWN;
     }
+  }
+
+  function getPointer(pointer, endOnly) {
+    var end = {
+      endX: pointer.pageX,
+      endY: pointer.pageY,
+    };
+
+    if (endOnly) {
+      return end;
+    }
+
+    return extend({
+      startX: pointer.pageX,
+      startY: pointer.pageY,
+    }, end);
+  }
+
+  function getMaxZoomRatio(pointers) {
+    var pointers2 = extend({}, pointers);
+    var ratios = [];
+
+    each(pointers, function (pointer, pointerId) {
+      delete pointers2[pointerId];
+
+      each(pointers2, function (pointer2) {
+        var x1 = Math.abs(pointer.startX - pointer2.startX);
+        var y1 = Math.abs(pointer.startY - pointer2.startY);
+        var x2 = Math.abs(pointer.endX - pointer2.endX);
+        var y2 = Math.abs(pointer.endY - pointer2.endY);
+        var z1 = Math.sqrt((x1 * x1) + (y1 * y1));
+        var z2 = Math.sqrt((x2 * x2) + (y2 * y2));
+        var ratio = (z2 - z1) / z1;
+
+        ratios.push(ratio);
+      });
+    });
+
+    ratios.sort(function (a, b) {
+      return Math.abs(a) < Math.abs(b);
+    });
+
+    return ratios[0];
+  }
+
+  function getPointersCenter(pointers) {
+    var pageX = 0;
+    var pageY = 0;
+    var count = 0;
+
+    each(pointers, function (pointer) {
+      pageX += pointer.startX;
+      pageY += pointer.startY;
+      count += 1;
+    });
+
+    pageX /= count;
+    pageY /= count;
+
+    return {
+      pageX: pageX,
+      pageY: pageY,
+    };
   }

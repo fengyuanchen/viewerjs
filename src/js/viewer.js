@@ -19,5 +19,6 @@
     _this.timeout = false;
     _this.index = 0;
     _this.length = 0;
+    _this.pointers = {};
     _this.init();
   }

@@ -1,5 +1,6 @@
   var document = window.document;
   var Event = window.Event;
+  var PointerEvent = window.PointerEvent;
 
   // Constants
   var NAMESPACE = 'viewer';
@@ -23,9 +24,9 @@
   var CLASS_CLOSE = NAMESPACE + '-close';
 
   // Events
-  var EVENT_MOUSEDOWN = 'mousedown touchstart pointerdown MSPointerDown';
-  var EVENT_MOUSEMOVE = 'mousemove touchmove pointermove MSPointerMove';
-  var EVENT_MOUSEUP = 'mouseup touchend touchcancel pointerup pointercancel MSPointerUp MSPointerCancel';
+  var EVENT_MOUSEDOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+  var EVENT_MOUSEMOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
+  var EVENT_MOUSEUP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
   var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
   var EVENT_TRANSITIONEND = 'transitionend';
   var EVENT_LOAD = 'load';

@@ -89,10 +89,12 @@
       }
     },
 
-    change: function (originalEvent) {
+    change: function (e) {
       var _this = this;
-      var offsetX = _this.endX - _this.startX;
-      var offsetY = _this.endY - _this.startY;
+      var pointers = _this.pointers;
+      var pointer = pointers[Object.keys(pointers)[0]];
+      var offsetX = pointer.endX - pointer.startX;
+      var offsetY = pointer.endY - pointer.startY;
 
       switch (_this.action) {
 
@@ -103,20 +105,7 @@
 
         // Zoom the current image
         case 'zoom':
-          _this.zoom(function (x1, y1, x2, y2) {
-            var z1 = sqrt(x1 * x1 + y1 * y1);
-            var z2 = sqrt(x2 * x2 + y2 * y2);
-
-            return (z2 - z1) / z1;
-          }(
-            abs(_this.startX - _this.startX2),
-            abs(_this.startY - _this.startY2),
-            abs(_this.endX - _this.endX2),
-            abs(_this.endY - _this.endY2)
-          ), false, originalEvent);
-
-          _this.startX2 = _this.endX2;
-          _this.startY2 = _this.endY2;
+          _this.zoom(getMaxZoomRatio(pointers), false, e);
           break;
 
         case 'switch':
@@ -136,8 +125,10 @@
       }
 
       // Override
-      _this.startX = _this.endX;
-      _this.startY = _this.endY;
+      each(pointers, function (p) {
+        p.startX = p.endX;
+        p.startY = p.endY;
+      });
     },
 
     isSwitchable: function () {

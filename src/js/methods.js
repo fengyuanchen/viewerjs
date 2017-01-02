@@ -278,6 +278,7 @@
     zoomTo: function (ratio, hasTooltip, _originalEvent, _zoomable) {
       var _this = this;
       var options = _this.options;
+      var pointers = _this.pointers;
       var minZoomRatio = 0.01;
       var maxZoomRatio = 100;
       var imageData = _this.imageData;
@@ -304,7 +305,7 @@
 
         if (_originalEvent) {
           offset = getOffset(_this.viewer);
-          center = _originalEvent.touches ? getTouchesCenter(_originalEvent.touches) : {
+          center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
             pageX: _originalEvent.pageX,
             pageY: _originalEvent.pageY
           };
