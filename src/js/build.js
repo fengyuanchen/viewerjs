@@ -67,8 +67,12 @@
         });
       }
 
-      // Inserts the viewer after to the current element
-      parent.insertBefore(viewer, element.nextSibling);
+      // Inserts the viewer after to the current element or target element
+      if (options.targetElement) {
+        options.targetElement.appendChild(viewer);
+      }else {
+        parent.insertBefore(viewer, element.nextSibling);
+      }      
 
       if (options.inline) {
         _this.render();

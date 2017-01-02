@@ -395,6 +395,14 @@ A shortcut of the `view` event.
 A shortcut of the `viewed` event.
 
 
+### targetElement
+
+- Type: 'HTMLElement',
+- Default: 'image element`s parent element'
+
+define Viewer element`s parent element.
+
+
 [⬆ back to top](#table-of-contents)
 
 
