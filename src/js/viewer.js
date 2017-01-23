@@ -116,7 +116,6 @@ class Viewer {
     let toolbar;
     let navbar;
     let title;
-    let rotate;
 
     template.innerHTML = TEMPLATE;
 
@@ -142,9 +141,10 @@ class Viewer {
     $.toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), 'viewer-invisible', !options.scalable);
 
     if (!options.rotatable) {
-      rotate = toolbar.querySelectorAll('li[class*="rotate"]');
-      $.addClass(rotate, 'viewer-invisible');
-      $.appendChild(toolbar, rotate);
+      const rotates = toolbar.querySelectorAll('li[class*="rotate"]');
+
+      $.addClass(rotates, 'viewer-invisible');
+      $.appendChild(toolbar, rotates);
     }
 
     if (options.inline) {

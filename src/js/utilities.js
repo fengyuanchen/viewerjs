@@ -398,6 +398,13 @@ export function createElement(tagName) {
 }
 
 export function appendChild(element, elem) {
+  if (elem.length) {
+    each(elem, (el) => {
+      appendChild(element, el);
+    });
+    return;
+  }
+
   element.appendChild(elem);
 }
 
