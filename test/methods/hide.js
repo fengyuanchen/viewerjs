@@ -11,11 +11,11 @@ QUnit.test('methods#hide', function (assert) {
     },
 
     hide: function () {
-      assert.ok(this.viewer.isShown);
+      assert.ok(this.viewer.visible);
     },
 
     hidden: function () {
-      assert.notOk(this.viewer.isShown);
+      assert.notOk(this.viewer.visible);
 
       done();
     }

@@ -11,11 +11,11 @@ QUnit.test('methods#play', function (assert) {
     viewed: function () {
       var viewer = this.viewer;
 
-      assert.notOk(viewer.isPlayed);
+      assert.notOk(viewer.played);
       assert.notOk(util.hasClass(viewer.player, 'viewer-show'));
 
       viewer.play();
-      assert.ok(viewer.isPlayed);
+      assert.ok(viewer.played);
       assert.ok(util.hasClass(viewer.player, 'viewer-show'));
 
       done();

@@ -7,13 +7,13 @@ QUnit.test('methods#show', function (assert) {
 
   var viewer = new Viewer(image, {
     show: function () {
-      assert.notOk(this.viewer.isShown);
+      assert.notOk(this.viewer.visible);
     },
 
     shown: function () {
       var viewer = this.viewer;
 
-      assert.ok(viewer.isShown);
+      assert.ok(viewer.visible);
 
       done();
 

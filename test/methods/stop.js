@@ -12,12 +12,12 @@ QUnit.test('methods#stop', function (assert) {
       var viewer = this.viewer;
 
       viewer.play();
-      assert.ok(viewer.isPlayed);
+      assert.ok(viewer.played);
       assert.ok(util.hasClass(viewer.player, 'viewer-show'));
 
       setTimeout(function () {
         viewer.stop();
-        assert.notOk(viewer.isPlayed);
+        assert.notOk(viewer.played);
         assert.notOk(util.hasClass(viewer.player, 'viewer-show'));
 
         done();

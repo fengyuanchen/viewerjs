@@ -11,13 +11,13 @@ QUnit.test('methods#full', function (assert) {
     viewed: function () {
       var viewer = this.viewer;
 
-      assert.notOk(viewer.isFulled);
+      assert.notOk(viewer.fulled);
       assert.notOk(util.hasClass(viewer.body, 'viewer-open'));
       assert.notOk(util.hasClass(viewer.button, 'viewer-fullscreen-exit'));
       assert.notOk(util.hasClass(viewer.viewer, 'viewer-fixed'));
 
       viewer.full();
-      assert.ok(viewer.isFulled);
+      assert.ok(viewer.fulled);
       assert.ok(util.hasClass(viewer.body, 'viewer-open'));
       assert.ok(util.hasClass(viewer.button, 'viewer-fullscreen-exit'));
       assert.ok(util.hasClass(viewer.viewer, 'viewer-fixed'));
