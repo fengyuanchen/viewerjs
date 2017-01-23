@@ -1,214 +1,215 @@
-    render: function () {
-      var _this = this;
+import * as $ from './utilities';
 
-      _this.initContainer();
-      _this.initViewer();
-      _this.initList();
-      _this.renderViewer();
-    },
+export default {
+  render() {
+    const self = this;
 
-    initContainer: function () {
-      var _this = this;
+    self.initContainer();
+    self.initViewer();
+    self.initList();
+    self.renderViewer();
+  },
 
-      _this.containerData = {
-        width: window.innerWidth,
-        height: window.innerHeight
+  initContainer() {
+    const self = this;
+
+    self.containerData = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  },
+
+  initViewer() {
+    const self = this;
+    const options = self.options;
+    const parent = self.parent;
+    let viewerData;
+
+    if (options.inline) {
+      self.parentData = viewerData = {
+        width: Math.max(parent.offsetWidth, options.minWidth),
+        height: Math.max(parent.offsetHeight, options.minHeight),
       };
-    },
+    }
 
-    initViewer: function () {
-      var _this = this;
-      var options = _this.options;
-      var parent = _this.parent;
-      var viewerData;
+    if (self.fulled || !viewerData) {
+      viewerData = self.containerData;
+    }
 
-      if (options.inline) {
-        _this.parentData = viewerData = {
-          width: max(parent.offsetWidth, options.minWidth),
-          height: max(parent.offsetHeight, options.minHeight)
-        };
+    self.viewerData = $.extend({}, viewerData);
+  },
+
+  renderViewer() {
+    const self = this;
+
+    if (self.options.inline && !self.fulled) {
+      $.setStyle(self.viewer, self.viewerData);
+    }
+  },
+
+  initList() {
+    const self = this;
+    const options = self.options;
+    const element = self.element;
+    const list = self.list;
+    const items = [];
+
+    $.each(self.images, (image, i) => {
+      const src = image.src;
+      const alt = image.alt || $.getImageName(src);
+      let url = options.url;
+
+      if (!src) {
+        return;
       }
 
-      if (_this.isFulled || !viewerData) {
-        viewerData = _this.containerData;
+      if ($.isString(url)) {
+        url = image.getAttribute(url);
+      } else if ($.isFunction(url)) {
+        url = url.call(image, image);
       }
 
-      _this.viewerData = extend({}, viewerData);
-    },
+      items.push(
+        '<li>' +
+          '<img' +
+            ` src="${src}"` +
+            ' data-action="view"' +
+            ` data-index="${i}"` +
+            ` data-original-url="${(url || src)}"` +
+            ` alt="${alt}"` +
+          '>' +
+        '</li>'
+      );
+    });
 
-    renderViewer: function () {
-      var _this = this;
+    list.innerHTML = items.join('');
 
-      if (_this.options.inline && !_this.isFulled) {
-        setStyle(_this.viewer, _this.viewerData);
+    $.each($.getByTag(list, 'img'), (image) => {
+      $.setData(image, 'filled', true);
+      $.addListener(image, 'load', $.proxy(self.loadImage, self), true);
+    });
+
+    self.items = $.getByTag(list, 'li');
+
+    if (options.transition) {
+      $.addListener(element, 'viewed', () => {
+        $.addClass(list, 'viewer-transition');
+      }, true);
+    }
+  },
+
+  renderList(index) {
+    const self = this;
+    const i = index || self.index;
+    const width = self.items[i].offsetWidth || 30;
+    const outerWidth = width + 1; // 1 pixel of `margin-left` width
+
+    // Place the active item in the center of the screen
+    $.setStyle(self.list, {
+      width: outerWidth * self.length,
+      marginLeft: ((self.viewerData.width - width) / 2) - (outerWidth * i)
+    });
+  },
+
+  resetList() {
+    const self = this;
+
+    $.empty(self.list);
+    $.removeClass(self.list, 'viewer-transition');
+    $.setStyle({
+      marginLeft: 0
+    });
+  },
+
+  initImage(callback) {
+    const self = this;
+    const options = self.options;
+    const image = self.image;
+    const viewerData = self.viewerData;
+    const footerHeight = self.footer.offsetHeight;
+    const viewerWidth = viewerData.width;
+    const viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
+    const oldImageData = self.imageData || {};
+
+    $.getImageSize(image, (naturalWidth, naturalHeight) => {
+      const aspectRatio = naturalWidth / naturalHeight;
+      let width = viewerWidth;
+      let height = viewerHeight;
+
+      if (viewerHeight * aspectRatio > viewerWidth) {
+        height = viewerWidth / aspectRatio;
+      } else {
+        width = viewerHeight * aspectRatio;
       }
-    },
 
-    initList: function () {
-      var _this = this;
-      var options = _this.options;
-      var element = _this.element;
-      var list = _this.list;
-      var items = [];
+      width = Math.min(width * 0.9, naturalWidth);
+      height = Math.min(height * 0.9, naturalHeight);
 
-      each(_this.images, function (image, i) {
-        var src = image.src;
-        var alt = image.alt || getImageName(src);
-        var url = options.url;
+      const imageData = {
+        naturalWidth,
+        naturalHeight,
+        aspectRatio,
+        ratio: width / naturalWidth,
+        width,
+        height,
+        left: (viewerWidth - width) / 2,
+        top: (viewerHeight - height) / 2,
+      };
+      const initialImageData = $.extend({}, imageData);
 
-        if (!src) {
-          return;
-        }
-
-        if (isString(url)) {
-          url = image.getAttribute(url);
-        } else if (isFunction(url)) {
-          url = url.call(image, image);
-        }
-
-        items.push(
-          '<li>' +
-            '<img' +
-              ' src="' + src + '"' +
-              ' data-action="view"' +
-              ' data-index="' +  i + '"' +
-              ' data-original-url="' +  (url || src) + '"' +
-              ' alt="' +  alt + '"' +
-            '>' +
-          '</li>'
-        );
-      });
-
-      list.innerHTML = items.join('');
-
-      each(getByTag(list, 'img'), function (image) {
-        setData(image, 'filled', true);
-        addListener(image, EVENT_LOAD, proxy(_this.loadImage, _this), true);
-      });
-
-      _this.items = getByTag(list, 'li');
-
-      if (options.transition) {
-        addListener(element, EVENT_VIEWED, function () {
-          addClass(list, CLASS_TRANSITION);
-        }, true);
+      if (options.rotatable) {
+        imageData.rotate = oldImageData.rotate || 0;
+        initialImageData.rotate = 0;
       }
-    },
 
-    renderList: function (index) {
-      var _this = this;
-      var i = index || _this.index;
-      var width = _this.items[i].offsetWidth || 30;
-      var outerWidth = width + 1; // 1 pixel of `margin-left` width
-
-      // Place the active item in the center of the screen
-      setStyle(_this.list, {
-        width: outerWidth * _this.length,
-        marginLeft: (_this.viewerData.width - width) / 2 - outerWidth * i
-      });
-    },
-
-    resetList: function () {
-      var _this = this;
-
-      empty(_this.list);
-      removeClass(_this.list, CLASS_TRANSITION);
-      setStyle({
-        marginLeft: 0
-      });
-    },
-
-    initImage: function (callback) {
-      var _this = this;
-      var options = _this.options;
-      var image = _this.image;
-      var viewerData = _this.viewerData;
-      var footerHeight = _this.footer.offsetHeight;
-      var viewerWidth = viewerData.width;
-      var viewerHeight = max(viewerData.height - footerHeight, footerHeight);
-      var oldImageData = _this.imageData || {};
-
-      getImageSize(image, function (naturalWidth, naturalHeight) {
-        var aspectRatio = naturalWidth / naturalHeight;
-        var width = viewerWidth;
-        var height = viewerHeight;
-        var initialImageData;
-        var imageData;
-
-        if (viewerHeight * aspectRatio > viewerWidth) {
-          height = viewerWidth / aspectRatio;
-        } else {
-          width = viewerHeight * aspectRatio;
-        }
-
-        width = min(width * 0.9, naturalWidth);
-        height = min(height * 0.9, naturalHeight);
-
-        imageData = {
-          naturalWidth: naturalWidth,
-          naturalHeight: naturalHeight,
-          aspectRatio: aspectRatio,
-          ratio: width / naturalWidth,
-          width: width,
-          height: height,
-          left: (viewerWidth - width) / 2,
-          top: (viewerHeight - height) / 2
-        };
-
-        initialImageData = extend({}, imageData);
-
-        if (options.rotatable) {
-          imageData.rotate = oldImageData.rotate || 0;
-          initialImageData.rotate = 0;
-        }
-
-        if (options.scalable) {
-          imageData.scaleX = oldImageData.scaleX || 1;
-          imageData.scaleY = oldImageData.scaleY || 1;
-          initialImageData.scaleX = 1;
-          initialImageData.scaleY = 1;
-        }
-
-        _this.imageData = imageData;
-        _this.initialImageData = initialImageData;
-
-        if (isFunction(callback)) {
-          callback();
-        }
-      });
-    },
-
-    renderImage: function (callback) {
-      var _this = this;
-      var image = _this.image;
-      var imageData = _this.imageData;
-      var transform = getTransform(imageData);
-
-      setStyle(image, {
-        width: imageData.width,
-        height: imageData.height,
-        marginLeft: imageData.left,
-        marginTop: imageData.top,
-        WebkitTransform: transform,
-        msTransform: transform,
-        transform: transform
-      });
-
-      if (isFunction(callback)) {
-        if (_this.transitioning) {
-          addListener(image, EVENT_TRANSITIONEND, callback, true);
-        } else {
-          callback();
-        }
+      if (options.scalable) {
+        imageData.scaleX = oldImageData.scaleX || 1;
+        imageData.scaleY = oldImageData.scaleY || 1;
+        initialImageData.scaleX = 1;
+        initialImageData.scaleY = 1;
       }
-    },
 
-    resetImage: function () {
-      var _this = this;
+      self.imageData = imageData;
+      self.initialImageData = initialImageData;
 
-      // this.image only defined after viewed
-      if (_this.image) {
-        removeChild(_this.image);
-        _this.image = null;
+      if ($.isFunction(callback)) {
+        callback();
       }
-    },
+    });
+  },
+
+  renderImage(callback) {
+    const self = this;
+    const image = self.image;
+    const imageData = self.imageData;
+    const transform = $.getTransform(imageData);
+
+    $.setStyle(image, {
+      width: imageData.width,
+      height: imageData.height,
+      marginLeft: imageData.left,
+      marginTop: imageData.top,
+      WebkitTransform: transform,
+      msTransform: transform,
+      transform,
+    });
+
+    if ($.isFunction(callback)) {
+      if (self.transitioning) {
+        $.addListener(image, 'transitionend', callback, true);
+      } else {
+        callback();
+      }
+    }
+  },
+
+  resetImage() {
+    const self = this;
+
+    // this.image only defined after viewed
+    if (self.image) {
+      $.removeChild(self.image);
+      self.image = null;
+    }
+  },
+};

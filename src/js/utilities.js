@@ -1,552 +1,548 @@
-  function typeOf(obj) {
-    return toString.call(obj).slice(8, -1).toLowerCase();
+// RegExps
+const REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
+const REGEXP_SPACES = /\s+/;
+const REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
+const REGEXP_TRIM = /^\s+(.*)\s+$/;
+
+// Utilities
+const objectProto = Object.prototype;
+const toString = objectProto.toString;
+const hasOwnProperty = objectProto.hasOwnProperty;
+const slice = Array.prototype.slice;
+
+export function typeOf(obj) {
+  return toString.call(obj).slice(8, -1).toLowerCase();
+}
+
+export function isString(str) {
+  return typeof str === 'string';
+}
+
+export function isNumber(num) {
+  return typeof num === 'number' && !isNaN(num);
+}
+
+export function isUndefined(obj) {
+  return typeof obj === 'undefined';
+}
+
+export function isObject(obj) {
+  return typeof obj === 'object' && obj !== null;
+}
+
+export function isPlainObject(obj) {
+  if (!isObject(obj)) {
+    return false;
   }
 
-  function isString(str) {
-    return typeof str === 'string';
+  try {
+    const constructor = obj.constructor;
+    const prototype = constructor.prototype;
+
+    return constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf');
+  } catch (e) {
+    return false;
+  }
+}
+
+export function isFunction(fn) {
+  return typeOf(fn) === 'function';
+}
+
+export function isArray(arr) {
+  return Array.isArray ? Array.isArray(arr) : typeOf(arr) === 'array';
+}
+
+export function toArray(obj, offset) {
+  offset = offset >= 0 ? offset : 0;
+
+  if (Array.from) {
+    return Array.from(obj).slice(offset);
   }
 
-  function isNumber(num) {
-    return typeof num === 'number' && !isNaN(num);
+  return slice.call(obj, offset);
+}
+
+export function inArray(value, arr) {
+  let index = -1;
+
+  if (arr.indexOf) {
+    return arr.indexOf(value);
   }
 
-  function isUndefined(obj) {
-    return typeof obj === 'undefined';
-  }
-
-  function isObject(obj) {
-    return typeof obj === 'object' && obj !== null;
-  }
-
-  function isPlainObject(obj) {
-    var constructor;
-    var prototype;
-
-    if (!isObject(obj)) {
-      return false;
+  arr.forEach((n, i) => {
+    if (n === value) {
+      index = i;
     }
+  });
 
-    try {
-      constructor = obj.constructor;
-      prototype = constructor.prototype;
+  return index;
+}
 
-      return constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf');
-    } catch (e) {
-      return false;
-    }
+export function trim(str) {
+  if (isString(str)) {
+    str = str.trim ? str.trim() : str.replace(REGEXP_TRIM, '1');
   }
 
-  function isFunction(fn) {
-    return typeOf(fn) === 'function';
-  }
+  return str;
+}
 
-  function isArray(arr) {
-    return Array.isArray ? Array.isArray(arr) : typeOf(arr) === 'array';
-  }
+export function each(obj, callback) {
+  if (obj && isFunction(callback)) {
+    let i;
 
-  function toArray(obj, offset) {
-    offset = offset >= 0 ? offset : 0;
+    if (isArray(obj) || isNumber(obj.length)/* array-like */) {
+      const length = obj.length;
 
-    if (Array.from) {
-      return Array.from(obj).slice(offset);
-    }
-
-    return slice.call(obj, offset);
-  }
-
-  function inArray(value, arr) {
-    var index = -1;
-
-    if (arr.indexOf) {
-      return arr.indexOf(value);
-    } else {
-      each(arr, function (n, i) {
-        if (n === value) {
-          index = i;
-          return false;
+      for (i = 0; i < length; i++) {
+        if (callback.call(obj, obj[i], i, obj) === false) {
+          break;
         }
+      }
+    } else if (isObject(obj)) {
+      Object.keys(obj).forEach((key) => {
+        callback.call(obj, obj[key], key, obj);
       });
     }
-
-    return index;
   }
 
-  function trim(str) {
-    if (isString(str)) {
-      str = str.trim ? str.trim() : str.replace(REGEXP_TRIM, '1');
+  return obj;
+}
+
+export function extend(obj, ...args) {
+  if (isObject(obj) && args.length > 0) {
+    if (Object.assign) {
+      return Object.assign(obj, ...args);
     }
 
-    return str;
-  }
-
-  function each(obj, callback) {
-    var length;
-    var i;
-
-    if (obj && isFunction(callback)) {
-      if (isArray(obj) || isNumber(obj.length)/* array-like */) {
-        for (i = 0, length = obj.length; i < length; i++) {
-          if (callback.call(obj, obj[i], i, obj) === false) {
-            break;
-          }
-        }
-      } else if (isObject(obj)) {
-        for (i in obj) {
-          if (obj.hasOwnProperty(i)) {
-            if (callback.call(obj, obj[i], i, obj) === false) {
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    return obj;
-  }
-
-  function extend(obj) {
-    var args;
-
-    if (arguments.length > 1) {
-      args = toArray(arguments);
-
-      if (Object.assign) {
-        return Object.assign.apply(Object, args);
-      }
-
-      args.shift();
-
-      each(args, function (arg) {
-        each(arg, function (prop, i) {
-          obj[i] = prop;
+    args.forEach((arg) => {
+      if (isObject(arg)) {
+        Object.keys(arg).forEach((key) => {
+          obj[key] = arg[key];
         });
-      });
-    }
-
-    return obj;
-  }
-
-  function proxy(fn, context) {
-    var args = toArray(arguments, 2);
-
-    return function () {
-      return fn.apply(context, args.concat(toArray(arguments)));
-    };
-  }
-
-  function setStyle(element, styles) {
-    var style = element.style;
-
-    each(styles, function (value, property) {
-      if (REGEXP_SUFFIX.test(property) && isNumber(value)) {
-        value += 'px';
       }
-
-      style[property] = value;
     });
   }
 
-  function getStyle(element) {
-    return window.getComputedStyle ?
-      window.getComputedStyle(element, null) :
-      element.currentStyle;
+  return obj;
+}
+
+export function proxy(fn, context, ...args) {
+  return (...args2) => {
+    return fn.apply(context, args.concat(args2));
+  };
+}
+
+export function setStyle(element, styles) {
+  const style = element.style;
+
+  each(styles, (value, property) => {
+    if (REGEXP_SUFFIX.test(property) && isNumber(value)) {
+      value += 'px';
+    }
+
+    style[property] = value;
+  });
+}
+
+export function getStyle(element) {
+  return window.getComputedStyle ?
+    window.getComputedStyle(element, null) :
+    element.currentStyle;
+}
+
+export function hasClass(element, value) {
+  return element.classList ?
+    element.classList.contains(value) :
+    element.className.indexOf(value) > -1;
+}
+
+export function addClass(element, value) {
+  if (!value) {
+    return;
   }
 
-  function hasClass(element, value) {
-    return element.classList ?
-      element.classList.contains(value) :
-      element.className.indexOf(value) > -1;
+  if (isNumber(element.length)) {
+    each(element, (elem) => {
+      addClass(elem, value);
+    });
+    return;
   }
 
-  function addClass(element, value) {
-    var className;
-
-    if (!value) {
-      return;
-    }
-
-    if (isNumber(element.length)) {
-      return each(element, function (elem) {
-        addClass(elem, value);
-      });
-    }
-
-    if (element.classList) {
-      return element.classList.add(value);
-    }
-
-    className = trim(element.className);
-
-    if (!className) {
-      element.className = value;
-    } else if (className.indexOf(value) < 0) {
-      element.className = className + ' ' + value;
-    }
+  if (element.classList) {
+    element.classList.add(value);
+    return;
   }
 
-  function removeClass(element, value) {
-    if (!value) {
-      return;
-    }
+  const className = trim(element.className);
 
-    if (isNumber(element.length)) {
-      return each(element, function (elem) {
-        removeClass(elem, value);
-      });
-    }
+  if (!className) {
+    element.className = value;
+  } else if (className.indexOf(value) < 0) {
+    element.className = `${className} ${value}`;
+  }
+}
 
-    if (element.classList) {
-      return element.classList.remove(value);
-    }
-
-    if (element.className.indexOf(value) >= 0) {
-      element.className = element.className.replace(value, '');
-    }
+export function removeClass(element, value) {
+  if (!value) {
+    return;
   }
 
-  function toggleClass(element, value, added) {
-    if (isNumber(element.length)) {
-      return each(element, function (elem) {
-        toggleClass(elem, value, added);
-      });
-    }
-
-    // IE10-11 doesn't support the second parameter of `classList.toggle`
-    if (added) {
-      addClass(element, value);
-    } else {
-      removeClass(element, value);
-    }
+  if (isNumber(element.length)) {
+    each(element, (elem) => {
+      removeClass(elem, value);
+    });
+    return;
   }
 
-  function hyphenate(str) {
-    return str.replace(REGEXP_HYPHENATE, '$1-$2').toLowerCase();
+  if (element.classList) {
+    element.classList.remove(value);
+    return;
   }
 
-  function getData(element, name) {
-    if (isObject(element[name])) {
-      return element[name];
-    } else if (element.dataset) {
-      return element.dataset[name];
-    }
+  if (element.className.indexOf(value) >= 0) {
+    element.className = element.className.replace(value, '');
+  }
+}
 
-    return element.getAttribute('data-' + hyphenate(name));
+export function toggleClass(element, value, added) {
+  if (!value) {
+    return;
   }
 
-  function setData(element, name, data) {
-    if (isObject(data)) {
-      element[name] = data;
-    } else if (element.dataset) {
-      element.dataset[name] = data;
-    } else {
-      element.setAttribute('data-' + hyphenate(name), data);
-    }
+  if (isNumber(element.length)) {
+    each(element, (elem) => {
+      toggleClass(elem, value, added);
+    });
+    return;
   }
 
-  function removeData(element, name) {
-    if (isObject(element[name])) {
-      delete element[name];
-    } else if (element.dataset) {
-      // Safari not allows to delete dataset property
-      try {
-        delete element.dataset[name];
-      } catch (e) {
-        element.dataset[name] = null;
-      }
-    } else {
-      element.removeAttribute('data-' + hyphenate(name));
-    }
+  // IE10-11 doesn't support the second parameter of `classList.toggle`
+  if (added) {
+    addClass(element, value);
+  } else {
+    removeClass(element, value);
+  }
+}
+
+export function hyphenate(str) {
+  return str.replace(REGEXP_HYPHENATE, '$1-$2').toLowerCase();
+}
+
+export function getData(element, name) {
+  if (isObject(element[name])) {
+    return element[name];
+  } else if (element.dataset) {
+    return element.dataset[name];
   }
 
-  function addListener(element, type, handler, once) {
-    var types = trim(type).split(REGEXP_SPACES);
-    var originalHandler = handler;
+  return element.getAttribute(`data-${hyphenate(name)}`);
+}
 
-    if (types.length > 1) {
-      return each(types, function (type) {
-        addListener(element, type, handler);
-      });
+export function setData(element, name, data) {
+  if (isObject(data)) {
+    element[name] = data;
+  } else if (element.dataset) {
+    element.dataset[name] = data;
+  } else {
+    element.setAttribute(`data-${hyphenate(name)}`, data);
+  }
+}
+
+export function removeData(element, name) {
+  if (isObject(element[name])) {
+    delete element[name];
+  } else if (element.dataset) {
+    // #128 Safari not allows to delete dataset property
+    try {
+      delete element.dataset[name];
+    } catch (e) {
+      element.dataset[name] = null;
     }
+  } else {
+    element.removeAttribute(`data-${hyphenate(name)}`);
+  }
+}
 
-    if (once) {
-      handler = function () {
-        removeListener(element, type, handler);
+export function removeListener(element, type, handler) {
+  const types = trim(type).split(REGEXP_SPACES);
 
-        return originalHandler.apply(element, arguments);
-      };
-    }
-
-    if (element.addEventListener) {
-      element.addEventListener(type, handler, false);
-    } else if (element.attachEvent) {
-      element.attachEvent('on' + type, handler);
-    }
+  if (types.length > 1) {
+    each(types, (t) => {
+      removeListener(element, t, handler);
+    });
+    return;
   }
 
-  function removeListener(element, type, handler) {
-    var types = trim(type).split(REGEXP_SPACES);
+  if (element.removeEventListener) {
+    element.removeEventListener(type, handler, false);
+  } else if (element.detachEvent) {
+    element.detachEvent(`on${type}`, handler);
+  }
+}
 
-    if (types.length > 1) {
-      return each(types, function (type) {
-        removeListener(element, type, handler);
-      });
-    }
+export function addListener(element, type, handler, once) {
+  const types = trim(type).split(REGEXP_SPACES);
+  const originalHandler = handler;
 
-    if (element.removeEventListener) {
-      element.removeEventListener(type, handler, false);
-    } else if (element.detachEvent) {
-      element.detachEvent('on' + type, handler);
-    }
+  if (types.length > 1) {
+    each(types, (t) => {
+      addListener(element, t, handler);
+    });
+    return;
   }
 
-  function dispatchEvent(element, type, data) {
-    var event;
+  if (once) {
+    handler = (...args) => {
+      removeListener(element, type, handler);
 
-    if (element.dispatchEvent) {
+      return originalHandler.apply(element, args);
+    };
+  }
 
-      // Event and CustomEvent on IE9-11 are global objects, not constructors
-      if (isFunction(Event) && isFunction(CustomEvent)) {
-        if (isUndefined(data)) {
-          event = new Event(type, {
-            bubbles: true,
-            cancelable: true
-          });
-        } else {
-          event = new CustomEvent(type, {
-            detail: data,
-            bubbles: true,
-            cancelable: true
-          });
-        }
+  if (element.addEventListener) {
+    element.addEventListener(type, handler, false);
+  } else if (element.attachEvent) {
+    element.attachEvent(`on${type}`, handler);
+  }
+}
+
+export function dispatchEvent(element, type, data) {
+  if (element.dispatchEvent) {
+    let event;
+
+    // Event and CustomEvent on IE9-11 are global objects, not constructors
+    if (isFunction(Event) && isFunction(CustomEvent)) {
+      if (isUndefined(data)) {
+        event = new Event(type, {
+          bubbles: true,
+          cancelable: true,
+        });
       } else {
-        // IE9-11
-        if (isUndefined(data)) {
-          event = document.createEvent('Event');
-          event.initEvent(type, true, true);
-        } else {
-          event = document.createEvent('CustomEvent');
-          event.initCustomEvent(type, true, true, data);
-        }
+        event = new CustomEvent(type, {
+          detail: data,
+          bubbles: true,
+          cancelable: true,
+        });
       }
-
-      // IE9+
-      return element.dispatchEvent(event);
-    } else if (element.fireEvent) {
-
-      // IE6-10 (native events only)
-      return element.fireEvent('on' + type);
-    }
-  }
-
-  function preventDefault(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
+    } else if (isUndefined(data)) {
+      event = document.createEvent('Event');
+      event.initEvent(type, true, true);
     } else {
-      e.returnValue = false;
-    }
-  }
-
-  function getEvent(event) {
-    var e = event || window.event;
-    var eventDoc;
-    var doc;
-    var body;
-
-    // Fix target property (IE8)
-    if (!e.target) {
-      e.target = e.srcElement || document;
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent(type, true, true, data);
     }
 
-    if (!isNumber(e.pageX) && isNumber(e.clientX)) {
-      eventDoc = event.target.ownerDocument || document;
-      doc = eventDoc.documentElement;
-      body = eventDoc.body;
-
-      e.pageX = e.clientX + (
-        ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
-        ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
-      );
-      e.pageY = e.clientY + (
-        ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
-        ((doc && doc.clientTop) || (body && body.clientTop) || 0)
-      );
-    }
-
-    return e;
+    // IE9+
+    return element.dispatchEvent(event);
+  } else if (element.fireEvent) {
+    // IE6-10 (native events only)
+    return element.fireEvent(`on${type}`);
   }
 
-  function getOffset(element) {
-    var doc = document.documentElement;
-    var box = element.getBoundingClientRect();
+  return true;
+}
 
-    return {
-      left: box.left + (window.scrollX || doc && doc.scrollLeft || 0) - (doc && doc.clientLeft || 0),
-      top: box.top + (window.scrollY || doc && doc.scrollTop || 0) - (doc && doc.clientTop || 0)
-    };
+export function getEvent(event) {
+  const e = event || window.event;
+
+  // Fix target property (IE8)
+  if (!e.target) {
+    e.target = e.srcElement || document;
   }
 
-  function getByTag(element, tagName) {
-    return element.getElementsByTagName(tagName);
+  if (!isNumber(e.pageX) && isNumber(e.clientX)) {
+    const eventDoc = event.target.ownerDocument || document;
+    const doc = eventDoc.documentElement;
+    const body = eventDoc.body;
+
+    e.pageX = e.clientX + (
+      ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
+      ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
+    );
+    e.pageY = e.clientY + (
+      ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
+      ((doc && doc.clientTop) || (body && body.clientTop) || 0)
+    );
   }
 
-  function getByClass(element, className) {
-    return element.getElementsByClassName ?
-      element.getElementsByClassName(className) :
-      element.querySelectorAll('.' + className);
+  return e;
+}
+
+export function getOffset(element) {
+  const doc = document.documentElement;
+  const box = element.getBoundingClientRect();
+
+  return {
+    left: box.left + (
+      (window.scrollX || (doc && doc.scrollLeft) || 0) - ((doc && doc.clientLeft) || 0)
+    ),
+    top: box.top + (
+      (window.scrollY || (doc && doc.scrollTop) || 0) - ((doc && doc.clientTop) || 0)
+    ),
+  };
+}
+
+export function getByTag(element, tagName) {
+  return element.getElementsByTagName(tagName);
+}
+
+export function getByClass(element, className) {
+  return element.getElementsByClassName ?
+    element.getElementsByClassName(className) :
+    element.querySelectorAll(`.${className}`);
+}
+
+export function createElement(tagName) {
+  return document.createElement(tagName);
+}
+
+export function appendChild(element, elem) {
+  element.appendChild(elem);
+}
+
+export function removeChild(element) {
+  if (element.parentNode) {
+    element.parentNode.removeChild(element);
+  }
+}
+
+export function empty(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+export function setText(element, text) {
+  if (!isUndefined(element.textContent)) {
+    element.textContent = text;
+  } else {
+    element.innerText = text;
+  }
+}
+
+// Force reflow to enable CSS3 transition
+export function forceReflow(element) {
+  return element.offsetWidth;
+}
+
+// e.g.: http://domain.com/path/to/picture.jpg?size=1280×960 -> picture.jpg
+export function getImageName(url) {
+  return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
+}
+
+export function getImageSize(image, callback) {
+  // Modern browsers
+  if (image.naturalWidth) {
+    callback(image.naturalWidth, image.naturalHeight);
+    return;
   }
 
-  function appendChild(element, elem) {
-    if (elem.length) {
-      return each(elem, function (el) {
-        appendChild(element, el);
-      });
-    }
+  const newImage = document.createElement('img');
 
-    element.appendChild(elem);
+  newImage.onload = function load() {
+    callback(this.width, this.height);
+  };
+
+  newImage.src = image.src;
+}
+
+export function getTransform(data) {
+  const transforms = [];
+  const rotate = data.rotate;
+  const scaleX = data.scaleX;
+  const scaleY = data.scaleY;
+
+  // Rotate should come first before scale to match orientation transform
+  if (isNumber(rotate) && rotate !== 0) {
+    transforms.push(`rotate(${rotate}deg)`);
   }
 
-  function removeChild(element) {
-    if (element.parentNode) {
-      element.parentNode.removeChild(element);
-    }
+  if (isNumber(scaleX) && scaleX !== 1) {
+    transforms.push(`scaleX(${scaleX})`);
   }
 
-  function empty(element) {
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
+  if (isNumber(scaleY) && scaleY !== 1) {
+    transforms.push(`scaleY(${scaleY})`);
   }
 
-  function setText(element, text) {
-    if (!isUndefined(element.textContent)) {
-      element.textContent = text;
-    } else {
-      element.innerText = text;
-    }
+  return transforms.length ? transforms.join(' ') : 'none';
+}
+
+export function getResponsiveClass(option) {
+  switch (option) {
+    case 2:
+      return 'viewer-hide-xs-down';
+
+    case 3:
+      return 'viewer-hide-sm-down';
+
+    case 4:
+      return 'viewer-hide-md-down';
   }
 
-  // Force reflow to enable CSS3 transition
-  function forceReflow(element) {
-    return element.offsetWidth;
+  return '';
+}
+
+export function getPointer(pointer, endOnly) {
+  const end = {
+    endX: pointer.pageX,
+    endY: pointer.pageY
+  };
+
+  if (endOnly) {
+    return end;
   }
 
-  // e.g.: http://domain.com/path/to/picture.jpg?size=1280×960 -> picture.jpg
-  function getImageName(url) {
-    return isString(url) ? url.replace(/^.*\//, '').replace(/[\?&#].*$/, '') : '';
-  }
+  return extend({
+    startX: pointer.pageX,
+    startY: pointer.pageY
+  }, end);
+}
 
-  function getImageSize(image, callback) {
-    var newImage;
+export function getMaxZoomRatio(pointers) {
+  const pointers2 = extend({}, pointers);
+  const ratios = [];
 
-    // Modern browsers
-    if (image.naturalWidth) {
-      return callback(image.naturalWidth, image.naturalHeight);
-    }
+  each(pointers, (pointer, pointerId) => {
+    delete pointers2[pointerId];
 
-    // IE8: Don't use `new Image()` here
-    newImage = document.createElement('img');
+    each(pointers2, (pointer2) => {
+      const x1 = Math.abs(pointer.startX - pointer2.startX);
+      const y1 = Math.abs(pointer.startY - pointer2.startY);
+      const x2 = Math.abs(pointer.endX - pointer2.endX);
+      const y2 = Math.abs(pointer.endY - pointer2.endY);
+      const z1 = Math.sqrt((x1 * x1) + (y1 * y1));
+      const z2 = Math.sqrt((x2 * x2) + (y2 * y2));
+      const ratio = (z2 - z1) / z1;
 
-    newImage.onload = function () {
-      callback(this.width, this.height);
-    };
-
-    newImage.src = image.src;
-  }
-
-  function getTransform(data) {
-    var transforms = [];
-    var rotate = data.rotate;
-    var scaleX = data.scaleX;
-    var scaleY = data.scaleY;
-
-    // Rotate should come first before scale
-    if (isNumber(rotate)) {
-      transforms.push('rotate(' + rotate + 'deg)');
-    }
-
-    if (isNumber(scaleX)) {
-      transforms.push('scaleX(' + scaleX + ')');
-    }
-
-    if (isNumber(scaleY)) {
-      transforms.push('scaleY(' + scaleY + ')');
-    }
-
-    return transforms.length ? transforms.join(' ') : 'none';
-  }
-
-  function getResponsiveClass(option) {
-    switch (option) {
-      case 2:
-        return CLASS_HIDE_XS_DOWN;
-
-      case 3:
-        return CLASS_HIDE_SM_DOWN;
-
-      case 4:
-        return CLASS_HIDE_MD_DOWN;
-    }
-  }
-
-  function getPointer(pointer, endOnly) {
-    var end = {
-      endX: pointer.pageX,
-      endY: pointer.pageY
-    };
-
-    if (endOnly) {
-      return end;
-    }
-
-    return extend({
-      startX: pointer.pageX,
-      startY: pointer.pageY
-    }, end);
-  }
-
-  function getMaxZoomRatio(pointers) {
-    var pointers2 = extend({}, pointers);
-    var ratios = [];
-
-    each(pointers, function (pointer, pointerId) {
-      delete pointers2[pointerId];
-
-      each(pointers2, function (pointer2) {
-        var x1 = Math.abs(pointer.startX - pointer2.startX);
-        var y1 = Math.abs(pointer.startY - pointer2.startY);
-        var x2 = Math.abs(pointer.endX - pointer2.endX);
-        var y2 = Math.abs(pointer.endY - pointer2.endY);
-        var z1 = Math.sqrt((x1 * x1) + (y1 * y1));
-        var z2 = Math.sqrt((x2 * x2) + (y2 * y2));
-        var ratio = (z2 - z1) / z1;
-
-        ratios.push(ratio);
-      });
+      ratios.push(ratio);
     });
+  });
 
-    ratios.sort(function (a, b) {
-      return Math.abs(a) < Math.abs(b);
-    });
+  ratios.sort((a, b) => {
+    return Math.abs(a) < Math.abs(b);
+  });
 
-    return ratios[0];
-  }
+  return ratios[0];
+}
 
-  function getPointersCenter(pointers) {
-    var pageX = 0;
-    var pageY = 0;
-    var count = 0;
+export function getPointersCenter(pointers) {
+  let pageX = 0;
+  let pageY = 0;
+  let count = 0;
 
-    each(pointers, function (pointer) {
-      pageX += pointer.startX;
-      pageY += pointer.startY;
-      count += 1;
-    });
+  each(pointers, (pointer) => {
+    pageX += pointer.startX;
+    pageY += pointer.startY;
+    count += 1;
+  });
 
-    pageX /= count;
-    pageY /= count;
+  pageX /= count;
+  pageY /= count;
 
-    return {
-      pageX: pageX,
-      pageY: pageY
-    };
-  }
+  return {
+    pageX,
+    pageY,
+  };
+}
