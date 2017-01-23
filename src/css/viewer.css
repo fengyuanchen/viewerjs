@@ -1,0 +1,348 @@
+:root {
+  --position-absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  --text-hide {
+    font-size: 0;
+    line-height: 0;
+
+    color: transparent;
+  }
+}
+
+.viewer-zoom-in::before,
+.viewer-zoom-out::before,
+.viewer-one-to-one::before,
+.viewer-reset::before,
+.viewer-prev::before,
+.viewer-play::before,
+.viewer-next::before,
+.viewer-rotate-left::before,
+.viewer-rotate-right::before,
+.viewer-flip-horizontal::before,
+.viewer-flip-vertical::before,
+.viewer-fullscreen::before,
+.viewer-fullscreen-exit::before,
+.viewer-close::before {
+  background-image: inline('../images/icons.png');
+  background-repeat: no-repeat;
+  display: block;
+  height: 20px;
+  width: 20px;
+  @apply --text-hide;
+}
+
+.viewer-zoom-in::before {
+  background-position: 0 0;
+  content: 'Zoom In';
+}
+
+.viewer-zoom-out::before {
+  background-position: -20px 0;
+  content: 'Zoom Out';
+}
+
+.viewer-one-to-one::before {
+  background-position: -40px 0;
+  content: 'One to One';
+}
+
+.viewer-reset::before {
+  background-position: -60px 0;
+  content: 'Reset';
+}
+
+.viewer-prev::before {
+  background-position: -80px 0;
+  content: 'Previous';
+}
+
+.viewer-play::before {
+  background-position: -100px 0;
+  content: 'Play';
+}
+
+.viewer-next::before {
+  background-position: -120px 0;
+  content: 'Next';
+}
+
+.viewer-rotate-left::before {
+  background-position: -140px 0;
+  content: 'Rotate Left';
+}
+
+.viewer-rotate-right::before {
+  background-position: -160px 0;
+  content: 'Rotate Right';
+}
+
+.viewer-flip-horizontal::before {
+  background-position: -180px 0;
+  content: 'Flip Horizontal';
+}
+
+.viewer-flip-vertical::before {
+  background-position: -200px 0;
+  content: 'Flip Vertical';
+}
+
+.viewer-fullscreen::before {
+  background-position: -220px 0;
+  content: 'Enter Full Screen';
+}
+
+.viewer-fullscreen-exit::before {
+  background-position: -240px 0;
+  content: 'Exit Full Screen';
+}
+
+.viewer-close::before {
+  background-position: -260px 0;
+  content: 'Close';
+}
+
+.viewer-container {
+  background-color: rgba(0, 0, 0, .5);
+  direction: ltr;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  @apply --position-absolute;
+
+  &::selection,
+  *::selection {
+    background-color: transparent;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    max-height: none !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    width: 100%;
+  }
+}
+
+.viewer-canvas {
+  overflow: hidden;
+  @apply --position-absolute;
+
+  > img {
+    height: auto;
+    margin: 15px auto;
+    max-width: 90% !important;
+    width: auto;
+  }
+}
+
+.viewer-footer {
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  text-align: center;
+}
+
+.viewer-navbar {
+  background-color: rgba(0, 0, 0, .5);
+  overflow: hidden;
+}
+
+.viewer-list {
+  box-sizing: content-box;
+  height: 50px;
+  margin: 0;
+  overflow: hidden;
+  padding: 1px 0;
+
+  > li {
+    cursor: pointer;
+    float: left;
+    height: 50px;
+    opacity: .5;
+    overflow: hidden;
+    width: 30px;
+    @apply --text-hide;
+
+    + li {
+      margin-left: 1px;
+    }
+  }
+
+  > .viewer-active {
+     opacity: 1;
+  }
+}
+
+.viewer-player {
+  background-color: #000;
+  cursor: none;
+  display: none;
+  @apply --position-absolute;
+
+  > img {
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+}
+
+.viewer-toolbar {
+  margin: 0 auto 5px;
+  overflow: hidden;
+  padding: 3px 0;
+  width: 280px;
+
+  > li {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 50%;
+    cursor: pointer;
+    float: left;
+    height: 24px;
+    overflow: hidden;
+    width: 24px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .8);
+    }
+
+    &::before {
+      margin: 2px;
+    }
+
+    + li {
+      margin-left: 1px;
+    }
+  }
+
+  > .viewer-play {
+    height: 30px;
+    margin-bottom: -3px;
+    margin-top: -3px;
+    width: 30px;
+
+    &::before {
+      margin: 5px;
+    }
+  }
+}
+
+.viewer-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  color: #fff;
+  display: none;
+  font-size: 12px;
+  height: 20px;
+  left: 50%;
+  line-height: 20px;
+  margin-left: -25px;
+  margin-top: -10px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 50px;
+}
+
+.viewer-title {
+  color: #ccc;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  margin: 0 5% 5px;
+  max-width: 90%;
+  opacity: .8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.viewer-button {
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 80px;
+  overflow: hidden;
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 80px;
+
+  &::before {
+    bottom: 15px;
+    left: 15px;
+    position: absolute;
+  }
+}
+
+.viewer-fixed {
+  position: fixed;
+}
+
+.viewer-open {
+  overflow: hidden;
+}
+
+.viewer-show {
+  display: block;
+}
+
+.viewer-hide {
+  display: none;
+}
+
+.viewer-invisible {
+  visibility: hidden;
+}
+
+.viewer-move {
+  cursor: move;
+  cursor: grab;
+}
+
+.viewer-fade {
+  opacity: 0;
+}
+
+.viewer-in {
+  opacity: 1;
+}
+
+.viewer-transition {
+  transition: all .3s;
+}
+
+@media (max-width: 767px) {
+  .viewer-hide-xs-down {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .viewer-hide-sm-down {
+    display: none;
+  }
+}
+
+@media (max-width: 1199px) {
+  .viewer-hide-md-down {
+    display: none;
+  }
+}
