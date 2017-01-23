@@ -94,7 +94,7 @@ export default {
 
     index = Number(index) || 0;
 
-    if (!self.visible || self.played || index < 0 || index >= self.length ||
+    if (!self.ready || !self.visible || self.played || index < 0 || index >= self.length ||
       (self.viewed && index === self.index)) {
       return self;
     }
