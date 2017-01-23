@@ -120,11 +120,11 @@
   @apply --position-absolute;
 
   &::selection,
-  *::selection {
+  & *::selection {
     background-color: transparent;
   }
 
-  img {
+  & img {
     display: block;
     height: auto;
     max-height: none !important;
@@ -139,7 +139,7 @@
   overflow: hidden;
   @apply --position-absolute;
 
-  > img {
+  & > img {
     height: auto;
     margin: 15px auto;
     max-width: 90% !important;
@@ -168,7 +168,7 @@
   overflow: hidden;
   padding: 1px 0;
 
-  > li {
+  & > li {
     cursor: pointer;
     float: left;
     height: 50px;
@@ -177,12 +177,12 @@
     width: 30px;
     @apply --text-hide;
 
-    + li {
+    & + li {
       margin-left: 1px;
     }
   }
 
-  > .viewer-active {
+  & > .viewer-active {
      opacity: 1;
   }
 }
@@ -193,7 +193,7 @@
   display: none;
   @apply --position-absolute;
 
-  > img {
+  & > img {
     left: 0;
     position: absolute;
     top: 0;
@@ -206,7 +206,7 @@
   padding: 3px 0;
   width: 280px;
 
-  > li {
+  & > li {
     background-color: rgba(0, 0, 0, .5);
     border-radius: 50%;
     cursor: pointer;
@@ -223,12 +223,12 @@
       margin: 2px;
     }
 
-    + li {
+    & + li {
       margin-left: 1px;
     }
   }
 
-  > .viewer-play {
+  & > .viewer-play {
     height: 30px;
     margin-bottom: -3px;
     margin-top: -3px;

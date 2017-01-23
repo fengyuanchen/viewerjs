@@ -70,6 +70,7 @@ window.onload = function () {
     console.log(e.type);
   });
   addEventListener(pictures, 'shown', function (e) {
+      console.log(viewer)
     console.log(e.type);
   });
   addEventListener(pictures, 'hide', function (e) {
