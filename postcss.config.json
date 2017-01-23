@@ -1,0 +1,8 @@
+{
+  "use": [
+    "postcss-cssnext",
+    "postcss-assets"
+  ],
+  "input": "src/css/viewer.css",
+  "output": "dist/viewer.css"
+}
