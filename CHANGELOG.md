@@ -1,6 +1,12 @@
 # Changelog
 
 
+## 0.6.0 (Jan 24, 2017)
+
+- Ported JavaScript code to ECMAScript 6.
+- Ported CSS code to CSSNext.
+
+
 ## 0.5.1 (Jan 2, 2017)
 
 - Improved event handler for Pointer Events.

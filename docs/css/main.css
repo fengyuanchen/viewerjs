@@ -12,20 +12,18 @@ body {
   text-align: center;
 }
 
-
-/* Header */
-
-.docs-header {
-  margin-bottom: 0;
+.btn {
+  padding-left: .75rem;
+  padding-right: .75rem;
 }
 
-.navbar-toggle:hover,
-.navbar-toggle:focus {
-  border-color: #0074d9;
+.d-flex > .btn {
+  flex-grow: 1;
 }
 
-.navbar-toggle .icon-bar {
-  background-color: #0074d9;
+.list-group-item {
+  padding-bottom: .5rem;
+  padding-top: .5rem;
 }
 
 
@@ -33,11 +31,12 @@ body {
 
 .docs-jumbotron {
   background-color: #0074d9;
+  border-radius: 0;
   color: #fff;
 }
 
 .docs-jumbotron .version {
-  font-size: 14px;
+  font-size: .875rem;
   color: #fff;
   filter: alpha(opacity=50);
   opacity: 0.5;
@@ -46,7 +45,7 @@ body {
 @media (min-width: 992px) {
   .docs-jumbotron h1,
   .docs-jumbotron p {
-    margin-right: 380px;
+    margin-right: 360px;
   }
 }
 
@@ -55,10 +54,11 @@ body {
 }
 
 .docs-carbonads {
-  max-width: 350px;
-  padding: 15px;
+  font-size: .875rem;
+  max-width: 330px;
+  padding: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: .25rem;
   overflow: hidden;
 }
 
@@ -96,7 +96,7 @@ body {
   .docs-carbonads {
     position: absolute;
     right: 0;
-    bottom: 5px;
+    bottom: -1.25rem;
   }
 }
 
@@ -153,24 +153,24 @@ body {
 /* Footer */
 
 .docs-footer {
+  font-size: .875rem;
   overflow: hidden;
 }
 
-.links {
-  margin-bottom: 30px;
-  text-align: center;
+.docs-footer .nav {
+  margin-bottom: 1rem;
 }
 
 .heart {
   position: relative;
   display: block;
   width: 100%;
-  height: 30px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  height: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
   color: #ddd;
-  font-size: 18px;
-  line-height: 30px;
+  font-size: 1.125rem;
+  line-height: 2rem;
   text-align: center;
 }
 
@@ -192,8 +192,8 @@ body {
 .heart:after {
   position: relative;
   z-index: 1;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: .5rem;
+  padding-right: .5rem;
   background-color: #fff;
   content: "♥";
 }
