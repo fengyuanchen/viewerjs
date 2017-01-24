@@ -1,8 +1,8 @@
 # Project
-node_modules
-bower_components
-dist/*.map
 /_*
+*.map
+bower_components
+node_modules
 
 # Windows image file caches
 Thumbs.db

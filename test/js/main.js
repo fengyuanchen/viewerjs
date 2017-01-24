@@ -11,7 +11,7 @@ window.Util = {
     var container = document.createElement('div');
     var image = document.createElement('img');
 
-    image.src = '../assets/img/tibet-1.jpg';
+    image.src = '../docs/images/tibet-1.jpg';
     container.className = 'container';
     container.appendChild(image);
     document.body.appendChild(container);
@@ -24,10 +24,10 @@ window.Util = {
 
     container.className = 'container';
     list.innerHTML = (
-      '<li><img src="../assets/img/tibet-1.jpg"></li>' +
-      '<li><img src="../assets/img/tibet-2.jpg"></li>' +
-      '<li><img src="../assets/img/tibet-3.jpg"></li>' +
-      '<li><img src="../assets/img/tibet-4.jpg"></li>'
+      '<li><img src="../docs/images/tibet-1.jpg"></li>' +
+      '<li><img src="../docs/images/tibet-2.jpg"></li>' +
+      '<li><img src="../docs/images/tibet-3.jpg"></li>' +
+      '<li><img src="../docs/images/tibet-4.jpg"></li>'
     );
     container.appendChild(list);
     document.body.appendChild(container);
@@ -38,7 +38,6 @@ window.Util = {
     var event;
 
     if (element.dispatchEvent) {
-
       // Event on IE is a global object, not a constructor
       if (typeof Event === 'function') {
         event = new Event(type, {
@@ -53,7 +52,6 @@ window.Util = {
       // IE9+
       return element.dispatchEvent(event);
     } else if (element.fireEvent) {
-
       // IE6-10
       return element.fireEvent('on' + type);
     }
