@@ -658,9 +658,9 @@ Reset the image to its initial state.
 
 ### update()
 
-Update the viewer when images changed.
+Update the viewer instance when the source images changed (added, removed or sorted).
 
-> If you load images dynamically, you can use this method to add the new images to the viewer instance.
+> If you load images dynamically (with XMLHTTPRequest), you can use this method to add the new images to the viewer instance.
 
 
 ### destroy()
