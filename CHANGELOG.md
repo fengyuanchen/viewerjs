@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.6.1 (Feb 18, 2017)
+
+- Prevented the default behaviour of drag action (#63).
+
+
 ## 0.6.0 (Jan 24, 2017)
 
 - Ported JavaScript code to ECMAScript 6.
