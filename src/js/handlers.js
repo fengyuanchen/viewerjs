@@ -299,6 +299,12 @@ export default {
     }
   },
 
+  dragstart(e) {
+    if (e.target.tagName.toLowerCase() === 'img') {
+      e.preventDefault();
+    }
+  },
+
   mousedown(event) {
     const self = this;
     const options = self.options;

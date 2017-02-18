@@ -7,6 +7,7 @@ const EVENT_MOUSEMOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
 const EVENT_MOUSEUP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
 const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
 const EVENT_KEYDOWN = 'keydown';
+const EVENT_DRAGSTART = 'dragstart';
 const EVENT_CLICK = 'click';
 const EVENT_RESIZE = 'resize';
 const EVENT_VIEW = 'view';
@@ -29,6 +30,7 @@ export default {
 
     $.addListener(viewer, EVENT_CLICK, (self.onClick = $.proxy(self.click, self)));
     $.addListener(viewer, EVENT_WHEEL, (self.onWheel = $.proxy(self.wheel, self)));
+    $.addListener(viewer, EVENT_DRAGSTART, (self.onDragstart = $.proxy(self.dragstart, self)));
     $.addListener(self.canvas, EVENT_MOUSEDOWN, (self.onMousedown = $.proxy(self.mousedown, self)));
     $.addListener(document, EVENT_MOUSEMOVE, (self.onMousemove = $.proxy(self.mousemove, self)));
     $.addListener(document, EVENT_MOUSEUP, (self.onMouseup = $.proxy(self.mouseup, self)));
@@ -52,6 +54,7 @@ export default {
 
     $.removeListener(viewer, EVENT_CLICK, self.onClick);
     $.removeListener(viewer, EVENT_WHEEL, self.onWheel);
+    $.removeListener(viewer, EVENT_DRAGSTART, self.onDragstart);
     $.removeListener(self.canvas, EVENT_MOUSEDOWN, self.onMousedown);
     $.removeListener(document, EVENT_MOUSEMOVE, self.onMousemove);
     $.removeListener(document, EVENT_MOUSEUP, self.onMouseup);
