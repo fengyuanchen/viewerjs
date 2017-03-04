@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.6.1
+ * Viewer.js v0.6.2
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-02-18T06:33:56.595Z
+ * Date: 2017-03-04T08:19:00.870Z
  */
 
 (function (global, factory) {
@@ -1348,7 +1348,7 @@ var handlers = {
 
     if (e.changedTouches) {
       each(e.changedTouches, function (touch) {
-        extend(pointers[touch.identifier], getPointer(touch), true);
+        extend(pointers[touch.identifier], getPointer(touch, true));
       });
     } else {
       extend(pointers[e.pointerId || 0], getPointer(e, true));

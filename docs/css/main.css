@@ -45,7 +45,7 @@ body {
 @media (min-width: 992px) {
   .docs-jumbotron h1,
   .docs-jumbotron p {
-    margin-right: 360px;
+    margin-right: 380px;
   }
 }
 
@@ -55,7 +55,7 @@ body {
 
 .docs-carbonads {
   font-size: .875rem;
-  max-width: 330px;
+  max-width: 360px;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: .25rem;

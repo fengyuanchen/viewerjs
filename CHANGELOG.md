@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.6.2 (Mar 4, 2017)
+
+- Fixed the issue of touch and move problem (#63).
+
+
 ## 0.6.1 (Feb 18, 2017)
 
 - Prevented the default behaviour of drag action (#63).
