@@ -350,7 +350,7 @@ export default {
 
     if (e.changedTouches) {
       $.each(e.changedTouches, (touch) => {
-        $.extend(pointers[touch.identifier], $.getPointer(touch), true);
+        $.extend(pointers[touch.identifier], $.getPointer(touch, true));
       });
     } else {
       $.extend(pointers[e.pointerId || 0], $.getPointer(e, true));
