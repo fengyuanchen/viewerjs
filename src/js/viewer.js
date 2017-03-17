@@ -138,7 +138,7 @@ class Viewer {
 
     $.toggleClass(toolbar.querySelector('.viewer-one-to-one'), 'viewer-invisible', !options.zoomable);
     $.toggleClass(toolbar.querySelectorAll('li[class*="zoom"]'), 'viewer-invisible', !options.zoomable);
-    $.toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), 'viewer-invisible', !options.scalable);
+    $.toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), 'viewer-invisible', !options.flippable || !options.scalable);
 
     if (!options.rotatable) {
       const rotates = toolbar.querySelectorAll('li[class*="rotate"]');
