@@ -305,7 +305,7 @@ export default {
     }
   },
 
-  mousedown(event) {
+  pointerdown(event) {
     const self = this;
     const options = self.options;
     const pointers = self.pointers;
@@ -334,7 +334,7 @@ export default {
     self.action = action;
   },
 
-  mousemove(event) {
+  pointermove(event) {
     const self = this;
     const options = self.options;
     const pointers = self.pointers;
@@ -363,7 +363,7 @@ export default {
     self.change(e);
   },
 
-  mouseup(event) {
+  pointerup(event) {
     const self = this;
     const pointers = self.pointers;
     const e = $.getEvent(event);

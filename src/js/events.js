@@ -2,12 +2,12 @@ import * as $ from './utilities';
 
 // Events
 const PointerEvent = typeof window !== 'undefined' ? window.PointerEvent : null;
-const EVENT_MOUSEDOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
-const EVENT_MOUSEMOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
-const EVENT_MOUSEUP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+const EVENT_POINTER_DOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+const EVENT_POINTER_MOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
+const EVENT_POINTER_UP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
 const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
-const EVENT_KEYDOWN = 'keydown';
-const EVENT_DRAGSTART = 'dragstart';
+const EVENT_KEY_DOWN = 'keydown';
+const EVENT_DRAGS_TART = 'dragstart';
 const EVENT_CLICK = 'click';
 const EVENT_RESIZE = 'resize';
 const EVENT_VIEW = 'view';
@@ -30,11 +30,11 @@ export default {
 
     $.addListener(viewer, EVENT_CLICK, (self.onClick = $.proxy(self.click, self)));
     $.addListener(viewer, EVENT_WHEEL, (self.onWheel = $.proxy(self.wheel, self)));
-    $.addListener(viewer, EVENT_DRAGSTART, (self.onDragstart = $.proxy(self.dragstart, self)));
-    $.addListener(self.canvas, EVENT_MOUSEDOWN, (self.onMousedown = $.proxy(self.mousedown, self)));
-    $.addListener(document, EVENT_MOUSEMOVE, (self.onMousemove = $.proxy(self.mousemove, self)));
-    $.addListener(document, EVENT_MOUSEUP, (self.onMouseup = $.proxy(self.mouseup, self)));
-    $.addListener(document, EVENT_KEYDOWN, (self.onKeydown = $.proxy(self.keydown, self)));
+    $.addListener(viewer, EVENT_DRAGS_TART, (self.onDragstart = $.proxy(self.dragstart, self)));
+    $.addListener(self.canvas, EVENT_POINTER_DOWN, (self.onPointerdown = $.proxy(self.pointerdown, self)));
+    $.addListener(document, EVENT_POINTER_MOVE, (self.onPointermove = $.proxy(self.pointermove, self)));
+    $.addListener(document, EVENT_POINTER_UP, (self.onPointerup = $.proxy(self.pointerup, self)));
+    $.addListener(document, EVENT_KEY_DOWN, (self.onKeydown = $.proxy(self.keydown, self)));
     $.addListener(window, EVENT_RESIZE, (self.onResize = $.proxy(self.resize, self)));
   },
 
@@ -54,11 +54,11 @@ export default {
 
     $.removeListener(viewer, EVENT_CLICK, self.onClick);
     $.removeListener(viewer, EVENT_WHEEL, self.onWheel);
-    $.removeListener(viewer, EVENT_DRAGSTART, self.onDragstart);
-    $.removeListener(self.canvas, EVENT_MOUSEDOWN, self.onMousedown);
-    $.removeListener(document, EVENT_MOUSEMOVE, self.onMousemove);
-    $.removeListener(document, EVENT_MOUSEUP, self.onMouseup);
-    $.removeListener(document, EVENT_KEYDOWN, self.onKeydown);
+    $.removeListener(viewer, EVENT_DRAGS_TART, self.onDragstart);
+    $.removeListener(self.canvas, EVENT_POINTER_DOWN, self.onPointerdown);
+    $.removeListener(document, EVENT_POINTER_MOVE, self.onPointermove);
+    $.removeListener(document, EVENT_POINTER_UP, self.onPointerup);
+    $.removeListener(document, EVENT_KEY_DOWN, self.onKeydown);
     $.removeListener(window, EVENT_RESIZE, self.onResize);
   },
 };
