@@ -369,7 +369,7 @@ export default {
     const e = $.getEvent(event);
     const action = self.action;
 
-    if (!action) {
+    if (!self.viewed) {
       return;
     }
 
@@ -381,12 +381,14 @@ export default {
       delete pointers[e.pointerId || 0];
     }
 
-    if (!Object.keys(pointers).length) {
-      if (action === 'move' && self.options.transition) {
-        $.addClass(self.image, 'viewer-transition');
-      }
-
-      self.action = false;
+    if (!action) {
+      return;
     }
+
+    if (action === 'move' && self.options.transition) {
+      $.addClass(self.image, 'viewer-transition');
+    }
+
+    self.action = false;
   },
 };
