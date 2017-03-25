@@ -73,6 +73,7 @@ export default {
         '<li>' +
           '<img' +
             ` src="${src}"` +
+            ' role="button"' +
             ' data-action="view"' +
             ` data-index="${i}"` +
             ` data-original-url="${(url || src)}"` +
