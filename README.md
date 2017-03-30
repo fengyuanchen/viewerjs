@@ -421,9 +421,13 @@ new Viewer(image, {
 ```
 
 
-### show()
+### show([index])
 
-Show the viewer.
+- **index** (optional):
+  - Type: `Number`
+  - The index of the image for viewing
+
+Show the viewer. If the index is specified then the image at that index is shown, otherwise the last viewed or first image (if the viewer hasn't popped up yet) is shown.
 
 > Only available in modal mode.
 

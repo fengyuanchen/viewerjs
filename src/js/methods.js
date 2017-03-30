@@ -2,12 +2,18 @@ import * as $ from './utilities';
 
 export default {
   // Show the viewer (only available in modal mode)
-  show() {
+  show(index) {
     const self = this;
     const options = self.options;
     const element = self.element;
 
-    if (options.inline || self.transitioning) {
+    const parsedIndex = Number(index) || 0;
+
+    if (
+      options.inline ||
+      self.transitioning ||
+      (index !== undefined && (parsedIndex < 0 || parsedIndex >= self.length))
+    ) {
       return self;
     }
 
@@ -29,7 +35,13 @@ export default {
 
     $.removeClass(viewer, 'viewer-hide');
     $.addListener(element, 'shown', () => {
-      self.view(self.target ? $.inArray(self.target, $.toArray(self.images)) : self.index);
+      let startIndex;
+      if (index !== undefined) {
+        startIndex = parsedIndex;
+      } else {
+        startIndex = self.target ? $.inArray(self.target, $.toArray(self.images)) : self.index;
+      }
+      self.view(startIndex);
       self.target = false;
     }, true);
 

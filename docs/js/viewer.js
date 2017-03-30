@@ -5,7 +5,7 @@
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-03-04T08:19:00.870Z
+ * Date: 2017-03-17T08:22:32.638Z
  */
 
 (function (global, factory) {
@@ -1390,12 +1390,14 @@ var handlers = {
 
 var methods = {
   // Show the viewer (only available in modal mode)
-  show: function show() {
+  show: function show(index) {
     var self = this;
     var options = self.options;
     var element = self.element;
 
-    if (options.inline || self.transitioning) {
+    var parsedIndex = Number(index) || 0;
+
+    if (options.inline || self.transitioning || index !== undefined && (parsedIndex < 0 || parsedIndex >= self.length)) {
       return self;
     }
 
@@ -1417,7 +1419,13 @@ var methods = {
 
     removeClass(viewer, 'viewer-hide');
     addListener(element, 'shown', function () {
-      self.view(self.target ? inArray(self.target, toArray$$1(self.images)) : self.index);
+      var startIndex = void 0;
+      if (index !== undefined) {
+        startIndex = parsedIndex;
+      } else {
+        startIndex = self.target ? inArray(self.target, toArray$$1(self.images)) : self.index;
+      }
+      self.view(startIndex);
       self.target = false;
     }, true);
 
@@ -1863,22 +1871,20 @@ var methods = {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
-      (function () {
-        var playing = function playing() {
-          self.playing = setTimeout(function () {
-            removeClass(list[index], 'viewer-in');
-            index++;
-            index = index < total ? index : 0;
-            addClass(list[index], 'viewer-in');
+      var playing = function playing() {
+        self.playing = setTimeout(function () {
+          removeClass(list[index], 'viewer-in');
+          index++;
+          index = index < total ? index : 0;
+          addClass(list[index], 'viewer-in');
 
-            playing();
-          }, options.interval);
-        };
-
-        if (total > 1) {
           playing();
-        }
-      })();
+        }, options.interval);
+      };
+
+      if (total > 1) {
+        playing();
+      }
     }
 
     return self;
@@ -2358,21 +2364,19 @@ var Viewer = function () {
       self.scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
       if (options.inline) {
-        (function () {
-          var progress = proxy(self.progress, self);
+        var progress = proxy(self.progress, self);
 
-          addListener(element, 'ready', function () {
-            self.view();
-          }, true);
+        addListener(element, 'ready', function () {
+          self.view();
+        }, true);
 
-          each(images, function (image) {
-            if (image.complete) {
-              progress();
-            } else {
-              addListener(image, 'load', progress, true);
-            }
-          });
-        })();
+        each(images, function (image) {
+          if (image.complete) {
+            progress();
+          } else {
+            addListener(image, 'load', progress, true);
+          }
+        });
       } else {
         addListener(element, 'click', self.onStart = proxy(self.start, self));
       }
