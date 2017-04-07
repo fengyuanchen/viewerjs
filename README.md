@@ -194,6 +194,15 @@ Specify the visibility of the title (the current image's name and dimensions).
 Specify the visibility of the toolbar.
 
 
+### toolbarLayout
+- Type: `Array of String`
+- Default: `['zoomin', 'zoomout', 'onetoone', 'reset', 'prev', 'play', 'next', 'rotateleft', 'rotateright', 'fliphorizontal', 'flipvertical']`
+
+Change the layout of the toolbar. Will place the layout in the same order of the array 
+
+__Note__ : Every 11 components must be in the toolbarLayout to make it work. If not, it will take the default one.
+
+
 ### tooltip
 
 - Type: `Boolean`
