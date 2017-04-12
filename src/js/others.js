@@ -1,18 +1,27 @@
 import * as $ from './utilities';
 
 export default {
+  // should be idempotent
   open() {
     const body = this.body;
 
     $.addClass(body, 'viewer-open');
-    body.style.paddingRight = `${this.scrollbarWidth}px`;
+    if (this.scrollbarWidth && this.oldScrollbarWidth == null) {
+      this.oldScrollbarWidth = body.style.paddingRight;
+      const width = parseFloat(getComputedStyle(body).paddingRight) + this.scrollbarWidth;
+      body.style.paddingRight = `${width}px`;
+    }
   },
 
+  // should be idempotent
   close() {
     const body = this.body;
 
     $.removeClass(body, 'viewer-open');
-    body.style.paddingRight = 0;
+    if (this.scrollbarWidth && this.oldScrollbarWidth != null) {
+      body.style.paddingRight = this.oldScrollbarWidth;
+      this.oldScrollbarWidth = null;
+    }
   },
 
   shown() {
