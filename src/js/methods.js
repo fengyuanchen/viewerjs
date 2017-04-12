@@ -775,6 +775,7 @@ export default {
       $.removeListener(element, 'click', self.onStart);
     }
 
+    self.close();
     self.unbuild();
     $.removeData(element, 'viewer');
 
