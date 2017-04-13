@@ -71,7 +71,7 @@ class Viewer {
     self.count = 0;
     self.images = images;
     self.body = document.body;
-    self.scrollbarWidth = window.innerWidth - document.body.clientWidth;
+    self.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     if (options.inline) {
       const progress = $.proxy(self.progress, self);
