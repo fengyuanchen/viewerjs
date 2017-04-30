@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.6.2
+ * Viewer.js v0.7.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-03-04T08:19:00.870Z
+ * Date: 2017-04-30T03:31:43.527Z
  */
 
 (function (global, factory) {
@@ -954,12 +954,12 @@ var render$1 = {
 
 // Events
 var PointerEvent = typeof window !== 'undefined' ? window.PointerEvent : null;
-var EVENT_MOUSEDOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
-var EVENT_MOUSEMOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
-var EVENT_MOUSEUP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+var EVENT_POINTER_DOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+var EVENT_POINTER_MOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
+var EVENT_POINTER_UP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
 var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
-var EVENT_KEYDOWN = 'keydown';
-var EVENT_DRAGSTART = 'dragstart';
+var EVENT_KEY_DOWN = 'keydown';
+var EVENT_DRAGS_TART = 'dragstart';
 var EVENT_CLICK = 'click';
 var EVENT_RESIZE = 'resize';
 var EVENT_VIEW = 'view';
@@ -982,11 +982,11 @@ var events = {
 
     addListener(viewer, EVENT_CLICK, self.onClick = proxy(self.click, self));
     addListener(viewer, EVENT_WHEEL, self.onWheel = proxy(self.wheel, self));
-    addListener(viewer, EVENT_DRAGSTART, self.onDragstart = proxy(self.dragstart, self));
-    addListener(self.canvas, EVENT_MOUSEDOWN, self.onMousedown = proxy(self.mousedown, self));
-    addListener(document, EVENT_MOUSEMOVE, self.onMousemove = proxy(self.mousemove, self));
-    addListener(document, EVENT_MOUSEUP, self.onMouseup = proxy(self.mouseup, self));
-    addListener(document, EVENT_KEYDOWN, self.onKeydown = proxy(self.keydown, self));
+    addListener(viewer, EVENT_DRAGS_TART, self.onDragstart = proxy(self.dragstart, self));
+    addListener(self.canvas, EVENT_POINTER_DOWN, self.onPointerdown = proxy(self.pointerdown, self));
+    addListener(document, EVENT_POINTER_MOVE, self.onPointermove = proxy(self.pointermove, self));
+    addListener(document, EVENT_POINTER_UP, self.onPointerup = proxy(self.pointerup, self));
+    addListener(document, EVENT_KEY_DOWN, self.onKeydown = proxy(self.keydown, self));
     addListener(window, EVENT_RESIZE, self.onResize = proxy(self.resize, self));
   },
   unbind: function unbind() {
@@ -1005,11 +1005,11 @@ var events = {
 
     removeListener(viewer, EVENT_CLICK, self.onClick);
     removeListener(viewer, EVENT_WHEEL, self.onWheel);
-    removeListener(viewer, EVENT_DRAGSTART, self.onDragstart);
-    removeListener(self.canvas, EVENT_MOUSEDOWN, self.onMousedown);
-    removeListener(document, EVENT_MOUSEMOVE, self.onMousemove);
-    removeListener(document, EVENT_MOUSEUP, self.onMouseup);
-    removeListener(document, EVENT_KEYDOWN, self.onKeydown);
+    removeListener(viewer, EVENT_DRAGS_TART, self.onDragstart);
+    removeListener(self.canvas, EVENT_POINTER_DOWN, self.onPointerdown);
+    removeListener(document, EVENT_POINTER_MOVE, self.onPointermove);
+    removeListener(document, EVENT_POINTER_UP, self.onPointerup);
+    removeListener(document, EVENT_KEY_DOWN, self.onKeydown);
     removeListener(window, EVENT_RESIZE, self.onResize);
   }
 };
@@ -1304,7 +1304,7 @@ var handlers = {
       e.preventDefault();
     }
   },
-  mousedown: function mousedown(event) {
+  pointerdown: function pointerdown(event) {
     var self = this;
     var options = self.options;
     var pointers = self.pointers;
@@ -1332,7 +1332,7 @@ var handlers = {
 
     self.action = action;
   },
-  mousemove: function mousemove(event) {
+  pointermove: function pointermove(event) {
     var self = this;
     var options = self.options;
     var pointers = self.pointers;
@@ -1360,13 +1360,13 @@ var handlers = {
 
     self.change(e);
   },
-  mouseup: function mouseup(event) {
+  pointerup: function pointerup(event) {
     var self = this;
     var pointers = self.pointers;
     var e = getEvent(event);
     var action = self.action;
 
-    if (!action) {
+    if (!self.viewed) {
       return;
     }
 
@@ -1378,13 +1378,15 @@ var handlers = {
       delete pointers[e.pointerId || 0];
     }
 
-    if (!Object.keys(pointers).length) {
-      if (action === 'move' && self.options.transition) {
-        addClass(self.image, 'viewer-transition');
-      }
-
-      self.action = false;
+    if (!action) {
+      return;
     }
+
+    if (action === 'move' && self.options.transition) {
+      addClass(self.image, 'viewer-transition');
+    }
+
+    self.action = false;
   }
 };
 
@@ -2513,4 +2515,3 @@ if (typeof window !== 'undefined') {
 return Viewer;
 
 })));
-//# sourceMappingURL=viewer.js.map

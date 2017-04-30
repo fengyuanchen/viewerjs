@@ -7,6 +7,14 @@ module.exports = {
       dest: 'dist/viewer.js',
     },
     {
+      dest: 'dist/viewer.common.js',
+      format: 'cjs',
+    },
+    {
+      dest: 'dist/viewer.esm.js',
+      format: 'es',
+    },
+    {
       dest: 'docs/js/viewer.js',
     },
   ],

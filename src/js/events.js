@@ -31,8 +31,12 @@ export default {
     $.addListener(viewer, EVENT_CLICK, (self.onClick = $.proxy(self.click, self)));
     $.addListener(viewer, EVENT_WHEEL, (self.onWheel = $.proxy(self.wheel, self)));
     $.addListener(viewer, EVENT_DRAGS_TART, (self.onDragstart = $.proxy(self.dragstart, self)));
-    $.addListener(self.canvas, EVENT_POINTER_DOWN, (self.onPointerdown = $.proxy(self.pointerdown, self)));
-    $.addListener(document, EVENT_POINTER_MOVE, (self.onPointermove = $.proxy(self.pointermove, self)));
+    $.addListener(self.canvas, EVENT_POINTER_DOWN, (
+      self.onPointerdown = $.proxy(self.pointerdown, self)
+    ));
+    $.addListener(document, EVENT_POINTER_MOVE, (
+      self.onPointermove = $.proxy(self.pointermove, self)
+    ));
     $.addListener(document, EVENT_POINTER_UP, (self.onPointerup = $.proxy(self.pointerup, self)));
     $.addListener(document, EVENT_KEY_DOWN, (self.onKeydown = $.proxy(self.keydown, self)));
     $.addListener(window, EVENT_RESIZE, (self.onResize = $.proxy(self.resize, self)));

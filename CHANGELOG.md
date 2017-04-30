@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.7.0 (Apr 30, 2017)
+
+- Changed the `main` field value from `dist/viewer.js` (UMD) to `dist/viewer.common.js` (CommonJS).
+- Added `module` and `browser` fields to `package.json`.
+- Fixed an issue of touch zoom.
+
+
 ## 0.6.2 (Mar 4, 2017)
 
 - Fixed the issue of touch and move problem (#63).
