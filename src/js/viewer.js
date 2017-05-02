@@ -1,5 +1,5 @@
 import DEFAULTS from './defaults';
-import TEMPLATE from './template';
+import toolbarTemplate from './template';
 import render from './render';
 import events from './events';
 import handlers from './handlers';
@@ -117,7 +117,7 @@ class Viewer {
     let navbar;
     let title;
 
-    template.innerHTML = TEMPLATE;
+    template.innerHTML = self.renderTemplateToolbar();
 
     self.parent = parent = element.parentNode;
     self.viewer = viewer = $.getByClass(template, 'viewer-container')[0];
@@ -144,7 +144,6 @@ class Viewer {
       const rotates = toolbar.querySelectorAll('li[class*="rotate"]');
 
       $.addClass(rotates, 'viewer-invisible');
-      $.appendChild(toolbar, rotates);
     }
 
     if (options.inline) {
@@ -204,6 +203,7 @@ class Viewer {
   }
 }
 
+$.extend(Viewer.prototype, toolbarTemplate);
 $.extend(Viewer.prototype, render);
 $.extend(Viewer.prototype, events);
 $.extend(Viewer.prototype, handlers);

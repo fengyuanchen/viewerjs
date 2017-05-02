@@ -14,6 +14,11 @@ export default {
   // Show the toolbar
   toolbar: true,
 
+  // Toolbar Layout
+  toolbarLayout: ['zoomin', 'zoomout', 'onetoone', 'reset',
+    'prev', 'play', 'next', 'rotateleft', 'rotateright',
+    'fliphorizontal', 'flipvertical'],
+
   // Show the tooltip with image ratio (percentage) when zoom in or zoom out
   tooltip: true,
 

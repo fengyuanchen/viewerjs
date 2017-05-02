@@ -5,7 +5,7 @@
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-04-30T03:31:43.527Z
+ * Date: 2017-05-02T15:26:45.279Z
  */
 
 .viewer-zoom-in::before,
@@ -345,7 +345,6 @@
 }
 
 .viewer-transition {
-  -webkit-transition: all .3s;
   transition: all .3s;
 }
 

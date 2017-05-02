@@ -5,7 +5,7 @@
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-04-30T03:31:43.527Z
+ * Date: 2017-05-02T15:26:45.279Z
  */
 
 (function (global, factory) {
@@ -29,6 +29,9 @@ var DEFAULTS = {
 
   // Show the toolbar
   toolbar: true,
+
+  // Toolbar Layout
+  toolbarLayout: ['zoomin', 'zoomout', 'onetoone', 'reset', 'prev', 'play', 'next', 'rotateleft', 'rotateright', 'fliphorizontal', 'flipvertical'],
 
   // Show the tooltip with image ratio (percentage) when zoom in or zoom out
   tooltip: true,
@@ -92,7 +95,76 @@ var DEFAULTS = {
   viewed: null
 };
 
-var TEMPLATE = '<div class="viewer-container">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<ul class="viewer-toolbar">' + '<li class="viewer-zoom-in" data-action="zoom-in"></li>' + '<li class="viewer-zoom-out" data-action="zoom-out"></li>' + '<li class="viewer-one-to-one" data-action="one-to-one"></li>' + '<li class="viewer-reset" data-action="reset"></li>' + '<li class="viewer-prev" data-action="prev"></li>' + '<li class="viewer-play" data-action="play"></li>' + '<li class="viewer-next" data-action="next"></li>' + '<li class="viewer-rotate-left" data-action="rotate-left"></li>' + '<li class="viewer-rotate-right" data-action="rotate-right"></li>' + '<li class="viewer-flip-horizontal" data-action="flip-horizontal"></li>' + '<li class="viewer-flip-vertical" data-action="flip-vertical"></li>' + '</ul>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+var toolbarTemplate = {
+  validatingToolbarLayout: function validatingToolbarLayout() {
+    var self = this;
+    var defaultOptionToolbarLayout = ['zoomin', 'zoomout', 'onetoone', 'reset', 'prev', 'play', 'next', 'rotateleft', 'rotateright', 'fliphorizontal', 'flipvertical'];
+
+    if (!self.options.toolbarLayout.every(function (elem) {
+      return defaultOptionToolbarLayout.indexOf(elem) > -1;
+    })) {
+      self.options.toolbarLayout = defaultOptionToolbarLayout;
+    }
+  },
+  renderToolbar: function renderToolbar() {
+    var self = this;
+    var toolbarTemplate = '<ul class="viewer-toolbar">';
+    self.validatingToolbarLayout();
+    self.options.toolbarLayout.forEach(function (element) {
+      switch (element) {
+        case 'zoomin':
+          toolbarTemplate += '<li role="button" class="viewer-zoom-in" data-action="zoom-in"></li>';
+          break;
+
+        case 'zoomout':
+          toolbarTemplate += '<li role="button" class="viewer-zoom-out" data-action="zoom-out"></li>';
+          break;
+
+        case 'onetoone':
+          toolbarTemplate += '<li role="button" class="viewer-one-to-one" data-action="one-to-one"></li>';
+          break;
+
+        case 'reset':
+          toolbarTemplate += '<li role="button" class="viewer-reset" data-action="reset"></li>';
+          break;
+
+        case 'prev':
+          toolbarTemplate += '<li role="button" class="viewer-prev" data-action="prev"></li>';
+          break;
+
+        case 'play':
+          toolbarTemplate += '<li role="button" class="viewer-play" data-action="play"></li>';
+          break;
+
+        case 'next':
+          toolbarTemplate += '<li role="button" class="viewer-next" data-action="next"></li>';
+          break;
+
+        case 'rotateleft':
+          toolbarTemplate += '<li role="button" class="viewer-rotate-left" data-action="rotate-left"></li>';
+          break;
+
+        case 'rotateright':
+          toolbarTemplate += '<li role="button" class="viewer-rotate-right" data-action="rotate-right"></li>';
+          break;
+
+        case 'fliphorizontal':
+          toolbarTemplate += '<li role="button" class="viewer-flip-horizontal" data-action="flip-horizontal"></li>';
+          break;
+
+        case 'flipvertical':
+          toolbarTemplate += '<li role="button" class="viewer-flip-vertical" data-action="flip-vertical"></li>';
+          break;
+      }
+    }, this);
+
+    toolbarTemplate += '</ul>';
+    return toolbarTemplate;
+  },
+  renderTemplateToolbar: function renderTemplateToolbar() {
+    return '' + ('<div class="viewer-container">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>') + ('' + this.renderToolbar()) + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+  }
+};
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -822,7 +894,7 @@ var render$1 = {
         url = url.call(image, image);
       }
 
-      items.push('<li>' + '<img' + (' src="' + src + '"') + ' data-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' alt="' + alt + '"') + '>' + '</li>');
+      items.push('<li>' + '<img' + (' src="' + src + '"') + ' role="button"' + ' data-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' alt="' + alt + '"') + '>' + '</li>');
     });
 
     list.innerHTML = items.join('');
@@ -1865,22 +1937,20 @@ var methods = {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
-      (function () {
-        var playing = function playing() {
-          self.playing = setTimeout(function () {
-            removeClass(list[index], 'viewer-in');
-            index++;
-            index = index < total ? index : 0;
-            addClass(list[index], 'viewer-in');
+      var playing = function playing() {
+        self.playing = setTimeout(function () {
+          removeClass(list[index], 'viewer-in');
+          index++;
+          index = index < total ? index : 0;
+          addClass(list[index], 'viewer-in');
 
-            playing();
-          }, options.interval);
-        };
-
-        if (total > 1) {
           playing();
-        }
-      })();
+        }, options.interval);
+      };
+
+      if (total > 1) {
+        playing();
+      }
     }
 
     return self;
@@ -2360,21 +2430,19 @@ var Viewer = function () {
       self.scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
       if (options.inline) {
-        (function () {
-          var progress = proxy(self.progress, self);
+        var progress = proxy(self.progress, self);
 
-          addListener(element, 'ready', function () {
-            self.view();
-          }, true);
+        addListener(element, 'ready', function () {
+          self.view();
+        }, true);
 
-          each(images, function (image) {
-            if (image.complete) {
-              progress();
-            } else {
-              addListener(image, 'load', progress, true);
-            }
-          });
-        })();
+        each(images, function (image) {
+          if (image.complete) {
+            progress();
+          } else {
+            addListener(image, 'load', progress, true);
+          }
+        });
       } else {
         addListener(element, 'click', self.onStart = proxy(self.start, self));
       }
@@ -2409,7 +2477,7 @@ var Viewer = function () {
       var navbar = void 0;
       var title = void 0;
 
-      template.innerHTML = TEMPLATE;
+      template.innerHTML = self.renderTemplateToolbar();
 
       self.parent = parent = element.parentNode;
       self.viewer = viewer = getByClass(template, 'viewer-container')[0];
@@ -2436,7 +2504,6 @@ var Viewer = function () {
         var rotates = toolbar.querySelectorAll('li[class*="rotate"]');
 
         addClass(rotates, 'viewer-invisible');
-        appendChild(toolbar, rotates);
       }
 
       if (options.inline) {
@@ -2501,6 +2568,7 @@ var Viewer = function () {
   return Viewer;
 }();
 
+extend(Viewer.prototype, toolbarTemplate);
 extend(Viewer.prototype, render$1);
 extend(Viewer.prototype, events);
 extend(Viewer.prototype, handlers);
