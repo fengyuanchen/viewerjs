@@ -45,10 +45,12 @@
 
 ```
 dist/
-├── viewer.css     ( 8 KB)
-├── viewer.min.css ( 7 KB)
-├── viewer.js      (60 KB)
-└── viewer.min.js  (26 KB)
+├── viewer.css       ( 8 KB)
+├── viewer.min.css   ( 7 KB)
+├── viewer.js        (60 KB, UMD)
+├── viewer.min.js    (26 KB, UMD, compressed)
+├── viewer.common.js (60 KB, CommonJS)
+└── viewer.esm.js    (60 KB, ES Module)
 ```
 
 
@@ -82,8 +84,7 @@ Initialize with `Viewer` constructor:
 
 - Browser: `window.Viewer`
 - CommonJS: `var Viewer = require('viewerjs')`
-- NodeJS: `var Viewer = require('viewerjs')(window)`
-
+- ES2015: `import Viewer from 'viewerjs'`
 
 ```html
 <!-- a block container is required -->

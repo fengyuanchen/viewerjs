@@ -8,12 +8,6 @@
  * Date: 2017-05-02T15:26:45.279Z
  */
 
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.Viewer = factory());
-}(this, (function () { 'use strict';
-
 var DEFAULTS = {
   // Enable inline mode
   inline: false,
@@ -2580,6 +2574,4 @@ if (typeof window !== 'undefined') {
   window.Viewer = Viewer;
 }
 
-return Viewer;
-
-})));
+export default Viewer;
