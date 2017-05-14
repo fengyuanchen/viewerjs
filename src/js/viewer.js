@@ -158,6 +158,8 @@ class Viewer {
           position: 'relative'
         });
       }
+
+      parent.insertBefore(viewer, element.nextSibling);
     } else {
       $.addClass(button, 'viewer-close');
       $.addClass(viewer, 'viewer-fixed');
@@ -167,10 +169,9 @@ class Viewer {
       $.setStyle(viewer, {
         zIndex: options.zIndex
       });
-    }
 
-    // Inserts the viewer after to the current element
-    parent.insertBefore(viewer, element.nextSibling);
+      document.body.appendChild(viewer);
+    }
 
     if (options.inline) {
       self.render();
