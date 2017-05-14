@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.7.1 (May 14, 2017)
+
+- Support to use Viewer in a modal (#39).
+
+
 ## 0.7.0 (Apr 30, 2017)
 
 - Changed the `main` field value from `dist/viewer.js` (UMD) to `dist/viewer.common.js` (CommonJS).
