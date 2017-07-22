@@ -118,10 +118,7 @@ export default {
 
     self.image = image;
 
-    if (self.viewed) {
-      $.removeClass(self.items[self.index], 'viewer-active');
-    }
-
+    $.removeClass(self.items[self.index], 'viewer-active');
     $.addClass(item, 'viewer-active');
 
     self.viewed = false;
