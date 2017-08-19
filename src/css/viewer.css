@@ -1,20 +1,3 @@
-:root {
-  --position-absolute {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  --text-hide {
-    font-size: 0;
-    line-height: 0;
-
-    color: transparent;
-  }
-}
-
 .viewer-zoom-in::before,
 .viewer-zoom-out::before,
 .viewer-one-to-one::before,
@@ -29,12 +12,14 @@
 .viewer-fullscreen::before,
 .viewer-fullscreen-exit::before,
 .viewer-close::before {
-  background-image: inline('../images/icons.png');
+  background-image: url('../images/icons.png');
   background-repeat: no-repeat;
+  color: transparent;
   display: block;
+  font-size: 0;
   height: 20px;
+  line-height: 0;
   width: 20px;
-  @apply --text-hide;
 }
 
 .viewer-zoom-in::before {
@@ -109,15 +94,19 @@
 
 .viewer-container {
   background-color: rgba(0, 0, 0, .5);
+  bottom: 0;
   direction: ltr;
   font-size: 0;
+  left: 0;
   line-height: 0;
   overflow: hidden;
+  position: absolute;
+  right: 0;
   -webkit-tap-highlight-color: transparent;
-  touch-action: none;
+  top: 0;
   -webkit-touch-callout: none;
+  touch-action: none;
   user-select: none;
-  @apply --position-absolute;
 
   &::selection,
   & *::selection {
@@ -136,8 +125,12 @@
 }
 
 .viewer-canvas {
+  bottom: 0;
+  left: 0;
   overflow: hidden;
-  @apply --position-absolute;
+  position: absolute;
+  right: 0;
+  top: 0;
 
   & > img {
     height: auto;
@@ -169,13 +162,15 @@
   padding: 1px 0;
 
   & > li {
+    color: transparent;
     cursor: pointer;
     float: left;
+    font-size: 0;
     height: 50px;
+    line-height: 0;
     opacity: .5;
     overflow: hidden;
     width: 30px;
-    @apply --text-hide;
 
     & + li {
       margin-left: 1px;
@@ -189,9 +184,13 @@
 
 .viewer-player {
   background-color: #000;
+  bottom: 0;
   cursor: none;
   display: none;
-  @apply --position-absolute;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 
   & > img {
     left: 0;
