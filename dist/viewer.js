@@ -1,17 +1,17 @@
 /*!
- * Viewer.js v0.7.1
+ * Viewer.js v0.7.2
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-05-14T07:05:32.049Z
+ * Date: 2017-08-19T06:58:08.154Z
  */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.Viewer = factory());
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.Viewer = factory());
 }(this, (function () { 'use strict';
 
 var DEFAULTS = {
@@ -94,114 +94,7 @@ var DEFAULTS = {
 
 var TEMPLATE = '<div class="viewer-container">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<ul class="viewer-toolbar">' + '<li role="button" class="viewer-zoom-in" data-action="zoom-in"></li>' + '<li role="button" class="viewer-zoom-out" data-action="zoom-out"></li>' + '<li role="button" class="viewer-one-to-one" data-action="one-to-one"></li>' + '<li role="button" class="viewer-reset" data-action="reset"></li>' + '<li role="button" class="viewer-prev" data-action="prev"></li>' + '<li role="button" class="viewer-play" data-action="play"></li>' + '<li role="button" class="viewer-next" data-action="next"></li>' + '<li role="button" class="viewer-rotate-left" data-action="rotate-left"></li>' + '<li role="button" class="viewer-rotate-right" data-action="rotate-right"></li>' + '<li role="button" class="viewer-flip-horizontal" data-action="flip-horizontal"></li>' + '<li role="button" class="viewer-flip-vertical" data-action="flip-vertical"></li>' + '</ul>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-
-
-
-
-
-
-
-
-
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-
-
-
-
-
-
-var get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-
-    if (getter === undefined) {
-      return undefined;
-    }
-
-    return getter.call(receiver);
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var set = function set(object, property, value, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent !== null) {
-      set(parent, property, value, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    desc.value = value;
-  } else {
-    var setter = desc.set;
-
-    if (setter !== undefined) {
-      setter.call(receiver, value);
-    }
-  }
-
-  return value;
-};
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // RegExps
 var REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
@@ -258,7 +151,7 @@ function isArray(arr) {
   return Array.isArray ? Array.isArray(arr) : typeOf(arr) === 'array';
 }
 
-function toArray$$1(obj, offset) {
+function toArray(obj, offset) {
   offset = offset >= 0 ? offset : 0;
 
   if (Array.from) {
@@ -299,7 +192,7 @@ function each(obj, callback) {
     if (isArray(obj) || isNumber(obj.length) /* array-like */) {
         var length = obj.length;
 
-        for (i = 0; i < length; i++) {
+        for (i = 0; i < length; i += 1) {
           if (callback.call(obj, obj[i], i, obj) === false) {
             break;
           }
@@ -689,6 +582,8 @@ function getResponsiveClass(option) {
 
     case 4:
       return 'viewer-hide-md-down';
+
+    default:
   }
 
   return '';
@@ -757,7 +652,7 @@ function getPointersCenter(pointers) {
   };
 }
 
-var render$1 = {
+var render = {
   render: function render() {
     var self = this;
 
@@ -781,10 +676,12 @@ var render$1 = {
     var viewerData = void 0;
 
     if (options.inline) {
-      self.parentData = viewerData = {
+      viewerData = {
         width: Math.max(parent.offsetWidth, options.minWidth),
         height: Math.max(parent.offsetHeight, options.minHeight)
       };
+
+      self.parentData = viewerData;
     }
 
     if (self.fulled || !viewerData) {
@@ -1231,7 +1128,6 @@ var handlers = {
     }
 
     switch (key) {
-
       // (Key: Esc)
       case 27:
         if (self.played) {
@@ -1296,7 +1192,7 @@ var handlers = {
 
         break;
 
-      // No default
+      default:
     }
   },
   dragstart: function dragstart(e) {
@@ -1310,7 +1206,7 @@ var handlers = {
     var pointers = self.pointers;
     var e = getEvent(event);
 
-    if (!self.viewed) {
+    if (!self.viewed || self.transitioning) {
       return;
     }
 
@@ -1419,7 +1315,7 @@ var methods = {
 
     removeClass(viewer, 'viewer-hide');
     addListener(element, 'shown', function () {
-      self.view(self.target ? inArray(self.target, toArray$$1(self.images)) : self.index);
+      self.view(self.target ? inArray(self.target, toArray(self.images)) : self.index);
       self.target = false;
     }, true);
 
@@ -1509,10 +1405,7 @@ var methods = {
 
     self.image = image;
 
-    if (self.viewed) {
-      removeClass(self.items[self.index], 'viewer-active');
-    }
-
+    removeClass(self.items[self.index], 'viewer-active');
     addClass(item, 'viewer-active');
 
     self.viewed = false;
@@ -1849,7 +1742,7 @@ var methods = {
 
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
-      total++;
+      total += 1;
 
       addClass(image, 'viewer-fade');
       toggleClass(image, 'viewer-transition', options.transition);
@@ -1865,22 +1758,20 @@ var methods = {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
-      (function () {
-        var playing = function playing() {
-          self.playing = setTimeout(function () {
-            removeClass(list[index], 'viewer-in');
-            index++;
-            index = index < total ? index : 0;
-            addClass(list[index], 'viewer-in');
+      var playing = function playing() {
+        self.playing = setTimeout(function () {
+          removeClass(list[index], 'viewer-in');
+          index += 1;
+          index = index < total ? index : 0;
+          addClass(list[index], 'viewer-in');
 
-            playing();
-          }, options.interval);
-        };
-
-        if (total > 1) {
           playing();
-        }
-      })();
+        }, options.interval);
+      };
+
+      if (total > 1) {
+        playing();
+      }
     }
 
     return self;
@@ -2249,7 +2140,6 @@ var others = {
     var offsetY = pointer.endY - pointer.startY;
 
     switch (self.action) {
-
       // Move the current image
       case 'move':
         self.move(offsetX, offsetY);
@@ -2273,7 +2163,7 @@ var others = {
 
         break;
 
-      // No default
+      default:
     }
 
     // Override
@@ -2291,12 +2181,16 @@ var others = {
   }
 };
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var SUPPORT_TRANSITION = typeof document.createElement('viewer').style.transition !== 'undefined';
 var AnotherViewer = void 0;
 
 var Viewer = function () {
   function Viewer(element, options) {
-    classCallCheck(this, Viewer);
+    _classCallCheck(this, Viewer);
 
     var self = this;
 
@@ -2322,7 +2216,7 @@ var Viewer = function () {
     self.init();
   }
 
-  createClass(Viewer, [{
+  _createClass(Viewer, [{
     key: 'init',
     value: function init() {
       var self = this;
@@ -2360,21 +2254,19 @@ var Viewer = function () {
       self.scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
       if (options.inline) {
-        (function () {
-          var progress = proxy(self.progress, self);
+        var progress = proxy(self.progress, self);
 
-          addListener(element, 'ready', function () {
-            self.view();
-          }, true);
+        addListener(element, 'ready', function () {
+          self.view();
+        }, true);
 
-          each(images, function (image) {
-            if (image.complete) {
-              progress();
-            } else {
-              addListener(image, 'load', progress, true);
-            }
-          });
-        })();
+        each(images, function (image) {
+          if (image.complete) {
+            progress();
+          } else {
+            addListener(image, 'load', progress, true);
+          }
+        });
       } else {
         addListener(element, 'click', self.onStart = proxy(self.start, self));
       }
@@ -2384,7 +2276,7 @@ var Viewer = function () {
     value: function progress() {
       var self = this;
 
-      self.count++;
+      self.count += 1;
 
       if (self.count === self.length) {
         self.build();
@@ -2401,24 +2293,25 @@ var Viewer = function () {
         return;
       }
 
+      var parent = element.parentNode;
       var template = document.createElement('div');
-      var parent = void 0;
-      var viewer = void 0;
-      var button = void 0;
-      var toolbar = void 0;
-      var navbar = void 0;
-      var title = void 0;
 
       template.innerHTML = TEMPLATE;
 
-      self.parent = parent = element.parentNode;
-      self.viewer = viewer = getByClass(template, 'viewer-container')[0];
+      var viewer = getByClass(template, 'viewer-container')[0];
+      var title = getByClass(viewer, 'viewer-title')[0];
+      var toolbar = getByClass(viewer, 'viewer-toolbar')[0];
+      var navbar = getByClass(viewer, 'viewer-navbar')[0];
+      var button = getByClass(viewer, 'viewer-button')[0];
+
+      self.parent = parent;
+      self.viewer = viewer;
+      self.title = title;
+      self.toolbar = toolbar;
+      self.navbar = navbar;
+      self.button = button;
       self.canvas = getByClass(viewer, 'viewer-canvas')[0];
       self.footer = getByClass(viewer, 'viewer-footer')[0];
-      self.title = title = getByClass(viewer, 'viewer-title')[0];
-      self.toolbar = toolbar = getByClass(viewer, 'viewer-toolbar')[0];
-      self.navbar = navbar = getByClass(viewer, 'viewer-navbar')[0];
-      self.button = button = getByClass(viewer, 'viewer-button')[0];
       self.tooltipBox = getByClass(viewer, 'viewer-tooltip')[0];
       self.player = getByClass(viewer, 'viewer-player')[0];
       self.list = getByClass(viewer, 'viewer-list')[0];
@@ -2499,10 +2392,11 @@ var Viewer = function () {
       extend(DEFAULTS, isPlainObject(options) && options);
     }
   }]);
+
   return Viewer;
 }();
 
-extend(Viewer.prototype, render$1);
+extend(Viewer.prototype, render);
 extend(Viewer.prototype, events);
 extend(Viewer.prototype, handlers);
 extend(Viewer.prototype, methods);

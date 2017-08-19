@@ -8,8 +8,7 @@
   <meta name="keywords" content="HTML, CSS, JS, JavaScript, image viewing, viewer, viewerjs, viewer.js, front-end, web development">
   <meta name="author" content="Fengyuan Chen">
   <title>Viewer.js</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/css/tether.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/viewer.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -19,7 +18,7 @@
   <![endif]-->
 
   <!-- Header -->
-  <header class="navbar navbar-light navbar-toggleable-md">
+  <header class="navbar navbar-light navbar-expand-md">
     <div class="container">
       <a class="navbar-brand" href="./">Viewer.js</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +38,7 @@
   <!-- Jumbotron -->
   <div class="jumbotron docs-jumbotron">
     <div class="container">
-      <h1>Viewer.js <small class="version">v0.7.1</small></h1>
+      <h1>Viewer.js <small class="version">v0.7.2</small></h1>
       <p class="lead">JavaScript image viewer.</p>
       <div class="docs-carbonads-container">
         <div class="docs-carbonads">
@@ -66,7 +65,7 @@
               <input type="radio" name="inline" data-value="true" autocomplete="off"> Inline mode
             </label>
           </div>
-          <button class="btn btn-primary btn-block hidden-md-up" id="toggle-options" data-target="#options" data-toggle="collapse" aria-expanded="true">Toggle options</button>
+          <button class="btn btn-primary btn-block d-md-none" id="toggle-options" data-target="#options" data-toggle="collapse" aria-expanded="true">Toggle options</button>
           <div class="docs-collapse collapse" id="options" aria-labelledby="toggle-options">
             <ul class="list-group">
               <li class="list-group-item">
@@ -239,8 +238,8 @@
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
   <script src="https://fengyuanchen.github.io/js/common.js"></script>
   <script src="js/viewer.js"></script>
   <script src="js/main.js"></script>

@@ -47,10 +47,10 @@
 dist/
 ├── viewer.css       ( 8 KB)
 ├── viewer.min.css   ( 7 KB)
-├── viewer.js        (60 KB, UMD)
+├── viewer.js        (58 KB, UMD)
 ├── viewer.min.js    (26 KB, UMD, compressed)
-├── viewer.common.js (60 KB, CommonJS)
-└── viewer.esm.js    (60 KB, ES Module)
+├── viewer.common.js (58 KB, CommonJS)
+└── viewer.esm.js    (58 KB, ES Module)
 ```
 
 
