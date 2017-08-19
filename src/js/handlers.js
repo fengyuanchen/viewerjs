@@ -311,7 +311,7 @@ export default {
     const pointers = self.pointers;
     const e = $.getEvent(event);
 
-    if (!self.viewed) {
+    if (!self.viewed || self.transitioning) {
       return;
     }
 
