@@ -94,7 +94,7 @@ export function each(obj, callback) {
     if (isArray(obj) || isNumber(obj.length)/* array-like */) {
       const length = obj.length;
 
-      for (i = 0; i < length; i++) {
+      for (i = 0; i < length; i += 1) {
         if (callback.call(obj, obj[i], i, obj) === false) {
           break;
         }
@@ -486,6 +486,8 @@ export function getResponsiveClass(option) {
 
     case 4:
       return 'viewer-hide-md-down';
+
+    default:
   }
 
   return '';
@@ -494,7 +496,7 @@ export function getResponsiveClass(option) {
 export function getPointer(pointer, endOnly) {
   const end = {
     endX: pointer.pageX,
-    endY: pointer.pageY
+    endY: pointer.pageY,
   };
 
   if (endOnly) {
@@ -503,7 +505,7 @@ export function getPointer(pointer, endOnly) {
 
   return extend({
     startX: pointer.pageX,
-    startY: pointer.pageY
+    startY: pointer.pageY,
   }, end);
 }
 

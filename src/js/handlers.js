@@ -157,7 +157,7 @@ export default {
         width,
         height,
         marginLeft: (parentWidth - width) / 2,
-        marginTop: (parentHeight - height) / 2
+        marginTop: (parentHeight - height) / 2,
       });
     });
   },
@@ -230,7 +230,6 @@ export default {
     }
 
     switch (key) {
-
       // (Key: Esc)
       case 27:
         if (self.played) {
@@ -295,7 +294,7 @@ export default {
 
         break;
 
-      // No default
+      default:
     }
   },
 

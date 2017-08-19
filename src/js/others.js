@@ -97,7 +97,6 @@ export default {
     const offsetY = pointer.endY - pointer.startY;
 
     switch (self.action) {
-
       // Move the current image
       case 'move':
         self.move(offsetX, offsetY);
@@ -121,7 +120,7 @@ export default {
 
         break;
 
-      // No default
+      default:
     }
 
     // Override
@@ -139,5 +138,5 @@ export default {
     return self.length > 1 && imageData.left >= 0 && imageData.top >= 0 &&
       imageData.width <= viewerData.width &&
       imageData.height <= viewerData.height;
-  }
+  },
 };

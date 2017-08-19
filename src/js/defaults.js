@@ -73,5 +73,5 @@ export default {
   hide: null,
   hidden: null,
   view: null,
-  viewed: null
+  viewed: null,
 };

@@ -191,7 +191,7 @@ export default {
 
     self.moveTo(
       $.isUndefined(offsetX) ? offsetX : imageData.left + Number(offsetX),
-      $.isUndefined(offsetY) ? offsetY : imageData.top + Number(offsetY)
+      $.isUndefined(offsetY) ? offsetY : imageData.top + Number(offsetY),
     );
 
     return self;
@@ -295,7 +295,7 @@ export default {
         const offset = $.getOffset(self.viewer);
         const center = pointers && Object.keys(pointers).length ? $.getPointersCenter(pointers) : {
           pageX: _originalEvent.pageX,
-          pageY: _originalEvent.pageY
+          pageY: _originalEvent.pageY,
         };
 
         // Zoom from the triggering point of the event
@@ -450,7 +450,7 @@ export default {
 
       image.src = $.getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
-      total++;
+      total += 1;
 
       $.addClass(image, 'viewer-fade');
       $.toggleClass(image, 'viewer-transition', options.transition);
@@ -469,7 +469,7 @@ export default {
       const playing = () => {
         self.playing = setTimeout(() => {
           $.removeClass(list[index], 'viewer-in');
-          index++;
+          index += 1;
           index = index < total ? index : 0;
           $.addClass(list[index], 'viewer-in');
 
@@ -530,7 +530,7 @@ export default {
     $.addClass(viewer, 'viewer-fixed');
     viewer.setAttribute('style', '');
     $.setStyle(viewer, {
-      zIndex: options.zIndex
+      zIndex: options.zIndex,
     });
 
     self.initContainer();
@@ -573,7 +573,7 @@ export default {
 
     $.removeClass(viewer, 'viewer-fixed');
     $.setStyle(viewer, {
-      zIndex: options.zIndexInline
+      zIndex: options.zIndexInline,
     });
 
     self.viewerData = $.extend({}, self.parentData);
@@ -697,7 +697,7 @@ export default {
       });
 
       $.setStyle(self.list, {
-        width: 'auto'
+        width: 'auto',
       });
 
       self.initList();
