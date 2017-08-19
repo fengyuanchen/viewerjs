@@ -109,15 +109,17 @@ class Viewer {
       return;
     }
 
-    const template = document.createElement('div');
     const parent = element.parentNode;
+    const template = document.createElement('div');
+
+    template.innerHTML = TEMPLATE;
+
     const viewer = $.getByClass(template, 'viewer-container')[0];
     const title = $.getByClass(viewer, 'viewer-title')[0];
     const toolbar = $.getByClass(viewer, 'viewer-toolbar')[0];
     const navbar = $.getByClass(viewer, 'viewer-navbar')[0];
     const button = $.getByClass(viewer, 'viewer-button')[0];
 
-    template.innerHTML = TEMPLATE;
     self.parent = parent;
     self.viewer = viewer;
     self.title = title;
