@@ -102,6 +102,10 @@ export default {
       self.timeout = false;
     }
 
+    if (!image) {
+      return;
+    }
+
     $.removeClass(image, 'viewer-invisible');
 
     image.style.cssText = (
