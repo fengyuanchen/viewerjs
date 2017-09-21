@@ -185,6 +185,9 @@ export default {
         $.addListener(image, 'load', $.proxy(self.loadImage, self), true);
         $.dispatchEvent(image, 'load');
       });
+      if (window.innerHeight < window.screen.availHeight) {
+        self.stop();
+      }
     }
   },
 

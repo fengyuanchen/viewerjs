@@ -5,7 +5,7 @@
  * Copyright (c) 2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-08-19T06:58:08.154Z
+ * Date: 2017-09-21T11:04:43.085Z
  */
 
 'use strict';
@@ -1007,6 +1007,10 @@ var handlers = {
       self.timeout = false;
     }
 
+    if (!image) {
+      return;
+    }
+
     removeClass(image, 'viewer-invisible');
 
     image.style.cssText = 'width:0;' + 'height:0;' + ('margin-left:' + viewerData.width / 2 + 'px;') + ('margin-top:' + viewerData.height / 2 + 'px;') + 'max-width:none!important;' + 'visibility:visible;';
@@ -1077,6 +1081,9 @@ var handlers = {
         addListener(image, 'load', proxy(self.loadImage, self), true);
         dispatchEvent(image, 'load');
       });
+      if (window.innerHeight < window.screen.availHeight) {
+        self.stop();
+      }
     }
   },
   wheel: function wheel(event) {
@@ -1570,7 +1577,7 @@ var methods = {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (ratio > 0.95 && ratio < 1.05) {
+      if (_originalEvent && ratio > 0.95 && ratio < 1.05) {
         ratio = 1;
       }
 
