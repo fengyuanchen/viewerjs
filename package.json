@@ -31,7 +31,7 @@
     "compress:css": "postcss dist/viewer.css -u cssnano --no-map -o dist/viewer.min.css",
     "compress:js": "uglifyjs dist/viewer.js -o dist/viewer.min.js -c -m --comments /^!/",
     "compress": "npm run compress:css && npm run compress:js",
-    "watch:css": "postcss src/css/viewer.css -o dist/viewer.css -w",
+    "watch:css": "postcss src/css/viewer.css -o docs/css/viewer.css -w",
     "watch:js": "rollup -c -w -m",
     "lint": "eslint src/js",
     "postbuild": "npm test && npm run compress && node build",
@@ -43,17 +43,18 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "cssnano": "^3.10.0",
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb-base": "^11.3.1",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
     "node-qunit-phantomjs": "^1.5.0",
-    "npm-run-all": "^4.0.2",
-    "postcss-cli": "^4.1.0",
+    "npm-run-all": "^4.1.1",
+    "postcss-cli": "^4.1.1",
     "postcss-cssnext": "^3.0.2",
     "postcss-url": "^7.1.2",
-    "rollup": "^0.47.6",
+    "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-watch": "^4.3.1",
-    "uglify-js": "^3.0.27"
+    "stylefmt": "^6.0.0",
+    "uglify-js": "^3.1.1"
   }
 }

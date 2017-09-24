@@ -1,25 +1,26 @@
 const babel = require('rollup-plugin-babel');
 
 module.exports = {
-  entry: 'src/js/viewer.js',
-  targets: [
+  input: 'src/js/viewer.js',
+  output: [
     {
-      dest: 'dist/viewer.js',
+      file: 'dist/viewer.js',
+      format: 'umd',
     },
     {
-      dest: 'dist/viewer.common.js',
+      file: 'dist/viewer.common.js',
       format: 'cjs',
     },
     {
-      dest: 'dist/viewer.esm.js',
+      file: 'dist/viewer.esm.js',
       format: 'es',
     },
     {
-      dest: 'docs/js/viewer.js',
+      file: 'docs/js/viewer.js',
+      format: 'umd',
     },
   ],
-  format: 'umd',
-  moduleName: 'Viewer',
+  name: 'Viewer',
   plugins: [
     babel({
       exclude: '/node_modules/**',
