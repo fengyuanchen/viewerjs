@@ -181,6 +181,15 @@ export default {
     }
 
     if (self.played) {
+      if (self.options.fullscreen && self.fulled &&
+        !document.fullscreenElement &&
+        !document.mozFullScreenElement &&
+        !document.webkitFullscreenElement &&
+        !document.msFullscreenElement) {
+        self.stop();
+        return;
+      }
+
       $.each($.getByTag(self.player, 'img'), (image) => {
         $.addListener(image, 'load', $.proxy(self.loadImage, self), {
           once: true,

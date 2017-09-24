@@ -458,6 +458,7 @@ export default {
     }
 
     self.played = true;
+    self.onLoadWhenPlay = load;
     $.addClass(player, 'viewer-show');
 
     $.each(self.items, (item, i) => {
@@ -518,6 +519,11 @@ export default {
 
     self.played = false;
     clearTimeout(self.playing);
+    $.each($.getByTag(self.player, 'img'), (image) => {
+      if (!image.complete) {
+        $.removeListener(image, 'load', self.onLoadWhenPlay);
+      }
+    });
     $.removeClass(player, 'viewer-show');
     $.empty(player);
 
