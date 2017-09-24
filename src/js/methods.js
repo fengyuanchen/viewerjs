@@ -16,7 +16,9 @@ export default {
     }
 
     if ($.isFunction(options.show)) {
-      $.addListener(element, 'show', options.show, true);
+      $.addListener(element, 'show', options.show, {
+        once: true,
+      });
     }
 
     if ($.dispatchEvent(element, 'show') === false) {
@@ -31,13 +33,17 @@ export default {
     $.addListener(element, 'shown', () => {
       self.view(self.target ? $.inArray(self.target, $.toArray(self.images)) : self.index);
       self.target = false;
-    }, true);
+    }, {
+      once: true,
+    });
 
     if (options.transition) {
       self.transitioning = true;
       $.addClass(viewer, 'viewer-transition');
       $.forceReflow(viewer);
-      $.addListener(viewer, 'transitionend', $.proxy(self.shown, self), true);
+      $.addListener(viewer, 'transitionend', $.proxy(self.shown, self), {
+        once: true,
+      });
       $.addClass(viewer, 'viewer-in');
     } else {
       $.addClass(viewer, 'viewer-in');
@@ -59,7 +65,9 @@ export default {
     }
 
     if ($.isFunction(options.hide)) {
-      $.addListener(element, 'hide', options.hide, true);
+      $.addListener(element, 'hide', options.hide, {
+        once: true,
+      });
     }
 
     if ($.dispatchEvent(element, 'hide') === false) {
@@ -69,9 +77,13 @@ export default {
     if (self.viewed && options.transition) {
       self.transitioning = true;
       $.addListener(self.image, 'transitionend', () => {
-        $.addListener(viewer, 'transitionend', $.proxy(self.hidden, self), true);
+        $.addListener(viewer, 'transitionend', $.proxy(self.hidden, self), {
+          once: true,
+        });
         $.removeClass(viewer, 'viewer-in');
-      }, true);
+      }, {
+        once: true,
+      });
       self.zoomTo(0, false, false, true);
     } else {
       $.removeClass(viewer, 'viewer-in');
@@ -140,12 +152,16 @@ export default {
       const imageData = self.imageData;
 
       $.setText(title, `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
-    }, true);
+    }, {
+      once: true,
+    });
 
     if (image.complete) {
       self.load();
     } else {
-      $.addListener(image, 'load', $.proxy(self.load, self), true);
+      $.addListener(image, 'load', $.proxy(self.load, self), {
+        once: true,
+      });
 
       if (self.timeout) {
         clearTimeout(self.timeout);
@@ -461,7 +477,9 @@ export default {
       }
 
       list.push(image);
-      $.addListener(image, 'load', load, true);
+      $.addListener(image, 'load', load, {
+        once: true,
+      });
       $.appendChild(player, image);
     });
 
@@ -631,7 +649,9 @@ export default {
           $.removeClass(tooltipBox, 'viewer-fade');
           $.removeClass(tooltipBox, 'viewer-transition');
           self.fading = false;
-        }, true);
+        }, {
+          once: true,
+        });
 
         $.removeClass(tooltipBox, 'viewer-in');
         self.fading = true;

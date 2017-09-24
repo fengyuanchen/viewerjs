@@ -89,7 +89,9 @@ export default {
 
     $.each($.getByTag(list, 'img'), (image) => {
       $.setData(image, 'filled', true);
-      $.addListener(image, 'load', $.proxy(self.loadImage, self), true);
+      $.addListener(image, 'load', $.proxy(self.loadImage, self), {
+        once: true,
+      });
     });
 
     self.items = $.getByTag(list, 'li');
@@ -97,7 +99,9 @@ export default {
     if (options.transition) {
       $.addListener(element, 'viewed', () => {
         $.addClass(list, 'viewer-transition');
-      }, true);
+      }, {
+        once: true,
+      });
     }
   },
 
@@ -199,7 +203,9 @@ export default {
 
     if ($.isFunction(callback)) {
       if (self.transitioning) {
-        $.addListener(image, 'transitionend', callback, true);
+        $.addListener(image, 'transitionend', callback, {
+          once: true,
+        });
       } else {
         callback();
       }

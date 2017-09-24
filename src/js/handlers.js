@@ -182,7 +182,9 @@ export default {
 
     if (self.played) {
       $.each($.getByTag(self.player, 'img'), (image) => {
-        $.addListener(image, 'load', $.proxy(self.loadImage, self), true);
+        $.addListener(image, 'load', $.proxy(self.loadImage, self), {
+          once: true,
+        });
         $.dispatchEvent(image, 'load');
       });
     }

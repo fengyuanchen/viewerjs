@@ -56,7 +56,9 @@ class Viewer {
     }
 
     if ($.isFunction(options.ready)) {
-      $.addListener(element, 'ready', options.ready, true);
+      $.addListener(element, 'ready', options.ready, {
+        once: true,
+      });
     }
 
     // Override `transition` option if it is not supported
@@ -76,13 +78,17 @@ class Viewer {
 
       $.addListener(element, 'ready', () => {
         self.view();
-      }, true);
+      }, {
+        once: true,
+      });
 
       $.each(images, (image) => {
         if (image.complete) {
           progress();
         } else {
-          $.addListener(image, 'load', progress, true);
+          $.addListener(image, 'load', progress, {
+            once: true,
+          });
         }
       });
     } else {

@@ -27,7 +27,9 @@ export default {
     self.bind();
 
     if ($.isFunction(options.shown)) {
-      $.addListener(element, 'shown', options.shown, true);
+      $.addListener(element, 'shown', options.shown, {
+        once: true,
+      });
     }
 
     $.dispatchEvent(element, 'shown');
@@ -49,7 +51,9 @@ export default {
     self.resetImage();
 
     if ($.isFunction(options.hidden)) {
-      $.addListener(element, 'hidden', options.hidden, true);
+      $.addListener(element, 'hidden', options.hidden, {
+        once: true,
+      });
     }
 
     $.dispatchEvent(element, 'hidden');
