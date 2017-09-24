@@ -40,7 +40,10 @@ export default {
     if (options.transition) {
       self.transitioning = true;
       $.addClass(viewer, 'viewer-transition');
-      $.forceReflow(viewer);
+
+      // Force reflow to enable CSS3 transition
+      // eslint-disable-next-line
+      viewer.offsetWidth;
       $.addListener(viewer, 'transitionend', $.proxy(self.shown, self), {
         once: true,
       });
@@ -639,7 +642,10 @@ export default {
         $.addClass(tooltipBox, 'viewer-show');
         $.addClass(tooltipBox, 'viewer-fade');
         $.addClass(tooltipBox, 'viewer-transition');
-        $.forceReflow(tooltipBox);
+
+        // Force reflow to enable CSS3 transition
+        // eslint-disable-next-line
+        tooltipBox.offsetWidth;
         $.addClass(tooltipBox, 'viewer-in');
       } else {
         $.addClass(tooltipBox, 'viewer-show');

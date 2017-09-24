@@ -434,11 +434,6 @@ export function setText(element, text) {
   }
 }
 
-// Force reflow to enable CSS3 transition
-export function forceReflow(element) {
-  return element.offsetWidth;
-}
-
 // e.g.: http://domain.com/path/to/picture.jpg?size=1280×960 -> picture.jpg
 export function getImageName(url) {
   return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
