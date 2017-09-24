@@ -187,6 +187,9 @@ export default {
         });
         $.dispatchEvent(image, 'load');
       });
+      if (window.innerHeight < window.screen.availHeight) {
+        self.stop();
+      }
     }
   },
 
