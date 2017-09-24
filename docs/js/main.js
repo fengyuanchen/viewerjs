@@ -130,4 +130,5 @@ window.onload = function () {
     }
   };
 
+  $('[data-toggle="tooltip"]').tooltip();
 };

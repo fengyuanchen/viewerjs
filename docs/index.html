@@ -14,7 +14,12 @@
 </head>
 <body>
   <!--[if lt IE 9]>
-  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <div class="alert alert-warning alert-dismissible fade show m-0 rounded-0" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+  </div>
   <![endif]-->
 
   <!-- Header -->
@@ -26,23 +31,27 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse" role="navigation">
         <nav class="nav navbar-nav">
-          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/README.md">Docs</a>
-          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs">GitHub</a>
-          <a class="nav-link" href="https://fengyuanchen.github.io">More</a>
-          <a class="nav-link" href="http://chenfengyuan.com">About</a>
+          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/README.md" data-toggle="tooltip" title="View the documentation">Docs</a>
+          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs" data-toggle="tooltip" title="View the GitHub project">GitHub</a>
+          <a class="nav-link" href="https://fengyuanchen.github.io" data-toggle="tooltip" title="More projects">More</a>
+          <a class="nav-link" href="http://chenfengyuan.com" data-toggle="tooltip" title="About the author">About</a>
         </nav>
       </div>
     </div>
   </header>
 
   <!-- Jumbotron -->
-  <div class="jumbotron docs-jumbotron">
+  <div class="jumbotron bg-primary text-white rounded-0">
     <div class="container">
-      <h1>Viewer.js <small class="version">v0.7.2</small></h1>
-      <p class="lead">JavaScript image viewer.</p>
-      <div class="docs-carbonads-container">
-        <div class="docs-carbonads">
-          <script id="_carbonads_js" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=fengyuanchen" async></script>
+      <div class="row">
+        <div class="col-md">
+          <h1>Viewer.js <small class="h6">v0.7.2</small></h1>
+          <p class="lead">JavaScript image viewer.</p>
+        </div>
+        <div class="col-md">
+          <div class="carbonads">
+            <script id="_carbonads_js" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=fengyuanchen" async></script>
+          </div>
         </div>
       </div>
     </div>
@@ -224,10 +233,10 @@
   </div>
 
   <!-- Footer -->
-  <footer class="docs-footer">
+  <footer class="footer">
     <div class="container">
       <p class="heart"></p>
-      <nav class="nav flex-wrap justify-content-center">
+      <nav class="nav flex-wrap justify-content-center mb-3">
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs">GitHub</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/releases">Releases</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/LICENSE">License</a>
@@ -240,7 +249,7 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  <script src="https://fengyuanchen.github.io/js/common.js"></script>
+  <!-- <script src="https://fengyuanchen.github.io/js/common.js"></script> -->
   <script src="js/viewer.js"></script>
   <script src="js/main.js"></script>
 </body>
