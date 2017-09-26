@@ -235,6 +235,14 @@ Enable to rotate the image.
 Enable to scale the image.
 
 
+### flippable
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to flip the image over. Needs also `scalable` turned on.
+
+
 ### transition
 
 - Type: `Boolean`

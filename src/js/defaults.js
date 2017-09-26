@@ -29,6 +29,9 @@ export default {
   // Enable to scale the image
   scalable: true,
 
+  // Enable to flip the image over
+  flippable: true,
+
   // Enable CSS3 Transition for some special elements
   transition: true,
 
