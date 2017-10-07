@@ -12,6 +12,10 @@ let AnotherViewer;
 
 class Viewer {
   constructor(element, options) {
+    if (!element || element.nodeType !== 1) {
+      throw new Error('The first argument is required and must be an element.');
+    }
+
     const self = this;
 
     self.element = element;
