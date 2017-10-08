@@ -45,7 +45,7 @@ export default {
   show() {
     const { element, options } = this;
 
-    if (options.inline || this.transitioning) {
+    if (options.inline || this.transitioning || this.visible) {
       return this;
     }
 
