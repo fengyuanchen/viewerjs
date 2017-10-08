@@ -1,43 +1,65 @@
-// RegExps
-const REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
-const REGEXP_SPACES = /\s+/;
-const REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
-const REGEXP_TRIM = /^\s+(.*)\s+$/;
+import {
+  CLASS_HIDE_XS_DOWN,
+  CLASS_HIDE_SM_DOWN,
+  CLASS_HIDE_MD_DOWN,
+} from './constants';
 
-// Utilities
-const objectProto = Object.prototype;
-const toString = objectProto.toString;
-const hasOwnProperty = objectProto.hasOwnProperty;
-const slice = Array.prototype.slice;
-
-export function typeOf(obj) {
-  return toString.call(obj).slice(8, -1).toLowerCase();
+/**
+ * Check if the given value is a string.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a string, else `false`.
+ */
+export function isString(value) {
+  return typeof value === 'string';
 }
 
-export function isString(str) {
-  return typeof str === 'string';
+/**
+ * Check if the given value is not a number.
+ */
+export const isNaN = Number.isNaN || window.isNaN;
+
+/**
+ * Check if the given value is a number.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a number, else `false`.
+ */
+export function isNumber(value) {
+  return typeof value === 'number' && !isNaN(value);
 }
 
-export function isNumber(num) {
-  return typeof num === 'number' && !isNaN(num);
+/**
+ * Check if the given value is undefined.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is undefined, else `false`.
+ */
+export function isUndefined(value) {
+  return typeof value === 'undefined';
 }
 
-export function isUndefined(obj) {
-  return typeof obj === 'undefined';
+/**
+ * Check if the given value is an object.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is an object, else `false`.
+ */
+export function isObject(value) {
+  return typeof value === 'object' && value !== null;
 }
 
-export function isObject(obj) {
-  return typeof obj === 'object' && obj !== null;
-}
+const { hasOwnProperty } = Object.prototype;
 
-export function isPlainObject(obj) {
-  if (!isObject(obj)) {
+/**
+ * Check if the given value is a plain object.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a plain object, else `false`.
+ */
+export function isPlainObject(value) {
+  if (!isObject(value)) {
     return false;
   }
 
   try {
-    const constructor = obj.constructor;
-    const prototype = constructor.prototype;
+    const { constructor } = value;
+    const { prototype } = constructor;
 
     return constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf');
   } catch (e) {
@@ -45,70 +67,48 @@ export function isPlainObject(obj) {
   }
 }
 
-export function isFunction(fn) {
-  return typeOf(fn) === 'function';
+/**
+ * Check if the given value is a function.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a function, else `false`.
+ */
+export function isFunction(value) {
+  return typeof value === 'function';
 }
 
-export function isArray(arr) {
-  return Array.isArray ? Array.isArray(arr) : typeOf(arr) === 'array';
-}
-
-export function toArray(obj, offset) {
-  offset = offset >= 0 ? offset : 0;
-
-  if (Array.from) {
-    return Array.from(obj).slice(offset);
-  }
-
-  return slice.call(obj, offset);
-}
-
-export function inArray(value, arr) {
-  let index = -1;
-
-  if (arr.indexOf) {
-    return arr.indexOf(value);
-  }
-
-  arr.forEach((n, i) => {
-    if (n === value) {
-      index = i;
-    }
-  });
-
-  return index;
-}
-
-export function trim(str) {
-  if (isString(str)) {
-    str = str.trim ? str.trim() : str.replace(REGEXP_TRIM, '1');
-  }
-
-  return str;
-}
-
-export function each(obj, callback) {
-  if (obj && isFunction(callback)) {
-    let i;
-
-    if (isArray(obj) || isNumber(obj.length)/* array-like */) {
-      const length = obj.length;
+/**
+ * Iterate the given data.
+ * @param {*} data - The data to iterate.
+ * @param {Function} callback - The process function for each element.
+ * @returns {*} The original data.
+ */
+export function each(data, callback) {
+  if (data && isFunction(callback)) {
+    if (Array.isArray(data) || isNumber(data.length)/* array-like */) {
+      const { length } = data;
+      let i;
 
       for (i = 0; i < length; i += 1) {
-        if (callback.call(obj, obj[i], i, obj) === false) {
+        if (callback.call(data, data[i], i, data) === false) {
           break;
         }
       }
-    } else if (isObject(obj)) {
-      Object.keys(obj).forEach((key) => {
-        callback.call(obj, obj[key], key, obj);
+    } else if (isObject(data)) {
+      Object.keys(data).forEach((key) => {
+        callback.call(data, data[key], key, data);
       });
     }
   }
 
-  return obj;
+  return data;
 }
 
+/**
+ * Extend the given object.
+ * @param {*} obj - The object to be extended.
+ * @param {*} args - The rest objects which will be merged to the first object.
+ * @returns {Object} The extended object.
+ */
 export function extend(obj, ...args) {
   if (isObject(obj) && args.length > 0) {
     if (Object.assign) {
@@ -127,14 +127,25 @@ export function extend(obj, ...args) {
   return obj;
 }
 
+/**
+ * Takes a function and returns a new one that will always have a particular context.
+ * @param {Function} fn - The target function.
+ * @param {Object} context - The new context for the function.
+ * @returns {Function} The new function.
+ */
 export function proxy(fn, context, ...args) {
-  return (...args2) => {
-    return fn.apply(context, args.concat(args2));
-  };
+  return (...args2) => fn.apply(context, args.concat(args2));
 }
 
+const REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
+
+/**
+ * Apply styles to the given element.
+ * @param {Element} element - The target element.
+ * @param {Object} styles - The styles for applying.
+ */
 export function setStyle(element, styles) {
-  const style = element.style;
+  const { style } = element;
 
   each(styles, (value, property) => {
     if (REGEXP_SUFFIX.test(property) && isNumber(value)) {
@@ -145,18 +156,34 @@ export function setStyle(element, styles) {
   });
 }
 
+/**
+ * Get the styles from the given element.
+ * @param {Element} element - The target element.
+ * @returns {Object} The styles of the element.
+ */
 export function getStyle(element) {
   return window.getComputedStyle ?
     window.getComputedStyle(element, null) :
     element.currentStyle;
 }
 
+/**
+ * Check if the given element has a special class.
+ * @param {Element} element - The element to check.
+ * @param {string} value - The class to search.
+ * @returns {boolean} Returns `true` if the special class was found.
+ */
 export function hasClass(element, value) {
   return element.classList ?
     element.classList.contains(value) :
     element.className.indexOf(value) > -1;
 }
 
+/**
+ * Add classes to the given element.
+ * @param {Element} element - The target element.
+ * @param {string} value - The classes to be added.
+ */
 export function addClass(element, value) {
   if (!value) {
     return;
@@ -174,7 +201,7 @@ export function addClass(element, value) {
     return;
   }
 
-  const className = trim(element.className);
+  const className = element.className.trim();
 
   if (!className) {
     element.className = value;
@@ -183,6 +210,11 @@ export function addClass(element, value) {
   }
 }
 
+/**
+ * Remove classes from the given element.
+ * @param {Element} element - The target element.
+ * @param {string} value - The classes to be removed.
+ */
 export function removeClass(element, value) {
   if (!value) {
     return;
@@ -205,6 +237,12 @@ export function removeClass(element, value) {
   }
 }
 
+/**
+ * Add or remove classes from the given element.
+ * @param {Element} element - The target element.
+ * @param {string} value - The classes to be toggled.
+ * @param {boolean} added - Add only.
+ */
 export function toggleClass(element, value, added) {
   if (!value) {
     return;
@@ -225,10 +263,23 @@ export function toggleClass(element, value, added) {
   }
 }
 
-export function hyphenate(str) {
-  return str.replace(REGEXP_HYPHENATE, '$1-$2').toLowerCase();
+const REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
+
+/**
+ * Hyphenate the given value.
+ * @param {string} value - The value to hyphenate.
+ * @returns {string} The hyphenated value.
+ */
+export function hyphenate(value) {
+  return value.replace(REGEXP_HYPHENATE, '$1-$2').toLowerCase();
 }
 
+/**
+ * Get data from the given element.
+ * @param {Element} element - The target element.
+ * @param {string} name - The data key to get.
+ * @returns {string} The data value.
+ */
 export function getData(element, name) {
   if (isObject(element[name])) {
     return element[name];
@@ -239,6 +290,12 @@ export function getData(element, name) {
   return element.getAttribute(`data-${hyphenate(name)}`);
 }
 
+/**
+ * Set data to the given element.
+ * @param {Element} element - The target element.
+ * @param {string} name - The data key to set.
+ * @param {string} data - The data value.
+ */
 export function setData(element, name, data) {
   if (isObject(data)) {
     element[name] = data;
@@ -249,6 +306,11 @@ export function setData(element, name, data) {
   }
 }
 
+/**
+ * Remove data from the given element.
+ * @param {Element} element - The target element.
+ * @param {string} name - The data key to remove.
+ */
 export function removeData(element, name) {
   if (isObject(element[name])) {
     delete element[name];
@@ -264,8 +326,17 @@ export function removeData(element, name) {
   }
 }
 
+const REGEXP_SPACES = /\s+/;
+
+/**
+ * Remove event listener from the given element.
+ * @param {Element} element - The target element.
+ * @param {string} type - The event type(s) to remove,
+ * @param {Function} listener - The event listener to remove.
+ * @param {Object} options - The event options.
+ */
 export function removeListener(element, type, listener, options = {}) {
-  const types = trim(type).split(REGEXP_SPACES);
+  const types = type.trim().split(REGEXP_SPACES);
 
   if (types.length > 1) {
     each(types, (t) => {
@@ -286,8 +357,15 @@ export function removeListener(element, type, listener, options = {}) {
   }
 }
 
+/**
+ * Add event listener to the given element.
+ * @param {Element} element - The target element.
+ * @param {string} type - The event type(s) to add,
+ * @param {Function} listener - The event listener to add.
+ * @param {Object} options - The event options.
+ */
 export function addListener(element, type, listener, options = {}) {
-  const types = trim(type).split(REGEXP_SPACES);
+  const types = type.trim().split(REGEXP_SPACES);
 
   if (types.length > 1) {
     each(types, (t) => {
@@ -313,6 +391,13 @@ export function addListener(element, type, listener, options = {}) {
   }
 }
 
+/**
+ * Dispatch event on the given element.
+ * @param {Element} element - The target element.
+ * @param {string} type - The event type(s) to dispatch,
+ * @param {Object} data - The additional event data.
+ * @returns {boolean} Indicate if the event is default prevented or not.
+ */
 export function dispatchEvent(element, type, data) {
   if (element.dispatchEvent) {
     let event;
@@ -349,32 +434,11 @@ export function dispatchEvent(element, type, data) {
   return true;
 }
 
-export function getEvent(event) {
-  const e = event || window.event;
-
-  // Fix target property (IE8)
-  if (!e.target) {
-    e.target = e.srcElement || document;
-  }
-
-  if (!isNumber(e.pageX) && isNumber(e.clientX)) {
-    const eventDoc = event.target.ownerDocument || document;
-    const doc = eventDoc.documentElement;
-    const body = eventDoc.body;
-
-    e.pageX = e.clientX + (
-      ((doc && doc.scrollLeft) || (body && body.scrollLeft) || 0) -
-      ((doc && doc.clientLeft) || (body && body.clientLeft) || 0)
-    );
-    e.pageY = e.clientY + (
-      ((doc && doc.scrollTop) || (body && body.scrollTop) || 0) -
-      ((doc && doc.clientTop) || (body && body.clientTop) || 0)
-    );
-  }
-
-  return e;
-}
-
+/**
+ * Get the offset base on the document.
+ * @param {Element} element - The target element.
+ * @returns {Object} The offset data.
+ */
 export function getOffset(element) {
   const doc = document.documentElement;
   const box = element.getBoundingClientRect();
@@ -389,127 +453,106 @@ export function getOffset(element) {
   };
 }
 
-export function getByTag(element, tagName) {
-  return element.getElementsByTagName(tagName);
-}
-
-export function getByClass(element, className) {
-  return element.getElementsByClassName ?
-    element.getElementsByClassName(className) :
-    element.querySelectorAll(`.${className}`);
-}
-
-export function createElement(tagName) {
-  return document.createElement(tagName);
-}
-
-export function appendChild(element, elem) {
-  if (elem.length) {
-    each(elem, (el) => {
-      appendChild(element, el);
-    });
-    return;
-  }
-
-  element.appendChild(elem);
-}
-
-export function removeChild(element) {
-  if (element.parentNode) {
-    element.parentNode.removeChild(element);
-  }
-}
-
+/**
+ * Empty an element.
+ * @param {Element} element - The element to empty.
+ */
 export function empty(element) {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
 }
 
-export function setText(element, text) {
-  if (!isUndefined(element.textContent)) {
-    element.textContent = text;
-  } else {
-    element.innerText = text;
+/**
+ * Get transforms base on the given object.
+ * @param {Object} obj - The target object.
+ * @returns {string} A string contains transform values.
+ */
+export function getTransforms({ rotate, scaleX, scaleY }) {
+  const values = [];
+
+  if (isNumber(rotate) && rotate !== 0) {
+    values.push(`rotate(${rotate}deg)`);
   }
+
+  if (isNumber(scaleX) && scaleX !== 1) {
+    values.push(`scaleX(${scaleX})`);
+  }
+
+  if (isNumber(scaleY) && scaleY !== 1) {
+    values.push(`scaleY(${scaleY})`);
+  }
+
+  const transform = values.length ? values.join(' ') : 'none';
+
+  return {
+    WebkitTransform: transform,
+    msTransform: transform,
+    transform,
+  };
 }
 
-// e.g.: http://domain.com/path/to/picture.jpg?size=1280×960 -> picture.jpg
-export function getImageName(url) {
+/**
+ * Get an image name from an image url.
+ * @param {string} url - The target url.
+ * @example
+ * // picture.jpg
+ * getImageNameFromURL('http://domain.com/path/to/picture.jpg?size=1280×960')
+ * @returns {string} A string contains the image name.
+ */
+export function getImageNameFromURL(url) {
   return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
 }
 
-export function getImageSize(image, callback) {
-  // Modern browsers
-  if (image.naturalWidth) {
+const IS_SAFARI_OR_UIWEBVIEW = navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent);
+
+/**
+ * Get an image's natural sizes.
+ * @param {string} image - The target image.
+ * @param {Function} callback - The callback function.
+ */
+export function getImageNaturalSizes(image, callback) {
+  // Modern browsers (except Safari)
+  if (image.naturalWidth && !IS_SAFARI_OR_UIWEBVIEW) {
     callback(image.naturalWidth, image.naturalHeight);
     return;
   }
 
   const newImage = document.createElement('img');
 
-  newImage.onload = function load() {
-    callback(this.width, this.height);
+  newImage.onload = () => {
+    callback(newImage.width, newImage.height);
   };
 
   newImage.src = image.src;
 }
 
-export function getTransform(data) {
-  const transforms = [];
-  const rotate = data.rotate;
-  const scaleX = data.scaleX;
-  const scaleY = data.scaleY;
-
-  // Rotate should come first before scale to match orientation transform
-  if (isNumber(rotate) && rotate !== 0) {
-    transforms.push(`rotate(${rotate}deg)`);
-  }
-
-  if (isNumber(scaleX) && scaleX !== 1) {
-    transforms.push(`scaleX(${scaleX})`);
-  }
-
-  if (isNumber(scaleY) && scaleY !== 1) {
-    transforms.push(`scaleY(${scaleY})`);
-  }
-
-  return transforms.length ? transforms.join(' ') : 'none';
-}
-
-export function getResponsiveClass(option) {
-  switch (option) {
+/**
+ * Get the related class name of a responsive type number.
+ * @param {string} type - The responsive type.
+ * @returns {string} The related class name.
+ */
+export function getResponsiveClass(type) {
+  switch (type) {
     case 2:
-      return 'viewer-hide-xs-down';
+      return CLASS_HIDE_XS_DOWN;
 
     case 3:
-      return 'viewer-hide-sm-down';
+      return CLASS_HIDE_SM_DOWN;
 
     case 4:
-      return 'viewer-hide-md-down';
+      return CLASS_HIDE_MD_DOWN;
 
     default:
+      return '';
   }
-
-  return '';
 }
 
-export function getPointer(pointer, endOnly) {
-  const end = {
-    endX: pointer.pageX,
-    endY: pointer.pageY,
-  };
-
-  if (endOnly) {
-    return end;
-  }
-
-  return extend({
-    startX: pointer.pageX,
-    startY: pointer.pageY,
-  }, end);
-}
-
+/**
+ * Get the max ratio of a group of pointers.
+ * @param {string} pointers - The target pointers.
+ * @returns {number} The result ratio.
+ */
 export function getMaxZoomRatio(pointers) {
   const pointers2 = extend({}, pointers);
   const ratios = [];
@@ -530,21 +573,46 @@ export function getMaxZoomRatio(pointers) {
     });
   });
 
-  ratios.sort((a, b) => {
-    return Math.abs(a) < Math.abs(b);
-  });
+  ratios.sort((a, b) => Math.abs(a) < Math.abs(b));
 
   return ratios[0];
 }
 
+/**
+ * Get a pointer from an event object.
+ * @param {Object} event - The target event object.
+ * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.
+ * @returns {Object} The result pointer contains start and/or end point coordinates.
+ */
+export function getPointer({ pageX, pageY }, endOnly) {
+  const end = {
+    endX: pageX,
+    endY: pageY,
+  };
+
+  if (endOnly) {
+    return end;
+  }
+
+  return extend({
+    startX: pageX,
+    startY: pageY,
+  }, end);
+}
+
+/**
+ * Get the center point coordinate of a group of pointers.
+ * @param {Object} pointers - The target pointers.
+ * @returns {Object} The center point coordinate.
+ */
 export function getPointersCenter(pointers) {
   let pageX = 0;
   let pageY = 0;
   let count = 0;
 
-  each(pointers, (pointer) => {
-    pageX += pointer.startX;
-    pageY += pointer.startY;
+  each(pointers, ({ startX, startY }) => {
+    pageX += startX;
+    pageY += startY;
     count += 1;
   });
 

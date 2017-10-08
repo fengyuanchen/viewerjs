@@ -1,28 +1,43 @@
-import * as $ from './utilities';
+import {
+  CLASS_TRANSITION,
+  EVENT_LOAD,
+  EVENT_TRANSITION_END,
+  EVENT_VIEWED,
+} from './constants';
+import {
+  addClass,
+  addListener,
+  each,
+  empty,
+  extend,
+  getImageNameFromURL,
+  getImageNaturalSizes,
+  getTransforms,
+  isFunction,
+  isString,
+  proxy,
+  removeClass,
+  setData,
+  setStyle,
+} from './utilities';
 
 export default {
   render() {
-    const self = this;
-
-    self.initContainer();
-    self.initViewer();
-    self.initList();
-    self.renderViewer();
+    this.initContainer();
+    this.initViewer();
+    this.initList();
+    this.renderViewer();
   },
 
   initContainer() {
-    const self = this;
-
-    self.containerData = {
+    this.containerData = {
       width: window.innerWidth,
       height: window.innerHeight,
     };
   },
 
   initViewer() {
-    const self = this;
-    const options = self.options;
-    const parent = self.parent;
+    const { options, parent } = this;
     let viewerData;
 
     if (options.inline) {
@@ -31,74 +46,67 @@ export default {
         height: Math.max(parent.offsetHeight, options.minHeight),
       };
 
-      self.parentData = viewerData;
+      this.parentData = viewerData;
     }
 
-    if (self.fulled || !viewerData) {
-      viewerData = self.containerData;
+    if (this.fulled || !viewerData) {
+      viewerData = this.containerData;
     }
 
-    self.viewerData = $.extend({}, viewerData);
+    this.viewerData = extend({}, viewerData);
   },
 
   renderViewer() {
-    const self = this;
-
-    if (self.options.inline && !self.fulled) {
-      $.setStyle(self.viewer, self.viewerData);
+    if (this.options.inline && !this.fulled) {
+      setStyle(this.viewer, this.viewerData);
     }
   },
 
   initList() {
-    const self = this;
-    const options = self.options;
-    const element = self.element;
-    const list = self.list;
+    const { element, options, list } = this;
     const items = [];
 
-    $.each(self.images, (image, i) => {
-      const src = image.src;
-      const alt = image.alt || $.getImageName(src);
-      let url = options.url;
+    each(this.images, (image, i) => {
+      const { src } = image;
+      const alt = image.alt || getImageNameFromURL(src);
+      let { url } = options;
 
       if (!src) {
         return;
       }
 
-      if ($.isString(url)) {
+      if (isString(url)) {
         url = image.getAttribute(url);
-      } else if ($.isFunction(url)) {
+      } else if (isFunction(url)) {
         url = url.call(image, image);
       }
 
-      items.push(
-        '<li>' +
-          '<img' +
-            ` src="${src}"` +
-            ' role="button"' +
-            ' data-action="view"' +
-            ` data-index="${i}"` +
-            ` data-original-url="${(url || src)}"` +
-            ` alt="${alt}"` +
-          '>' +
-        '</li>',
-      );
+      items.push('<li>' +
+        '<img' +
+          ` src="${src}"` +
+          ' role="button"' +
+          ' data-action="view"' +
+          ` data-index="${i}"` +
+          ` data-original-url="${(url || src)}"` +
+          ` alt="${alt}"` +
+        '>' +
+      '</li>');
     });
 
     list.innerHTML = items.join('');
 
-    $.each($.getByTag(list, 'img'), (image) => {
-      $.setData(image, 'filled', true);
-      $.addListener(image, 'load', $.proxy(self.loadImage, self), {
+    each(list.getElementsByTagName('img'), (image) => {
+      setData(image, 'filled', true);
+      addListener(image, EVENT_LOAD, proxy(this.loadImage, this), {
         once: true,
       });
     });
 
-    self.items = $.getByTag(list, 'li');
+    this.items = list.getElementsByTagName('li');
 
     if (options.transition) {
-      $.addListener(element, 'viewed', () => {
-        $.addClass(list, 'viewer-transition');
+      addListener(element, EVENT_VIEWED, () => {
+        addClass(list, CLASS_TRANSITION);
       }, {
         once: true,
       });
@@ -106,39 +114,33 @@ export default {
   },
 
   renderList(index) {
-    const self = this;
-    const i = index || self.index;
-    const width = self.items[i].offsetWidth || 30;
+    const i = index || this.index;
+    const width = this.items[i].offsetWidth || 30;
     const outerWidth = width + 1; // 1 pixel of `margin-left` width
 
     // Place the active item in the center of the screen
-    $.setStyle(self.list, {
-      width: outerWidth * self.length,
-      marginLeft: ((self.viewerData.width - width) / 2) - (outerWidth * i),
+    setStyle(this.list, {
+      width: outerWidth * this.length,
+      marginLeft: ((this.viewerData.width - width) / 2) - (outerWidth * i),
     });
   },
 
   resetList() {
-    const self = this;
-
-    $.empty(self.list);
-    $.removeClass(self.list, 'viewer-transition');
-    $.setStyle({
+    empty(this.list);
+    removeClass(this.list, CLASS_TRANSITION);
+    setStyle({
       marginLeft: 0,
     });
   },
 
   initImage(callback) {
-    const self = this;
-    const options = self.options;
-    const image = self.image;
-    const viewerData = self.viewerData;
-    const footerHeight = self.footer.offsetHeight;
+    const { options, image, viewerData } = this;
+    const footerHeight = this.footer.offsetHeight;
     const viewerWidth = viewerData.width;
     const viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
-    const oldImageData = self.imageData || {};
+    const oldImageData = this.ImageData || {};
 
-    $.getImageSize(image, (naturalWidth, naturalHeight) => {
+    getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
       const aspectRatio = naturalWidth / naturalHeight;
       let width = viewerWidth;
       let height = viewerHeight;
@@ -162,7 +164,7 @@ export default {
         left: (viewerWidth - width) / 2,
         top: (viewerHeight - height) / 2,
       };
-      const initialImageData = $.extend({}, imageData);
+      const initialImageData = extend({}, imageData);
 
       if (options.rotatable) {
         imageData.rotate = oldImageData.rotate || 0;
@@ -176,34 +178,28 @@ export default {
         initialImageData.scaleY = 1;
       }
 
-      self.imageData = imageData;
-      self.initialImageData = initialImageData;
+      this.imageData = imageData;
+      this.initialImageData = initialImageData;
 
-      if ($.isFunction(callback)) {
+      if (isFunction(callback)) {
         callback();
       }
     });
   },
 
   renderImage(callback) {
-    const self = this;
-    const image = self.image;
-    const imageData = self.imageData;
-    const transform = $.getTransform(imageData);
+    const { image, imageData } = this;
 
-    $.setStyle(image, {
+    setStyle(image, extend({
       width: imageData.width,
       height: imageData.height,
       marginLeft: imageData.left,
       marginTop: imageData.top,
-      WebkitTransform: transform,
-      msTransform: transform,
-      transform,
-    });
+    }, getTransforms(imageData)));
 
-    if ($.isFunction(callback)) {
-      if (self.transitioning) {
-        $.addListener(image, 'transitionend', callback, {
+    if (isFunction(callback)) {
+      if (this.transitioning) {
+        addListener(image, EVENT_TRANSITION_END, callback, {
           once: true,
         });
       } else {
@@ -213,12 +209,12 @@ export default {
   },
 
   resetImage() {
-    const self = this;
+    const { image } = this;
 
     // this.image only defined after viewed
-    if (self.image) {
-      $.removeChild(self.image);
-      self.image = null;
+    if (image) {
+      image.parentNode.removeChild(image);
+      this.image = null;
     }
   },
 };
