@@ -16,6 +16,7 @@ import {
   EVENT_LOAD,
   EVENT_READY,
   NAMESPACE,
+  WINDOW,
 } from './constants';
 import {
   addClass,
@@ -35,7 +36,7 @@ import {
   toggleClass,
 } from './utilities';
 
-let AnotherViewer;
+const AnotherViewer = WINDOW.Viewer;
 
 class Viewer {
   /**
@@ -47,7 +48,6 @@ class Viewer {
     if (!element || element.nodeType !== 1) {
       throw new Error('The first argument is required and must be an element.');
     }
-
 
     this.element = element;
     this.options = extend({}, DEFAULTS, isPlainObject(options) && options);
@@ -251,10 +251,5 @@ class Viewer {
 }
 
 extend(Viewer.prototype, render, events, handlers, methods, others);
-
-if (typeof window !== 'undefined') {
-  AnotherViewer = window.Viewer;
-  window.Viewer = Viewer;
-}
 
 export default Viewer;

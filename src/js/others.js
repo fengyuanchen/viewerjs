@@ -17,8 +17,6 @@ import {
   removeClass,
 } from './utilities';
 
-const { document } = window;
-
 export default {
   open() {
     const { body } = this;
@@ -75,6 +73,8 @@ export default {
   },
 
   requestFullscreen() {
+    const { document } = window;
+
     if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement &&
       !document.webkitFullscreenElement && !document.msFullscreenElement) {
       const { documentElement } = document;

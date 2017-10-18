@@ -1,5 +1,4 @@
-const { PointerEvent } = window;
-
+export const WINDOW = typeof window !== 'undefined' ? window : {};
 export const NAMESPACE = 'viewer';
 
 // Actions
@@ -37,9 +36,9 @@ export const EVENT_CLICK = 'click';
 export const EVENT_DRAG_START = 'dragstart';
 export const EVENT_KEY_DOWN = 'keydown';
 export const EVENT_LOAD = 'load';
-export const EVENT_POINTER_DOWN = PointerEvent ? 'pointerdown' : 'touchstart mousedown';
-export const EVENT_POINTER_MOVE = PointerEvent ? 'pointermove' : 'mousemove touchmove';
-export const EVENT_POINTER_UP = PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+export const EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+export const EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'mousemove touchmove';
+export const EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
 export const EVENT_RESIZE = 'resize';
 export const EVENT_TRANSITION_END = 'transitionend';
 export const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';

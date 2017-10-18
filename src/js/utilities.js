@@ -2,6 +2,7 @@ import {
   CLASS_HIDE_XS_DOWN,
   CLASS_HIDE_SM_DOWN,
   CLASS_HIDE_MD_DOWN,
+  WINDOW,
 } from './constants';
 
 /**
@@ -16,7 +17,7 @@ export function isString(value) {
 /**
  * Check if the given value is not a number.
  */
-export const isNaN = Number.isNaN || window.isNaN;
+export const isNaN = Number.isNaN || WINDOW.isNaN;
 
 /**
  * Check if the given value is a number.
@@ -512,7 +513,7 @@ export function getImageNameFromURL(url) {
   return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
 }
 
-const { navigator } = window;
+const { navigator } = WINDOW;
 const IS_SAFARI_OR_UIWEBVIEW = navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent);
 
 /**
