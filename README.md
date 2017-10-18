@@ -9,7 +9,7 @@
 - [Features](#features)
 - [Main](#main)
 - [Getting started](#getting-started)
-- [Keyboard support](#keyboard-support)
+- [Keyboard support](#keyboard-support)s
 - [Options](#options)
 - [Methods](#methods)
 - [Events](#events)
@@ -692,6 +692,6 @@ Maintained under the [Semantic Versioning guidelines](http://semver.org/).
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © [Fengyuan Chen](http://chenfengyuan.com)
+[MIT](http://opensource.org/licenses/MIT) © [Chen Fengyuan](http://chenfengyuan.com)
 
 [⬆ back to top](#table-of-contents)
