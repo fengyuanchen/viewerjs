@@ -33,17 +33,17 @@ export default {
     addListener(viewer, EVENT_WHEEL, (this.onWheel = proxy(this.wheel, this)));
     addListener(viewer, EVENT_DRAG_START, (this.onDragStart = proxy(this.dragstart, this)));
     addListener(
-      this.canvas, EVENT_POINTER_DOWN, (
-        this.onPointerDown = proxy(this.pointerdown, this)
-      ),
+      this.canvas,
+      EVENT_POINTER_DOWN,
+      (this.onPointerDown = proxy(this.pointerdown, this)),
     );
     addListener(
-      document, EVENT_POINTER_MOVE, (
-        this.onPointerMove = proxy(this.pointermove, this)
-      ),
+      element.ownerDocument,
+      EVENT_POINTER_MOVE,
+      (this.onPointerMove = proxy(this.pointermove, this)),
     );
-    addListener(document, EVENT_POINTER_UP, (this.onPointerUp = proxy(this.pointerup, this)));
-    addListener(document, EVENT_KEY_DOWN, (this.onKeyDown = proxy(this.keydown, this)));
+    addListener(element.ownerDocument, EVENT_POINTER_UP, (this.onPointerUp = proxy(this.pointerup, this)));
+    addListener(element.ownerDocument, EVENT_KEY_DOWN, (this.onKeyDown = proxy(this.keydown, this)));
     addListener(window, EVENT_RESIZE, (this.onResize = proxy(this.resize, this)));
   },
 
@@ -62,9 +62,9 @@ export default {
     removeListener(viewer, EVENT_WHEEL, this.onWheel);
     removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
     removeListener(this.canvas, EVENT_POINTER_DOWN, this.onPointerDown);
-    removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
-    removeListener(document, EVENT_POINTER_UP, this.onPointerUp);
-    removeListener(document, EVENT_KEY_DOWN, this.onKeyDown);
+    removeListener(element.ownerDocument, EVENT_POINTER_MOVE, this.onPointerMove);
+    removeListener(element.ownerDocument, EVENT_POINTER_UP, this.onPointerUp);
+    removeListener(element.ownerDocument, EVENT_KEY_DOWN, this.onKeyDown);
     removeListener(window, EVENT_RESIZE, this.onResize);
   },
 };
