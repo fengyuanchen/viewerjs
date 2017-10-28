@@ -71,26 +71,24 @@ export default {
       const alt = image.alt || getImageNameFromURL(src);
       let { url } = options;
 
-      if (!src) {
-        return;
-      }
-
       if (isString(url)) {
         url = image.getAttribute(url);
       } else if (isFunction(url)) {
         url = url.call(image, image);
       }
 
-      items.push('<li>' +
-        '<img' +
-          ` src="${src}"` +
-          ' role="button"' +
-          ' data-action="view"' +
-          ` data-index="${i}"` +
-          ` data-original-url="${(url || src)}"` +
-          ` alt="${alt}"` +
-        '>' +
-      '</li>');
+      if (src || url) {
+        items.push('<li>' +
+          '<img' +
+            ` src="${src || url}"` +
+            ' role="button"' +
+            ' data-action="view"' +
+            ` data-index="${i}"` +
+            ` data-original-url="${url || src}"` +
+            ` alt="${alt}"` +
+          '>' +
+        '</li>');
+      }
     });
 
     list.innerHTML = items.join('');
