@@ -372,7 +372,7 @@ export default {
   },
 
   start({ target }) {
-    if (target.tagName.toLowerCase() === 'img') {
+    if (target.tagName.toLowerCase() === 'img' && this.images.indexOf(target) !== -1) {
       this.target = target;
       this.show();
     }

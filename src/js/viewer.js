@@ -81,7 +81,20 @@ class Viewer {
     setData(element, NAMESPACE, this);
 
     const isImg = element.tagName.toLowerCase() === 'img';
-    const images = isImg ? [element] : element.getElementsByTagName('img');
+    let images = isImg ? [element] : element.querySelectorAll('img');
+
+    if (isFunction(options.filter)) {
+      const filtered = [];
+
+      each(images, (image) => {
+        if (options.filter(image)) {
+          filtered.push(image);
+        }
+      });
+
+      images = filtered;
+    }
+
     const { length } = images;
 
     if (!length) {

@@ -698,19 +698,35 @@ export default {
 
   // Update viewer when images changed
   update() {
+    const { element, options, isImg } = this;
     const indexes = [];
 
     // Destroy viewer if the target image was deleted
-    if (this.isImg && !this.element.parentNode) {
+    if (isImg && !element.parentNode) {
       return this.destroy();
     }
 
-    this.length = this.images.length;
+    let images = isImg ? [element] : element.querySelectorAll('img');
+
+    if (isFunction(options.filter)) {
+      const filtered = [];
+
+      each(images, (image) => {
+        if (options.filter(image)) {
+          filtered.push(image);
+        }
+      });
+
+      images = filtered;
+    }
+
+    this.images = images;
+    this.length = images.length;
 
     if (this.ready) {
       each(this.items, (item, i) => {
         const img = item.querySelector('img');
-        const image = this.images[i];
+        const image = images[i];
 
         if (image) {
           if (image.src !== img.src) {

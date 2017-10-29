@@ -66,6 +66,10 @@ export default {
   // Type: String (an image attribute) or Function (should return an image URL)
   url: 'src',
 
+  // Filter the images for viewing.
+  // Type: Function (return true if the image is viewable)
+  filter: null,
+
   // Event shortcuts
   ready: null,
   show: null,
