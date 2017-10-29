@@ -42,8 +42,16 @@ export default {
       EVENT_POINTER_MOVE,
       (this.onPointerMove = proxy(this.pointermove, this)),
     );
-    addListener(element.ownerDocument, EVENT_POINTER_UP, (this.onPointerUp = proxy(this.pointerup, this)));
-    addListener(element.ownerDocument, EVENT_KEY_DOWN, (this.onKeyDown = proxy(this.keydown, this)));
+    addListener(
+      element.ownerDocument,
+      EVENT_POINTER_UP,
+      (this.onPointerUp = proxy(this.pointerup, this)),
+    );
+    addListener(
+      element.ownerDocument,
+      EVENT_KEY_DOWN,
+      (this.onKeyDown = proxy(this.keydown, this)),
+    );
     addListener(window, EVENT_RESIZE, (this.onResize = proxy(this.resize, this)));
   },
 
