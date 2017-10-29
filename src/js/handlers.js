@@ -317,10 +317,6 @@ export default {
   pointerup(e) {
     const { action, pointers } = this;
 
-    if (!this.viewed) {
-      return;
-    }
-
     if (e.changedTouches) {
       each(e.changedTouches, (touch) => {
         delete pointers[touch.identifier];
