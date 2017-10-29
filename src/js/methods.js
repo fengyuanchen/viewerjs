@@ -212,17 +212,38 @@ export default {
     return this;
   },
 
-  // View the previous image
-  prev() {
-    this.view(Math.max(this.index - 1, 0));
+  /**
+   * View the previous image
+   * @param {boolean} [loop=false] - Indicate if view the last one
+   * when it is the first one at present.
+   * @returns {Object} this
+   */
+  prev(loop = false) {
+    let index = this.index - 1;
 
+    if (index < 0) {
+      index = loop ? this.length - 1 : 0;
+    }
+
+    this.view(index);
     return this;
   },
 
-  // View the next image
-  next() {
-    this.view(Math.min(this.index + 1, this.length - 1));
+  /**
+   * View the next image
+   * @param {boolean} [loop=false] - Indicate if view the first one
+   * when it is the last one at present.
+   * @returns {Object} this
+   */
+  next(loop = false) {
+    const maxIndex = this.length - 1;
+    let index = this.index + 1;
 
+    if (index > maxIndex) {
+      index = loop ? 0 : maxIndex;
+    }
+
+    this.view(index);
     return this;
   },
 
