@@ -330,10 +330,10 @@ export function removeData(element, name) {
 const REGEXP_SPACES = /\s+/;
 
 /**
- * Remove event listener from the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to remove,
- * @param {Function} listener - The event listener to remove.
+ * Remove event listener from the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
+ * @param {Function} listener - The event listener.
  * @param {Object} options - The event options.
  */
 export function removeListener(element, type, listener, options = {}) {
@@ -345,7 +345,7 @@ export function removeListener(element, type, listener, options = {}) {
 
   if (types.length > 1) {
     each(types, (t) => {
-      removeListener(element, t, listener);
+      removeListener(element, t, listener, options);
     });
     return;
   }
@@ -363,10 +363,10 @@ export function removeListener(element, type, listener, options = {}) {
 }
 
 /**
- * Add event listener to the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to add,
- * @param {Function} listener - The event listener to add.
+ * Add event listener to the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
+ * @param {Function} listener - The event listener.
  * @param {Object} options - The event options.
  */
 export function addListener(element, type, listener, options = {}) {
@@ -378,7 +378,7 @@ export function addListener(element, type, listener, options = {}) {
 
   if (types.length > 1) {
     each(types, (t) => {
-      addListener(element, t, listener);
+      addListener(element, t, listener, options);
     });
     return;
   }
@@ -386,9 +386,10 @@ export function addListener(element, type, listener, options = {}) {
   if (options.once) {
     const originalListener = listener;
     const onceListener = (...args) => {
-      removeListener(element, type, onceListener);
+      removeListener(element, type, onceListener, options);
       return originalListener.apply(element, args);
     };
+
     originalListener.onceListener = onceListener;
     listener = onceListener;
   }
@@ -401,9 +402,9 @@ export function addListener(element, type, listener, options = {}) {
 }
 
 /**
- * Dispatch event on the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to dispatch,
+ * Dispatch event on the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
  * @param {Object} data - The additional event data.
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
