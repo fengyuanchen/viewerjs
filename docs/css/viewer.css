@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.7.2
+ * Viewer.js v0.8.0
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) 2017 Fengyuan Chen
+ * Copyright (c) 2015-2017 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2017-08-19T06:58:08.154Z
+ * Date: 2017-10-08T11:44:55.790Z
  */
 
 .viewer-zoom-in::before,
@@ -116,20 +116,20 @@
   top: 0;
   -webkit-touch-callout: none;
   -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .viewer-container::-moz-selection,
-  .viewer-container *::-moz-selection {
+.viewer-container *::-moz-selection {
   background-color: transparent;
 }
 
 .viewer-container::selection,
-  .viewer-container *::selection {
+.viewer-container *::selection {
   background-color: transparent;
 }
 
@@ -149,7 +149,7 @@
   overflow: hidden;
   position: absolute;
   right: 0;
-  top: 0
+  top: 0;
 }
 
 .viewer-canvas > img {
@@ -175,11 +175,11 @@
 
 .viewer-list {
   -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  box-sizing: content-box;
   height: 50px;
   margin: 0;
   overflow: hidden;
-  padding: 1px 0
+  padding: 1px 0;
 }
 
 .viewer-list > li {
@@ -210,7 +210,7 @@
   left: 0;
   position: absolute;
   right: 0;
-  top: 0
+  top: 0;
 }
 
 .viewer-player > img {
@@ -223,7 +223,7 @@
   margin: 0 auto 5px;
   overflow: hidden;
   padding: 3px 0;
-  width: 280px
+  width: 280px;
 }
 
 .viewer-toolbar > li {
@@ -286,7 +286,7 @@
   opacity: .8;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
 .viewer-title:hover {
@@ -302,7 +302,7 @@
   position: absolute;
   right: -40px;
   top: -40px;
-  width: 80px
+  width: 80px;
 }
 
 .viewer-button::before {
