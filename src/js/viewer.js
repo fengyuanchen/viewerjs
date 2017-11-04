@@ -6,6 +6,7 @@ import handlers from './handlers';
 import methods from './methods';
 import others from './others';
 import {
+  BUTTONS,
   CLASS_CLOSE,
   CLASS_FADE,
   CLASS_FIXED,
@@ -27,7 +28,9 @@ import {
   getData,
   getResponsiveClass,
   getStyle,
+  hyphenate,
   isFunction,
+  isNumber,
   isPlainObject,
   isUndefined,
   proxy,
@@ -180,13 +183,63 @@ class Viewer {
     this.list = viewer.querySelector(`.${NAMESPACE}-list`);
 
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
-    addClass(toolbar, !options.toolbar ? CLASS_HIDE : getResponsiveClass(options.toolbar));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(button, CLASS_HIDE, !options.button);
 
-    toggleClass(toolbar.querySelector(`.${NAMESPACE}-one-to-one`), CLASS_INVISIBLE, !options.zoomable);
-    toggleClass(toolbar.querySelectorAll('li[class*="zoom"]'), CLASS_INVISIBLE, !options.zoomable);
-    toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), CLASS_INVISIBLE, !options.scalable);
+    if (options.toolbar) {
+      const list = document.createElement('ul');
+      const custom = isPlainObject(options.toolbar);
+      const zoomButtons = BUTTONS.slice(0, 3);
+      const rotateButtons = BUTTONS.slice(7, 9);
+      const scaleButtons = BUTTONS.slice(9);
+
+      if (!custom) {
+        addClass(toolbar, getResponsiveClass(options.toolbar));
+      }
+
+      each(custom ? options.toolbar : BUTTONS, (value, index) => {
+        const deep = custom && isPlainObject(value);
+        const name = custom ? hyphenate(index) : value;
+        const show = deep ? value.show : value;
+
+        if (
+          !show ||
+          (!options.zoomable && zoomButtons.indexOf(name) !== -1) ||
+          (!options.rotatable && rotateButtons.indexOf(name) !== -1) ||
+          (!options.scalable && scaleButtons.indexOf(name) !== -1)
+        ) {
+          return;
+        }
+
+        const size = deep ? value.size : value;
+        const click = deep ? value.click : value;
+        const item = document.createElement('li');
+
+        item.setAttribute('role', 'button');
+        setData(item, 'action', name);
+        addClass(item, `${NAMESPACE}-${name}`);
+
+        if (isNumber(show)) {
+          addClass(item, getResponsiveClass(show));
+        }
+
+        if (['small', 'large'].indexOf(size) !== -1) {
+          addClass(item, `${NAMESPACE}-${size}`);
+        } else if (name === 'play') {
+          addClass(item, `${NAMESPACE}-large`);
+        }
+
+        if (isFunction(click)) {
+          addListener(item, EVENT_CLICK, click);
+        }
+
+        list.appendChild(item);
+      });
+
+      toolbar.appendChild(list);
+    } else {
+      addClass(toolbar, CLASS_HIDE);
+    }
 
     if (!options.rotatable) {
       const rotates = toolbar.querySelectorAll('li[class*="rotate"]');

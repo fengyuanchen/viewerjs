@@ -42,3 +42,17 @@ export const EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' 
 export const EVENT_RESIZE = 'resize';
 export const EVENT_TRANSITION_END = 'transitionend';
 export const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+
+export const BUTTONS = [
+  'zoom-in',
+  'zoom-out',
+  'one-to-one',
+  'reset',
+  'prev',
+  'play',
+  'next',
+  'rotate-left',
+  'rotate-right',
+  'flip-horizontal',
+  'flip-vertical',
+];
