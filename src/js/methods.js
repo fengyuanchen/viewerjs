@@ -802,9 +802,9 @@ export default {
       removeListener(element, EVENT_CLICK, this.onStart);
     }
 
+    this.close();
     this.unbuild();
     removeData(element, NAMESPACE);
-
     return this;
   },
 };
