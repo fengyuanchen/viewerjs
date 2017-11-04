@@ -792,6 +792,10 @@ export default {
   destroy() {
     const { element } = this;
 
+    if (!this.ready) {
+      return;
+    }
+
     if (this.options.inline) {
       this.unbind();
     } else {

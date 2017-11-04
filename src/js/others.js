@@ -53,13 +53,12 @@ export default {
 
   hidden() {
     const { element, options } = this;
-
     this.transitioning = false;
     this.viewed = false;
     this.fulled = false;
     this.visible = false;
-    this.unbind();
     this.close();
+    this.unbind();
     addClass(this.viewer, CLASS_HIDE);
     this.resetList();
     this.resetImage();

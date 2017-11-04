@@ -277,7 +277,7 @@ class Viewer {
         zIndex: options.zIndex,
       });
 
-      document.body.appendChild(viewer);
+      this.body.appendChild(viewer);
     }
 
     if (options.inline) {
