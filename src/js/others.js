@@ -18,29 +18,19 @@ import {
 } from './utilities';
 
 export default {
-  // should be idempotent
   open() {
     const { body } = this;
 
     addClass(body, CLASS_OPEN);
-    
-    if (this.scrollbarWidth && !this.oldScrollbarWidth) {
-      this.oldScrollbarWidth = body.style.paddingRight;
-      const width = parseFloat(getComputedStyle(body).paddingRight) + this.scrollbarWidth;
-      body.style.paddingRight = `${width}px`;
-    }
+
+    body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight)  || 0)}px`;
   },
 
-  // should be idempotent
   close() {
     const { body } = this;
 
     removeClass(body, CLASS_OPEN);
-    
-    if (this.scrollbarWidth && this.oldScrollbarWidth) {
-      body.style.paddingRight = this.oldScrollbarWidth;
-      this.oldScrollbarWidth = null;
-    }
+    body.style.paddingRight = this.initialBodyPaddingRight;
   },
 
   shown() {

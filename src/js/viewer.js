@@ -117,8 +117,12 @@ class Viewer {
     this.length = length;
     this.count = 0;
     this.images = images;
-    this.body = document.body;
+
+    const { body } = document;
+
+    this.body = body;
     this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    this.initialBodyPaddingRight = getStyle(body).paddingRight;
 
     if (options.inline) {
       const progress = proxy(this.progress, this);
