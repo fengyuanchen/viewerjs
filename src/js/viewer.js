@@ -5,113 +5,157 @@ import events from './events';
 import handlers from './handlers';
 import methods from './methods';
 import others from './others';
-import * as $ from './utilities';
+import {
+  BUTTONS,
+  CLASS_CLOSE,
+  CLASS_FADE,
+  CLASS_FIXED,
+  CLASS_FULLSCREEN,
+  CLASS_HIDE,
+  CLASS_INVISIBLE,
+  EVENT_CLICK,
+  EVENT_LOAD,
+  EVENT_READY,
+  NAMESPACE,
+  WINDOW,
+} from './constants';
+import {
+  addClass,
+  addListener,
+  dispatchEvent,
+  each,
+  extend,
+  getData,
+  getResponsiveClass,
+  getStyle,
+  hyphenate,
+  isFunction,
+  isNumber,
+  isPlainObject,
+  isUndefined,
+  proxy,
+  setData,
+  setStyle,
+  toggleClass,
+} from './utilities';
 
-const SUPPORT_TRANSITION = typeof document.createElement('viewer').style.transition !== 'undefined';
-let AnotherViewer;
+const AnotherViewer = WINDOW.Viewer;
 
 class Viewer {
-  constructor(element, options) {
-    const self = this;
+  /**
+   * Create a new Viewer.
+   * @param {Element} element - The target element for viewing.
+   * @param {Object} [options={}] - The configuration options.
+   */
+  constructor(element, options = {}) {
+    if (!element || element.nodeType !== 1) {
+      throw new Error('The first argument is required and must be an element.');
+    }
 
-    self.element = element;
-    self.options = $.extend({}, DEFAULTS, $.isPlainObject(options) && options);
-    self.isImg = false;
-    self.ready = false;
-    self.visible = false;
-    self.viewed = false;
-    self.fulled = false;
-    self.played = false;
-    self.wheeling = false;
-    self.playing = false;
-    self.fading = false;
-    self.tooltiping = false;
-    self.transitioning = false;
-    self.action = false;
-    self.target = false;
-    self.timeout = false;
-    self.index = 0;
-    self.length = 0;
-    self.pointers = {};
-    self.init();
+    this.element = element;
+    this.options = extend({}, DEFAULTS, isPlainObject(options) && options);
+    this.isImg = false;
+    this.ready = false;
+    this.visible = false;
+    this.viewed = false;
+    this.fulled = false;
+    this.played = false;
+    this.wheeling = false;
+    this.playing = false;
+    this.fading = false;
+    this.tooltiping = false;
+    this.transitioning = false;
+    this.action = false;
+    this.target = false;
+    this.timeout = false;
+    this.index = 0;
+    this.length = 0;
+    this.pointers = {};
+    this.init();
   }
 
   init() {
-    const self = this;
-    const options = self.options;
-    const element = self.element;
+    const { element, options } = this;
 
-    if ($.getData(element, 'viewer')) {
+    if (getData(element, NAMESPACE)) {
       return;
     }
 
-    $.setData(element, 'viewer', self);
+    setData(element, NAMESPACE, this);
 
     const isImg = element.tagName.toLowerCase() === 'img';
-    const images = isImg ? [element] : $.getByTag(element, 'img');
-    const length = images.length;
+    const images = [];
+
+    each(isImg ? [element] : element.querySelectorAll('img'), (image) => {
+      if (options.filter) {
+        if (options.filter(image)) {
+          images.push(image);
+        }
+      } else {
+        images.push(image);
+      }
+    });
+
+    const { length } = images;
 
     if (!length) {
       return;
     }
 
-    if ($.isFunction(options.ready)) {
-      $.addListener(element, 'ready', options.ready, {
+    if (isFunction(options.ready)) {
+      addListener(element, EVENT_READY, options.ready, {
         once: true,
       });
     }
 
     // Override `transition` option if it is not supported
-    if (!SUPPORT_TRANSITION) {
+    if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
       options.transition = false;
     }
 
-    self.isImg = isImg;
-    self.length = length;
-    self.count = 0;
-    self.images = images;
-    self.body = document.body;
-    self.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    this.isImg = isImg;
+    this.length = length;
+    this.count = 0;
+    this.images = images;
+    this.body = document.body;
+    this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     if (options.inline) {
-      const progress = $.proxy(self.progress, self);
+      const progress = proxy(this.progress, this);
 
-      $.addListener(element, 'ready', () => {
-        self.view();
+      addListener(element, EVENT_READY, () => {
+        this.view();
       }, {
         once: true,
       });
 
-      $.each(images, (image) => {
+      each(images, (image) => {
         if (image.complete) {
           progress();
         } else {
-          $.addListener(image, 'load', progress, {
+          addListener(image, EVENT_LOAD, progress, {
             once: true,
           });
         }
       });
     } else {
-      $.addListener(element, 'click', (self.onStart = $.proxy(self.start, self)));
+      addListener(element, EVENT_CLICK, (this.onStart = proxy(this.start, this)));
     }
   }
 
   progress() {
-    const self = this;
+    this.count += 1;
 
-    self.count += 1;
-
-    if (self.count === self.length) {
-      self.build();
+    if (this.count === this.length) {
+      this.build();
     }
   }
 
   build() {
-    const self = this;
-    const options = self.options;
-    const element = self.element;
+    const { options } = this;
+    const { element } = this;
 
-    if (self.ready) {
+    if (this.ready) {
       return;
     }
 
@@ -120,60 +164,112 @@ class Viewer {
 
     template.innerHTML = TEMPLATE;
 
-    const viewer = $.getByClass(template, 'viewer-container')[0];
-    const title = $.getByClass(viewer, 'viewer-title')[0];
-    const toolbar = $.getByClass(viewer, 'viewer-toolbar')[0];
-    const navbar = $.getByClass(viewer, 'viewer-navbar')[0];
-    const button = $.getByClass(viewer, 'viewer-button')[0];
+    const viewer = template.querySelector(`.${NAMESPACE}-container`);
+    const title = viewer.querySelector(`.${NAMESPACE}-title`);
+    const toolbar = viewer.querySelector(`.${NAMESPACE}-toolbar`);
+    const navbar = viewer.querySelector(`.${NAMESPACE}-navbar`);
+    const button = viewer.querySelector(`.${NAMESPACE}-button`);
 
-    self.parent = parent;
-    self.viewer = viewer;
-    self.title = title;
-    self.toolbar = toolbar;
-    self.navbar = navbar;
-    self.button = button;
-    self.canvas = $.getByClass(viewer, 'viewer-canvas')[0];
-    self.footer = $.getByClass(viewer, 'viewer-footer')[0];
-    self.tooltipBox = $.getByClass(viewer, 'viewer-tooltip')[0];
-    self.player = $.getByClass(viewer, 'viewer-player')[0];
-    self.list = $.getByClass(viewer, 'viewer-list')[0];
+    this.parent = parent;
+    this.viewer = viewer;
+    this.title = title;
+    this.toolbar = toolbar;
+    this.navbar = navbar;
+    this.button = button;
+    this.canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
+    this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
+    this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
+    this.player = viewer.querySelector(`.${NAMESPACE}-player`);
+    this.list = viewer.querySelector(`.${NAMESPACE}-list`);
 
-    $.addClass(title, !options.title ? 'viewer-hide' : $.getResponsiveClass(options.title));
-    $.addClass(toolbar, !options.toolbar ? 'viewer-hide' : $.getResponsiveClass(options.toolbar));
-    $.addClass(navbar, !options.navbar ? 'viewer-hide' : $.getResponsiveClass(options.navbar));
-    $.toggleClass(button, 'viewer-hide', !options.button);
+    addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
+    addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
+    toggleClass(button, CLASS_HIDE, !options.button);
 
-    $.toggleClass(toolbar.querySelector('.viewer-one-to-one'), 'viewer-invisible', !options.zoomable);
-    $.toggleClass(toolbar.querySelectorAll('li[class*="zoom"]'), 'viewer-invisible', !options.zoomable);
-    $.toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), 'viewer-invisible', !options.scalable);
+    if (options.toolbar) {
+      const list = document.createElement('ul');
+      const custom = isPlainObject(options.toolbar);
+      const zoomButtons = BUTTONS.slice(0, 3);
+      const rotateButtons = BUTTONS.slice(7, 9);
+      const scaleButtons = BUTTONS.slice(9);
+
+      if (!custom) {
+        addClass(toolbar, getResponsiveClass(options.toolbar));
+      }
+
+      each(custom ? options.toolbar : BUTTONS, (value, index) => {
+        const deep = custom && isPlainObject(value);
+        const name = custom ? hyphenate(index) : value;
+        const show = deep ? value.show : value;
+
+        if (
+          !show ||
+          (!options.zoomable && zoomButtons.indexOf(name) !== -1) ||
+          (!options.rotatable && rotateButtons.indexOf(name) !== -1) ||
+          (!options.scalable && scaleButtons.indexOf(name) !== -1)
+        ) {
+          return;
+        }
+
+        const size = deep ? value.size : value;
+        const click = deep ? value.click : value;
+        const item = document.createElement('li');
+
+        item.setAttribute('role', 'button');
+        setData(item, 'action', name);
+        addClass(item, `${NAMESPACE}-${name}`);
+
+        if (isNumber(show)) {
+          addClass(item, getResponsiveClass(show));
+        }
+
+        if (['small', 'large'].indexOf(size) !== -1) {
+          addClass(item, `${NAMESPACE}-${size}`);
+        } else if (name === 'play') {
+          addClass(item, `${NAMESPACE}-large`);
+        }
+
+        if (isFunction(click)) {
+          addListener(item, EVENT_CLICK, click);
+        }
+
+        list.appendChild(item);
+      });
+
+      toolbar.appendChild(list);
+    } else {
+      addClass(toolbar, CLASS_HIDE);
+    }
 
     if (!options.rotatable) {
       const rotates = toolbar.querySelectorAll('li[class*="rotate"]');
 
-      $.addClass(rotates, 'viewer-invisible');
-      $.appendChild(toolbar, rotates);
+      addClass(rotates, CLASS_INVISIBLE);
+      each(rotates, (rotate) => {
+        toolbar.appendChild(rotate);
+      });
     }
 
     if (options.inline) {
-      $.addClass(button, 'viewer-fullscreen');
-      $.setStyle(viewer, {
+      addClass(button, CLASS_FULLSCREEN);
+      setStyle(viewer, {
         zIndex: options.zIndexInline,
       });
 
-      if ($.getStyle(parent).position === 'static') {
-        $.setStyle(parent, {
+      if (getStyle(parent).position === 'static') {
+        setStyle(parent, {
           position: 'relative',
         });
       }
 
       parent.insertBefore(viewer, element.nextSibling);
     } else {
-      $.addClass(button, 'viewer-close');
-      $.addClass(viewer, 'viewer-fixed');
-      $.addClass(viewer, 'viewer-fade');
-      $.addClass(viewer, 'viewer-hide');
+      addClass(button, CLASS_CLOSE);
+      addClass(viewer, CLASS_FIXED);
+      addClass(viewer, CLASS_FADE);
+      addClass(viewer, CLASS_HIDE);
 
-      $.setStyle(viewer, {
+      setStyle(viewer, {
         zIndex: options.zIndex,
       });
 
@@ -181,46 +277,43 @@ class Viewer {
     }
 
     if (options.inline) {
-      self.render();
-      self.bind();
-      self.visible = true;
+      this.render();
+      this.bind();
+      this.visible = true;
     }
 
-    self.ready = true;
+    this.ready = true;
 
-    $.dispatchEvent(element, 'ready');
+    dispatchEvent(element, EVENT_READY);
   }
 
   unbuild() {
-    const self = this;
-
-    if (!self.ready) {
+    if (!this.ready) {
       return;
     }
 
-    self.ready = false;
-    $.removeChild(self.viewer);
+    this.ready = false;
+    this.viewer.parentNode.removeChild(this.viewer);
   }
 
+  /**
+   * Get the no conflict viewer class.
+   * @returns {Viewer} The viewer class.
+   */
   static noConflict() {
     window.Viewer = AnotherViewer;
     return Viewer;
   }
 
+  /**
+   * Change the default options.
+   * @param {Object} options - The new default options.
+   */
   static setDefaults(options) {
-    $.extend(DEFAULTS, $.isPlainObject(options) && options);
+    extend(DEFAULTS, isPlainObject(options) && options);
   }
 }
 
-$.extend(Viewer.prototype, render);
-$.extend(Viewer.prototype, events);
-$.extend(Viewer.prototype, handlers);
-$.extend(Viewer.prototype, methods);
-$.extend(Viewer.prototype, others);
-
-if (typeof window !== 'undefined') {
-  AnotherViewer = window.Viewer;
-  window.Viewer = Viewer;
-}
+extend(Viewer.prototype, render, events, handlers, methods, others);
 
 export default Viewer;

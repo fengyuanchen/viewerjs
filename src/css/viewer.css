@@ -200,12 +200,15 @@
 }
 
 .viewer-toolbar {
-  margin: 0 auto 5px;
-  overflow: hidden;
-  padding: 3px 0;
-  width: 280px;
+  & ul {
+    display: inline-block;
+    margin: 0 auto 5px;
+    overflow: hidden;
+    padding: 3px 0;
+    /* transform: translateX(-50%); */
+  }
 
-  & > li {
+  & li {
     background-color: rgba(0, 0, 0, .5);
     border-radius: 50%;
     cursor: pointer;
@@ -227,7 +230,18 @@
     }
   }
 
-  & > .viewer-play {
+  & .viewer-small {
+    height: 18px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    width: 18px;
+
+    &::before {
+      margin: -1px;
+    }
+  }
+
+  & .viewer-large {
     height: 30px;
     margin-bottom: -3px;
     margin-top: -3px;
