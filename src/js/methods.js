@@ -793,7 +793,7 @@ export default {
     const { element } = this;
 
     if (!this.ready) {
-      return;
+      return this;
     }
 
     if (this.options.inline) {
