@@ -1,13 +1,13 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
-  "license": "MIT",
   "repository": "fengyuanchen/viewerjs",
   "homepage": "https://fengyuanchen.github.io/viewerjs",
+  "license": "MIT",
   "author": {
     "name": "Chen Fengyuan",
     "url": "http://chenfengyuan.com"
@@ -31,14 +31,15 @@
   ],
   "scripts": {
     "build": "npm run build:css && npm run build:js",
-    "build:css": "postcss src/css/viewer.css -o dist/viewer.css -m",
+    "build:css": "postcss src/css/viewer.css -o dist/viewer.css --no-map",
     "build:js": "rollup -c",
+    "clear": "del-cli dist",
     "compress": "npm run compress:css && npm run compress:js",
-    "compress:css": "postcss dist/viewer.css -u cssnano -o dist/viewer.min.css -m",
+    "compress:css": "postcss dist/viewer.css -u cssnano -o dist/viewer.min.css --no-map",
     "compress:js": "uglifyjs dist/viewer.js -o dist/viewer.min.js -c -m --comments /^!/",
     "copy": "cpy dist/viewer.css docs/css",
     "lint": "eslint src/js --fix",
-    "release": "npm run lint && npm run build && npm run compress && npm run copy && npm test",
+    "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
     "start": "npm-run-all --parallel watch:*",
     "test": "node-qunit-phantomjs test/index.html --timeout 10",
     "watch:css": "postcss src/css/viewer.css -o docs/css/viewer.css -m -w",
@@ -46,13 +47,14 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "cpy-cli": "^1.0.1",
     "cssnano": "^3.10.0",
-    "eslint": "^4.8.0",
-    "eslint-config-airbnb-base": "^12.0.2",
-    "eslint-plugin-import": "^2.7.0",
-    "node-qunit-phantomjs": "^1.5.0",
+    "del-cli": "^1.1.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "node-qunit-phantomjs": "^1.6.0",
     "npm-run-all": "^4.1.1",
     "postcss-cli": "^4.1.1",
     "postcss-cssnext": "^3.0.2",
@@ -62,6 +64,6 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-watch": "^4.3.1",
     "stylefmt": "^6.0.0",
-    "uglify-js": "^3.1.3"
+    "uglify-js": "^3.1.6"
   }
 }

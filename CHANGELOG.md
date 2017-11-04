@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0 (Nov 4, 2017)
+
+- Add a new option: `filter`.
+- Support to customize the layout of toolbar (#79).
+- Disallow to show again if it had shown.
+
 ## 0.8.0 (Oct 8, 2017)
 
 - Refactor - separate constants, simplify utilities, and so on.

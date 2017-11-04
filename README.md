@@ -1,4 +1,6 @@
-# Viewer.js [![Build Status](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs)
+# Viewer.js
+
+[![Build Status](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs) [![Downloads](https://img.shields.io/npm/dt/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![License](https://img.shields.io/npm/l/viewerjs.svg)](https://www.npmjs.com/package/viewerjs)
 
 > JavaScript image viewer.
 
@@ -155,16 +157,42 @@ Specify the visibility of the title (the current image's name and dimensions).
 
 ### toolbar
 
-- Type: `Boolean` or `Number`
+- Type: `Boolean` or `Number` or `Object`
 - Default: `true`
 - Options:
-  - `0` or `false`: hide the toolbar
-  - `1` or `true`: show the toolbar
-  - `2`: show the toolbar only when screen width great then 768 pixels
-  - `3`: show the toolbar only when screen width great then 992 pixels
-  - `4`: show the toolbar only when screen width great then 1200 pixels
+  - `0` or `false`: hide the toolbar.
+  - `1` or `true`: show the toolbar.
+  - `2`: show the toolbar only when screen width great then 768 pixels.
+  - `3`: show the toolbar only when screen width great then 992 pixels.
+  - `4`: show the toolbar only when screen width great then 1200 pixels.
+  - `{ key: Boolean | Number }`: show or hide the toolbar.
+  - `{ key: String }`: customize the size of the button.
+  - `{ key: { show: Boolean | Number, size: String, click: Function }`: customize each property of the button.
+  - Available keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal" and "flipVertical".
+  - Available sizes: "small", "medium" (default) and "large".
 
-Specify the visibility of the toolbar.
+Specify the visibility and layout of the toolbar its buttons.
+
+For example, `toolbar: 4` equals to:
+
+```js
+toolbar: {
+  zoomIn: 4,
+  zoomOut: 4,
+  oneToOne: 4,
+  reset: 4,
+  prev: 4,
+  play: {
+    show: 4,
+    size: 'large',
+  },
+  next: 4,
+  rotateLeft: 4,
+  rotateRight: 4,
+  flipHorizontal: 4,
+  flipVertical: 4,
+}
+```
 
 ### tooltip
 
@@ -294,6 +322,23 @@ Define where to get the original image URL for viewing.
 > If it is a string, it should be one of the attributes of each image element.
 > If it is a function, it will be called on each image and should return a valid image URL.
 
+### filter
+
+- Type: `Function`
+- Default: `null`
+
+Filter the images for viewing (should return `true` if the image is viewable).
+
+For example:
+
+```js
+new Viewer(images, {
+  filter(image) {
+    return image.complete;
+  },
+});
+```
+
 ### ready
 
 - Type: `Function`
@@ -391,11 +436,21 @@ View one of the images with image's index.
 viewer.view(1); // View the second image
 ```
 
-### prev()
+### prev([loop=false])
+
+- **loop** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Indicate if turn to view the last one when it is the first one at present.
 
 View the previous image.
 
-### next()
+### next([loop=false])
+
+- **loop** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Indicate if turn to view the first one  when it is the last one at present.
 
 View the next image.
 
@@ -594,6 +649,9 @@ Destroy the viewer and remove the instance.
 ## Events
 
 All events can access the viewer instance with `this.viewer` in its handler.
+
+> Be careful to use these events in other component which has the same event names, e.g.: [Bootstrap](https://getbootstrap.com/)'s modal.
+
 
 ```js
 var viewer;
