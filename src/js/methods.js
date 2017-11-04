@@ -792,7 +792,7 @@ export default {
   destroy() {
     const { element } = this;
 
-    if (!this.ready) {
+    if (!getData(element, NAMESPACE)) {
       return this;
     }
 
