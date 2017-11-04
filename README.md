@@ -23,7 +23,7 @@
 
 ## Features
 
-- Supports 29 [options](#options)
+- Supports 30 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 7 [events](#events)
 - Supports modal and inline modes
