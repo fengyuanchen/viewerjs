@@ -204,7 +204,7 @@ class Viewer {
       each(custom ? options.toolbar : BUTTONS, (value, index) => {
         const deep = custom && isPlainObject(value);
         const name = custom ? hyphenate(index) : value;
-        const show = deep ? value.show : value;
+        const show = deep && !isUndefined(value.show) ? value.show : value;
 
         if (
           !show ||
