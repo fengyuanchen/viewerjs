@@ -26,14 +26,14 @@ import {
 
 export default {
   click({ target }) {
-    const { imageData } = this;
+    const { options, imageData } = this;
     const action = getData(target, 'action');
 
     switch (action) {
       case 'mix':
         if (this.played) {
           this.stop();
-        } else if (this.options.inline) {
+        } else if (options.inline) {
           if (this.fulled) {
             this.exit();
           } else {
@@ -66,7 +66,7 @@ export default {
         break;
 
       case 'prev':
-        this.prev();
+        this.prev(options.loop);
         break;
 
       case 'play':
@@ -74,7 +74,7 @@ export default {
         break;
 
       case 'next':
-        this.next();
+        this.next(options.loop);
         break;
 
       case 'rotate-left':
@@ -209,7 +209,7 @@ export default {
 
       // View previous (Key: ←)
       case 37:
-        this.prev();
+        this.prev(options.loop);
         break;
 
       // Zoom in (Key: ↑)
@@ -223,7 +223,7 @@ export default {
 
       // View next (Key: →)
       case 39:
-        this.next();
+        this.next(options.loop);
         break;
 
       // Zoom out (Key: ↓)

@@ -106,7 +106,7 @@ export default {
   },
 
   change(e) {
-    const { pointers } = this;
+    const { options, pointers } = this;
     const pointer = pointers[Object.keys(pointers)[0]];
     const offsetX = pointer.endX - pointer.startX;
     const offsetY = pointer.endY - pointer.startY;
@@ -127,9 +127,9 @@ export default {
 
         if (Math.abs(offsetX) > Math.abs(offsetY)) {
           if (offsetX > 1) {
-            this.prev();
+            this.prev(options.loop);
           } else if (offsetX < -1) {
-            this.next();
+            this.next(options.loop);
           }
         }
 

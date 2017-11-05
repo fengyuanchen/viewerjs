@@ -38,8 +38,11 @@ export default {
   // Enable keyboard support
   keyboard: true,
 
-  // Define interval of each image when playing
-  interval: 5000,
+  // Enable keyboard support
+  keyboard: true,
+
+  // Enable loop viewing.
+  loop: false,
 
   // Min width of the viewer in inline mode
   minWidth: 200,
