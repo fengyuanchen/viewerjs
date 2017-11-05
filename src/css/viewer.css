@@ -170,14 +170,20 @@
     line-height: 0;
     opacity: .5;
     overflow: hidden;
+    transition: opacity .15s;
     width: 30px;
+
+    &:hover {
+      opacity: .75;
+    }
 
     & + li {
       margin-left: 1px;
     }
   }
 
-  & > .viewer-active {
+  & > .viewer-active,
+  & > .viewer-active:hover {
      opacity: 1;
   }
 }
@@ -205,7 +211,6 @@
     margin: 0 auto 5px;
     overflow: hidden;
     padding: 3px 0;
-    /* transform: translateX(-50%); */
   }
 
   & li {
@@ -215,6 +220,7 @@
     float: left;
     height: 24px;
     overflow: hidden;
+    transition: background-color .15s;
     width: 24px;
 
     &:hover {
@@ -280,6 +286,7 @@
   opacity: .8;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: opacity .15s;
   white-space: nowrap;
 
   &:hover {
@@ -296,7 +303,13 @@
   position: absolute;
   right: -40px;
   top: -40px;
+  transition: background-color .15s;
   width: 80px;
+
+  &:focus,
+  &:hover {
+    background-color: rgba(0, 0, 0, .8);
+  }
 
   &::before {
     bottom: 15px;
