@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.8.0
+ * Viewer.js v0.10.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2017 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-11-05T11:35:04.350Z
+ * Date: 2017-11-05T04:38:31.466Z
  */
 
 (function (global, factory) {
@@ -54,8 +54,8 @@ var DEFAULTS = {
   // Enable keyboard support
   keyboard: true,
 
-  // Define interval of each image when playing
-  interval: 5000,
+  // Enable loop viewing.
+  loop: false,
 
   // Min width of the viewer in inline mode
   minWidth: 200,
@@ -96,7 +96,7 @@ var DEFAULTS = {
   viewed: null
 };
 
-var TEMPLATE = '<div class="viewer-container">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<ul class="viewer-toolbar">' + '<li role="button" class="viewer-zoom-in" data-action="zoom-in"></li>' + '<li role="button" class="viewer-zoom-out" data-action="zoom-out"></li>' + '<li role="button" class="viewer-one-to-one" data-action="one-to-one"></li>' + '<li role="button" class="viewer-reset" data-action="reset"></li>' + '<li role="button" class="viewer-prev" data-action="prev"></li>' + '<li role="button" class="viewer-play" data-action="play"></li>' + '<li role="button" class="viewer-next" data-action="next"></li>' + '<li role="button" class="viewer-rotate-left" data-action="rotate-left"></li>' + '<li role="button" class="viewer-rotate-right" data-action="rotate-right"></li>' + '<li role="button" class="viewer-flip-horizontal" data-action="flip-horizontal"></li>' + '<li role="button" class="viewer-flip-vertical" data-action="flip-vertical"></li>' + '</ul>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+var TEMPLATE = '<div class="viewer-container">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
 var WINDOW = typeof window !== 'undefined' ? window : {};
 var NAMESPACE = 'viewer';
@@ -142,6 +142,8 @@ var EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touche
 var EVENT_RESIZE = 'resize';
 var EVENT_TRANSITION_END = 'transitionend';
 var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+
+var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -484,10 +486,10 @@ function removeData(element, name) {
 var REGEXP_SPACES = /\s+/;
 
 /**
- * Remove event listener from the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to remove,
- * @param {Function} listener - The event listener to remove.
+ * Remove event listener from the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
+ * @param {Function} listener - The event listener.
  * @param {Object} options - The event options.
  */
 function removeListener(element, type, listener) {
@@ -501,14 +503,9 @@ function removeListener(element, type, listener) {
 
   if (types.length > 1) {
     each(types, function (t) {
-      removeListener(element, t, listener);
+      removeListener(element, t, listener, options);
     });
     return;
-  }
-
-  if (listener && isFunction(listener.onceListener)) {
-    listener = listener.onceListener;
-    delete listener.onceListener;
   }
 
   if (element.removeEventListener) {
@@ -519,16 +516,16 @@ function removeListener(element, type, listener) {
 }
 
 /**
- * Add event listener to the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to add,
- * @param {Function} listener - The event listener to add.
+ * Add event listener to the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
+ * @param {Function} listener - The event listener.
  * @param {Object} options - The event options.
  */
-function addListener(element, type, listener) {
+function addListener(element, type, _listener) {
   var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-  if (!isFunction(listener)) {
+  if (!isFunction(_listener)) {
     return;
   }
 
@@ -536,36 +533,35 @@ function addListener(element, type, listener) {
 
   if (types.length > 1) {
     each(types, function (t) {
-      addListener(element, t, listener);
+      addListener(element, t, _listener, options);
     });
     return;
   }
 
   if (options.once) {
-    var originalListener = listener;
-    var onceListener = function onceListener() {
+    var originalListener = _listener;
+
+    _listener = function listener() {
       for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         args[_key4] = arguments[_key4];
       }
 
-      removeListener(element, type, onceListener);
+      removeListener(element, type, _listener, options);
       return originalListener.apply(element, args);
     };
-    originalListener.onceListener = onceListener;
-    listener = onceListener;
   }
 
   if (element.addEventListener) {
-    element.addEventListener(type, listener, options);
+    element.addEventListener(type, _listener, options);
   } else if (element.attachEvent) {
-    element.attachEvent('on' + type, listener);
+    element.attachEvent('on' + type, _listener);
   }
 }
 
 /**
- * Dispatch event on the given element.
- * @param {Element} element - The target element.
- * @param {string} type - The event type(s) to dispatch,
+ * Dispatch event on the target element.
+ * @param {Element} element - The event target.
+ * @param {string} type - The event type(s).
  * @param {Object} data - The additional event data.
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
@@ -1053,7 +1049,8 @@ var events = {
 var handlers = {
   click: function click(_ref) {
     var target = _ref.target;
-    var imageData = this.imageData;
+    var options = this.options,
+        imageData = this.imageData;
 
     var action = getData(target, 'action');
 
@@ -1061,7 +1058,7 @@ var handlers = {
       case 'mix':
         if (this.played) {
           this.stop();
-        } else if (this.options.inline) {
+        } else if (options.inline) {
           if (this.fulled) {
             this.exit();
           } else {
@@ -1094,7 +1091,7 @@ var handlers = {
         break;
 
       case 'prev':
-        this.prev();
+        this.prev(options.loop);
         break;
 
       case 'play':
@@ -1102,7 +1099,7 @@ var handlers = {
         break;
 
       case 'next':
-        this.next();
+        this.next(options.loop);
         break;
 
       case 'rotate-left':
@@ -1229,7 +1226,7 @@ var handlers = {
 
       // View previous (Key: ←)
       case 37:
-        this.prev();
+        this.prev(options.loop);
         break;
 
       // Zoom in (Key: ↑)
@@ -1243,7 +1240,7 @@ var handlers = {
 
       // View next (Key: →)
       case 39:
-        this.next();
+        this.next(options.loop);
         break;
 
       // Zoom out (Key: ↓)
@@ -1298,7 +1295,7 @@ var handlers = {
 
     if (Object.keys(pointers).length > 1) {
       action = ACTION_ZOOM;
-    } else if ((e.pointerType === 'touch' || e.type === 'touchmove') && this.isSwitchable()) {
+    } else if ((e.pointerType === 'touch' || e.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;
     }
 
@@ -2251,6 +2248,10 @@ var methods = {
     var element = this.element;
 
 
+    if (!getData(element, NAMESPACE)) {
+      return this;
+    }
+
     if (this.options.inline) {
       this.unbind();
     } else {
@@ -2261,9 +2262,9 @@ var methods = {
       removeListener(element, EVENT_CLICK, this.onStart);
     }
 
+    this.close();
     this.unbuild();
     removeData(element, NAMESPACE);
-
     return this;
   }
 };
@@ -2274,14 +2275,15 @@ var others = {
 
 
     addClass(body, CLASS_OPEN);
-    body.style.paddingRight = this.scrollbarWidth + 'px';
+
+    body.style.paddingRight = this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight) || 0) + 'px';
   },
   close: function close() {
     var body = this.body;
 
 
     removeClass(body, CLASS_OPEN);
-    body.style.paddingRight = 0;
+    body.style.paddingRight = this.initialBodyPaddingRight;
   },
   shown: function shown() {
     var element = this.element,
@@ -2306,13 +2308,12 @@ var others = {
     var element = this.element,
         options = this.options;
 
-
     this.transitioning = false;
     this.viewed = false;
     this.fulled = false;
     this.visible = false;
-    this.unbind();
     this.close();
+    this.unbind();
     addClass(this.viewer, CLASS_HIDE);
     this.resetList();
     this.resetImage();
@@ -2359,7 +2360,8 @@ var others = {
     }
   },
   change: function change(e) {
-    var pointers = this.pointers;
+    var options = this.options,
+        pointers = this.pointers;
 
     var pointer = pointers[Object.keys(pointers)[0]];
     var offsetX = pointer.endX - pointer.startX;
@@ -2381,9 +2383,9 @@ var others = {
 
         if (Math.abs(offsetX) > Math.abs(offsetY)) {
           if (offsetX > 1) {
-            this.prev();
+            this.prev(options.loop);
           } else if (offsetX < -1) {
-            this.next();
+            this.next(options.loop);
           }
         }
 
@@ -2500,8 +2502,14 @@ var Viewer = function () {
       this.length = length;
       this.count = 0;
       this.images = images;
-      this.body = document.body;
-      this.scrollbarWidth = window.innerWidth - document.body.clientWidth;
+
+      var _document = document,
+          body = _document.body;
+
+
+      this.body = body;
+      this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      this.initialBodyPaddingRight = getStyle(body).paddingRight;
 
       if (options.inline) {
         var progress = proxy(this.progress, this);
@@ -2569,13 +2577,61 @@ var Viewer = function () {
       this.list = viewer.querySelector('.' + NAMESPACE + '-list');
 
       addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
-      addClass(toolbar, !options.toolbar ? CLASS_HIDE : getResponsiveClass(options.toolbar));
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
 
-      toggleClass(toolbar.querySelector('.' + NAMESPACE + '-one-to-one'), CLASS_INVISIBLE, !options.zoomable);
-      toggleClass(toolbar.querySelectorAll('li[class*="zoom"]'), CLASS_INVISIBLE, !options.zoomable);
-      toggleClass(toolbar.querySelectorAll('li[class*="flip"]'), CLASS_INVISIBLE, !options.scalable);
+      if (options.toolbar) {
+        var list = document.createElement('ul');
+        var custom = isPlainObject(options.toolbar);
+        var zoomButtons = BUTTONS.slice(0, 3);
+        var rotateButtons = BUTTONS.slice(7, 9);
+        var scaleButtons = BUTTONS.slice(9);
+
+        if (!custom) {
+          addClass(toolbar, getResponsiveClass(options.toolbar));
+        }
+
+        each(custom ? options.toolbar : BUTTONS, function (value, index) {
+          var deep = custom && isPlainObject(value);
+          var name = custom ? hyphenate(index) : value;
+          var show = deep && !isUndefined(value.show) ? value.show : value;
+
+          if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1) {
+            return;
+          }
+
+          var size = deep && !isUndefined(value.size) ? value.size : value;
+          var click = deep && !isUndefined(value.click) ? value.click : value;
+          var item = document.createElement('li');
+
+          item.setAttribute('role', 'button');
+          addClass(item, NAMESPACE + '-' + name);
+
+          if (!isFunction(click)) {
+            setData(item, 'action', name);
+          }
+
+          if (isNumber(show)) {
+            addClass(item, getResponsiveClass(show));
+          }
+
+          if (['small', 'large'].indexOf(size) !== -1) {
+            addClass(item, NAMESPACE + '-' + size);
+          } else if (name === 'play') {
+            addClass(item, NAMESPACE + '-large');
+          }
+
+          if (isFunction(click)) {
+            addListener(item, EVENT_CLICK, click);
+          }
+
+          list.appendChild(item);
+        });
+
+        toolbar.appendChild(list);
+      } else {
+        addClass(toolbar, CLASS_HIDE);
+      }
 
       if (!options.rotatable) {
         var rotates = toolbar.querySelectorAll('li[class*="rotate"]');
@@ -2609,7 +2665,7 @@ var Viewer = function () {
           zIndex: options.zIndex
         });
 
-        document.body.appendChild(viewer);
+        this.body.appendChild(viewer);
       }
 
       if (options.inline) {
