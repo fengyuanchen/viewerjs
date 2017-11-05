@@ -350,7 +350,7 @@ export function removeListener(element, type, listener, options = {}) {
     return;
   }
 
-  if (isFunction(listener.onceListener)) {
+  if (listener && isFunction(listener.onceListener)) {
     listener = listener.onceListener;
     delete listener.onceListener;
   }
