@@ -38,9 +38,6 @@ export default {
   // Enable keyboard support
   keyboard: true,
 
-  // Enable keyboard support
-  keyboard: true,
-
   // Enable loop viewing.
   loop: false,
 
