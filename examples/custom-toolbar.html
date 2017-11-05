@@ -5,6 +5,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Viewer.js</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/viewer.css">
   <style>
@@ -28,6 +29,18 @@
       width: 100%;
       cursor: -webkit-zoom-in;
       cursor: zoom-in;
+    }
+
+    .viewer-download {
+      color: #fff;
+      font-family: FontAwesome;
+      font-size: .75rem;
+      line-height: 1.5rem;
+      text-align: center;
+    }
+
+    .viewer-download::before {
+      content: "\f019";
     }
   </style>
 </head>
@@ -58,36 +71,22 @@
       var viewer = new Viewer(galley, {
         url: 'data-original',
         toolbar: {
-          rotateLeft: {
-            show: true,
-            size: 'small',
-            click: function(e) {
-              e.stopPropagation();
-              viewer.rotate(-180);
-            },
-          },
-          prev: {
-            show: true,
-            click: function(e) {
-              e.stopPropagation();
-              viewer.prev(true);
-            },
+          oneToOne: true,
+          prev: function() {
+            viewer.prev(true);
           },
           play: true,
-          next: {
-            show: true,
-            click: function(e) {
-              e.stopPropagation();
-              viewer.prev(true);
-            },
+          next: function() {
+            viewer.next(true);
           },
-          rotateRight: {
-            show: true,
-            size: 'small',
-            click: function(e) {
-              e.stopPropagation();
-              viewer.rotate(180);
-            },
+          download: function() {
+            const a = document.createElement('a');
+
+            a.href = viewer.image.src;
+            a.download = viewer.image.alt;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
           },
         },
       });

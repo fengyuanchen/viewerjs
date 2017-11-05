@@ -215,13 +215,16 @@ class Viewer {
           return;
         }
 
-        const size = deep ? value.size : value;
-        const click = deep ? value.click : value;
+        const size = deep && !isUndefined(value.size) ? value.size : value;
+        const click = deep && !isUndefined(value.click) ? value.click : value;
         const item = document.createElement('li');
 
         item.setAttribute('role', 'button');
-        setData(item, 'action', name);
         addClass(item, `${NAMESPACE}-${name}`);
+
+        if (!isFunction(click)) {
+          setData(item, 'action', name);
+        }
 
         if (isNumber(show)) {
           addClass(item, getResponsiveClass(show));
