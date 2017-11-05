@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.9.0
+ * Viewer.js v0.10.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2017 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-11-04T13:54:03.954Z
+ * Date: 2017-11-05T04:38:31.466Z
  */
 
 var DEFAULTS = {
@@ -48,8 +48,8 @@ var DEFAULTS = {
   // Enable keyboard support
   keyboard: true,
 
-  // Define interval of each image when playing
-  interval: 5000,
+  // Enable loop viewing.
+  loop: false,
 
   // Min width of the viewer in inline mode
   minWidth: 200,
@@ -1043,7 +1043,8 @@ var events = {
 var handlers = {
   click: function click(_ref) {
     var target = _ref.target;
-    var imageData = this.imageData;
+    var options = this.options,
+        imageData = this.imageData;
 
     var action = getData(target, 'action');
 
@@ -1051,7 +1052,7 @@ var handlers = {
       case 'mix':
         if (this.played) {
           this.stop();
-        } else if (this.options.inline) {
+        } else if (options.inline) {
           if (this.fulled) {
             this.exit();
           } else {
@@ -1084,7 +1085,7 @@ var handlers = {
         break;
 
       case 'prev':
-        this.prev();
+        this.prev(options.loop);
         break;
 
       case 'play':
@@ -1092,7 +1093,7 @@ var handlers = {
         break;
 
       case 'next':
-        this.next();
+        this.next(options.loop);
         break;
 
       case 'rotate-left':
@@ -1219,7 +1220,7 @@ var handlers = {
 
       // View previous (Key: ←)
       case 37:
-        this.prev();
+        this.prev(options.loop);
         break;
 
       // Zoom in (Key: ↑)
@@ -1233,7 +1234,7 @@ var handlers = {
 
       // View next (Key: →)
       case 39:
-        this.next();
+        this.next(options.loop);
         break;
 
       // Zoom out (Key: ↓)
@@ -1288,7 +1289,7 @@ var handlers = {
 
     if (Object.keys(pointers).length > 1) {
       action = ACTION_ZOOM;
-    } else if ((e.pointerType === 'touch' || e.type === 'touchmove') && this.isSwitchable()) {
+    } else if ((e.pointerType === 'touch' || e.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;
     }
 
@@ -2353,7 +2354,8 @@ var others = {
     }
   },
   change: function change(e) {
-    var pointers = this.pointers;
+    var options = this.options,
+        pointers = this.pointers;
 
     var pointer = pointers[Object.keys(pointers)[0]];
     var offsetX = pointer.endX - pointer.startX;
@@ -2375,9 +2377,9 @@ var others = {
 
         if (Math.abs(offsetX) > Math.abs(offsetY)) {
           if (offsetX > 1) {
-            this.prev();
+            this.prev(options.loop);
           } else if (offsetX < -1) {
-            this.next();
+            this.next(options.loop);
           }
         }
 
@@ -2586,19 +2588,22 @@ var Viewer = function () {
         each(custom ? options.toolbar : BUTTONS, function (value, index) {
           var deep = custom && isPlainObject(value);
           var name = custom ? hyphenate(index) : value;
-          var show = deep ? value.show : value;
+          var show = deep && !isUndefined(value.show) ? value.show : value;
 
           if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1) {
             return;
           }
 
-          var size = deep ? value.size : value;
-          var click = deep ? value.click : value;
+          var size = deep && !isUndefined(value.size) ? value.size : value;
+          var click = deep && !isUndefined(value.click) ? value.click : value;
           var item = document.createElement('li');
 
           item.setAttribute('role', 'button');
-          setData(item, 'action', name);
           addClass(item, NAMESPACE + '-' + name);
+
+          if (!isFunction(click)) {
+            setData(item, 'action', name);
+          }
 
           if (isNumber(show)) {
             addClass(item, getResponsiveClass(show));

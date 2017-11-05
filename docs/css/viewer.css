@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.9.0
+ * Viewer.js v0.10.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2017 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-11-04T13:53:58.664Z
+ * Date: 2017-11-05T04:38:25.879Z
  */
 
 .viewer-zoom-in::before,
@@ -191,14 +191,21 @@
   line-height: 0;
   opacity: .5;
   overflow: hidden;
+  -webkit-transition: opacity .15s;
+  transition: opacity .15s;
   width: 30px;
+}
+
+.viewer-list > li:hover {
+  opacity: .75;
 }
 
 .viewer-list > li + li {
   margin-left: 1px;
 }
 
-.viewer-list > .viewer-active {
+.viewer-list > .viewer-active,
+.viewer-list > .viewer-active:hover {
   opacity: 1;
 }
 
@@ -223,8 +230,7 @@
   display: inline-block;
   margin: 0 auto 5px;
   overflow: hidden;
-  padding: 3px 0;/*transform: translateX(-50%);
- */
+  padding: 3px 0;
 }
 
 .viewer-toolbar li {
@@ -234,6 +240,8 @@
   float: left;
   height: 24px;
   overflow: hidden;
+  -webkit-transition: background-color .15s;
+  transition: background-color .15s;
   width: 24px;
 }
 
@@ -298,6 +306,8 @@
   opacity: .8;
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-transition: opacity .15s;
+  transition: opacity .15s;
   white-space: nowrap;
 }
 
@@ -314,7 +324,14 @@
   position: absolute;
   right: -40px;
   top: -40px;
+  -webkit-transition: background-color .15s;
+  transition: background-color .15s;
   width: 80px;
+}
+
+.viewer-button:focus,
+.viewer-button:hover {
+  background-color: rgba(0, 0, 0, .8);
 }
 
 .viewer-button::before {

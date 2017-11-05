@@ -1,8 +1,14 @@
 # Changelog
 
+## 0.10.0 (Nov 5, 2017)
+
+- Add a new option: `loop`.
+- Enhance toolbar customization.
+
 ## 0.9.0 (Nov 4, 2017)
 
 - Add a new option: `filter`.
+- Enhance the `prev` and `next` methods (#47).
 - Support to customize the layout of toolbar (#79).
 - Disallow to show again if it had shown.
 

@@ -23,7 +23,7 @@
 
 ## Features
 
-- Supports 30 [options](#options)
+- Supports 31 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 7 [events](#events)
 - Supports modal and inline modes
@@ -167,6 +167,7 @@ Specify the visibility of the title (the current image's name and dimensions).
   - `4`: show the toolbar only when screen width great then 1200 pixels.
   - `{ key: Boolean | Number }`: show or hide the toolbar.
   - `{ key: String }`: customize the size of the button.
+  - `{ key: Function }`: customize the click handler of the button.
   - `{ key: { show: Boolean | Number, size: String, click: Function }`: customize each property of the button.
   - Available keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal" and "flipVertical".
   - Available sizes: "small", "medium" (default) and "large".
@@ -251,6 +252,15 @@ Enable to request full screen when play.
 - Default: `true`
 
 Enable keyboard support.
+
+### loop
+
+- Type: `Boolean`
+- Default: `false`
+
+Enable loop viewing.
+
+> If the current image is the last one, then the next one to view is the first one, and vice versa.
 
 ### interval
 
