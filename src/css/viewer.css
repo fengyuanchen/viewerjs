@@ -132,7 +132,8 @@
   right: 0;
   top: 0;
 
-  & > img {
+  & > img,
+  & > video {
     height: auto;
     margin: 15px auto;
     max-width: 90% !important;

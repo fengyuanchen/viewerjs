@@ -36,6 +36,7 @@ export const EVENT_CLICK = 'click';
 export const EVENT_DRAG_START = 'dragstart';
 export const EVENT_KEY_DOWN = 'keydown';
 export const EVENT_LOAD = 'load';
+export const EVENT_LOADEDMETADATA = 'loadedmetadata';
 export const EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
 export const EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'mousemove touchmove';
 export const EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';

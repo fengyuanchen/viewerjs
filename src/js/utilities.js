@@ -522,6 +522,12 @@ export function getImageNaturalSizes(image, callback) {
     return;
   }
 
+  // If the element is a video
+  if (image.videoWidth) {
+    callback(image.videoWidth, image.videoHeight);
+    return;
+  }
+
   const newImage = document.createElement('img');
 
   newImage.onload = () => {

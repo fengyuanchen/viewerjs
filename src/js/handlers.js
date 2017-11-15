@@ -6,6 +6,7 @@ import {
   CLASS_MOVE,
   CLASS_TRANSITION,
   EVENT_LOAD,
+  EVENT_LOADEDMETADATA,
   EVENT_VIEWED,
 } from './constants';
 import {
@@ -360,6 +361,9 @@ export default {
 
       each(this.player.getElementsByTagName('img'), (image) => {
         addListener(image, EVENT_LOAD, proxy(this.loadImage, this), {
+          once: true,
+        });
+        addListener(image, EVENT_LOADEDMETADATA, proxy(this.loadImage, this), {
           once: true,
         });
         dispatchEvent(image, EVENT_LOAD);
