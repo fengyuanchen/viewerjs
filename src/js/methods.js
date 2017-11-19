@@ -69,7 +69,7 @@ export default {
 
     removeClass(viewer, CLASS_HIDE);
     addListener(element, EVENT_SHOWN, () => {
-      this.view(this.target ? [...this.images].indexOf(this.target) : this.index);
+      this.view(this.target ? ([].concat(this.images)).indexOf(this.target) : this.index);
       this.target = false;
     }, {
       once: true,
