@@ -28,6 +28,9 @@ export default {
 
   close() {
     const { body } = this;
+    if (!body) {
+      return;
+    }
 
     removeClass(body, CLASS_OPEN);
     body.style.paddingRight = this.initialBodyPaddingRight;
