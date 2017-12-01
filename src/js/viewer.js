@@ -118,7 +118,7 @@ class Viewer {
     this.count = 0;
     this.images = images;
 
-    const { body } = document;
+    const body = document.body || document.documentElement;
 
     this.body = body;
     this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
