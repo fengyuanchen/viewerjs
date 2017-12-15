@@ -28,6 +28,7 @@ export default {
 
   close() {
     const { body } = this;
+
     if (!body) {
       return;
     }
