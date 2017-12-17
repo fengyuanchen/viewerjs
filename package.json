@@ -1,10 +1,11 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "0.10.0",
+  "version": "1.0.0-beta",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
+  "style": "dist/viewer.css",
   "repository": "fengyuanchen/viewerjs",
   "homepage": "https://fengyuanchen.github.io/viewerjs",
   "license": "MIT",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-beta (Dec 12, 2017)
+
+- Add `style` field to `package.json`.
+- Fix the issue of NodeList deconstructing (#118).
+- Fall back to `document.documentElement` if `document.body` is not existing (#120).
+
 ## 0.10.0 (Nov 5, 2017)
 
 - Add a new option: `loop`.

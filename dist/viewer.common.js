@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v0.10.0
+ * Viewer.js v1.0.0-beta
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2017 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-11-05T04:38:31.466Z
+ * Date: 2017-12-17T10:29:35.102Z
  */
 
 'use strict';
@@ -141,7 +141,45 @@ var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
 
 var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
 
 /**
  * Check if the given value is a string.
@@ -466,9 +504,12 @@ function setData(element, name, data) {
  */
 function removeData(element, name) {
   if (isObject(element[name])) {
-    delete element[name];
+    try {
+      delete element[name];
+    } catch (e) {
+      element[name] = null;
+    }
   } else if (element.dataset) {
-    // #128 Safari not allows to delete dataset property
     try {
       delete element.dataset[name];
     } catch (e) {
@@ -684,12 +725,16 @@ function getImageNaturalSizes(image, callback) {
   }
 
   var newImage = document.createElement('img');
+  var body = document.body || document.documentElement;
 
   newImage.onload = function () {
     callback(newImage.width, newImage.height);
+    body.removeChild(newImage);
   };
 
   newImage.src = image.src;
+  newImage.style.cssText = 'position: absolute; top: 0; left: 0; z-index: -1; opacity: 0;';
+  body.appendChild(newImage);
 }
 
 /**
@@ -1418,8 +1463,6 @@ var handlers = {
   }
 };
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 var methods = {
   // Show the viewer (only available in modal mode)
   show: function show() {
@@ -1454,7 +1497,7 @@ var methods = {
 
     removeClass(viewer, CLASS_HIDE);
     addListener(element, EVENT_SHOWN, function () {
-      _this.view(_this.target ? [].concat(_toConsumableArray(_this.images)).indexOf(_this.target) : _this.index);
+      _this.view(_this.target ? [].concat(_this.images).indexOf(_this.target) : _this.index);
       _this.target = false;
     }, {
       once: true
@@ -2278,6 +2321,10 @@ var others = {
     var body = this.body;
 
 
+    if (!body) {
+      return;
+    }
+
     removeClass(body, CLASS_OPEN);
     body.style.paddingRight = this.initialBodyPaddingRight;
   },
@@ -2405,10 +2452,6 @@ var others = {
   }
 };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var AnotherViewer = WINDOW.Viewer;
 
 var Viewer = function () {
@@ -2419,8 +2462,7 @@ var Viewer = function () {
    */
   function Viewer(element) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, Viewer);
+    classCallCheck(this, Viewer);
 
     if (!element || element.nodeType !== 1) {
       throw new Error('The first argument is required and must be an element.');
@@ -2448,7 +2490,7 @@ var Viewer = function () {
     this.init();
   }
 
-  _createClass(Viewer, [{
+  createClass(Viewer, [{
     key: 'init',
     value: function init() {
       var _this = this;
@@ -2499,9 +2541,7 @@ var Viewer = function () {
       this.count = 0;
       this.images = images;
 
-      var _document = document,
-          body = _document.body;
-
+      var body = document.body || document.documentElement;
 
       this.body = body;
       this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -2708,7 +2748,6 @@ var Viewer = function () {
       extend(DEFAULTS, isPlainObject(options) && options);
     }
   }]);
-
   return Viewer;
 }();
 
