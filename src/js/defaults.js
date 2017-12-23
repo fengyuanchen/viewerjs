@@ -38,6 +38,9 @@ export default {
   // Enable keyboard support
   keyboard: true,
 
+  // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
+  backdrop: true,
+
   // Enable loop viewing.
   loop: false,
 

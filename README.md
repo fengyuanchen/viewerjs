@@ -253,6 +253,13 @@ Enable to request full screen when play.
 
 Enable keyboard support.
 
+### backdrop
+
+- Type: `Boolean` or `String`
+- Default: `true`
+
+Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click.
+
 ### loop
 
 - Type: `Boolean`

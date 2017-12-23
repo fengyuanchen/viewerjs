@@ -45,6 +45,10 @@ export default {
 
         break;
 
+      case 'hide':
+        this.hide();
+        break;
+
       case 'view':
         this.view(getData(target, 'index'));
         break;

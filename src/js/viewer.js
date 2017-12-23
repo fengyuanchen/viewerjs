@@ -173,6 +173,7 @@ class Viewer {
     const toolbar = viewer.querySelector(`.${NAMESPACE}-toolbar`);
     const navbar = viewer.querySelector(`.${NAMESPACE}-navbar`);
     const button = viewer.querySelector(`.${NAMESPACE}-button`);
+    const canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
 
     this.parent = parent;
     this.viewer = viewer;
@@ -180,7 +181,7 @@ class Viewer {
     this.toolbar = toolbar;
     this.navbar = navbar;
     this.button = button;
-    this.canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
+    this.canvas = canvas;
     this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
     this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
     this.player = viewer.querySelector(`.${NAMESPACE}-player`);
@@ -189,6 +190,14 @@ class Viewer {
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(button, CLASS_HIDE, !options.button);
+
+    if (options.backdrop) {
+      addClass(viewer, `${NAMESPACE}-backdrop`);
+
+      if (!options.inline && options.backdrop === true) {
+        setData(canvas, 'action', 'hide');
+      }
+    }
 
     if (options.toolbar) {
       const list = document.createElement('ul');
