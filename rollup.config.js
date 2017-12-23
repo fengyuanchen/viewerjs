@@ -9,6 +9,7 @@ module.exports = {
     {
       file: 'dist/viewer.js',
       format: 'umd',
+      name: 'Viewer',
     },
     {
       file: 'dist/viewer.common.js',
@@ -21,9 +22,9 @@ module.exports = {
     {
       file: 'docs/js/viewer.js',
       format: 'umd',
+      name: 'Viewer',
     },
   ],
-  name: 'Viewer',
   plugins: [
     babel({
       exclude: 'node_modules/**',
