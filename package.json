@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.1",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
@@ -42,7 +42,7 @@
     "lint": "eslint src/js --fix",
     "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
     "start": "npm-run-all --parallel watch:*",
-    "test": "node-qunit-phantomjs test/index.html --timeout 10",
+    "test": "node-qunit-phantomjs test/index.html --timeout 100",
     "watch:css": "postcss src/css/viewer.css -o docs/css/viewer.css -m -w",
     "watch:js": "rollup -c -m -w"
   },
@@ -62,8 +62,8 @@
     "postcss-cssnext": "^3.0.2",
     "postcss-header": "^1.0.0",
     "postcss-url": "^7.3.0",
-    "rollup": "^0.52.2",
-    "rollup-plugin-babel": "^3.0.2",
+    "rollup": "^0.52.3",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-watch": "^4.3.1",
     "stylefmt": "^6.0.0",
     "uglify-js": "^3.2.2"

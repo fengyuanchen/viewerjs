@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0-beta.1 (Dec 23, 2017)
+
+- Add a new option: `backdrop`.
+
 ## 1.0.0-beta (Dec 12, 2017)
 
 - Add `style` field to `package.json`.

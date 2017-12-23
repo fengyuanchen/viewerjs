@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.0-beta
+ * Viewer.js v1.0.0-beta.1
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2017 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-12-17T10:29:35.102Z
+ * Date: 2017-12-23T04:31:53.438Z
  */
 
 (function (global, factory) {
@@ -53,6 +53,9 @@ var DEFAULTS = {
 
   // Enable keyboard support
   keyboard: true,
+
+  // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
+  backdrop: true,
 
   // Enable loop viewing.
   loop: false,
@@ -737,7 +740,7 @@ function getImageNaturalSizes(image, callback) {
   };
 
   newImage.src = image.src;
-  newImage.style.cssText = 'position: absolute; top: 0; left: 0; z-index: -1; opacity: 0;';
+  newImage.style.cssText = 'left:0;' + 'max-height:none!important;' + 'max-width:none!important;' + 'min-height:0!important;' + 'min-width:0!important;' + 'opacity:0;' + 'position:absolute;' + 'top:0;' + 'z-index:-1;';
   body.appendChild(newImage);
 }
 
@@ -1113,6 +1116,10 @@ var handlers = {
           this.hide();
         }
 
+        break;
+
+      case 'hide':
+        this.hide();
         break;
 
       case 'view':
@@ -2603,6 +2610,7 @@ var Viewer = function () {
       var toolbar = viewer.querySelector('.' + NAMESPACE + '-toolbar');
       var navbar = viewer.querySelector('.' + NAMESPACE + '-navbar');
       var button = viewer.querySelector('.' + NAMESPACE + '-button');
+      var canvas = viewer.querySelector('.' + NAMESPACE + '-canvas');
 
       this.parent = parent;
       this.viewer = viewer;
@@ -2610,7 +2618,7 @@ var Viewer = function () {
       this.toolbar = toolbar;
       this.navbar = navbar;
       this.button = button;
-      this.canvas = viewer.querySelector('.' + NAMESPACE + '-canvas');
+      this.canvas = canvas;
       this.footer = viewer.querySelector('.' + NAMESPACE + '-footer');
       this.tooltipBox = viewer.querySelector('.' + NAMESPACE + '-tooltip');
       this.player = viewer.querySelector('.' + NAMESPACE + '-player');
@@ -2619,6 +2627,14 @@ var Viewer = function () {
       addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
+
+      if (options.backdrop) {
+        addClass(viewer, NAMESPACE + '-backdrop');
+
+        if (!options.inline && options.backdrop === true) {
+          setData(canvas, 'action', 'hide');
+        }
+      }
 
       if (options.toolbar) {
         var list = document.createElement('ul');

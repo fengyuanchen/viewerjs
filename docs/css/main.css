@@ -4,8 +4,7 @@
 }
 
 .list-group-item {
-  padding-bottom: .5rem;
-  padding-top: .5rem;
+  padding: .35rem 1rem;
 }
 
 .d-flex > .btn {
