@@ -256,6 +256,30 @@
       margin: 5px;
     }
   }
+
+  &.viewer-toolbar-right,
+  &.viewer-toolbar-left {
+    position: absolute;
+
+    & li {
+      float: none;
+      margin: auto;
+    }
+
+    & li + li {
+      margin-top: 3px;
+    }
+  }
+
+  &.viewer-toolbar-right {
+    top: 45px;
+    right: 0;
+  }
+
+  &.viewer-toolbar-left {
+    top: 7px;
+    left: 0;
+  }
 }
 
 .viewer-tooltip {
