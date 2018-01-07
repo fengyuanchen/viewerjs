@@ -1,6 +1,6 @@
 export default function (options) {
   const { toolbarPosition } = options;
-  const toolbarPositionClass = `viewer-toolbar--${toolbarPosition}`;
+  const toolbarPositionClass = `viewer-toolbar-${toolbarPosition}`;
   let template = '';
 
   template =
