@@ -2,6 +2,12 @@ window.Util = {
   hasClass: function (element, className) {
     return element.classList.contains(className);
   },
+  hasClassParent: function (element, className) {
+    return element.parentNode.classList.contains(className);
+  },
+  hasClass: function (element, className) {
+    return element.classList.contains(className);
+  },
   getByClass: function (element, className) {
     return element.getElementsByClassName ?
       element.getElementsByClassName(className) :

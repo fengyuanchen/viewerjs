@@ -166,7 +166,7 @@ class Viewer {
     const parent = element.parentNode;
     const template = document.createElement('div');
 
-    template.innerHTML = TEMPLATE;
+    template.innerHTML = TEMPLATE(options);
 
     const viewer = template.querySelector(`.${NAMESPACE}-container`);
     const title = viewer.querySelector(`.${NAMESPACE}-title`);

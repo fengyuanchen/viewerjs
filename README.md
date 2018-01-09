@@ -195,6 +195,17 @@ toolbar: {
 }
 ```
 
+### toolbarPosition
+
+- Type: `String`
+- Default: `bottom`
+- Options:
+  - `bottom`: leaves the toolbar at the bottom.
+  - `left`: pulls toolbar to left.
+  - `right`: pulls toolbar to right.
+
+Sets the position of the toolbar on the screen.
+
 ### tooltip
 
 - Type: `Boolean`

@@ -14,6 +14,9 @@ export default {
   // Show the toolbar
   toolbar: true,
 
+  // Sets the toolbar position [ bottom | left | right ]
+  toolbarPosition: 'bottom',
+
   // Show the tooltip with image ratio (percentage) when zoom in or zoom out
   tooltip: true,
 

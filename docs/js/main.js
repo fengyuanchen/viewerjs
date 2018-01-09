@@ -90,11 +90,19 @@ window.onload = function () {
   toggles.onchange = function (event) {
     var e = event || window.event;
     var input = e.target || e.srcElement;
-    var name;
+    var name, type;
 
     if (viewer) {
       name = input.getAttribute('name');
-      options[name] = name === 'inline' ? JSON.parse(input.getAttribute('data-value')) : input.checked;
+      type = input.getAttribute('type');
+      
+      if (name === 'inline') {
+        options[name] = JSON.parse(input.getAttribute('data-value'));
+      } else if (type === 'radio') {
+        options[name] = input.value;
+      } else {
+        options[name] = input.checked;
+      }
       viewer.destroy();
       viewer = new Viewer(pictures, options);
       toggleButtons(options.inline ? 'inline' : 'modal');
