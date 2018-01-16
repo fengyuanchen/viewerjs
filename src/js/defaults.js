@@ -69,6 +69,10 @@ export default {
   // Type: String (an image attribute) or Function (should return an image URL)
   url: 'src',
 
+  // Define where to put the viewer in modal mode.
+  // Type: String | Element
+  container: 'body',
+
   // Filter the images for viewing.
   // Type: Function (return true if the image is viewable)
   filter: null,

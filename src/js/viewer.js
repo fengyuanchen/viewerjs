@@ -32,6 +32,7 @@ import {
   isFunction,
   isNumber,
   isPlainObject,
+  isString,
   isUndefined,
   proxy,
   setData,
@@ -289,7 +290,17 @@ class Viewer {
         zIndex: options.zIndex,
       });
 
-      this.body.appendChild(viewer);
+      let { container } = options;
+
+      if (isString(container)) {
+        container = document.querySelector(container);
+      }
+
+      if (!container) {
+        container = this.body;
+      }
+
+      container.appendChild(viewer);
     }
 
     if (options.inline) {

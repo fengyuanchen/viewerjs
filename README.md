@@ -339,6 +339,16 @@ Define where to get the original image URL for viewing.
 > If it is a string, it should be one of the attributes of each image element.
 > If it is a function, it will be called on each image and should return a valid image URL.
 
+### container
+
+- Type: `Element` or `String`
+- Default: `'body'`
+- An element or a valid selector for [Document.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
+
+The container to put the viewer in modal mode.
+
+> Only available when the `inline` option is set to `false`.
+
 ### filter
 
 - Type: `Function`
