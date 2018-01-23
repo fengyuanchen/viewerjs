@@ -17,6 +17,7 @@ import {
   isString,
   proxy,
   removeClass,
+  removeListener,
   setData,
   setStyle,
 } from './utilities';
@@ -124,14 +125,20 @@ export default {
   },
 
   resetList() {
-    empty(this.list);
-    removeClass(this.list, CLASS_TRANSITION);
-    setStyle({
+    const { list } = this;
+
+    empty(list);
+    removeClass(list, CLASS_TRANSITION);
+    setStyle(list, {
       marginLeft: 0,
     });
   },
 
   initImage(callback) {
+    if (!this.image) {
+      return;
+    }
+
     const { options, image, viewerData } = this;
     const footerHeight = this.footer.offsetHeight;
     const viewerWidth = viewerData.width;
@@ -186,6 +193,10 @@ export default {
   },
 
   renderImage(callback) {
+    if (!this.image) {
+      return;
+    }
+
     const { image, imageData } = this;
 
     setStyle(image, extend({
@@ -211,6 +222,7 @@ export default {
 
     // this.image only defined after viewed
     if (image) {
+      removeListener(image, EVENT_LOAD, this.onLoad);
       image.parentNode.removeChild(image);
       this.image = null;
     }
