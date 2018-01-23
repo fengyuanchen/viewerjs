@@ -194,7 +194,7 @@ export default {
     if (image.complete) {
       this.load();
     } else {
-      addListener(image, EVENT_LOAD, proxy(this.load, this), {
+      addListener(image, EVENT_LOAD, this.onLoad = proxy(this.load, this), {
         once: true,
       });
 

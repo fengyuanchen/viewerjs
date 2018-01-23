@@ -105,21 +105,21 @@ export default {
   },
 
   load() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = false;
+    }
+
+    if (!this.image) {
+      return;
+    }
+
     const {
       options,
       image,
       index,
       viewerData,
     } = this;
-
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = false;
-    }
-
-    if (!image) {
-      return;
-    }
 
     removeClass(image, CLASS_INVISIBLE);
 
