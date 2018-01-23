@@ -11,7 +11,7 @@
 - [Features](#features)
 - [Main](#main)
 - [Getting started](#getting-started)
-- [Keyboard support](#keyboard-support)s
+- [Keyboard support](#keyboard-support)
 - [Options](#options)
 - [Methods](#methods)
 - [Events](#events)
