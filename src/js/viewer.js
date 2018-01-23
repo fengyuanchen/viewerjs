@@ -103,12 +103,6 @@ class Viewer {
       return;
     }
 
-    if (isFunction(options.ready)) {
-      addListener(element, EVENT_READY, options.ready, {
-        once: true,
-      });
-    }
-
     // Override `transition` option if it is not supported
     if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
       options.transition = false;
@@ -311,7 +305,16 @@ class Viewer {
 
     this.ready = true;
 
-    dispatchEvent(element, EVENT_READY);
+    // Trigger the "ready" event asynchronously to keep "element.viewer" is defined
+    this.timeout = setTimeout(() => {
+      if (isFunction(options.ready)) {
+        addListener(element, EVENT_READY, options.ready, {
+          once: true,
+        });
+      }
+
+      dispatchEvent(element, EVENT_READY);
+    }, 0);
   }
 
   unbuild() {
@@ -319,6 +322,7 @@ class Viewer {
       return;
     }
 
+    clearTimeout(this.timeout);
     this.ready = false;
     this.viewer.parentNode.removeChild(this.viewer);
   }
