@@ -75,7 +75,7 @@ export default {
       if (isString(url)) {
         url = image.getAttribute(url);
       } else if (isFunction(url)) {
-        url = url.call(image, image);
+        url = url.call(this, image);
       }
 
       if (src || url) {
