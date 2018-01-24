@@ -6,28 +6,17 @@ import {
   EVENT_POINTER_MOVE,
   EVENT_POINTER_UP,
   EVENT_RESIZE,
-  EVENT_VIEW,
-  EVENT_VIEWED,
   EVENT_WHEEL,
 } from './constants';
 import {
   addListener,
-  isFunction,
   proxy,
   removeListener,
 } from './utilities';
 
 export default {
   bind() {
-    const { element, options, viewer } = this;
-
-    if (isFunction(options.view)) {
-      addListener(element, EVENT_VIEW, options.view);
-    }
-
-    if (isFunction(options.viewed)) {
-      addListener(element, EVENT_VIEWED, options.viewed);
-    }
+    const { element, viewer } = this;
 
     addListener(viewer, EVENT_CLICK, (this.onClick = proxy(this.click, this)));
     addListener(viewer, EVENT_WHEEL, (this.onWheel = proxy(this.wheel, this)));
@@ -56,15 +45,7 @@ export default {
   },
 
   unbind() {
-    const { element, options, viewer } = this;
-
-    if (isFunction(options.view)) {
-      removeListener(element, EVENT_VIEW, options.view);
-    }
-
-    if (isFunction(options.viewed)) {
-      removeListener(element, EVENT_VIEWED, options.viewed);
-    }
+    const { element, viewer } = this;
 
     removeListener(viewer, EVENT_CLICK, this.onClick);
     removeListener(viewer, EVENT_WHEEL, this.onWheel);
