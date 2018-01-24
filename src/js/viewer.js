@@ -88,8 +88,8 @@ class Viewer {
     const images = [];
 
     each(isImg ? [element] : element.querySelectorAll('img'), (image) => {
-      if (options.filter) {
-        if (options.filter(image)) {
+      if (isFunction(options.filter)) {
+        if (options.filter.call(this, image)) {
           images.push(image);
         }
       } else {
