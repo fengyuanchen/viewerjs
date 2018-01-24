@@ -137,7 +137,12 @@ export default {
    * @returns {Object} this
    */
   view(index) {
-    const { element, title, canvas } = this;
+    const {
+      element,
+      options,
+      title,
+      canvas,
+    } = this;
 
     index = Number(index) || 0;
 
@@ -154,6 +159,12 @@ export default {
 
     image.src = url;
     image.alt = alt;
+
+    if (isFunction(options.view)) {
+      addListener(element, EVENT_VIEW, options.view, {
+        once: true,
+      });
+    }
 
     if (dispatchEvent(element, EVENT_VIEW, {
       originalImage: this.images[index],
