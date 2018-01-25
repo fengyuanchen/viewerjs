@@ -122,8 +122,10 @@ class Viewer {
     if (options.inline) {
       const progress = proxy(this.progress, this);
 
-      addListener(element, EVENT_READY, () => {
-        this.view();
+      addListener(element, EVENT_READY, (event) => {
+        if (!event.defaultPrevented) {
+          this.view();
+        }
       }, {
         once: true,
       });
