@@ -11,6 +11,7 @@ import {
   EVENT_CLICK,
   EVENT_HIDE,
   EVENT_LOAD,
+  EVENT_READY,
   EVENT_SHOW,
   EVENT_SHOWN,
   EVENT_TRANSITION_END,
@@ -50,7 +51,16 @@ export default {
     }
 
     if (!this.ready) {
+      addListener(element, EVENT_READY, (event) => {
+        if (!event.defaultPrevented) {
+          this.show();
+        }
+      }, {
+        once: true,
+      });
+
       this.build();
+      return this;
     }
 
     if (isFunction(options.show)) {
@@ -68,7 +78,11 @@ export default {
     const { viewer } = this;
 
     removeClass(viewer, CLASS_HIDE);
-    addListener(element, EVENT_SHOWN, () => {
+    addListener(element, EVENT_SHOWN, (event) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
       this.view(this.target ? ([].concat(this.images)).indexOf(this.target) : this.index);
       this.target = false;
     }, {
@@ -137,6 +151,11 @@ export default {
    * @returns {Object} this
    */
   view(index) {
+    if (!this.visible) {
+      this.index = index;
+      return this.show();
+    }
+
     const {
       element,
       options,
@@ -618,7 +637,7 @@ export default {
       list,
     } = this;
 
-    if (!this.fulled) {
+    if (!this.visible || this.played || !this.fulled || !options.inline) {
       return this;
     }
 

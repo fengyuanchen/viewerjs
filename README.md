@@ -97,7 +97,7 @@ var viewer = new Viewer(document.getElementById('images'), options);
 
 > Only available in modal mode.
 
-- `Esc`: Exit full screen or stop play.
+- `Esc`: Exit full screen or close the viewer or exit modal mode or stop play.
 - `Space`: Stop play.
 - `←`: View the previous image.
 - `→`: View the next image.
@@ -337,7 +337,21 @@ Define the CSS `z-index` value of viewer in inline mode.
 Define where to get the original image URL for viewing.
 
 > If it is a string, it should be one of the attributes of each image element.
-> If it is a function, it will be called on each image and should return a valid image URL.
+> If it is a function, it should return a valid image URL.
+
+For example:
+
+```html
+<img src="picture.jpg?size=160">
+```
+
+```js
+new Viewer(image, {
+  url(image) {
+    return image.src.replace('?size=160', '');
+  },
+});
+```
 
 ### container
 
@@ -457,7 +471,7 @@ hide the viewer.
   - Default: `0`
   - The index of the image for viewing
 
-View one of the images with image's index.
+View one of the images with image's index. If the viewer is not shown, will show the viewer first.
 
 ```js
 viewer.view(1); // View the second image
