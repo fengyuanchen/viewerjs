@@ -191,14 +191,13 @@ export default {
 
   keydown(e) {
     const { options } = this;
-    const key = e.keyCode || e.which || e.charCode;
 
     if (!this.fulled || !options.keyboard) {
       return;
     }
 
-    switch (key) {
-      // (Key: Esc)
+    switch (e.keyCode || e.which || e.charCode) {
+      // Escape
       case 27:
         if (this.played) {
           this.stop();
@@ -212,7 +211,7 @@ export default {
 
         break;
 
-      // (Key: Space)
+      // Space
       case 32:
         if (this.played) {
           this.stop();
@@ -220,42 +219,42 @@ export default {
 
         break;
 
-      // View previous (Key: ←)
+      // ArrowLeft
       case 37:
         this.prev(options.loop);
         break;
 
-      // Zoom in (Key: ↑)
+      // ArrowUp
       case 38:
-
         // Prevent scroll on Firefox
         e.preventDefault();
 
+        // Zoom in
         this.zoom(options.zoomRatio, true);
         break;
 
-      // View next (Key: →)
+      // ArrowRight
       case 39:
         this.next(options.loop);
         break;
 
-      // Zoom out (Key: ↓)
+      // ArrowDown
       case 40:
-
         // Prevent scroll on Firefox
         e.preventDefault();
 
+        // Zoom out
         this.zoom(-options.zoomRatio, true);
         break;
 
-      // Zoom out to initial size (Key: Ctrl + 0)
+      // Ctrl + 0
       case 48:
         // Fall through
 
-      // Zoom in to natural size (Key: Ctrl + 1)
-      // eslint-disable-next-line
+      // Ctrl + 1
+      // eslint-disable-next-line no-fallthrough
       case 49:
-        if (e.ctrlKey || e.shiftKey) {
+        if (e.ctrlKey) {
           e.preventDefault();
           this.toggle();
         }
