@@ -64,7 +64,7 @@ class Viewer {
     this.wheeling = false;
     this.playing = false;
     this.fading = false;
-    this.tooltiping = false;
+    this.tooltipping = false;
     this.transitioning = false;
     this.action = false;
     this.target = false;

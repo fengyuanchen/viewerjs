@@ -688,7 +688,7 @@ export default {
 
     tooltipBox.textContent = `${Math.round(imageData.ratio * 100)}%`;
 
-    if (!this.tooltiping) {
+    if (!this.tooltipping) {
       if (options.transition) {
         if (this.fading) {
           dispatchEvent(tooltipBox, EVENT_TRANSITION_END);
@@ -706,10 +706,10 @@ export default {
         addClass(tooltipBox, CLASS_SHOW);
       }
     } else {
-      clearTimeout(this.tooltiping);
+      clearTimeout(this.tooltipping);
     }
 
-    this.tooltiping = setTimeout(() => {
+    this.tooltipping = setTimeout(() => {
       if (options.transition) {
         addListener(tooltipBox, EVENT_TRANSITION_END, () => {
           removeClass(tooltipBox, CLASS_SHOW);
@@ -726,7 +726,7 @@ export default {
         removeClass(tooltipBox, CLASS_SHOW);
       }
 
-      this.tooltiping = false;
+      this.tooltipping = false;
     }, 1000);
 
     return this;
