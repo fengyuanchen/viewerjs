@@ -35,6 +35,9 @@ export default {
   // Enable to request fullscreen when play
   fullscreen: true,
 
+  // The amount of time to delay between automatically cycling an image when playing.
+  interval: 5000,
+
   // Enable keyboard support
   keyboard: true,
 
