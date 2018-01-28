@@ -113,10 +113,11 @@ class Viewer {
     this.count = 0;
     this.images = images;
 
-    const body = document.body || document.documentElement;
+    const { ownerDocument } = element;
+    const body = ownerDocument.body || ownerDocument.documentElement;
 
     this.body = body;
-    this.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
     this.initialBodyPaddingRight = getStyle(body).paddingRight;
 
     if (options.inline) {
@@ -153,8 +154,7 @@ class Viewer {
   }
 
   build() {
-    const { options } = this;
-    const { element } = this;
+    const { element, options } = this;
 
     if (this.ready) {
       return;
@@ -289,7 +289,7 @@ class Viewer {
       let { container } = options;
 
       if (isString(container)) {
-        container = document.querySelector(container);
+        container = element.ownerDocument.querySelector(container);
       }
 
       if (!container) {

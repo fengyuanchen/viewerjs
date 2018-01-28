@@ -110,7 +110,7 @@ export default {
 
   // Hide the viewer (only available in modal mode)
   hide() {
-    const { element, options, viewer } = this;
+    const { element, options } = this;
 
     if (options.inline || this.transitioning || !this.visible) {
       return this;
@@ -129,6 +129,8 @@ export default {
     if (this.played) {
       this.stop();
     }
+
+    const { viewer } = this;
 
     if (this.viewed && options.transition) {
       this.transitioning = true;
