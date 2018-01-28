@@ -126,6 +126,10 @@ export default {
       return this;
     }
 
+    if (this.played) {
+      this.stop();
+    }
+
     if (this.viewed && options.transition) {
       this.transitioning = true;
       addListener(this.image, EVENT_TRANSITION_END, () => {
