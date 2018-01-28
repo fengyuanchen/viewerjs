@@ -77,7 +77,7 @@ export default {
   },
 
   requestFullscreen() {
-    const { document } = window;
+    const { document } = this.element.ownerDocument;
 
     if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement &&
       !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -97,6 +97,8 @@ export default {
 
   exitFullscreen() {
     if (this.fulled) {
+      const { document } = this.element.ownerDocument;
+      
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.msExitFullscreen) {

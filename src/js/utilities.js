@@ -446,7 +446,7 @@ export function dispatchEvent(element, type, data) {
  * @returns {Object} The offset data.
  */
 export function getOffset(element) {
-  const doc = document.documentElement;
+  const doc = element.ownerDocument.documentElement;
   const box = element.getBoundingClientRect();
 
   return {
@@ -526,7 +526,7 @@ export function getImageNaturalSizes(image, callback) {
   }
 
   const newImage = document.createElement('img');
-  const body = document.body || document.documentElement;
+  const body = image.ownerDocument.body || image.ownerDocument.documentElement;
 
   newImage.onload = () => {
     callback(newImage.width, newImage.height);
