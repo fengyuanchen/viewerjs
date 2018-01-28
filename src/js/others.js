@@ -98,7 +98,7 @@ export default {
   exitFullscreen() {
     if (this.fulled) {
       const { document } = this.element.ownerDocument;
-      
+
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.msExitFullscreen) {
