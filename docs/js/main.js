@@ -110,7 +110,7 @@ window.onload = function () {
 
     if (viewer && method) {
       if (target) {
-        viewer[method](target.value);
+        viewer[method](document.querySelector(target).value);
       } else {
         viewer[method](args[0], args[1]);
       }
