@@ -51,15 +51,9 @@ export default {
     }
 
     if (!this.ready) {
-      addListener(element, EVENT_READY, (event) => {
-        if (!event.defaultPrevented) {
-          this.show();
-        }
-      }, {
-        once: true,
+      this.build(() => {
+        this.show();
       });
-
-      this.build();
       return this;
     }
 
@@ -78,16 +72,6 @@ export default {
     const { viewer } = this;
 
     removeClass(viewer, CLASS_HIDE);
-    addListener(element, EVENT_SHOWN, (event) => {
-      if (event.defaultPrevented) {
-        return;
-      }
-
-      this.view(this.target ? ([].concat(this.images)).indexOf(this.target) : this.index);
-      this.target = false;
-    }, {
-      once: true,
-    });
 
     if (options.transition) {
       this.transitioning = true;
@@ -156,7 +140,9 @@ export default {
    * @param {number} index - The index of the image to view.
    * @returns {Object} this
    */
-  view(index) {
+  view(index = 0) {
+    index = Number(index) || 0;
+
     if (!this.visible) {
       this.index = index;
       return this.show();
@@ -168,8 +154,6 @@ export default {
       title,
       canvas,
     } = this;
-
-    index = Number(index) || 0;
 
     if (!this.ready || !this.visible || this.played || index < 0 || index >= this.length ||
       (this.viewed && index === this.index)) {
@@ -607,8 +591,11 @@ export default {
     addClass(this.button, CLASS_FULLSCREEN_EXIT);
 
     if (options.transition) {
-      removeClass(image, CLASS_TRANSITION);
       removeClass(list, CLASS_TRANSITION);
+
+      if (this.viewed) {
+        removeClass(image, CLASS_TRANSITION);
+      }
     }
 
     addClass(viewer, CLASS_FIXED);
@@ -620,16 +607,19 @@ export default {
     this.initContainer();
     this.viewerData = extend({}, this.containerData);
     this.renderList();
-    this.initImage(() => {
-      this.renderImage(() => {
-        if (options.transition) {
-          setTimeout(() => {
-            addClass(image, CLASS_TRANSITION);
-            addClass(list, CLASS_TRANSITION);
-          }, 0);
-        }
+
+    if (this.viewed) {
+      this.initImage(() => {
+        this.renderImage(() => {
+          if (options.transition) {
+            setTimeout(() => {
+              addClass(image, CLASS_TRANSITION);
+              addClass(list, CLASS_TRANSITION);
+            }, 0);
+          }
+        });
       });
-    });
+    }
 
     return this;
   },
@@ -652,8 +642,11 @@ export default {
     removeClass(this.button, CLASS_FULLSCREEN_EXIT);
 
     if (options.transition) {
-      removeClass(image, CLASS_TRANSITION);
       removeClass(list, CLASS_TRANSITION);
+
+      if (this.viewed) {
+        removeClass(image, CLASS_TRANSITION);
+      }
     }
 
     removeClass(viewer, CLASS_FIXED);
@@ -664,16 +657,19 @@ export default {
     this.viewerData = extend({}, this.parentData);
     this.renderViewer();
     this.renderList();
-    this.initImage(() => {
-      this.renderImage(() => {
-        if (options.transition) {
-          setTimeout(() => {
-            addClass(image, CLASS_TRANSITION);
-            addClass(list, CLASS_TRANSITION);
-          }, 0);
-        }
+
+    if (this.viewed) {
+      this.initImage(() => {
+        this.renderImage(() => {
+          if (options.transition) {
+            setTimeout(() => {
+              addClass(image, CLASS_TRANSITION);
+              addClass(list, CLASS_TRANSITION);
+            }, 0);
+          }
+        });
       });
-    });
+    }
 
     return this;
   },
