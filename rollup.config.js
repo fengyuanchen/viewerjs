@@ -14,8 +14,6 @@ const banner = `/*!
 `;
 
 module.exports = {
-  // Export banner for sharing with PostCSS
-  banner,
   input: 'src/js/viewer.js',
   output: [
     {
