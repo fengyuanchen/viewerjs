@@ -793,7 +793,7 @@ If you have to use other viewer with the same namespace, just call the `Viewer.n
 
 ## Contributing
 
-Please read through our [contributing guidelines](CONTRIBUTING.md).
+Please read through our [contributing guidelines](.github/CONTRIBUTING.md).
 
 ## Versioning
 
