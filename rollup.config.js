@@ -14,7 +14,7 @@ const banner = `/*!
 `;
 
 module.exports = {
-  input: 'src/js/viewer.js',
+  input: 'src/index.js',
   output: [
     {
       banner,
