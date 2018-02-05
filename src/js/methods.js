@@ -50,7 +50,7 @@ export default {
       return this;
     }
 
-    if (!this.ready) {
+    if (!this.ready && !this.destroyed) {
       this.build(() => {
         this.show();
       });
@@ -824,9 +824,11 @@ export default {
   destroy() {
     const { element } = this;
 
-    if (!getData(element, NAMESPACE)) {
+    if (this.destroyed || !getData(element, NAMESPACE)) {
       return this;
     }
+
+    this.destroyed = true;
 
     if (this.options.inline) {
       this.unbind();

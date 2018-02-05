@@ -52,7 +52,10 @@ export default {
       });
     }
 
-    dispatchEvent(element, EVENT_SHOWN);
+    if (dispatchEvent(element, EVENT_SHOWN) !== false) {
+      this.view(this.target ? ([].concat(this.images)).indexOf(this.target) : this.index);
+      this.target = false;
+    }
   },
 
   hidden() {
@@ -77,7 +80,7 @@ export default {
   },
 
   requestFullscreen() {
-    const { document } = this.element.ownerDocument;
+    const document = this.element.ownerDocument;
 
     if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement &&
       !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -97,7 +100,7 @@ export default {
 
   exitFullscreen() {
     if (this.fulled) {
-      const { document } = this.element.ownerDocument;
+      const document = this.element.ownerDocument;
 
       if (document.exitFullscreen) {
         document.exitFullscreen();

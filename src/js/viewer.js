@@ -61,6 +61,7 @@ class Viewer {
     this.viewed = false;
     this.fulled = false;
     this.played = false;
+    this.destroyed = false;
     this.wheeling = false;
     this.playing = false;
     this.fading = false;
@@ -123,14 +124,6 @@ class Viewer {
     if (options.inline) {
       const progress = proxy(this.progress, this);
 
-      addListener(element, EVENT_READY, (event) => {
-        if (!event.defaultPrevented) {
-          this.view();
-        }
-      }, {
-        once: true,
-      });
-
       each(images, (image) => {
         if (image.complete) {
           progress();
@@ -153,7 +146,7 @@ class Viewer {
     }
   }
 
-  build() {
+  build(done) {
     const { element, options } = this;
 
     if (this.ready) {
@@ -307,7 +300,7 @@ class Viewer {
 
     this.ready = true;
 
-    // Trigger the "ready" event asynchronously to keep "element.viewer" is defined
+    // Call the "ready" hook function asynchronously for accessing instance variable in the hook.
     this.timeout = setTimeout(() => {
       if (isFunction(options.ready)) {
         addListener(element, EVENT_READY, options.ready, {
@@ -315,7 +308,17 @@ class Viewer {
         });
       }
 
-      dispatchEvent(element, EVENT_READY);
+      if (dispatchEvent(element, EVENT_READY) === false || this.destroyed) {
+        return;
+      }
+
+      if (options.inline) {
+        this.view();
+      }
+
+      if (isFunction(done)) {
+        done();
+      }
     }, 0);
   }
 
