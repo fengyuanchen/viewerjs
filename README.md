@@ -23,7 +23,7 @@
 
 ## Features
 
-- Supports 32 [options](#options)
+- Supports 33 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 7 [events](#events)
 - Supports modal and inline modes
@@ -64,11 +64,21 @@ Include files:
 
 ### Usage
 
-Initialize with `Viewer` constructor:
+#### Syntax
 
-- Browser: `window.Viewer`
-- CommonJS: `var Viewer = require('viewerjs')`
-- ES2015: `import Viewer from 'viewerjs'`
+```js
+new Viewer(element[, options])
+```
+
+- **element**
+  - Type: `HTMLElement`
+  - The target image or container of images for viewing.
+
+- **options** (optional)
+  - Type: `Object`
+  - The options for viewing. Check out the available [options](#options).
+
+#### Example
 
 ```html
 <!-- a block container is required -->
@@ -134,9 +144,9 @@ Show the button on the top-right of the viewer.
 - Options:
   - `0` or `false`: hide the navbar
   - `1` or `true`: show the navbar
-  - `2`: show the navbar only when screen width great then 768 pixels
-  - `3`: show the navbar only when screen width great then 992 pixels
-  - `4`: show the navbar only when screen width great then 1200 pixels
+  - `2`: show the navbar only when the screen width is greater than 768 pixels
+  - `3`: show the navbar only when the screen width is greater than 992 pixels
+  - `4`: show the navbar only when the screen width is greater than 1200 pixels
 
 Specify the visibility of the navbar.
 
@@ -147,9 +157,9 @@ Specify the visibility of the navbar.
 - Options:
   - `0` or `false`: hide the title
   - `1` or `true`: show the title
-  - `2`: show the title only when screen width great then 768 pixels
-  - `3`: show the title only when screen width great then 992 pixels
-  - `4`: show the title only when screen width great then 1200 pixels
+  - `2`: show the title only when the screen width is greater than 768 pixels
+  - `3`: show the title only when the screen width is greater than 992 pixels
+  - `4`: show the title only when the screen width is greater than 1200 pixels
 
 Specify the visibility of the title (the current image's name and dimensions).
 
@@ -162,9 +172,9 @@ Specify the visibility of the title (the current image's name and dimensions).
 - Options:
   - `0` or `false`: hide the toolbar.
   - `1` or `true`: show the toolbar.
-  - `2`: show the toolbar only when screen width great then 768 pixels.
-  - `3`: show the toolbar only when screen width great then 992 pixels.
-  - `4`: show the toolbar only when screen width great then 1200 pixels.
+  - `2`: show the toolbar only when the screen width is greater than 768 pixels.
+  - `3`: show the toolbar only when the screen width is greater than 992 pixels.
+  - `4`: show the toolbar only when the screen width is greater than 1200 pixels.
   - `{ key: Boolean | Number }`: show or hide the toolbar.
   - `{ key: String }`: customize the size of the button.
   - `{ key: Function }`: customize the click handler of the button.
@@ -274,7 +284,7 @@ Enable loop viewing.
 - Type: `Number`
 - Default: `5000`
 
-Define interval of each image when playing.
+The amount of time to delay between automatically cycling an image when playing.
 
 ### minWidth
 
