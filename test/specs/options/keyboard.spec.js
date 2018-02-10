@@ -191,7 +191,7 @@ describe('keyboard (option)', () => {
     viewer.show();
   });
 
-  it('should zoom out to initial size when press both the "Control" and "0" keys in modal mode', (done) => {
+  it('should zoom out to initial size when press `Ctrl + 0` in modal mode', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       viewed() {
@@ -214,7 +214,7 @@ describe('keyboard (option)', () => {
     viewer.show();
   });
 
-  it('should zoom out in to natural size when press both the "Control" and "1" keys in modal mode', (done) => {
+  it('should zoom out in to natural size when press `Ctrl + 1` in modal mode', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       viewed() {
