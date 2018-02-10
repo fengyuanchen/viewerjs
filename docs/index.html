@@ -8,7 +8,7 @@
   <meta name="keywords" content="HTML, CSS, JS, JavaScript, image viewing, viewer, viewerjs, viewer.js, front-end, web development">
   <meta name="author" content="Chen Fengyuan">
   <title>Viewer.js</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/viewer.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -45,7 +45,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md">
-          <h1>Viewer.js <small class="h6">v1.0.0-beta.1</small></h1>
+          <h1>Viewer.js <small class="h6">v1.0.0.beta.1</small></h1>
           <p class="lead">JavaScript image viewer.</p>
         </div>
         <div class="col-md">
@@ -68,84 +68,98 @@
         <div class="docs-toggles">
           <div class="btn-group d-flex" data-toggle="buttons" role="group">
             <label class="btn btn-primary active">
-              <input type="radio" name="inline" data-value="false" autocomplete="off" checked> Modal mode
+              <input type="radio" class="sr-only" name="inline" data-value="false" autocomplete="off" checked> Modal mode
             </label>
             <label class="btn btn-primary">
-              <input type="radio" name="inline" data-value="true" autocomplete="off"> Inline mode
+              <input type="radio" class="sr-only" name="inline" data-value="true" autocomplete="off"> Inline mode
             </label>
           </div>
           <button class="btn btn-primary btn-block d-md-none" id="toggle-options" data-target="#options" data-toggle="collapse" aria-expanded="true">Toggle options</button>
           <div class="docs-collapse collapse" id="options" aria-labelledby="toggle-options">
             <ul class="list-group">
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="button" checked> button
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="button" type="checkbox" name="button" checked>
+                  <label for="button" class="form-check-label">button</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="navbar" checked> navbar
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="navbar" type="checkbox" name="navbar" checked>
+                  <label for="navbar" class="form-check-label">navbar</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="title" checked> title
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="title" type="checkbox" name="title" checked>
+                  <label for="title" class="form-check-label">title</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="toolbar" checked> toolbar
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="toolbar" type="checkbox" name="toolbar" checked>
+                  <label for="toolbar" class="form-check-label">toolbar</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="tooltip" checked> tooltip
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="tooltip" type="checkbox" name="tooltip" checked>
+                  <label for="tooltip" class="form-check-label">tooltip</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="movable" checked> movable
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="movable" type="checkbox" name="movable" checked>
+                  <label for="movable" class="form-check-label">movable</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="zoomable" checked> zoomable
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="zoomable" type="checkbox" name="zoomable" checked>
+                  <label for="zoomable" class="form-check-label">zoomable</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="rotatable" checked> rotatable
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="rotatable" type="checkbox" name="rotatable" checked>
+                  <label for="rotatable" class="form-check-label">rotatable</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="scalable" checked> scalable
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="scalable" type="checkbox" name="scalable" checked>
+                  <label for="scalable" class="form-check-label">scalable</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="transition" checked> transition
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="transition" type="checkbox" name="transition" checked>
+                  <label for="transition" class="form-check-label">transition</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="fullscreen" checked> fullscreen
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="fullscreen" type="checkbox" name="fullscreen" checked>
+                  <label for="fullscreen" class="form-check-label">fullscreen</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="keyboard" checked> keyboard
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="keyboard" type="checkbox" name="keyboard" checked>
+                  <label for="keyboard" class="form-check-label">keyboard</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="backdrop" checked> backdrop
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="backdrop" type="checkbox" name="backdrop" checked>
+                  <label for="backdrop" class="form-check-label">backdrop</label>
+                </div>
               </li>
               <li class="list-group-item">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="loop"> loop
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" id="loop" type="checkbox" name="loop">
+                  <label for="loop" class="form-check-label">loop</label>
+                </div>
               </li>
             </ul>
           </div>
@@ -256,8 +270,8 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://fengyuanchen.github.io/js/common.js"></script>
   <script src="js/viewer.js"></script>
   <script src="js/main.js"></script>
