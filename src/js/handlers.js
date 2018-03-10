@@ -3,6 +3,7 @@ import {
   ACTION_SWITCH,
   ACTION_ZOOM,
   CLASS_INVISIBLE,
+  CLASS_LOADING,
   CLASS_MOVE,
   CLASS_TRANSITION,
   EVENT_LOAD,
@@ -11,15 +12,15 @@ import {
 import {
   addClass,
   addListener,
+  assign,
   dispatchEvent,
-  each,
-  extend,
+  forEach,
   getData,
   getImageNaturalSizes,
   getPointer,
+  getTransforms,
   hasClass,
   isFunction,
-  proxy,
   removeClass,
   setStyle,
   toggleClass,
@@ -75,7 +76,7 @@ export default {
         break;
 
       case 'play':
-        this.play();
+        this.play(options.fullscreen);
         break;
 
       case 'next':
@@ -111,10 +112,6 @@ export default {
       this.timeout = false;
     }
 
-    if (!this.image) {
-      return;
-    }
-
     const {
       element,
       options,
@@ -125,21 +122,26 @@ export default {
 
     removeClass(image, CLASS_INVISIBLE);
 
+    if (options.loading) {
+      removeClass(this.canvas, CLASS_LOADING);
+    }
+
     image.style.cssText = (
-      'width:0;' +
       'height:0;' +
       `margin-left:${viewerData.width / 2}px;` +
       `margin-top:${viewerData.height / 2}px;` +
       'max-width:none!important;' +
-      'visibility:visible;'
+      'position:absolute;' +
+      'width:0;'
     );
 
     this.initImage(() => {
-      toggleClass(image, CLASS_TRANSITION, options.transition);
       toggleClass(image, CLASS_MOVE, options.movable);
+      toggleClass(image, CLASS_TRANSITION, options.transition);
 
       this.renderImage(() => {
         this.viewed = true;
+        this.viewing = false;
 
         if (isFunction(options.viewed)) {
           addListener(element, EVENT_VIEWED, options.viewed, {
@@ -180,12 +182,13 @@ export default {
         width = parentHeight * aspectRatio;
       }
 
-      setStyle(image, {
+      setStyle(image, assign({
         width,
         height,
-        marginLeft: (parentWidth - width) / 2,
-        marginTop: (parentHeight - height) / 2,
-      });
+      }, getTransforms({
+        translateX: (parentWidth - width) / 2,
+        translateY: (parentHeight - height) / 2,
+      })));
     });
   },
 
@@ -274,12 +277,12 @@ export default {
   pointerdown(e) {
     const { options, pointers } = this;
 
-    if (!this.viewed || this.transitioning) {
+    if (!this.viewed || this.showing || this.viewing || this.hiding) {
       return;
     }
 
     if (e.changedTouches) {
-      each(e.changedTouches, (touch) => {
+      forEach(e.changedTouches, (touch) => {
         pointers[touch.identifier] = getPointer(touch);
       });
     } else {
@@ -312,11 +315,11 @@ export default {
     e.preventDefault();
 
     if (e.changedTouches) {
-      each(e.changedTouches, (touch) => {
-        extend(pointers[touch.identifier], getPointer(touch, true));
+      forEach(e.changedTouches, (touch) => {
+        assign(pointers[touch.identifier], getPointer(touch, true));
       });
     } else {
-      extend(pointers[e.pointerId || 0], getPointer(e, true));
+      assign(pointers[e.pointerId || 0], getPointer(e, true));
     }
 
     if (action === ACTION_MOVE && options.transition && hasClass(image, CLASS_TRANSITION)) {
@@ -330,7 +333,7 @@ export default {
     const { action, pointers } = this;
 
     if (e.changedTouches) {
-      each(e.changedTouches, (touch) => {
+      forEach(e.changedTouches, (touch) => {
         delete pointers[touch.identifier];
       });
     } else {
@@ -349,6 +352,10 @@ export default {
   },
 
   resize() {
+    if (!this.isShown || this.hiding) {
+      return;
+    }
+
     this.initContainer();
     this.initViewer();
     this.renderViewer();
@@ -370,19 +377,12 @@ export default {
         return;
       }
 
-      each(this.player.getElementsByTagName('img'), (image) => {
-        addListener(image, EVENT_LOAD, proxy(this.loadImage, this), {
+      forEach(this.player.getElementsByTagName('img'), (image) => {
+        addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
           once: true,
         });
         dispatchEvent(image, EVENT_LOAD);
       });
-    }
-  },
-
-  start({ target }) {
-    if (target.tagName.toLowerCase() === 'img' && this.images.indexOf(target) !== -1) {
-      this.target = target;
-      this.show();
     }
   },
 

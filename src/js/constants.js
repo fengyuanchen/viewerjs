@@ -19,6 +19,7 @@ export const CLASS_HIDE_SM_DOWN = `${NAMESPACE}-hide-sm-down`;
 export const CLASS_HIDE_XS_DOWN = `${NAMESPACE}-hide-xs-down`;
 export const CLASS_IN = `${NAMESPACE}-in`;
 export const CLASS_INVISIBLE = `${NAMESPACE}-invisible`;
+export const CLASS_LOADING = `${NAMESPACE}-loading`;
 export const CLASS_MOVE = `${NAMESPACE}-move`;
 export const CLASS_OPEN = `${NAMESPACE}-open`;
 export const CLASS_SHOW = `${NAMESPACE}-show`;

@@ -1,0 +1,13 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "Viewer": true,
+    "expect": true
+  },
+  "rules": {
+    "no-new": "off",
+    "no-unused-expressions": "off"
+  }
+}

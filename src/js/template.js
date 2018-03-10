@@ -1,5 +1,5 @@
 export default (
-  '<div class="viewer-container">' +
+  '<div class="viewer-container" touch-action="none">' +
     '<div class="viewer-canvas"></div>' +
     '<div class="viewer-footer">' +
       '<div class="viewer-title"></div>' +

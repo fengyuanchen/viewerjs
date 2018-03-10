@@ -44,8 +44,11 @@ export default {
   // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
   backdrop: true,
 
-  // Enable loop viewing.
-  loop: false,
+  // Indicate if show a loading spinner when load image or not.
+  loading: true,
+
+  // Indicate if enable loop viewing or not.
+  loop: true,
 
   // Min width of the viewer in inline mode
   minWidth: 200,

@@ -83,7 +83,7 @@ export function isFunction(value) {
  * @param {Function} callback - The process function for each element.
  * @returns {*} The original data.
  */
-export function each(data, callback) {
+export function forEach(data, callback) {
   if (data && isFunction(callback)) {
     if (Array.isArray(data) || isNumber(data.length)/* array-like */) {
       const { length } = data;
@@ -110,12 +110,8 @@ export function each(data, callback) {
  * @param {*} args - The rest objects which will be merged to the first object.
  * @returns {Object} The extended object.
  */
-export function extend(obj, ...args) {
+export const assign = Object.assign || function assign(obj, ...args) {
   if (isObject(obj) && args.length > 0) {
-    if (Object.assign) {
-      return Object.assign(obj, ...args);
-    }
-
     args.forEach((arg) => {
       if (isObject(arg)) {
         Object.keys(arg).forEach((key) => {
@@ -126,19 +122,9 @@ export function extend(obj, ...args) {
   }
 
   return obj;
-}
+};
 
-/**
- * Takes a function and returns a new one that will always have a particular context.
- * @param {Function} fn - The target function.
- * @param {Object} context - The new context for the function.
- * @returns {Function} The new function.
- */
-export function proxy(fn, context, ...args) {
-  return (...args2) => fn.apply(context, args.concat(args2));
-}
-
-const REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
+const REGEXP_SUFFIX = /^(?:width|height|left|top|marginLeft|marginTop)$/;
 
 /**
  * Apply styles to the given element.
@@ -148,24 +134,13 @@ const REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
 export function setStyle(element, styles) {
   const { style } = element;
 
-  each(styles, (value, property) => {
+  forEach(styles, (value, property) => {
     if (REGEXP_SUFFIX.test(property) && isNumber(value)) {
       value += 'px';
     }
 
     style[property] = value;
   });
-}
-
-/**
- * Get the styles from the given element.
- * @param {Element} element - The target element.
- * @returns {Object} The styles of the element.
- */
-export function getStyle(element) {
-  return window.getComputedStyle ?
-    window.getComputedStyle(element, null) :
-    element.currentStyle;
 }
 
 /**
@@ -191,7 +166,7 @@ export function addClass(element, value) {
   }
 
   if (isNumber(element.length)) {
-    each(element, (elem) => {
+    forEach(element, (elem) => {
       addClass(elem, value);
     });
     return;
@@ -222,7 +197,7 @@ export function removeClass(element, value) {
   }
 
   if (isNumber(element.length)) {
-    each(element, (elem) => {
+    forEach(element, (elem) => {
       removeClass(elem, value);
     });
     return;
@@ -250,7 +225,7 @@ export function toggleClass(element, value, added) {
   }
 
   if (isNumber(element.length)) {
-    each(element, (elem) => {
+    forEach(element, (elem) => {
       toggleClass(elem, value, added);
     });
     return;
@@ -267,9 +242,9 @@ export function toggleClass(element, value, added) {
 const REGEXP_HYPHENATE = /([a-z\d])([A-Z])/g;
 
 /**
- * Hyphenate the given value.
- * @param {string} value - The value to hyphenate.
- * @returns {string} The hyphenated value.
+ * Transform the given string from camelCase to kebab-case
+ * @param {string} value - The value to transform.
+ * @returns {string} The transformed value.
  */
 export function hyphenate(value) {
   return value.replace(REGEXP_HYPHENATE, '$1-$2').toLowerCase();
@@ -317,20 +292,35 @@ export function removeData(element, name) {
     try {
       delete element[name];
     } catch (e) {
-      element[name] = null;
+      element[name] = undefined;
     }
   } else if (element.dataset) {
+    // #128 Safari not allows to delete dataset property
     try {
       delete element.dataset[name];
     } catch (e) {
-      element.dataset[name] = null;
+      element.dataset[name] = undefined;
     }
   } else {
     element.removeAttribute(`data-${hyphenate(name)}`);
   }
 }
 
-const REGEXP_SPACES = /\s+/;
+const REGEXP_SPACES = /\s\s*/;
+const onceSupported = (() => {
+  let supported = false;
+  const listener = () => {};
+  const options = Object.defineProperty({}, 'once', {
+    get() {
+      supported = true;
+      return true;
+    },
+  });
+
+  WINDOW.addEventListener('test', listener, options);
+  WINDOW.removeEventListener('test', listener, options);
+  return supported;
+})();
 
 /**
  * Remove event listener from the target element.
@@ -340,24 +330,28 @@ const REGEXP_SPACES = /\s+/;
  * @param {Object} options - The event options.
  */
 export function removeListener(element, type, listener, options = {}) {
-  if (!isFunction(listener)) {
-    return;
-  }
+  let handler = listener;
 
-  const types = type.trim().split(REGEXP_SPACES);
+  type.trim().split(REGEXP_SPACES).forEach((event) => {
+    if (!onceSupported) {
+      const { listeners } = element;
 
-  if (types.length > 1) {
-    each(types, (t) => {
-      removeListener(element, t, listener, options);
-    });
-    return;
-  }
+      if (listeners && listeners[event] && listeners[event][listener]) {
+        handler = listeners[event][listener];
+        delete listeners[event][listener];
 
-  if (element.removeEventListener) {
-    element.removeEventListener(type, listener, options);
-  } else if (element.detachEvent) {
-    element.detachEvent(`on${type}`, listener);
-  }
+        if (Object.keys(listeners[event]).length === 0) {
+          delete listeners[event];
+        }
+
+        if (Object.keys(listeners).length === 0) {
+          delete element.listeners;
+        }
+      }
+    }
+
+    element.removeEventListener(event, handler, options);
+  });
 }
 
 /**
@@ -368,33 +362,32 @@ export function removeListener(element, type, listener, options = {}) {
  * @param {Object} options - The event options.
  */
 export function addListener(element, type, listener, options = {}) {
-  if (!isFunction(listener)) {
-    return;
-  }
+  let handler = listener;
 
-  const types = type.trim().split(REGEXP_SPACES);
+  type.trim().split(REGEXP_SPACES).forEach((event) => {
+    if (options.once && !onceSupported) {
+      const { listeners = {} } = element;
 
-  if (types.length > 1) {
-    each(types, (t) => {
-      addListener(element, t, listener, options);
-    });
-    return;
-  }
+      handler = (...args) => {
+        delete listeners[event][listener];
+        element.removeEventListener(event, handler, options);
+        listener.apply(element, args);
+      };
 
-  if (options.once) {
-    const originalListener = listener;
+      if (!listeners[event]) {
+        listeners[event] = {};
+      }
 
-    listener = (...args) => {
-      removeListener(element, type, listener, options);
-      return originalListener.apply(element, args);
-    };
-  }
+      if (listeners[event][listener]) {
+        element.removeEventListener(event, listeners[event][listener], options);
+      }
 
-  if (element.addEventListener) {
-    element.addEventListener(type, listener, options);
-  } else if (element.attachEvent) {
-    element.attachEvent(`on${type}`, listener);
-  }
+      listeners[event][listener] = handler;
+      element.listeners = listeners;
+    }
+
+    element.addEventListener(event, handler, options);
+  });
 }
 
 /**
@@ -405,39 +398,21 @@ export function addListener(element, type, listener, options = {}) {
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
 export function dispatchEvent(element, type, data) {
-  if (element.dispatchEvent) {
-    let event;
+  let event;
 
-    // Event and CustomEvent on IE9-11 are global objects, not constructors
-    if (isFunction(Event) && isFunction(CustomEvent)) {
-      if (isUndefined(data)) {
-        event = new Event(type, {
-          bubbles: true,
-          cancelable: true,
-        });
-      } else {
-        event = new CustomEvent(type, {
-          detail: data,
-          bubbles: true,
-          cancelable: true,
-        });
-      }
-    } else if (isUndefined(data)) {
-      event = document.createEvent('Event');
-      event.initEvent(type, true, true);
-    } else {
-      event = document.createEvent('CustomEvent');
-      event.initCustomEvent(type, true, true, data);
-    }
-
-    // IE9+
-    return element.dispatchEvent(event);
-  } else if (element.fireEvent) {
-    // IE6-10 (native events only)
-    return element.fireEvent(`on${type}`);
+  // Event and CustomEvent on IE9-11 are global objects, not constructors
+  if (isFunction(Event) && isFunction(CustomEvent)) {
+    event = new CustomEvent(type, {
+      detail: data,
+      bubbles: true,
+      cancelable: true,
+    });
+  } else {
+    event = document.createEvent('CustomEvent');
+    event.initCustomEvent(type, true, true, data);
   }
 
-  return true;
+  return element.dispatchEvent(event);
 }
 
 /**
@@ -446,27 +421,12 @@ export function dispatchEvent(element, type, data) {
  * @returns {Object} The offset data.
  */
 export function getOffset(element) {
-  const doc = element.ownerDocument.documentElement;
   const box = element.getBoundingClientRect();
 
   return {
-    left: box.left + (
-      (window.scrollX || (doc && doc.scrollLeft) || 0) - ((doc && doc.clientLeft) || 0)
-    ),
-    top: box.top + (
-      (window.scrollY || (doc && doc.scrollTop) || 0) - ((doc && doc.clientTop) || 0)
-    ),
+    left: box.left + (window.pageXOffset - document.documentElement.clientLeft),
+    top: box.top + (window.pageYOffset - document.documentElement.clientTop),
   };
-}
-
-/**
- * Empty an element.
- * @param {Element} element - The element to empty.
- */
-export function empty(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
 }
 
 /**
@@ -474,9 +434,24 @@ export function empty(element) {
  * @param {Object} obj - The target object.
  * @returns {string} A string contains transform values.
  */
-export function getTransforms({ rotate, scaleX, scaleY }) {
+export function getTransforms({
+  rotate,
+  scaleX,
+  scaleY,
+  translateX,
+  translateY,
+}) {
   const values = [];
 
+  if (isNumber(translateX) && translateX !== 0) {
+    values.push(`translateX(${translateX}px)`);
+  }
+
+  if (isNumber(translateY) && translateY !== 0) {
+    values.push(`translateY(${translateY}px)`);
+  }
+
+  // Rotate should come first before scale to match orientation transform
   if (isNumber(rotate) && rotate !== 0) {
     values.push(`rotate(${rotate}deg)`);
   }
@@ -510,42 +485,53 @@ export function getImageNameFromURL(url) {
   return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
 }
 
-const { navigator } = WINDOW;
-const IS_SAFARI_OR_UIWEBVIEW = navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent);
+const IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(WINDOW.navigator.userAgent);
 
 /**
  * Get an image's natural sizes.
  * @param {string} image - The target image.
  * @param {Function} callback - The callback function.
+ * @returns {HTMLImageElement} The new image.
  */
 export function getImageNaturalSizes(image, callback) {
+  const newImage = document.createElement('img');
+
   // Modern browsers (except Safari)
-  if (image.naturalWidth && !IS_SAFARI_OR_UIWEBVIEW) {
+  if (image.naturalWidth && !IS_SAFARI) {
     callback(image.naturalWidth, image.naturalHeight);
-    return;
+    return newImage;
   }
 
-  const newImage = document.createElement('img');
-  const body = image.ownerDocument.body || image.ownerDocument.documentElement;
+  const body = document.body || document.documentElement;
 
   newImage.onload = () => {
     callback(newImage.width, newImage.height);
-    body.removeChild(newImage);
+
+    if (!IS_SAFARI) {
+      body.removeChild(newImage);
+    }
   };
 
   newImage.src = image.src;
-  newImage.style.cssText = (
-    'left:0;' +
-    'max-height:none!important;' +
-    'max-width:none!important;' +
-    'min-height:0!important;' +
-    'min-width:0!important;' +
-    'opacity:0;' +
-    'position:absolute;' +
-    'top:0;' +
-    'z-index:-1;'
-  );
-  body.appendChild(newImage);
+
+  // iOS Safari will convert the image automatically
+  // with its orientation once append it into DOM
+  if (!IS_SAFARI) {
+    newImage.style.cssText = (
+      'left:0;' +
+      'max-height:none!important;' +
+      'max-width:none!important;' +
+      'min-height:0!important;' +
+      'min-width:0!important;' +
+      'opacity:0;' +
+      'position:absolute;' +
+      'top:0;' +
+      'z-index:-1;'
+    );
+    body.appendChild(newImage);
+  }
+
+  return newImage;
 }
 
 /**
@@ -575,13 +561,13 @@ export function getResponsiveClass(type) {
  * @returns {number} The result ratio.
  */
 export function getMaxZoomRatio(pointers) {
-  const pointers2 = extend({}, pointers);
+  const pointers2 = assign({}, pointers);
   const ratios = [];
 
-  each(pointers, (pointer, pointerId) => {
+  forEach(pointers, (pointer, pointerId) => {
     delete pointers2[pointerId];
 
-    each(pointers2, (pointer2) => {
+    forEach(pointers2, (pointer2) => {
       const x1 = Math.abs(pointer.startX - pointer2.startX);
       const y1 = Math.abs(pointer.startY - pointer2.startY);
       const x2 = Math.abs(pointer.endX - pointer2.endX);
@@ -611,11 +597,7 @@ export function getPointer({ pageX, pageY }, endOnly) {
     endY: pageY,
   };
 
-  if (endOnly) {
-    return end;
-  }
-
-  return extend({
+  return endOnly ? end : assign({
     startX: pageX,
     startY: pageY,
   }, end);
@@ -631,7 +613,7 @@ export function getPointersCenter(pointers) {
   let pageY = 0;
   let count = 0;
 
-  each(pointers, ({ startX, startY }) => {
+  forEach(pointers, ({ startX, startY }) => {
     pageX += startX;
     pageY += startY;
     count += 1;
