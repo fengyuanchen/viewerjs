@@ -5,7 +5,6 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="JavaScript image viewer.">
-  <meta name="keywords" content="HTML, CSS, JS, JavaScript, image viewing, viewer, viewerjs, viewer.js, front-end, web development">
   <meta name="author" content="Chen Fengyuan">
   <title>Viewer.js</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -157,8 +156,14 @@
               </li>
               <li class="list-group-item">
                 <div class="form-check">
-                  <input class="form-check-input" id="loop" type="checkbox" name="loop">
+                  <input class="form-check-input" id="loop" type="checkbox" name="loop" checked>
                   <label for="loop" class="form-check-label">loop</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="loading" type="checkbox" name="loading" checked>
+                  <label for="loading" class="form-check-label">loading</label>
                 </div>
               </li>
             </ul>
@@ -263,6 +268,7 @@
       <nav class="nav flex-wrap justify-content-center mb-3">
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs">GitHub</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/releases">Releases</a>
+        <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/examples">Examples</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/LICENSE">License</a>
         <a class="nav-link" href="http://chenfengyuan.com">About</a>
       </nav>
