@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0-rc (Mar 10, 2018)
+
+- Add a new option: `loading`.
+- Add type definitions file for TypeScript.
+- Enhance the `show`, `hide` and `play` methods.
+- Change the default value of `loop` option from `false` to `true`.
+
 ## 1.0.0-beta.2 (Feb 13, 2018)
 
 - Add a new option: `container`.
