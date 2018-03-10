@@ -47,8 +47,8 @@ export default {
   // Indicate if show a loading spinner when load image or not.
   loading: true,
 
-  // Enable loop viewing.
-  loop: false,
+  // Indicate if enable loop viewing or not.
+  loop: true,
 
   // Min width of the viewer in inline mode
   minWidth: 200,

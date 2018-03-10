@@ -280,9 +280,9 @@ Indicate if show a loading spinner when load image or not.
 ### loop
 
 - Type: `Boolean`
-- Default: `false`
+- Default: `true`
 
-Enable loop viewing.
+Indicate if enable loop viewing or not.
 
 > If the current image is the last one, then the next one to view is the first one, and vice versa.
 

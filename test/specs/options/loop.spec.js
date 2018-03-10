@@ -1,8 +1,32 @@
 describe('loop (option)', () => {
-  it('should not be loop by default', (done) => {
+  it('should be loop by default', (done) => {
     const imageList = window.createImageList();
     const viewer = new Viewer(imageList, {
       inline: true,
+
+      viewed(event) {
+        switch (event.detail.index) {
+          case 0:
+            viewer.toolbar.querySelector('.viewer-prev').click();
+            break;
+
+          case 4:
+            done();
+            break;
+
+          default:
+        }
+      },
+    });
+
+    expect(viewer.options.loop).to.be.true;
+  });
+
+  it('should not be loop', (done) => {
+    const imageList = window.createImageList();
+    const viewer = new Viewer(imageList, {
+      inline: true,
+      loop: false,
 
       viewed(event) {
         switch (event.detail.index) {
@@ -21,29 +45,5 @@ describe('loop (option)', () => {
     });
 
     expect(viewer.options.loop).to.be.false;
-  });
-
-  it('should be loop', (done) => {
-    const imageList = window.createImageList();
-    const viewer = new Viewer(imageList, {
-      inline: true,
-      loop: true,
-
-      viewed(event) {
-        switch (event.detail.index) {
-          case 0:
-            viewer.toolbar.querySelector('.viewer-prev').click();
-            break;
-
-          case 4:
-            done();
-            break;
-
-          default:
-        }
-      },
-    });
-
-    expect(viewer.options.loop).to.be.true;
   });
 });
