@@ -3,6 +3,7 @@ import {
   ACTION_SWITCH,
   ACTION_ZOOM,
   CLASS_INVISIBLE,
+  CLASS_LOADING,
   CLASS_MOVE,
   CLASS_TRANSITION,
   EVENT_LOAD,
@@ -17,6 +18,7 @@ import {
   getData,
   getImageNaturalSizes,
   getPointer,
+  getTransforms,
   hasClass,
   isFunction,
   removeClass,
@@ -120,18 +122,22 @@ export default {
 
     removeClass(image, CLASS_INVISIBLE);
 
+    if (options.loading) {
+      removeClass(this.canvas, CLASS_LOADING);
+    }
+
     image.style.cssText = (
-      'width:0;' +
       'height:0;' +
       `margin-left:${viewerData.width / 2}px;` +
       `margin-top:${viewerData.height / 2}px;` +
       'max-width:none!important;' +
-      'visibility:visible;'
+      'position:absolute;' +
+      'width:0;'
     );
 
     this.initImage(() => {
-      toggleClass(image, CLASS_TRANSITION, options.transition);
       toggleClass(image, CLASS_MOVE, options.movable);
+      toggleClass(image, CLASS_TRANSITION, options.transition);
 
       this.renderImage(() => {
         this.viewed = true;
@@ -176,12 +182,13 @@ export default {
         width = parentHeight * aspectRatio;
       }
 
-      setStyle(image, {
+      setStyle(image, assign({
         width,
         height,
-        marginLeft: (parentWidth - width) / 2,
-        marginTop: (parentHeight - height) / 2,
-      });
+      }, getTransforms({
+        translateX: (parentWidth - width) / 2,
+        translateY: (parentHeight - height) / 2,
+      })));
     });
   },
 
@@ -345,6 +352,10 @@ export default {
   },
 
   resize() {
+    if (!this.isShown || this.hiding) {
+      return;
+    }
+
     this.initContainer();
     this.initViewer();
     this.renderViewer();

@@ -6,6 +6,7 @@ import {
   CLASS_HIDE,
   CLASS_IN,
   CLASS_INVISIBLE,
+  CLASS_LOADING,
   CLASS_SHOW,
   CLASS_TRANSITION,
   EVENT_CLICK,
@@ -236,6 +237,11 @@ export default {
     this.index = index;
     this.imageData = {};
     addClass(image, CLASS_INVISIBLE);
+
+    if (options.loading) {
+      addClass(canvas, CLASS_LOADING);
+    }
+
     canvas.innerHTML = '';
     canvas.appendChild(image);
 

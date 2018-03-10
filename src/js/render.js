@@ -1,4 +1,5 @@
 import {
+  CLASS_LOADING,
   CLASS_TRANSITION,
   EVENT_LOAD,
   EVENT_TRANSITION_END,
@@ -92,9 +93,22 @@ export default {
 
     list.innerHTML = items.join('');
     this.items = list.getElementsByTagName('li');
-    forEach(list.getElementsByTagName('img'), (image) => {
+    forEach(this.items, (item) => {
+      const image = item.firstElementChild;
+
       setData(image, 'filled', true);
-      addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
+
+      if (options.loading) {
+        addClass(item, CLASS_LOADING);
+      }
+
+      addListener(image, EVENT_LOAD, (event) => {
+        if (options.loading) {
+          removeClass(item, CLASS_LOADING);
+        }
+
+        this.loadImage(event);
+      }, {
         once: true,
       });
     });
@@ -114,10 +128,11 @@ export default {
     const outerWidth = width + 1; // 1 pixel of `margin-left` width
 
     // Place the active item in the center of the screen
-    setStyle(this.list, {
+    setStyle(this.list, assign({
       width: outerWidth * this.length,
-      marginLeft: ((this.viewerData.width - width) / 2) - (outerWidth * i),
-    });
+    }, getTransforms({
+      translateX: ((this.viewerData.width - width) / 2) - (outerWidth * i),
+    })));
   },
 
   resetList() {
@@ -125,9 +140,9 @@ export default {
 
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
-    setStyle(list, {
-      marginLeft: 0,
-    });
+    setStyle(list, getTransforms({
+      translateX: 0,
+    }));
   },
 
   initImage(done) {

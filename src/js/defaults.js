@@ -44,6 +44,9 @@ export default {
   // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
   backdrop: true,
 
+  // Indicate if show a loading spinner when load image or not.
+  loading: true,
+
   // Enable loop viewing.
   loop: false,
 

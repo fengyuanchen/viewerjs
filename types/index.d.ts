@@ -44,6 +44,7 @@ declare namespace Viewer {
     inline?: boolean;
     interval?: number;
     keyboard?: boolean;
+    loading?: boolean;
     loop?: boolean;
     maxZoomRatio?: number;
     minHeight?: number;
@@ -75,11 +76,11 @@ declare class Viewer {
   destroy(): Viewer;
   exit(): Viewer;
   full(): Viewer;
-  hide(): Viewer;
+  hide(immediate: boolean): Viewer;
   move(offsetX: number, offsetY?: number): Viewer;
   moveTo(x: number, y?: number): Viewer;
   next(loop?: boolean): Viewer;
-  play(): Viewer;
+  play(fullscreen?: boolean): Viewer;
   prev(loop?: boolean): Viewer;
   reset(): Viewer;
   rotate(degree: number): Viewer;
@@ -87,7 +88,7 @@ declare class Viewer {
   scale(scaleX: number, scaleY?: number): Viewer;
   scaleX(scaleX: number): Viewer;
   scaleY(scaleY: number): Viewer;
-  show(): Viewer;
+  show(immediate: boolean): Viewer;
   stop(): Viewer;
   toggle(): Viewer;
   tooltip(): Viewer;

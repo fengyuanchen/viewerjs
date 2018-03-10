@@ -434,9 +434,24 @@ export function getOffset(element) {
  * @param {Object} obj - The target object.
  * @returns {string} A string contains transform values.
  */
-export function getTransforms({ rotate, scaleX, scaleY }) {
+export function getTransforms({
+  rotate,
+  scaleX,
+  scaleY,
+  translateX,
+  translateY,
+}) {
   const values = [];
 
+  if (isNumber(translateX) && translateX !== 0) {
+    values.push(`translateX(${translateX}px)`);
+  }
+
+  if (isNumber(translateY) && translateY !== 0) {
+    values.push(`translateY(${translateY}px)`);
+  }
+
+  // Rotate should come first before scale to match orientation transform
   if (isNumber(rotate) && rotate !== 0) {
     values.push(`rotate(${rotate}deg)`);
   }

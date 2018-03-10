@@ -7,7 +7,7 @@ module.exports = (config) => {
   config.set({
     autoWatch: false,
     basePath: '..',
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadlessWithoutSandbox'],
     customLaunchers: {
       ChromeHeadlessWithoutSandbox: {
         base: 'ChromeHeadless',
