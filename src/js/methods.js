@@ -263,24 +263,6 @@ export default {
       once: true,
     });
 
-    if (image.complete) {
-      this.load();
-    } else {
-      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
-        once: true,
-      });
-
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-
-      // Make the image visible if it fails to load within 1s
-      this.timeout = setTimeout(() => {
-        removeClass(image, CLASS_INVISIBLE);
-        this.timeout = false;
-      }, 1000);
-    }
-
     this.viewing = {
       abort() {
         removeListener(element, EVENT_VIEWED, onViewed);
@@ -300,6 +282,24 @@ export default {
         }
       },
     };
+
+    if (image.complete) {
+      this.load();
+    } else {
+      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
+        once: true,
+      });
+
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      // Make the image visible if it fails to load within 1s
+      this.timeout = setTimeout(() => {
+        removeClass(image, CLASS_INVISIBLE);
+        this.timeout = false;
+      }, 1000);
+    }
 
     return this;
   },
