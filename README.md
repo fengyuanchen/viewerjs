@@ -23,7 +23,7 @@
 
 ## Features
 
-- Supports 33 [options](#options)
+- Supports 34 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 7 [events](#events)
 - Supports modal and inline modes
@@ -270,6 +270,13 @@ Enable keyboard support.
 
 Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click.
 
+### loading
+
+- Type: `Boolean`
+- Default: `true`
+
+Indicate if show a loading spinner when load image or not.
+
 ### loop
 
 - Type: `Boolean`
@@ -462,13 +469,23 @@ new Viewer(image, {
 });
 ```
 
-### show()
+### show([immediate])
+
+- **immediate** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Indicates if show the viewer immediately or not.
 
 Show the viewer.
 
 > Only available in modal mode.
 
-### hide()
+### hide([immediate])
+
+- **immediate** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Indicates if hide the viewer immediately or not.
 
 hide the viewer.
 
@@ -651,7 +668,12 @@ Scale the ordinate of the image.
 viewer.scaleY(-1); // Flip vertical
 ```
 
-### play()
+### play([fullscreen])
+
+- **fullscreen** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Indicate if request fullscreen or not.
 
 Play the images.
 

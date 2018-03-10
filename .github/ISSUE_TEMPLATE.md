@@ -10,7 +10,7 @@ ISSUES MISSING IMPORTANT INFORMATION MAY BE CLOSED WITHOUT INVESTIGATION.
 
 <pre><code>
 [ ] Regression (a behavior that used to work and stopped working in a new release)
-[ ] Bug report  <!-- Please search GitHub for a similar issue or PR before submitting -->
+[ ] Bug report <!-- Please search GitHub for a similar issue or PR before submitting -->
 [ ] Feature request
 [ ] Documentation issue or request
 </code></pre>
@@ -56,5 +56,5 @@ Browser:
 - [ ] Edge version XX
 
 Others:
-<!-- Anything else relevant?  Operating system version, IDE, package manager, HTTP server, ... -->
+<!-- Anything else relevant? -->
 </code></pre>
