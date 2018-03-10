@@ -88,7 +88,7 @@ new Viewer(element[, options])
 
 <div>
   <ul id="images">
-    <li><img src="picture.jpg" alt="Picture"></li>
+    <li><img src="picture-1.jpg" alt="Picture 1"></li>
     <li><img src="picture-2.jpg" alt="Picture 2"></li>
     <li><img src="picture-3.jpg" alt="Picture 3"></li>
   </ul>
@@ -96,11 +96,15 @@ new Viewer(element[, options])
 ```
 
 ```js
-// View one image
-var viewer = new Viewer(document.getElementById('image'), options);
+var viewer = new Viewer(document.getElementById('image'), {
+  inline: true,
+  viewed: function() {
+    viewer.zoomTo(1);
+  }
+});
 
-// View some images
-var viewer = new Viewer(document.getElementById('images'), options);
+// View a list of images
+var viewer = new Viewer(document.getElementById('images'));
 ```
 
 ## Keyboard support
