@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.0-beta.1
+ * Viewer.js v1.0.0-beta.2
  * https://github.com/fengyuanchen/viewerjs
  *
- * Copyright (c) 2015-2017 Chen Fengyuan
+ * Copyright (c) 2015-2018 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2017-12-23T04:31:53.438Z
+ * Date: 2018-02-13T13:33:47.607Z
  */
 
 (function (global, factory) {
@@ -51,6 +51,9 @@ var DEFAULTS = {
   // Enable to request fullscreen when play
   fullscreen: true,
 
+  // The amount of time to delay between automatically cycling an image when playing.
+  interval: 5000,
+
   // Enable keyboard support
   keyboard: true,
 
@@ -84,6 +87,10 @@ var DEFAULTS = {
   // Define where to get the original image URL for viewing
   // Type: String (an image attribute) or Function (should return an image URL)
   url: 'src',
+
+  // Define where to put the viewer in modal mode.
+  // Type: String | Element
+  container: 'body',
 
   // Filter the images for viewing.
   // Type: Function (return true if the image is viewable)
@@ -2721,7 +2728,18 @@ var Viewer = function () {
           zIndex: options.zIndex
         });
 
-        this.body.appendChild(viewer);
+        var container = options.container;
+
+
+        if (isString(container)) {
+          container = document.querySelector(container);
+        }
+
+        if (!container) {
+          container = this.body;
+        }
+
+        container.appendChild(viewer);
       }
 
       if (options.inline) {

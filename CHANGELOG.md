@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-beta.2 (Feb 13, 2018)
+
+- Add a new option: `container`.
+- Recover the missing default value of the `interval` option (#133).
+
 ## 1.0.0-beta.1 (Dec 23, 2017)
 
 - Add a new option: `backdrop`.
