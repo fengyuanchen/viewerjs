@@ -12,6 +12,7 @@ describe('zoom (method)', () => {
         expect(imageData.width).to.be.above(width);
         viewer.zoom(-0.2);
         expect(imageData.width).to.be.below(width);
+        viewer.hide(true);
         done();
       },
     });

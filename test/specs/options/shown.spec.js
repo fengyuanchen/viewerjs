@@ -11,6 +11,7 @@ describe('shown (option)', () => {
     const viewer = new Viewer(image, {
       shown(event) {
         expect(event.type).to.equal('shown');
+        viewer.hide(true);
         done();
       },
     });

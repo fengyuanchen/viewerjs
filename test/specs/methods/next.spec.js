@@ -9,6 +9,7 @@ describe('next (method)', () => {
             break;
 
           case 1:
+            viewer.hide(true);
             done();
             break;
 
@@ -29,9 +30,12 @@ describe('next (method)', () => {
             expect.fail(1, 0);
             break;
 
-          case 3:
+          case 4:
             viewer.next();
-            done();
+            setTimeout(() => {
+              viewer.hide(true);
+              done();
+            }, 500);
             break;
 
           default:
@@ -39,7 +43,7 @@ describe('next (method)', () => {
       },
     });
 
-    viewer.view(3);
+    viewer.view(4);
   });
 
   it('should work when the current image is the last one and the first argument is set to `true`', (done) => {
@@ -48,10 +52,11 @@ describe('next (method)', () => {
       viewed(event) {
         switch (event.detail.index) {
           case 0:
+            viewer.hide(true);
             done();
             break;
 
-          case 3:
+          case 4:
             viewer.next(true);
             break;
 
@@ -60,7 +65,7 @@ describe('next (method)', () => {
       },
     });
 
-    viewer.view(3);
+    viewer.view(4);
   });
 
   it('should work in inline mode', (done) => {

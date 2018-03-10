@@ -12,6 +12,7 @@ describe('full (method)', () => {
         expect(viewer.fulled).to.be.true;
         expect(viewer.button.className).to.include('viewer-fullscreen-exit');
         expect(viewer.viewer.className).to.include('viewer-fixed');
+        viewer.exit();
         done();
       },
     });
@@ -28,6 +29,7 @@ describe('full (method)', () => {
         expect(viewer.fulled).to.be.true;
         expect(viewer.button.className).to.not.include('viewer-fullscreen-exit');
         expect(viewer.viewer.className).to.include('viewer-fixed');
+        viewer.hide(true);
         done();
       },
     });

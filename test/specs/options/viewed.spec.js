@@ -11,6 +11,7 @@ describe('viewed (option)', () => {
     const viewer = new Viewer(image, {
       viewed(event) {
         expect(event.type).to.equal('viewed');
+        viewer.hide(true);
         done();
       },
     });
@@ -26,6 +27,7 @@ describe('viewed (option)', () => {
         expect(event.detail.image.src).to.equal(image.src);
         expect(event.detail.index).to.equal(0);
         expect(event.detail.originalImage).to.equal(image);
+        viewer.hide(true);
         done();
       },
     });

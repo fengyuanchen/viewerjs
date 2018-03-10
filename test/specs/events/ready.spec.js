@@ -23,7 +23,7 @@ describe('ready (event)', () => {
     viewer.show();
   });
 
-  it('should trigger the `ready` event directly in inline mode', (done) => {
+  it('should trigger the `ready` event immediately in inline mode', (done) => {
     const image = window.createImage();
 
     image.addEventListener('ready', (event) => {

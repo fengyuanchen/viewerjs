@@ -3,12 +3,27 @@ describe('hide (method)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       shown() {
-        expect(viewer.visible).to.be.true;
+        expect(viewer.isShown).to.be.true;
         viewer.hide();
-        setTimeout(() => {
-          expect(viewer.visible).to.be.false;
-          done();
-        }, 350);
+      },
+
+      hidden() {
+        expect(viewer.isShown).to.be.false;
+        done();
+      },
+    });
+
+    viewer.show();
+  });
+
+  it('should hide immediately the viewer in modal mode', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      shown() {
+        expect(viewer.isShown).to.be.true;
+        viewer.hide(true);
+        expect(viewer.isShown).to.be.false;
+        done();
       },
     });
 
@@ -21,9 +36,9 @@ describe('hide (method)', () => {
       inline: true,
 
       ready() {
-        expect(viewer.visible).to.be.true;
-        viewer.hide();
-        expect(viewer.visible).to.be.true;
+        expect(viewer.isShown).to.be.true;
+        viewer.hide(true);
+        expect(viewer.isShown).to.be.true;
         done();
       },
     });

@@ -9,7 +9,7 @@ describe('hidden (event)', () => {
 
     const viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
       },
     });
 
@@ -27,7 +27,7 @@ describe('hidden (event)', () => {
       inline: true,
 
       ready() {
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });

@@ -14,6 +14,7 @@ describe('zIndex (option)', () => {
 
       viewed() {
         expect(Number(window.getComputedStyle(viewer.viewer).zIndex)).to.equal(zIndex);
+        viewer.hide(true);
         done();
       },
     });

@@ -11,6 +11,10 @@ describe('view (option)', () => {
     const viewer = new Viewer(image, {
       view(event) {
         expect(event.type).to.equal('view');
+      },
+
+      viewed() {
+        viewer.hide(true);
         done();
       },
     });
@@ -26,6 +30,10 @@ describe('view (option)', () => {
         expect(event.detail.image.src).to.equal(image.src);
         expect(event.detail.index).to.equal(0);
         expect(event.detail.originalImage).to.equal(image);
+      },
+
+      viewed() {
+        viewer.hide(true);
         done();
       },
     });
@@ -35,13 +43,15 @@ describe('view (option)', () => {
 
   it('should not execute the `viewed` hook function when default prevented', (done) => {
     const image = window.createImage();
-
-    new Viewer(image, {
+    const viewer = new Viewer(image, {
       inline: true,
 
       view(event) {
         event.preventDefault();
-        done();
+        setTimeout(() => {
+          viewer.hide(true);
+          done();
+        }, 350);
       },
 
       viewed() {
@@ -50,7 +60,7 @@ describe('view (option)', () => {
     });
   });
 
-  it('should execute the `view` hook function in inline mode', (done) => {
+  it('should execute the `view` hook function in modal mode', (done) => {
     const image = window.createImage();
 
     new Viewer(image, {

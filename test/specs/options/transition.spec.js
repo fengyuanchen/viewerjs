@@ -6,6 +6,7 @@ describe('transition (option)', () => {
         expect(viewer.viewer.className).to.include('viewer-transition');
         expect(viewer.list.className).to.include('viewer-transition');
         expect(viewer.image.className).to.include('viewer-transition');
+        viewer.hide(true);
         done();
       },
     });
@@ -23,6 +24,7 @@ describe('transition (option)', () => {
         expect(viewer.viewer.className).to.not.include('viewer-transition');
         expect(viewer.list.className).to.not.include('viewer-transition');
         expect(viewer.image.className).to.not.include('viewer-transition');
+        viewer.hide(true);
         done();
       },
     });

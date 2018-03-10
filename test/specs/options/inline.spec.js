@@ -5,6 +5,7 @@ describe('inline (option)', () => {
       shown() {
         expect(viewer.fulled).to.be.true;
         expect(viewer.viewer.className).to.include('viewer-fixed');
+        viewer.hide(true);
         done();
       },
     });
@@ -63,7 +64,7 @@ describe('inline (option)', () => {
       },
 
       shown() {
-        viewer.hide();
+        viewer.hide(true);
         expect.fail(1, 0);
       },
 

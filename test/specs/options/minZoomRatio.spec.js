@@ -10,8 +10,8 @@ describe('minZoomRatio (option)', () => {
     const image = window.createImage();
     const minZoomRatio = 0.1;
     const viewer = new Viewer(image, {
-      inline: true,
       minZoomRatio,
+      inline: true,
 
       viewed() {
         viewer.zoomTo(0.01);

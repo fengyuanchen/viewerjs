@@ -30,6 +30,7 @@ describe('exit (method)', () => {
         viewer.exit();
         expect(viewer.fulled).to.be.true;
         expect(viewer.viewer.className).to.include('viewer-fixed');
+        viewer.hide(true);
         done();
       },
     });

@@ -12,6 +12,7 @@ describe('zoomTo (method)', () => {
         expect(imageData.ratio).to.equal(1);
         viewer.zoomTo(ratio);
         expect(imageData.ratio).to.equal(ratio);
+        viewer.hide(true);
         done();
       },
     });

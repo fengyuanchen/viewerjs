@@ -7,7 +7,7 @@ describe('shown (event)', () => {
       expect(event.type).to.equal('shown');
       done();
       event.preventDefault();
-      viewer.hide();
+      viewer.hide(true);
     });
 
     viewer = new Viewer(image);

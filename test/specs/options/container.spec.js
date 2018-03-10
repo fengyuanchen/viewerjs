@@ -2,8 +2,9 @@ describe('container (option)', () => {
   it('should be "body" by default', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
-      ready() {
+      ready(event) {
         expect(viewer.viewer.parentElement).to.equal(image.ownerDocument.body);
+        event.preventDefault();
         done();
       },
     });
@@ -21,8 +22,9 @@ describe('container (option)', () => {
     const viewer = new Viewer(image, {
       container: '#container',
 
-      ready() {
+      ready(event) {
         expect(container.firstElementChild).to.equal(viewer.viewer);
+        event.preventDefault();
         done();
       },
     });
@@ -36,8 +38,9 @@ describe('container (option)', () => {
     const viewer = new Viewer(image, {
       container,
 
-      ready() {
+      ready(event) {
         expect(container.firstElementChild).to.equal(viewer.viewer);
+        event.preventDefault();
         done();
       },
     });

@@ -7,7 +7,7 @@ describe('backdrop (option)', () => {
         viewer.canvas.click();
       },
 
-      hide() {
+      hidden() {
         done();
       },
     });
@@ -18,17 +18,22 @@ describe('backdrop (option)', () => {
 
   it('should not show backdrop and hide the viewer on click the backdrop', (done) => {
     const image = window.createImage();
+    let hidable = false;
     const viewer = new Viewer(image, {
       backdrop: false,
 
       shown() {
         expect(viewer.viewer.className).to.not.include('viewer-backdrop');
         viewer.canvas.click();
+        hidable = true;
+        viewer.hide(true);
         done();
       },
 
       hide() {
-        expect.fail(1, 0);
+        if (!hidable) {
+          expect.fail(1, 0);
+        }
       },
     });
 
@@ -38,17 +43,22 @@ describe('backdrop (option)', () => {
 
   it('should show backdrop but not hide the viewer on click the backdrop', (done) => {
     const image = window.createImage();
+    let hidable = false;
     const viewer = new Viewer(image, {
       backdrop: 'static',
 
       shown() {
         expect(viewer.viewer.className).to.include('viewer-backdrop');
         viewer.canvas.click();
+        hidable = true;
+        viewer.hide(true);
         done();
       },
 
       hide() {
-        expect.fail(1, 0);
+        if (!hidable) {
+          expect.fail(1, 0);
+        }
       },
     });
 

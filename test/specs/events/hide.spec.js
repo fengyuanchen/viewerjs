@@ -4,12 +4,12 @@ describe('hide (event)', () => {
 
     image.addEventListener('hide', (event) => {
       expect(event.type).to.equal('hide');
-      done();
     });
 
     const viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
+        done();
       },
     });
 
@@ -26,10 +26,8 @@ describe('hide (event)', () => {
 
       if (count === 1) {
         event.preventDefault();
-        setTimeout(() => {
-          viewer.hide();
-          done();
-        }, 350);
+        viewer.hide(true);
+        done();
       }
     });
 
@@ -41,7 +39,7 @@ describe('hide (event)', () => {
 
     viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
       },
     });
 
@@ -59,7 +57,7 @@ describe('hide (event)', () => {
       inline: true,
 
       viewed() {
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });

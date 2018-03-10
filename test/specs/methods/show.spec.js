@@ -3,12 +3,13 @@ describe('show (method)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       shown() {
-        expect(viewer.visible).to.be.true;
+        expect(viewer.isShown).to.be.true;
+        viewer.hide(true);
         done();
       },
     });
 
-    expect(viewer.visible).to.be.false;
+    expect(viewer.isShown).to.be.false;
     viewer.show();
   });
 
@@ -17,24 +18,11 @@ describe('show (method)', () => {
     const viewer = new Viewer(image, {
       viewed(event) {
         expect(event.detail.index).to.equal(0);
+        viewer.hide(true);
         done();
       },
     });
 
     viewer.show();
-  });
-
-  it('should not work in inline mode', (done) => {
-    const image = window.createImage();
-    const viewer = new Viewer(image, {
-      inline: true,
-
-      ready() {
-        expect(viewer.visible).to.be.true;
-        viewer.hide();
-        expect(viewer.visible).to.be.true;
-        done();
-      },
-    });
   });
 });

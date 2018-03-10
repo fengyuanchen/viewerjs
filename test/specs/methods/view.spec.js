@@ -4,6 +4,7 @@ describe('view (method)', () => {
     const viewer = new Viewer(imageList, {
       viewed(event) {
         expect(event.detail.index).to.equal(1);
+        viewer.hide(true);
         done();
       },
     });
@@ -20,7 +21,10 @@ describe('view (method)', () => {
     });
 
     viewer.view(-1);
-    done();
+    setTimeout(() => {
+      viewer.hide(true);
+      done();
+    }, 500);
   });
 
   it('show not work when the given index is greater than or equal to the length of the images', (done) => {
@@ -32,6 +36,9 @@ describe('view (method)', () => {
     });
 
     viewer.view(imageList.childElementCount);
-    done();
+    setTimeout(() => {
+      viewer.hide(true);
+      done();
+    }, 500);
   });
 });

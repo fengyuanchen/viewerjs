@@ -5,12 +5,12 @@ describe('viewed (event)', () => {
 
     image.addEventListener('viewed', (event) => {
       expect(event.type).to.equal('viewed');
-      viewer.hide();
+      viewer.hide(true);
       done();
     });
 
     viewer = new Viewer(image);
-    viewer.view();
+    viewer.show();
   });
 
   it('should have expected properties in `event.detail`', (done) => {
@@ -24,12 +24,12 @@ describe('viewed (event)', () => {
       expect(detail.image.src).to.equal(image.src);
       expect(detail.index).to.equal(0);
       expect(detail.originalImage).to.equal(image);
-      viewer.hide();
+      viewer.hide(true);
       done();
     });
 
     viewer = new Viewer(image);
-    viewer.view();
+    viewer.show();
   });
 
   it('should trigger the `viewed` event in inline mode', (done) => {

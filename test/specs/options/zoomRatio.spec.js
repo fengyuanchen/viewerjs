@@ -20,6 +20,7 @@ describe('zoomRatio (option)', () => {
           deltaY: -1,
         }));
         expect(imageData.ratio).to.equal((width * (1 + zoomRatio)) / imageData.naturalWidth);
+        viewer.hide(true);
         done();
       },
     });

@@ -11,7 +11,7 @@ describe('loop (option)', () => {
             done();
             break;
 
-          case 3:
+          case 4:
             expect.fail(1, 0);
             break;
 
@@ -35,7 +35,7 @@ describe('loop (option)', () => {
             viewer.toolbar.querySelector('.viewer-prev').click();
             break;
 
-          case 3:
+          case 4:
             done();
             break;
 

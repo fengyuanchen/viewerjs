@@ -10,6 +10,7 @@ describe('toggle (method)', () => {
         expect(imageData.ratio).to.equal(1);
         viewer.toggle();
         expect(imageData.ratio).to.equal(ratio);
+        viewer.hide(true);
         done();
       },
     });
@@ -28,6 +29,7 @@ describe('toggle (method)', () => {
 
         viewer.toggle();
         expect(imageData.ratio).to.equal(ratio);
+        viewer.hide(true);
         done();
       },
     });

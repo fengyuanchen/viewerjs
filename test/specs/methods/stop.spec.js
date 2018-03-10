@@ -9,6 +9,7 @@ describe('stop (method)', () => {
         viewer.stop();
         expect(viewer.played).to.be.false;
         expect(window.getComputedStyle(viewer.player).display).to.equal('none');
+        viewer.hide(true);
         done();
       },
     });

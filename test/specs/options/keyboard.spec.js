@@ -6,19 +6,19 @@ describe('keyboard (option)', () => {
     expect(viewer.options.keyboard).to.be.true;
   });
 
-  /* it('should be disabled', (done) => {
+  it('should be disabled', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       keyboard: false,
 
       viewed() {
-        expect(viewer.visible).to.be.true;
+        expect(viewer.isShown).to.be.true;
         image.dispatchEvent(window.createEvent('keydown', {
           key: 'Escape',
           keyCode: 27,
         }));
-        expect(viewer.visible).to.be.true;
-        viewer.hide();
+        expect(viewer.isShown).to.be.true;
+        viewer.hide(true);
         done();
       },
     });
@@ -74,7 +74,7 @@ describe('keyboard (option)', () => {
           keyCode: 27,
         }));
         expect(viewer.played).to.be.false;
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
@@ -93,7 +93,7 @@ describe('keyboard (option)', () => {
           keyCode: 32,
         }));
         expect(viewer.played).to.be.false;
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
@@ -107,7 +107,7 @@ describe('keyboard (option)', () => {
       viewed(event) {
         switch (event.detail.index) {
           case 0:
-            viewer.hide();
+            viewer.hide(true);
             done();
             break;
 
@@ -141,7 +141,7 @@ describe('keyboard (option)', () => {
           }
 
           case 1:
-            viewer.hide();
+            viewer.hide(true);
             done();
             break;
 
@@ -164,7 +164,7 @@ describe('keyboard (option)', () => {
           keyCode: 38,
         }));
         expect(viewer.imageData.ratio).to.be.above(ratio);
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
@@ -183,7 +183,7 @@ describe('keyboard (option)', () => {
           keyCode: 40,
         }));
         expect(viewer.imageData.ratio).to.be.below(ratio);
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
@@ -206,7 +206,7 @@ describe('keyboard (option)', () => {
           keyCode: 48,
         }));
         expect(imageData.ratio).to.equal(ratio);
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
@@ -227,11 +227,11 @@ describe('keyboard (option)', () => {
           keyCode: 49,
         }));
         expect(imageData.ratio).to.equal(1);
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
     });
 
     viewer.show();
-  }); */
+  });
 });

@@ -32,6 +32,7 @@ describe('zIndexInline (option)', () => {
 
       viewed() {
         expect(Number(window.getComputedStyle(viewer.viewer).zIndex)).to.not.equal(zIndexInline);
+        viewer.hide(true);
         done();
       },
     });

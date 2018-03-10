@@ -10,7 +10,7 @@ describe('button (option)', () => {
         button.click();
       },
 
-      hide() {
+      hidden() {
         done();
       },
     });
@@ -26,6 +26,7 @@ describe('button (option)', () => {
 
       shown() {
         expect(window.getComputedStyle(viewer.button).display).to.equal('none');
+        viewer.hide(true);
         done();
       },
     });
@@ -49,6 +50,7 @@ describe('button (option)', () => {
         viewer.button.click();
         expect(button.className).to.include('viewer-fullscreen-exit');
         expect(viewer.fulled).to.be.true;
+        viewer.exit();
         done();
       },
     });

@@ -11,6 +11,7 @@ describe('ready (option)', () => {
     const viewer = new Viewer(image, {
       ready(event) {
         expect(event.type).to.equal('ready');
+        event.preventDefault();
         done();
       },
     });

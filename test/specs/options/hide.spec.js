@@ -10,11 +10,14 @@ describe('hide (option)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
       },
 
       hide(event) {
         expect(event.type).to.equal('hide');
+      },
+
+      hidden() {
         done();
       },
     });
@@ -24,18 +27,28 @@ describe('hide (option)', () => {
 
   it('should not trigger the `hidden` event when default prevented', (done) => {
     const image = window.createImage();
+    let hidable = false;
     const viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
       },
 
       hide(event) {
-        event.preventDefault();
-        done();
+        if (!hidable) {
+          event.preventDefault();
+          setTimeout(() => {
+            hidable = true;
+            viewer.hide(true);
+          }, 350);
+        }
       },
 
       hidden() {
-        expect.fail(1, 0);
+        if (!hidable) {
+          expect.fail(1, 0);
+        } else {
+          done();
+        }
       },
     });
 
@@ -48,7 +61,7 @@ describe('hide (option)', () => {
       inline: true,
 
       viewed() {
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
 

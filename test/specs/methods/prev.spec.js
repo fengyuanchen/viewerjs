@@ -29,7 +29,10 @@ describe('prev (method)', () => {
         switch (event.detail.index) {
           case 0:
             viewer.prev();
-            done();
+            setTimeout(() => {
+              viewer.hide(true);
+              done();
+            }, 500);
             break;
 
           case 3:
@@ -53,7 +56,8 @@ describe('prev (method)', () => {
             viewer.prev(true);
             break;
 
-          case 3:
+          case 4:
+            viewer.hide(true);
             done();
             break;
 

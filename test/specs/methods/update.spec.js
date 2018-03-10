@@ -17,6 +17,7 @@ describe('update (method)', () => {
         imageList.removeChild(items.item(0));
         viewer.update();
         expect(viewer.items.length).to.equal(itemsLength - 1);
+        viewer.hide(true);
         done();
       },
     });

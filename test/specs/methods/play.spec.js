@@ -8,6 +8,7 @@ describe('play (method)', () => {
         viewer.play();
         expect(viewer.played).to.be.true;
         expect(window.getComputedStyle(viewer.player).display).to.not.equal('none');
+        viewer.hide(true);
         done();
       },
     });

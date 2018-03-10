@@ -15,8 +15,8 @@ describe('minWidth (option)', () => {
     image.parentElement.style.width = '160px';
 
     const viewer = new Viewer(image, {
-      inline: true,
       minWidth,
+      inline: true,
 
       viewed() {
         expect(parseFloat(window.getComputedStyle(viewer.viewer).width)).to.equal(minWidth);

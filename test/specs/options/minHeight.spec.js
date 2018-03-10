@@ -15,8 +15,8 @@ describe('minHeight (option)', () => {
     image.parentElement.style.height = '90px';
 
     const viewer = new Viewer(image, {
-      inline: true,
       minHeight,
+      inline: true,
 
       viewed() {
         expect(parseFloat(window.getComputedStyle(viewer.viewer).height)).to.equal(minHeight);

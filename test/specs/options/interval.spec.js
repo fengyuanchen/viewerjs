@@ -11,6 +11,7 @@ describe('interval (option)', () => {
     const interval = 1000;
     const viewer = new Viewer(imageList, {
       interval,
+      inline: true,
 
       viewed() {
         viewer.play();
@@ -24,12 +25,12 @@ describe('interval (option)', () => {
           expect(children[0].className).to.not.include('viewer-in');
           expect(children[1].className).to.include('viewer-in');
           expect(children[2].className).to.not.include('viewer-in');
+          viewer.stop();
           done();
         }, interval + 10);
       },
     });
 
     expect(viewer.options.interval).to.equal(interval);
-    viewer.show();
   });
 });

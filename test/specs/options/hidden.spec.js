@@ -10,7 +10,7 @@ describe('hidden (option)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       shown() {
-        viewer.hide();
+        viewer.hide(true);
       },
 
       hidden(event) {
@@ -28,7 +28,7 @@ describe('hidden (option)', () => {
       inline: true,
 
       ready() {
-        viewer.hide();
+        viewer.hide(true);
         done();
       },
 
