@@ -7,15 +7,13 @@ import {
 import {
   addClass,
   addListener,
-  each,
-  empty,
-  extend,
+  assign,
+  forEach,
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
   isFunction,
   isString,
-  proxy,
   removeClass,
   removeListener,
   setData,
@@ -54,7 +52,7 @@ export default {
       viewerData = this.containerData;
     }
 
-    this.viewerData = extend({}, viewerData);
+    this.viewerData = assign({}, viewerData);
   },
 
   renderViewer() {
@@ -67,7 +65,7 @@ export default {
     const { element, options, list } = this;
     const items = [];
 
-    each(this.images, (image, i) => {
+    forEach(this.images, (image, i) => {
       const { src } = image;
       const alt = image.alt || getImageNameFromURL(src);
       let { url } = options;
@@ -93,15 +91,13 @@ export default {
     });
 
     list.innerHTML = items.join('');
-
-    each(list.getElementsByTagName('img'), (image) => {
+    this.items = list.getElementsByTagName('li');
+    forEach(list.getElementsByTagName('img'), (image) => {
       setData(image, 'filled', true);
-      addListener(image, EVENT_LOAD, proxy(this.loadImage, this), {
+      addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
         once: true,
       });
     });
-
-    this.items = list.getElementsByTagName('li');
 
     if (options.transition) {
       addListener(element, EVENT_VIEWED, () => {
@@ -127,28 +123,33 @@ export default {
   resetList() {
     const { list } = this;
 
-    empty(list);
+    list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
     setStyle(list, {
       marginLeft: 0,
     });
   },
 
-  initImage(callback) {
-    if (!this.image) {
-      return;
-    }
-
+  initImage(done) {
     const { options, image, viewerData } = this;
     const footerHeight = this.footer.offsetHeight;
     const viewerWidth = viewerData.width;
     const viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
-    const oldImageData = this.ImageData || {};
+    const oldImageData = this.imageData || {};
+    let sizingImage;
 
-    getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
+    this.imageInitializing = {
+      abort() {
+        sizingImage.onload = null;
+      },
+    };
+
+    sizingImage = getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
       const aspectRatio = naturalWidth / naturalHeight;
       let width = viewerWidth;
       let height = viewerHeight;
+
+      this.imageInitializing = false;
 
       if (viewerHeight * aspectRatio > viewerWidth) {
         height = viewerWidth / aspectRatio;
@@ -169,7 +170,7 @@ export default {
         left: (viewerWidth - width) / 2,
         top: (viewerHeight - height) / 2,
       };
-      const initialImageData = extend({}, imageData);
+      const initialImageData = assign({}, imageData);
 
       if (options.rotatable) {
         imageData.rotate = oldImageData.rotate || 0;
@@ -186,43 +187,53 @@ export default {
       this.imageData = imageData;
       this.initialImageData = initialImageData;
 
-      if (isFunction(callback)) {
-        callback();
+      if (done) {
+        done();
       }
     });
   },
 
-  renderImage(callback) {
-    if (!this.image) {
-      return;
-    }
-
+  renderImage(done) {
     const { image, imageData } = this;
 
-    setStyle(image, extend({
+    setStyle(image, assign({
       width: imageData.width,
       height: imageData.height,
       marginLeft: imageData.left,
       marginTop: imageData.top,
     }, getTransforms(imageData)));
 
-    if (isFunction(callback)) {
-      if (this.transitioning) {
-        addListener(image, EVENT_TRANSITION_END, callback, {
+    if (done) {
+      if (this.viewing && this.options.transition) {
+        const onTransitionEnd = () => {
+          this.imageRendering = false;
+          done();
+        };
+
+        this.imageRendering = {
+          abort() {
+            removeListener(image, EVENT_TRANSITION_END, onTransitionEnd);
+          },
+        };
+
+        addListener(image, EVENT_TRANSITION_END, onTransitionEnd, {
           once: true,
         });
       } else {
-        callback();
+        done();
       }
     }
   },
 
   resetImage() {
-    const { image } = this;
-
     // this.image only defined after viewed
-    if (image) {
-      removeListener(image, EVENT_LOAD, this.onLoad);
+    if (this.viewing || this.viewed) {
+      const { image } = this;
+
+      if (this.viewing) {
+        this.viewing.abort();
+      }
+
       image.parentNode.removeChild(image);
       this.image = null;
     }

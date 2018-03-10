@@ -10,7 +10,6 @@ import {
 } from './constants';
 import {
   addListener,
-  proxy,
   removeListener,
 } from './utilities';
 
@@ -18,30 +17,30 @@ export default {
   bind() {
     const { element, viewer } = this;
 
-    addListener(viewer, EVENT_CLICK, (this.onClick = proxy(this.click, this)));
-    addListener(viewer, EVENT_WHEEL, (this.onWheel = proxy(this.wheel, this)));
-    addListener(viewer, EVENT_DRAG_START, (this.onDragStart = proxy(this.dragstart, this)));
+    addListener(viewer, EVENT_CLICK, (this.onClick = this.click.bind(this)));
+    addListener(viewer, EVENT_WHEEL, (this.onWheel = this.wheel.bind(this)));
+    addListener(viewer, EVENT_DRAG_START, (this.onDragStart = this.dragstart.bind(this)));
     addListener(
       this.canvas,
       EVENT_POINTER_DOWN,
-      (this.onPointerDown = proxy(this.pointerdown, this)),
+      (this.onPointerDown = this.pointerdown.bind(this)),
     );
     addListener(
       element.ownerDocument,
       EVENT_POINTER_MOVE,
-      (this.onPointerMove = proxy(this.pointermove, this)),
+      (this.onPointerMove = this.pointermove.bind(this)),
     );
     addListener(
       element.ownerDocument,
       EVENT_POINTER_UP,
-      (this.onPointerUp = proxy(this.pointerup, this)),
+      (this.onPointerUp = this.pointerup.bind(this)),
     );
     addListener(
       element.ownerDocument,
       EVENT_KEY_DOWN,
-      (this.onKeyDown = proxy(this.keydown, this)),
+      (this.onKeyDown = this.keydown.bind(this)),
     );
-    addListener(window, EVENT_RESIZE, (this.onResize = proxy(this.resize, this)));
+    addListener(window, EVENT_RESIZE, (this.onResize = this.resize.bind(this)));
   },
 
   unbind() {

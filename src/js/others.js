@@ -11,7 +11,7 @@ import {
   addClass,
   addListener,
   dispatchEvent,
-  each,
+  forEach,
   getMaxZoomRatio,
   isFunction,
   removeClass,
@@ -29,10 +29,6 @@ export default {
   close() {
     const { body } = this;
 
-    if (!body) {
-      return;
-    }
-
     removeClass(body, CLASS_OPEN);
     body.style.paddingRight = this.initialBodyPaddingRight;
   },
@@ -40,11 +36,11 @@ export default {
   shown() {
     const { element, options } = this;
 
-    this.transitioning = false;
     this.fulled = true;
-    this.visible = true;
+    this.isShown = true;
     this.render();
     this.bind();
+    this.showing = false;
 
     if (isFunction(options.shown)) {
       addListener(element, EVENT_SHOWN, options.shown, {
@@ -52,31 +48,37 @@ export default {
       });
     }
 
-    if (dispatchEvent(element, EVENT_SHOWN) !== false) {
-      this.view(this.target ? ([].concat(this.images)).indexOf(this.target) : this.index);
-      this.target = false;
+    if (dispatchEvent(element, EVENT_SHOWN) === false) {
+      return;
+    }
+
+    if (this.ready && this.isShown && !this.hiding) {
+      this.view(this.index);
     }
   },
 
   hidden() {
     const { element, options } = this;
-    this.transitioning = false;
-    this.viewed = false;
+
     this.fulled = false;
-    this.visible = false;
+    this.viewed = false;
+    this.isShown = false;
     this.close();
     this.unbind();
     addClass(this.viewer, CLASS_HIDE);
     this.resetList();
     this.resetImage();
+    this.hiding = false;
 
-    if (isFunction(options.hidden)) {
-      addListener(element, EVENT_HIDDEN, options.hidden, {
-        once: true,
-      });
+    if (!this.destroyed) {
+      if (isFunction(options.hidden)) {
+        addListener(element, EVENT_HIDDEN, options.hidden, {
+          once: true,
+        });
+      }
+
+      dispatchEvent(element, EVENT_HIDDEN);
     }
-
-    dispatchEvent(element, EVENT_HIDDEN);
   },
 
   requestFullscreen() {
@@ -148,7 +150,7 @@ export default {
     }
 
     // Override
-    each(pointers, (p) => {
+    forEach(pointers, (p) => {
       p.startX = p.endX;
       p.startY = p.endY;
     });
