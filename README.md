@@ -5,6 +5,7 @@
 > JavaScript image viewer.
 
 - [Website](https://fengyuanchen.github.io/viewerjs)
+- [jquery-viewer](https://github.com/fengyuanchen/jquery-viewer) - A jQuery plugin wrapper for Viewer.js.
 
 ## Table of contents
 
@@ -49,7 +50,7 @@ dist/
 
 ## Getting started
 
-### Install
+### Installation
 
 ```shell
 npm install viewerjs
