@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.0-rc
+ * Viewer.js v1.0.0-rc.1
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2018 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-03-10T13:05:00.762Z
+ * Date: 2018-03-13T14:06:27.179Z
  */
 
 (function (global, factory) {
@@ -151,7 +151,7 @@ var EVENT_DRAG_START = 'dragstart';
 var EVENT_KEY_DOWN = 'keydown';
 var EVENT_LOAD = 'load';
 var EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
-var EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'mousemove touchmove';
+var EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'touchmove mousemove';
 var EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
 var EVENT_RESIZE = 'resize';
 var EVENT_TRANSITION_END = 'transitionend';
@@ -499,11 +499,22 @@ function removeData(element, name) {
 var REGEXP_SPACES = /\s\s*/;
 var onceSupported = function () {
   var supported = false;
+  var once = false;
   var listener = function listener() {};
   var options = Object.defineProperty({}, 'once', {
     get: function get$$1() {
       supported = true;
-      return true;
+      return once;
+    },
+
+
+    /**
+     * This setter can fix a `TypeError` in strict mode
+     * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Getter_only}
+     * @param {boolean} value - The value to set
+     */
+    set: function set$$1(value) {
+      once = value;
     }
   });
 
@@ -2580,6 +2591,9 @@ var others = {
 
       case ACTION_SWITCH:
         this.action = 'switched';
+
+        // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
+        this.pointers = {};
 
         if (Math.abs(offsetX) > Math.abs(offsetY)) {
           if (offsetX > 1) {

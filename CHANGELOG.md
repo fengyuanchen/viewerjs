@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-rc.1 (Mar 13, 2018)
+
+- Fix the wrong image switching behavior in iOS browsers.
+- Fix a `TypeError` in strict mode (#149).
+- Fix type definitions issue of the `show` and `hide` methods.
+
 ## 1.0.0-rc (Mar 10, 2018)
 
 - Add a new option: `loading`.
