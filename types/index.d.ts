@@ -76,7 +76,7 @@ declare class Viewer {
   destroy(): Viewer;
   exit(): Viewer;
   full(): Viewer;
-  hide(immediate: boolean): Viewer;
+  hide(immediate?: boolean): Viewer;
   move(offsetX: number, offsetY?: number): Viewer;
   moveTo(x: number, y?: number): Viewer;
   next(loop?: boolean): Viewer;
@@ -88,7 +88,7 @@ declare class Viewer {
   scale(scaleX: number, scaleY?: number): Viewer;
   scaleX(scaleX: number): Viewer;
   scaleY(scaleY: number): Viewer;
-  show(immediate: boolean): Viewer;
+  show(immediate?: boolean): Viewer;
   stop(): Viewer;
   toggle(): Viewer;
   tooltip(): Viewer;
