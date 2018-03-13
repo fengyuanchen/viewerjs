@@ -136,6 +136,9 @@ export default {
       case ACTION_SWITCH:
         this.action = 'switched';
 
+        // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
+        this.pointers = {};
+
         if (Math.abs(offsetX) > Math.abs(offsetY)) {
           if (offsetX > 1) {
             this.prev(options.loop);
