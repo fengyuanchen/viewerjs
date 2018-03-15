@@ -1,7 +1,8 @@
 import {
-  CLASS_HIDE_XS_DOWN,
-  CLASS_HIDE_SM_DOWN,
   CLASS_HIDE_MD_DOWN,
+  CLASS_HIDE_SM_DOWN,
+  CLASS_HIDE_XS_DOWN,
+  IN_BROWSER,
   WINDOW,
 } from './constants';
 
@@ -327,8 +328,11 @@ const onceSupported = (() => {
     },
   });
 
-  WINDOW.addEventListener('test', listener, options);
-  WINDOW.removeEventListener('test', listener, options);
+  if (IN_BROWSER) {
+    WINDOW.addEventListener('test', listener, options);
+    WINDOW.removeEventListener('test', listener, options);
+  }
+
   return supported;
 })();
 
