@@ -7,11 +7,7 @@ declare namespace Viewer {
     VisibleOnExtraLargeOrWiderScreen = 4,
   }
 
-  export enum ToolbarButtonSize {
-    Small = 'small',
-    Medium = 'medium',
-    Large = 'large',
-  }
+  export type ToolbarButtonSize = 'small' | 'medium' | 'large';
 
   export interface ToolbarButtonOptions {
     click?: Function,
