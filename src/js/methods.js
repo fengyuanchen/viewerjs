@@ -821,7 +821,6 @@ export default {
   // Update viewer when images changed
   update() {
     const { element, options, isImg } = this;
-    const indexes = [];
 
     // Destroy viewer if the target image was deleted
     if (isImg && !element.parentNode) {
@@ -840,10 +839,16 @@ export default {
       }
     });
 
+    if (!images.length) {
+      return this;
+    }
+
     this.images = images;
     this.length = images.length;
 
     if (this.ready) {
+      const indexes = [];
+
       forEach(this.items, (item, i) => {
         const img = item.querySelector('img');
         const image = images[i];
