@@ -889,6 +889,8 @@ export default {
           this.title.innerHTML = '';
         }
       }
+    } else {
+      this.build()
     }
 
     return this;
