@@ -890,7 +890,7 @@ export default {
         }
       }
     } else {
-      this.build()
+      this.build();
     }
 
     return this;
