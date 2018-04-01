@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.0-rc.1
+ * Viewer.js v1.0.0
  * https://github.com/fengyuanchen/viewerjs
  *
  * Copyright (c) 2015-2018 Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-03-13T14:06:27.179Z
+ * Date: 2018-04-01T05:33:18.955Z
  */
 
 var DEFAULTS = {
@@ -105,7 +105,8 @@ var DEFAULTS = {
 
 var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
-var WINDOW = typeof window !== 'undefined' ? window : {};
+var IN_BROWSER = typeof window !== 'undefined';
+var WINDOW = IN_BROWSER ? window : {};
 var NAMESPACE = 'viewer';
 
 // Actions
@@ -493,27 +494,31 @@ function removeData(element, name) {
 var REGEXP_SPACES = /\s\s*/;
 var onceSupported = function () {
   var supported = false;
-  var once = false;
-  var listener = function listener() {};
-  var options = Object.defineProperty({}, 'once', {
-    get: function get$$1() {
-      supported = true;
-      return once;
-    },
+
+  if (IN_BROWSER) {
+    var once = false;
+    var listener = function listener() {};
+    var options = Object.defineProperty({}, 'once', {
+      get: function get$$1() {
+        supported = true;
+        return once;
+      },
 
 
-    /**
-     * This setter can fix a `TypeError` in strict mode
-     * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Getter_only}
-     * @param {boolean} value - The value to set
-     */
-    set: function set$$1(value) {
-      once = value;
-    }
-  });
+      /**
+       * This setter can fix a `TypeError` in strict mode
+       * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Getter_only}
+       * @param {boolean} value - The value to set
+       */
+      set: function set$$1(value) {
+        once = value;
+      }
+    });
 
-  WINDOW.addEventListener('test', listener, options);
-  WINDOW.removeEventListener('test', listener, options);
+    WINDOW.addEventListener('test', listener, options);
+    WINDOW.removeEventListener('test', listener, options);
+  }
+
   return supported;
 }();
 
@@ -2335,9 +2340,8 @@ var methods = {
         options = this.options,
         isImg = this.isImg;
 
-    var indexes = [];
-
     // Destroy viewer if the target image was deleted
+
     if (isImg && !element.parentNode) {
       return this.destroy();
     }
@@ -2354,10 +2358,16 @@ var methods = {
       }
     });
 
+    if (!images.length) {
+      return this;
+    }
+
     this.images = images;
     this.length = images.length;
 
     if (this.ready) {
+      var indexes = [];
+
       forEach(this.items, function (item, i) {
         var img = item.querySelector('img');
         var image = images[i];
@@ -2398,6 +2408,8 @@ var methods = {
           this.title.innerHTML = '';
         }
       }
+    } else {
+      this.build();
     }
 
     return this;

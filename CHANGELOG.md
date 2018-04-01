@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0 (Apr 1, 2018)
+
+- Add in browser checking to support to import in Node.js.
+- Cancel update when there are no images when call the `update` method.
+
 ## 1.0.0-rc.1 (Mar 13, 2018)
 
 - Fix the wrong image switching behavior in iOS browsers.
