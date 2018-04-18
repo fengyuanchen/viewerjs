@@ -884,7 +884,7 @@ export default {
           this.image = null;
           this.viewed = false;
           this.index = 0;
-          this.imageData = null;
+          this.imageData = {};
           this.canvas.innerHTML = '';
           this.title.innerHTML = '';
         }

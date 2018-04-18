@@ -58,8 +58,10 @@ class Viewer {
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
+    this.imageData = {};
     this.index = 0;
     this.isImg = false;
+    this.isShown = false;
     this.length = 0;
     this.played = false;
     this.playing = false;
@@ -70,7 +72,6 @@ class Viewer {
     this.tooltipping = false;
     this.viewed = false;
     this.viewing = false;
-    this.isShown = false;
     this.wheeling = false;
     this.init();
   }
