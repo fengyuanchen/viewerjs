@@ -13,6 +13,7 @@ import {
   CLASS_FULLSCREEN,
   CLASS_HIDE,
   CLASS_INVISIBLE,
+  DATA_ACTION,
   EVENT_CLICK,
   EVENT_LOAD,
   EVENT_READY,
@@ -207,7 +208,7 @@ class Viewer {
       addClass(viewer, `${NAMESPACE}-backdrop`);
 
       if (!options.inline && options.backdrop === true) {
-        setData(canvas, 'action', 'hide');
+        setData(canvas, DATA_ACTION, 'hide');
       }
     }
 
@@ -244,7 +245,7 @@ class Viewer {
         addClass(item, `${NAMESPACE}-${name}`);
 
         if (!isFunction(click)) {
-          setData(item, 'action', name);
+          setData(item, DATA_ACTION, name);
         }
 
         if (isNumber(show)) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## next (Apr 22, 2018)
+
+- Add namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.
+- Make sure the image data is a non-null object to avoid unexpected errors.
+
 ## 1.0.0 (Apr 1, 2018)
 
 - Add in browser checking to support to import in Node.js.

@@ -9,7 +9,7 @@ export default (
       '</div>' +
     '</div>' +
     '<div class="viewer-tooltip"></div>' +
-    '<div role="button" class="viewer-button" data-action="mix"></div>' +
+    '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' +
     '<div class="viewer-player"></div>' +
   '</div>'
 );

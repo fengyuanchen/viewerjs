@@ -82,7 +82,7 @@ export default {
           '<img' +
             ` src="${src || url}"` +
             ' role="button"' +
-            ' data-action="view"' +
+            ' data-viewer-action="view"' +
             ` data-index="${i}"` +
             ` data-original-url="${url || src}"` +
             ` alt="${alt}"` +

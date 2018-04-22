@@ -45,6 +45,8 @@ export const EVENT_RESIZE = 'resize';
 export const EVENT_TRANSITION_END = 'transitionend';
 export const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
 
+// Data keys
+export const DATA_ACTION = `${NAMESPACE}Action`;
 export const BUTTONS = [
   'zoom-in',
   'zoom-out',

@@ -6,6 +6,7 @@ import {
   CLASS_LOADING,
   CLASS_MOVE,
   CLASS_TRANSITION,
+  DATA_ACTION,
   EVENT_LOAD,
   EVENT_VIEWED,
 } from './constants';
@@ -29,7 +30,7 @@ import {
 export default {
   click({ target }) {
     const { options, imageData } = this;
-    const action = getData(target, 'action');
+    const action = getData(target, DATA_ACTION);
 
     switch (action) {
       case 'mix':
