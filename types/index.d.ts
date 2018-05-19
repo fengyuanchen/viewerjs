@@ -1,5 +1,5 @@
 declare namespace Viewer {
-  export enum Visibility {
+  enum Visibility {
     Hidden = 0,
     Visible = 1,
     VisibleOnMediumOrWiderScreen = 2,
@@ -7,7 +7,7 @@ declare namespace Viewer {
     VisibleOnExtraLargeOrWiderScreen = 4,
   }
 
-  export enum ToolbarButtonSize {
+  enum ToolbarButtonSize {
     Small = 'small',
     Medium = 'medium',
     Large = 'large',
