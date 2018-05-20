@@ -282,6 +282,9 @@ export default {
       return;
     }
 
+    // This line is required for preventing page zooming in iOS browsers
+    e.preventDefault();
+
     if (e.changedTouches) {
       forEach(e.changedTouches, (touch) => {
         pointers[touch.identifier] = getPointer(touch);
@@ -344,6 +347,8 @@ export default {
     if (!action) {
       return;
     }
+
+    e.preventDefault();
 
     if (action === ACTION_MOVE && this.options.transition) {
       addClass(this.image, CLASS_TRANSITION);
