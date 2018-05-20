@@ -1,5 +1,9 @@
 # Changelog
 
+## next (May 20, 2018)
+
+- Make the touch zooming more smoother (#162).
+
 ## 1.0.1 (May 20, 2018)
 
 - Add namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.

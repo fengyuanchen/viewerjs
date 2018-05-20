@@ -20,7 +20,6 @@ import {
   getImageNaturalSizes,
   getPointer,
   getTransforms,
-  hasClass,
   isFunction,
   removeClass,
   setStyle,
@@ -301,15 +300,17 @@ export default {
       action = ACTION_SWITCH;
     }
 
+    if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
+      removeClass(this.image, CLASS_TRANSITION);
+    }
+
     this.action = action;
   },
 
   pointermove(e) {
     const {
-      options,
       pointers,
       action,
-      image,
     } = this;
 
     if (!this.viewed || !action) {
@@ -324,10 +325,6 @@ export default {
       });
     } else {
       assign(pointers[e.pointerId || 0], getPointer(e, true));
-    }
-
-    if (action === ACTION_MOVE && options.transition && hasClass(image, CLASS_TRANSITION)) {
-      removeClass(image, CLASS_TRANSITION);
     }
 
     this.change(e);
@@ -350,7 +347,7 @@ export default {
 
     e.preventDefault();
 
-    if (action === ACTION_MOVE && this.options.transition) {
+    if (this.options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
       addClass(this.image, CLASS_TRANSITION);
     }
 
