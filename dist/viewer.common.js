@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.0
- * https://github.com/fengyuanchen/viewerjs
+ * Viewer.js v1.0.1
+ * https://fengyuanchen.github.io/viewerjs
  *
- * Copyright (c) 2015-2018 Chen Fengyuan
+ * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-04-01T05:33:18.955Z
+ * Date: 2018-05-20T09:43:46.347Z
  */
 
 'use strict';
@@ -105,7 +105,7 @@ var DEFAULTS = {
   viewed: null
 };
 
-var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
 var IN_BROWSER = typeof window !== 'undefined';
 var WINDOW = IN_BROWSER ? window : {};
@@ -154,6 +154,8 @@ var EVENT_RESIZE = 'resize';
 var EVENT_TRANSITION_END = 'transitionend';
 var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
 
+// Data keys
+var DATA_ACTION = NAMESPACE + 'Action';
 var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -901,7 +903,7 @@ var render = {
       }
 
       if (src || url) {
-        items.push('<li>' + '<img' + (' src="' + (src || url) + '"') + ' role="button"' + ' data-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' alt="' + alt + '"') + '>' + '</li>');
+        items.push('<li>' + '<img' + (' src="' + (src || url) + '"') + ' role="button"' + ' data-viewer-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' alt="' + alt + '"') + '>' + '</li>');
       }
     });
 
@@ -1112,7 +1114,7 @@ var handlers = {
     var options = this.options,
         imageData = this.imageData;
 
-    var action = getData(target, 'action');
+    var action = getData(target, DATA_ACTION);
 
     switch (action) {
       case 'mix':
@@ -1356,6 +1358,9 @@ var handlers = {
       return;
     }
 
+    // This line is required for preventing page zooming in iOS browsers
+    e.preventDefault();
+
     if (e.changedTouches) {
       forEach(e.changedTouches, function (touch) {
         pointers[touch.identifier] = getPointer(touch);
@@ -1417,6 +1422,8 @@ var handlers = {
     if (!action) {
       return;
     }
+
+    e.preventDefault();
 
     if (action === ACTION_MOVE && this.options.transition) {
       addClass(this.image, CLASS_TRANSITION);
@@ -2405,7 +2412,7 @@ var methods = {
           this.image = null;
           this.viewed = false;
           this.index = 0;
-          this.imageData = null;
+          this.imageData = {};
           this.canvas.innerHTML = '';
           this.title.innerHTML = '';
         }
@@ -2598,20 +2605,24 @@ var others = {
         break;
 
       case ACTION_SWITCH:
-        this.action = 'switched';
+        {
+          this.action = 'switched';
 
-        // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
-        this.pointers = {};
+          var absoluteOffsetX = Math.abs(offsetX);
 
-        if (Math.abs(offsetX) > Math.abs(offsetY)) {
-          if (offsetX > 1) {
-            this.prev(options.loop);
-          } else if (offsetX < -1) {
-            this.next(options.loop);
+          if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
+            // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
+            this.pointers = {};
+
+            if (offsetX > 1) {
+              this.prev(options.loop);
+            } else if (offsetX < -1) {
+              this.next(options.loop);
+            }
           }
-        }
 
-        break;
+          break;
+        }
 
       default:
     }
@@ -2653,8 +2664,10 @@ var Viewer = function () {
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
+    this.imageData = {};
     this.index = 0;
     this.isImg = false;
+    this.isShown = false;
     this.length = 0;
     this.played = false;
     this.playing = false;
@@ -2665,7 +2678,6 @@ var Viewer = function () {
     this.tooltipping = false;
     this.viewed = false;
     this.viewing = false;
-    this.isShown = false;
     this.wheeling = false;
     this.init();
   }
@@ -2813,7 +2825,7 @@ var Viewer = function () {
         addClass(viewer, NAMESPACE + '-backdrop');
 
         if (!options.inline && options.backdrop === true) {
-          setData(canvas, 'action', 'hide');
+          setData(canvas, DATA_ACTION, 'hide');
         }
       }
 
@@ -2845,7 +2857,7 @@ var Viewer = function () {
           addClass(item, NAMESPACE + '-' + name);
 
           if (!isFunction(click)) {
-            setData(item, 'action', name);
+            setData(item, DATA_ACTION, name);
           }
 
           if (isNumber(show)) {

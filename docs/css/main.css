@@ -124,22 +124,16 @@
   margin-bottom: 10px;
 }
 
-@media (min-width: 992px) {
-  .docs-collapse {
-    display: block;
-  }
-}
-
 .docs-buttons > .btn-group,
 .docs-buttons > .input-group {
   width: 100%;
   margin-bottom: 5px;
 }
 
-.docs-buttons .input-group-btn {
+.docs-buttons .input-group-prepend {
   width: 50%;
 }
 
-.docs-buttons .input-group-btn .btn {
+.docs-buttons .input-group-prepend .btn {
   width: 100%;
 }

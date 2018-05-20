@@ -1,9 +1,10 @@
 # Changelog
 
-## next (Apr 22, 2018)
+## 1.0.1 (May 20, 2018)
 
 - Add namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.
 - Make sure the image data is a non-null object to avoid unexpected errors.
+- Fix broken zoom feature in iOS browsers (#167).
 
 ## 1.0.0 (Apr 1, 2018)
 
