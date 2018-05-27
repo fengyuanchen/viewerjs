@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "unpkg": "dist/viewer.js",
@@ -77,10 +77,10 @@
     "postcss-import": "^11.1.0",
     "postcss-url": "^7.3.2",
     "puppeteer": "^1.4.0",
-    "rollup": "^0.59.1",
+    "rollup": "^0.59.3",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-watch": "^4.3.1",
     "stylefmt": "^6.0.0",
-    "uglify-js": "^3.3.25"
+    "uglify-js": "^3.3.27"
   }
 }

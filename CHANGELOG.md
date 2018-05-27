@@ -1,7 +1,8 @@
 # Changelog
 
-## next (May 20, 2018)
+## 1.1.0 (May 27, 2018)
 
+- Add 2 new events: `zoom` and `zoomed` (#144).
 - Make the touch zooming more smoother (#162).
 
 ## 1.0.1 (May 20, 2018)

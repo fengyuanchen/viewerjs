@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.0.1
+ * Viewer.js v1.1.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-20T09:43:46.347Z
+ * Date: 2018-05-27T07:33:19.361Z
  */
 
 (function (global, factory) {
@@ -106,7 +106,9 @@
     hide: null,
     hidden: null,
     view: null,
-    viewed: null
+    viewed: null,
+    zoom: null,
+    zoomed: null
   };
 
   var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
@@ -147,6 +149,8 @@
   var EVENT_HIDDEN = 'hidden';
   var EVENT_VIEW = 'view';
   var EVENT_VIEWED = 'viewed';
+  var EVENT_ZOOM = 'zoom';
+  var EVENT_ZOOMED = 'zoomed';
   var EVENT_CLICK = 'click';
   var EVENT_DRAG_START = 'dragstart';
   var EVENT_KEY_DOWN = 'keydown';
@@ -1045,7 +1049,7 @@
       }, getTransforms(imageData)));
 
       if (done) {
-        if (this.viewing && this.options.transition) {
+        if ((this.viewing || this.zooming) && this.options.transition) {
           var onTransitionEnd = function onTransitionEnd() {
             _this3.imageRendering = false;
             done();
@@ -1381,13 +1385,15 @@
         action = ACTION_SWITCH;
       }
 
+      if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
+        removeClass(this.image, CLASS_TRANSITION);
+      }
+
       this.action = action;
     },
     pointermove: function pointermove(e) {
-      var options = this.options,
-          pointers = this.pointers,
-          action = this.action,
-          image = this.image;
+      var pointers = this.pointers,
+          action = this.action;
 
 
       if (!this.viewed || !action) {
@@ -1402,10 +1408,6 @@
         });
       } else {
         assign(pointers[e.pointerId || 0], getPointer(e, true));
-      }
-
-      if (action === ACTION_MOVE && options.transition && hasClass(image, CLASS_TRANSITION)) {
-        removeClass(image, CLASS_TRANSITION);
       }
 
       this.change(e);
@@ -1429,7 +1431,7 @@
 
       e.preventDefault();
 
-      if (action === ACTION_MOVE && this.options.transition) {
+      if (this.options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
         addClass(this.image, CLASS_TRANSITION);
       }
 
@@ -1915,11 +1917,14 @@
     zoomTo: function zoomTo(ratio) {
       var hasTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
+      var _this2 = this;
+
       var _originalEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
       var _zoomable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-      var options = this.options,
+      var element = this.element,
+          options = this.options,
           pointers = this.pointers,
           imageData = this.imageData;
 
@@ -1940,6 +1945,23 @@
 
         var newWidth = imageData.naturalWidth * ratio;
         var newHeight = imageData.naturalHeight * ratio;
+        var oldRatio = imageData.width / imageData.naturalWidth;
+
+        if (isFunction(options.zoom)) {
+          addListener(element, EVENT_ZOOM, options.zoom, {
+            once: true
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_ZOOM, {
+          ratio: ratio,
+          oldRatio: oldRatio,
+          originalEvent: _originalEvent
+        }) === false) {
+          return this;
+        }
+
+        this.zooming = true;
 
         if (_originalEvent) {
           var offset = getOffset(this.viewer);
@@ -1960,7 +1982,21 @@
         imageData.width = newWidth;
         imageData.height = newHeight;
         imageData.ratio = ratio;
-        this.renderImage();
+        this.renderImage(function () {
+          _this2.zooming = false;
+
+          if (isFunction(options.zoomed)) {
+            addListener(element, EVENT_ZOOMED, options.zoomed, {
+              once: true
+            });
+          }
+
+          dispatchEvent(element, EVENT_ZOOMED, {
+            ratio: ratio,
+            oldRatio: oldRatio,
+            originalEvent: _originalEvent
+          });
+        });
 
         if (hasTooltip) {
           this.tooltip();
@@ -2069,7 +2105,7 @@
      * @returns {Viewer} this
      */
     play: function play() {
-      var _this2 = this;
+      var _this3 = this;
 
       var fullscreen = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -2117,7 +2153,7 @@
 
       if (isNumber(options.interval) && options.interval > 0) {
         var play = function play() {
-          _this2.playing = setTimeout(function () {
+          _this3.playing = setTimeout(function () {
             removeClass(list[index], CLASS_IN);
             index += 1;
             index = index < total ? index : 0;
@@ -2137,7 +2173,7 @@
 
     // Stop play
     stop: function stop() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!this.played) {
         return this;
@@ -2149,7 +2185,7 @@
       this.played = false;
       clearTimeout(this.playing);
       forEach(player.getElementsByTagName('img'), function (image) {
-        removeListener(image, EVENT_LOAD, _this3.onLoadWhenPlay);
+        removeListener(image, EVENT_LOAD, _this4.onLoadWhenPlay);
       });
       removeClass(player, CLASS_SHOW);
       player.innerHTML = '';
@@ -2161,7 +2197,7 @@
 
     // Enter modal mode (only available in inline mode)
     full: function full() {
-      var _this4 = this;
+      var _this5 = this;
 
       var options = this.options,
           viewer = this.viewer,
@@ -2197,7 +2233,7 @@
 
       if (this.viewed) {
         this.initImage(function () {
-          _this4.renderImage(function () {
+          _this5.renderImage(function () {
             if (options.transition) {
               setTimeout(function () {
                 addClass(image, CLASS_TRANSITION);
@@ -2214,7 +2250,7 @@
 
     // Exit modal mode (only available in inline mode)
     exit: function exit() {
-      var _this5 = this;
+      var _this6 = this;
 
       var options = this.options,
           viewer = this.viewer,
@@ -2249,7 +2285,7 @@
 
       if (this.viewed) {
         this.initImage(function () {
-          _this5.renderImage(function () {
+          _this6.renderImage(function () {
             if (options.transition) {
               setTimeout(function () {
                 addClass(image, CLASS_TRANSITION);
@@ -2266,7 +2302,7 @@
 
     // Show the current ratio of the image with percentage
     tooltip: function tooltip() {
-      var _this6 = this;
+      var _this7 = this;
 
       var options = this.options,
           tooltipBox = this.tooltipBox,
@@ -2306,18 +2342,18 @@
             removeClass(tooltipBox, CLASS_SHOW);
             removeClass(tooltipBox, CLASS_FADE);
             removeClass(tooltipBox, CLASS_TRANSITION);
-            _this6.fading = false;
+            _this7.fading = false;
           }, {
             once: true
           });
 
           removeClass(tooltipBox, CLASS_IN);
-          _this6.fading = true;
+          _this7.fading = true;
         } else {
           removeClass(tooltipBox, CLASS_SHOW);
         }
 
-        _this6.tooltipping = false;
+        _this7.tooltipping = false;
       }, 1000);
 
       return this;
@@ -2683,6 +2719,7 @@
       this.viewed = false;
       this.viewing = false;
       this.wheeling = false;
+      this.zooming = false;
       this.init();
     }
 

@@ -30,6 +30,12 @@ window.onload = function () {
     },
     viewed: function (e) {
       console.log(e.type);
+    },
+    zoom: function (e) {
+      console.log(e.type);
+    },
+    zoomed: function (e) {
+      console.log(e.type);
     }
   };
   var viewer;
@@ -81,6 +87,12 @@ window.onload = function () {
     console.log(e.type);
   });
   addEventListener(pictures, 'viewed', function (e) {
+    console.log(e.type);
+  });
+  addEventListener(pictures, 'zoom', function (e) {
+    console.log(e.type);
+  });
+  addEventListener(pictures, 'zoomed', function (e) {
     console.log(e.type);
   });
   viewer = new Viewer(pictures, options);
