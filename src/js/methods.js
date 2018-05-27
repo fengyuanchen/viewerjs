@@ -16,6 +16,8 @@ import {
   EVENT_TRANSITION_END,
   EVENT_VIEW,
   EVENT_VIEWED,
+  EVENT_ZOOM,
+  EVENT_ZOOMED,
   NAMESPACE,
 } from './constants';
 import {
@@ -421,7 +423,12 @@ export default {
    * @returns {Viewer} this
    */
   zoomTo(ratio, hasTooltip = false, _originalEvent = null, _zoomable = false) {
-    const { options, pointers, imageData } = this;
+    const {
+      element,
+      options,
+      pointers,
+      imageData,
+    } = this;
 
     ratio = Math.max(0, ratio);
 
@@ -439,6 +446,23 @@ export default {
 
       const newWidth = imageData.naturalWidth * ratio;
       const newHeight = imageData.naturalHeight * ratio;
+      const oldRatio = imageData.width / imageData.naturalWidth;
+
+      if (isFunction(options.zoom)) {
+        addListener(element, EVENT_ZOOM, options.zoom, {
+          once: true,
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_ZOOM, {
+        ratio,
+        oldRatio,
+        originalEvent: _originalEvent,
+      }) === false) {
+        return this;
+      }
+
+      this.zooming = true;
 
       if (_originalEvent) {
         const offset = getOffset(this.viewer);
@@ -463,7 +487,21 @@ export default {
       imageData.width = newWidth;
       imageData.height = newHeight;
       imageData.ratio = ratio;
-      this.renderImage();
+      this.renderImage(() => {
+        this.zooming = false;
+
+        if (isFunction(options.zoomed)) {
+          addListener(element, EVENT_ZOOMED, options.zoomed, {
+            once: true,
+          });
+        }
+
+        dispatchEvent(element, EVENT_ZOOMED, {
+          ratio,
+          oldRatio,
+          originalEvent: _originalEvent,
+        });
+      });
 
       if (hasTooltip) {
         this.tooltip();

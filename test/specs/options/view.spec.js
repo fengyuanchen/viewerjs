@@ -60,7 +60,7 @@ describe('view (option)', () => {
     });
   });
 
-  it('should execute the `view` hook function in modal mode', (done) => {
+  it('should execute the `view` hook function in inline mode', (done) => {
     const image = window.createImage();
 
     new Viewer(image, {

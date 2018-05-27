@@ -219,7 +219,7 @@ export default {
     }, getTransforms(imageData)));
 
     if (done) {
-      if (this.viewing && this.options.transition) {
+      if ((this.viewing || this.zooming) && this.options.transition) {
         const onTransitionEnd = () => {
           this.imageRendering = false;
           done();

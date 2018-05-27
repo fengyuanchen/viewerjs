@@ -24,9 +24,9 @@
 
 ## Features
 
-- Supports 34 [options](#options)
+- Supports 36 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 7 [events](#events)
+- Supports 9 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -451,6 +451,20 @@ A shortcut of the `view` event.
 
 A shortcut of the `viewed` event.
 
+### zoom
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `zoom` event.
+
+### zoomed
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `zoomed` event.
+
 [⬆ back to top](#table-of-contents)
 
 ## Methods
@@ -793,6 +807,28 @@ This event fires when a viewer starts to show (view) an image.
 - **event.detail**: the same as the `view` event.
 
 This event fires when a viewer has shown (viewed) an image.
+
+### zoom
+
+- **event.detail.originalEvent**:
+  - Type: `Event`
+  - Options: `wheel`, `touchmove`.
+
+- **event.detail.oldRatio**:
+  - Type: `Number`
+  - The old (current) ratio of the image.
+
+- **event.detail.ratio**:
+  - Type: `Number`
+  - The new (next) ratio of the image (`imageData.width / imageData.naturalWidth`).
+
+This event fires when a viewer starts to zoom (in or out) an image.
+
+### zoomed
+
+- **event.detail**: the same as the `zoom` event.
+
+This event fires when a viewer has zoomed (in or out) an image.
 
 [⬆ back to top](#table-of-contents)
 

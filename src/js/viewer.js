@@ -74,6 +74,7 @@ class Viewer {
     this.viewed = false;
     this.viewing = false;
     this.wheeling = false;
+    this.zooming = false;
     this.init();
   }
 

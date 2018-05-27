@@ -91,4 +91,6 @@ export default {
   hidden: null,
   view: null,
   viewed: null,
+  zoom: null,
+  zoomed: null,
 };
