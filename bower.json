@@ -1,0 +1,28 @@
+{
+  "name": "viewerjs-image",
+  "description": "JavaScript image viewer.",
+  "main": ["dist/viewer.js", "dist/viewer.css"],
+  "authors": [
+    "Chen Fengyuan"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "image",
+    "viewer",
+    "viewerjs",
+    "viewer.js",
+    "html",
+    "css",
+    "javascript",
+    "front-end",
+    "web"
+  ],
+  "homepage": "https://fengyuanchen.github.io/viewerjs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
