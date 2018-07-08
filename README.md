@@ -419,6 +419,17 @@ new Viewer(images, {
 });
 ```
 
+### toggleOnDblclick
+
+- Type: `Boolean`
+- Default: `true`
+
+Indicate if toggle the image size between its natural size and initial size when double click on the image or not.
+
+In other words, call the [`toggle`](#toggle) method automatically when double click on the image.
+
+> Requires [`dblclick`](https://developer.mozilla.org/en-US/docs/Web/Events/dblclick) event support.
+
 ### ready
 
 - Type: `Function`
@@ -738,6 +749,8 @@ Show the current ratio of the image with percentage.
 ### toggle()
 
 Toggle the image size between its natural size and initial size.
+
+> Used by the [`toggleOnDblclick`](#toggleOnDblclick) option.
 
 ### reset()
 

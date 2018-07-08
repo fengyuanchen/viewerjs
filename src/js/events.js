@@ -1,5 +1,6 @@
 import {
   EVENT_CLICK,
+  EVENT_DBLCLICK,
   EVENT_DRAG_START,
   EVENT_KEY_DOWN,
   EVENT_POINTER_DOWN,
@@ -15,13 +16,18 @@ import {
 
 export default {
   bind() {
-    const { element, viewer } = this;
+    const { canvas, element, viewer } = this;
 
     addListener(viewer, EVENT_CLICK, (this.onClick = this.click.bind(this)));
     addListener(viewer, EVENT_WHEEL, (this.onWheel = this.wheel.bind(this)));
     addListener(viewer, EVENT_DRAG_START, (this.onDragStart = this.dragstart.bind(this)));
+
+    if (this.options.toggleOnDblclick) {
+      addListener(canvas, EVENT_DBLCLICK, (this.onDblclick = this.dblclick.bind(this)));
+    }
+
     addListener(
-      this.canvas,
+      canvas,
       EVENT_POINTER_DOWN,
       (this.onPointerDown = this.pointerdown.bind(this)),
     );
@@ -44,12 +50,17 @@ export default {
   },
 
   unbind() {
-    const { element, viewer } = this;
+    const { canvas, element, viewer } = this;
 
     removeListener(viewer, EVENT_CLICK, this.onClick);
     removeListener(viewer, EVENT_WHEEL, this.onWheel);
     removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
-    removeListener(this.canvas, EVENT_POINTER_DOWN, this.onPointerDown);
+
+    if (this.options.toggleOnDblclick) {
+      removeListener(canvas, EVENT_DBLCLICK, this.onDblclick);
+    }
+
+    removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
     removeListener(element.ownerDocument, EVENT_POINTER_MOVE, this.onPointerMove);
     removeListener(element.ownerDocument, EVENT_POINTER_UP, this.onPointerUp);
     removeListener(element.ownerDocument, EVENT_KEY_DOWN, this.onKeyDown);

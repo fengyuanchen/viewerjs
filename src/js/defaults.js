@@ -89,6 +89,10 @@ export default {
   // Type: Function (return true if the image is viewable)
   filter: null,
 
+  // Indicate if toggle the image size between its natural size
+  // and initial size when double click on the image or not.
+  toggleOnDblclick: true,
+
   // Event shortcuts
   ready: null,
   show: null,

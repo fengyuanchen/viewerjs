@@ -27,25 +27,26 @@ export const CLASS_SHOW = `${NAMESPACE}-show`;
 export const CLASS_TRANSITION = `${NAMESPACE}-transition`;
 
 // Events
-export const EVENT_READY = 'ready';
-export const EVENT_SHOW = 'show';
-export const EVENT_SHOWN = 'shown';
-export const EVENT_HIDE = 'hide';
-export const EVENT_HIDDEN = 'hidden';
-export const EVENT_VIEW = 'view';
-export const EVENT_VIEWED = 'viewed';
-export const EVENT_ZOOM = 'zoom';
-export const EVENT_ZOOMED = 'zoomed';
 export const EVENT_CLICK = 'click';
+export const EVENT_DBLCLICK = 'dblclick';
 export const EVENT_DRAG_START = 'dragstart';
+export const EVENT_HIDDEN = 'hidden';
+export const EVENT_HIDE = 'hide';
 export const EVENT_KEY_DOWN = 'keydown';
 export const EVENT_LOAD = 'load';
 export const EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
 export const EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'touchmove mousemove';
 export const EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+export const EVENT_READY = 'ready';
 export const EVENT_RESIZE = 'resize';
+export const EVENT_SHOW = 'show';
+export const EVENT_SHOWN = 'shown';
 export const EVENT_TRANSITION_END = 'transitionend';
+export const EVENT_VIEW = 'view';
+export const EVENT_VIEWED = 'viewed';
 export const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+export const EVENT_ZOOM = 'zoom';
+export const EVENT_ZOOMED = 'zoomed';
 
 // Data keys
 export const DATA_ACTION = `${NAMESPACE}Action`;

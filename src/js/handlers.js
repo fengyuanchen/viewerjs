@@ -106,6 +106,12 @@ export default {
     }
   },
 
+  dblclick(event) {
+    if (event.target.parentElement === this.canvas) {
+      this.toggle();
+    }
+  },
+
   load() {
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -127,12 +133,12 @@ export default {
     }
 
     image.style.cssText = (
-      'height:0;' +
-      `margin-left:${viewerData.width / 2}px;` +
-      `margin-top:${viewerData.height / 2}px;` +
-      'max-width:none!important;' +
-      'position:absolute;' +
-      'width:0;'
+      'height:0;'
+      + `margin-left:${viewerData.width / 2}px;`
+      + `margin-top:${viewerData.height / 2}px;`
+      + 'max-width:none!important;'
+      + 'position:absolute;'
+      + 'width:0;'
     );
 
     this.initImage(() => {
@@ -371,11 +377,11 @@ export default {
     }
 
     if (this.played) {
-      if (this.options.fullscreen && this.fulled &&
-        !document.fullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.msFullscreenElement) {
+      if (this.options.fullscreen && this.fulled
+        && !document.fullscreenElement
+        && !document.mozFullScreenElement
+        && !document.webkitFullscreenElement
+        && !document.msFullscreenElement) {
         this.stop();
         return;
       }
