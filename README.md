@@ -166,18 +166,26 @@ Specify the visibility of the navbar.
 
 ### title
 
-- Type: `Boolean` or `Number`
+- Type: `Boolean` or `Number` or `Function` or `Array`
 - Default: `true`
 - Options:
   - `0` or `false`: hide the title
-  - `1` or `true`: show the title
+  - `1` or `true` or `Function` or `Array`: show the title
   - `2`: show the title only when the screen width is greater than 768 pixels
   - `3`: show the title only when the screen width is greater than 992 pixels
   - `4`: show the title only when the screen width is greater than 1200 pixels
+  - `Function`: customize the title content
+  - `[Number, Function]`: the first element indicate the visibility, the second element customize the title content
 
-Specify the visibility of the title (the current image's name and dimensions).
+Specify the visibility and the content of the title.
 
 > The name comes from the `alt` attribute of an image element or the image name parsed from URL.
+
+For example, `title: 4` equals to:
+
+```js
+title: [4, (image, imageData) => `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`]
+```
 
 ### toolbar
 

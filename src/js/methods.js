@@ -256,8 +256,11 @@ export default {
     // Generate title after viewed
     const onViewed = () => {
       const { imageData } = this;
+      const render = Array.isArray(options.title) ? options.title[1] : options.title;
 
-      title.textContent = `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`;
+      title.innerHTML = isFunction(render)
+        ? render.call(this, image, imageData)
+        : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`;
     };
     let onLoad;
 

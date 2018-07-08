@@ -201,7 +201,9 @@ class Viewer {
     this.player = viewer.querySelector(`.${NAMESPACE}-player`);
     this.list = viewer.querySelector(`.${NAMESPACE}-list`);
 
-    addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
+    addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
+      ? options.title[0]
+      : options.title));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(button, CLASS_HIDE, !options.button);
 

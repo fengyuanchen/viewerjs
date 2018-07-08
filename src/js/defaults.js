@@ -11,7 +11,10 @@ export default {
   // Show the navbar
   navbar: true,
 
-  // Show the title
+  /**
+   * Specify the visibility and the content of the title.
+   * @type {boolean|number|Function|Array}
+   */
   title: true,
 
   // Show the toolbar

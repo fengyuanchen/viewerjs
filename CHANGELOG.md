@@ -3,6 +3,7 @@
 ## next
 
 - Add a new options: `initialViewIndex` (#183).
+- Enhance the `title` option to support to customize title content (#54, #185).
 
 ## 1.1.0 (May 27, 2018)
 
