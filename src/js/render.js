@@ -78,16 +78,16 @@ export default {
       }
 
       if (src || url) {
-        items.push('<li>' +
-          '<img' +
-            ` src="${src || url}"` +
-            ' role="button"' +
-            ' data-viewer-action="view"' +
-            ` data-index="${i}"` +
-            ` data-original-url="${url || src}"` +
-            ` alt="${alt}"` +
-          '>' +
-        '</li>');
+        items.push('<li>'
+          + '<img'
+            + ` src="${src || url}"`
+            + ' role="button"'
+            + ' data-viewer-action="view"'
+            + ` data-index="${i}"`
+            + ` data-original-url="${url || src}"`
+            + ` alt="${alt}"`
+          + '>'
+        + '</li>');
       }
     });
 

@@ -22,11 +22,11 @@ window.createImageList = () => {
   const list = document.createElement('ul');
 
   list.innerHTML = (
-    '<li><img src="/base/docs/images/tibet-1.jpg"></li>' +
-    '<li><img src="/base/docs/images/tibet-2.jpg"></li>' +
-    '<li><img src="/base/docs/images/tibet-3.jpg"></li>' +
-    '<li><img src="/base/docs/images/tibet-4.jpg"></li>' +
-    '<li><img src="/base/docs/images/tibet-5.jpg"></li>'
+    '<li><img src="/base/docs/images/tibet-1.jpg"></li>'
+    + '<li><img src="/base/docs/images/tibet-2.jpg"></li>'
+    + '<li><img src="/base/docs/images/tibet-3.jpg"></li>'
+    + '<li><img src="/base/docs/images/tibet-4.jpg"></li>'
+    + '<li><img src="/base/docs/images/tibet-5.jpg"></li>'
   );
   container.appendChild(list);
 

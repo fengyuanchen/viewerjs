@@ -194,8 +194,8 @@ export default {
       return this.show();
     }
 
-    if (this.hiding || this.played || index < 0 || index >= this.length ||
-      (this.viewed && index === this.index)) {
+    if (this.hiding || this.played || index < 0 || index >= this.length
+      || (this.viewed && index === this.index)) {
       return this;
     }
 

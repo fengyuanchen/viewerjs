@@ -151,9 +151,9 @@ export function setStyle(element, styles) {
  * @returns {boolean} Returns `true` if the special class was found.
  */
 export function hasClass(element, value) {
-  return element.classList ?
-    element.classList.contains(value) :
-    element.className.indexOf(value) > -1;
+  return element.classList
+    ? element.classList.contains(value)
+    : element.className.indexOf(value) > -1;
 }
 
 /**
@@ -260,7 +260,9 @@ export function hyphenate(value) {
 export function getData(element, name) {
   if (isObject(element[name])) {
     return element[name];
-  } else if (element.dataset) {
+  }
+
+  if (element.dataset) {
     return element.dataset[name];
   }
 
@@ -533,15 +535,15 @@ export function getImageNaturalSizes(image, callback) {
   // with its orientation once append it into DOM
   if (!IS_SAFARI) {
     newImage.style.cssText = (
-      'left:0;' +
-      'max-height:none!important;' +
-      'max-width:none!important;' +
-      'min-height:0!important;' +
-      'min-width:0!important;' +
-      'opacity:0;' +
-      'position:absolute;' +
-      'top:0;' +
-      'z-index:-1;'
+      'left:0;'
+      + 'max-height:none!important;'
+      + 'max-width:none!important;'
+      + 'min-height:0!important;'
+      + 'min-width:0!important;'
+      + 'opacity:0;'
+      + 'position:absolute;'
+      + 'top:0;'
+      + 'z-index:-1;'
     );
     body.appendChild(newImage);
   }

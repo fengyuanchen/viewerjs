@@ -232,10 +232,10 @@ class Viewer {
         const show = deep && !isUndefined(value.show) ? value.show : value;
 
         if (
-          !show ||
-          (!options.zoomable && zoomButtons.indexOf(name) !== -1) ||
-          (!options.rotatable && rotateButtons.indexOf(name) !== -1) ||
-          (!options.scalable && scaleButtons.indexOf(name) !== -1)
+          !show
+          || (!options.zoomable && zoomButtons.indexOf(name) !== -1)
+          || (!options.rotatable && rotateButtons.indexOf(name) !== -1)
+          || (!options.scalable && scaleButtons.indexOf(name) !== -1)
         ) {
           return;
         }

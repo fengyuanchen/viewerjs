@@ -84,8 +84,8 @@ export default {
   requestFullscreen() {
     const document = this.element.ownerDocument;
 
-    if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement &&
-      !document.webkitFullscreenElement && !document.msFullscreenElement) {
+    if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement
+      && !document.webkitFullscreenElement && !document.msFullscreenElement) {
       const { documentElement } = document;
 
       if (documentElement.requestFullscreen) {
@@ -165,8 +165,8 @@ export default {
   isSwitchable() {
     const { imageData, viewerData } = this;
 
-    return this.length > 1 && imageData.left >= 0 && imageData.top >= 0 &&
-      imageData.width <= viewerData.width &&
-      imageData.height <= viewerData.height;
+    return this.length > 1 && imageData.left >= 0 && imageData.top >= 0
+      && imageData.width <= viewerData.width
+      && imageData.height <= viewerData.height;
   },
 };
