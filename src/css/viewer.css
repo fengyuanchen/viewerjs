@@ -217,55 +217,55 @@
 }
 
 .viewer-toolbar {
-  & ul {
+  & > ul {
     display: inline-block;
     margin: 0 auto 5px;
     overflow: hidden;
     padding: 3px 0;
-  }
 
-  & li {
-    background-color: rgba(0, 0, 0, .5);
-    border-radius: 50%;
-    cursor: pointer;
-    float: left;
-    height: 24px;
-    overflow: hidden;
-    transition: background-color .15s;
-    width: 24px;
+    & > li {
+      background-color: rgba(0, 0, 0, .5);
+      border-radius: 50%;
+      cursor: pointer;
+      float: left;
+      height: 24px;
+      overflow: hidden;
+      transition: background-color .15s;
+      width: 24px;
 
-    &:hover {
-      background-color: rgba(0, 0, 0, .8);
+      &:hover {
+        background-color: rgba(0, 0, 0, .8);
+      }
+
+      &::before {
+        margin: 2px;
+      }
+
+      & + li {
+        margin-left: 1px;
+      }
     }
 
-    &::before {
-      margin: 2px;
+    & > .viewer-small {
+      height: 18px;
+      margin-bottom: 3px;
+      margin-top: 3px;
+      width: 18px;
+
+      &::before {
+        margin: -1px;
+      }
     }
 
-    & + li {
-      margin-left: 1px;
-    }
-  }
+    & > .viewer-large {
+      height: 30px;
+      margin-bottom: -3px;
+      margin-top: -3px;
+      width: 30px;
 
-  & .viewer-small {
-    height: 18px;
-    margin-bottom: 3px;
-    margin-top: 3px;
-    width: 18px;
-
-    &::before {
-      margin: -1px;
-    }
-  }
-
-  & .viewer-large {
-    height: 30px;
-    margin-bottom: -3px;
-    margin-top: -3px;
-    width: 30px;
-
-    &::before {
-      margin: 5px;
+      &::before {
+        margin: 5px;
+      }
     }
   }
 }
