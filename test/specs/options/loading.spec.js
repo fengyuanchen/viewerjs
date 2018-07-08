@@ -6,7 +6,10 @@ describe('loading (option)', () => {
 
       view() {
         setTimeout(() => {
-          expect(viewer.canvas.className).to.include('viewer-loading');
+          if (!viewer.image.complete) {
+            expect(viewer.canvas.className).to.include('viewer-loading');
+          }
+
           done();
         }, 0);
       },
@@ -29,6 +32,6 @@ describe('loading (option)', () => {
       },
     });
 
-    expect(viewer.options.loading).to.be.loading;
+    expect(viewer.options.loading).to.be.false;
   });
 });
