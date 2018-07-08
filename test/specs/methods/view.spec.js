@@ -1,5 +1,5 @@
 describe('view (method)', () => {
-  it('show view the image of the given index', (done) => {
+  it('should view the image of the given index', (done) => {
     const imageList = window.createImageList();
     const viewer = new Viewer(imageList, {
       viewed(event) {
@@ -12,7 +12,7 @@ describe('view (method)', () => {
     viewer.view(1);
   });
 
-  it('show not work when the given index is less than 0', (done) => {
+  it('should not work when the given index is less than 0', (done) => {
     const imageList = window.createImageList();
     const viewer = new Viewer(imageList, {
       viewed() {
@@ -27,7 +27,7 @@ describe('view (method)', () => {
     }, 500);
   });
 
-  it('show not work when the given index is greater than or equal to the length of the images', (done) => {
+  it('should not work when the given index is greater than or equal to the length of the images', (done) => {
     const imageList = window.createImageList();
     const viewer = new Viewer(imageList, {
       viewed() {
