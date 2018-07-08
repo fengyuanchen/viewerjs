@@ -128,6 +128,15 @@ var viewer = new Viewer(document.getElementById('images'));
 You may set viewer options with `new Viewer(image, options)`.
 If you want to change the global default options, You may use `Viewer.setDefaults(options)`.
 
+### initialViewIndex
+
+- Type: `Number`
+- Default: `0`
+
+Define the initial index of image for viewing.
+
+> Also used as the default parameter value of the `view` method.
+
 ### inline
 
 - Type: `Boolean`
@@ -514,7 +523,7 @@ hide the viewer.
 
 - **index** (optional):
   - Type: `Number`
-  - Default: `0`
+  - Default: `0` (inherits from the `initialViewIndex` option)
   - The index of the image for viewing
 
 View one of the images with image's index. If the viewer is not shown, will show the viewer first.

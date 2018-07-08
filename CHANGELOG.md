@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add a new options: `initialViewIndex` (#183).
+
 ## 1.1.0 (May 27, 2018)
 
 - Add 2 new events: `zoom` and `zoomed` (#144).

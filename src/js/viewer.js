@@ -60,7 +60,7 @@ class Viewer {
     this.fulled = false;
     this.hiding = false;
     this.imageData = {};
-    this.index = 0;
+    this.index = this.options.initialViewIndex;
     this.isImg = false;
     this.isShown = false;
     this.length = 0;
@@ -336,7 +336,7 @@ class Viewer {
     }
 
     if (this.ready && options.inline) {
-      this.view();
+      this.view(this.index);
     }
   }
 

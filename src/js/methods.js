@@ -186,7 +186,7 @@ export default {
    * @param {number} index - The index of the image to view.
    * @returns {Viewer} this
    */
-  view(index = 0) {
+  view(index = this.options.initialViewIndex) {
     index = Number(index) || 0;
 
     if (!this.isShown) {

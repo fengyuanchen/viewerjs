@@ -1,4 +1,7 @@
 export default {
+  // Define the initial index of image for viewing.
+  initialViewIndex: 0,
+
   // Enable inline mode
   inline: false,
 
