@@ -41,6 +41,7 @@ declare namespace Viewer {
     fullscreen?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
+    initialViewIndex?: number;
     inline?: boolean;
     interval?: number;
     keyboard?: boolean;
@@ -57,7 +58,8 @@ declare namespace Viewer {
     scalable?: boolean;
     show?(event: CustomEvent): void;
     shown?(event: CustomEvent): void;
-    title?: boolean | Visibility;
+    title?: boolean | Visibility | Function | [Visibility, Function];
+    toggleOnDblclick?: boolean;
     toolbar?: boolean | Visibility | ToolbarOptions;
     tooltip?: boolean;
     transition?: boolean;
@@ -66,8 +68,10 @@ declare namespace Viewer {
     viewed?(event: CustomEvent): void;
     zIndex?: number;
     zIndexInline?: number;
+    zoom?(event: CustomEvent): void;
     zoomRatio?: number;
     zoomable?: boolean;
+    zoomed?(event: CustomEvent): void;
   }
 }
 
