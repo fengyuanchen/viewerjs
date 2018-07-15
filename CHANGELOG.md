@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.2.0 (Jul 15, 2018)
 
 - Add 2 new options: `toggleOnDblclick` (#173) and `initialViewIndex` (#183).
 - Enhance the `title` option to support to customize title content (#54, #185).

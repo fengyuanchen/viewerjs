@@ -890,7 +890,7 @@ Please read through our [contributing guidelines](.github/CONTRIBUTING.md).
 
 ## Versioning
 
-Maintained under the [Semantic Versioning guidelines](http://semver.org/).
+Maintained under the [Semantic Versioning guidelines](https://semver.org/).
 
 ## License
 

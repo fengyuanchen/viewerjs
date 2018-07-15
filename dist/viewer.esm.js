@@ -1,99 +1,194 @@
 /*!
- * Viewer.js v1.1.0
+ * Viewer.js v1.2.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-27T07:33:19.361Z
+ * Date: 2018-07-15T10:10:54.376Z
  */
 
 var DEFAULTS = {
-  // Enable inline mode
+  /**
+   * Define the initial index of image for viewing.
+   * @type {number}
+   */
+  initialViewIndex: 0,
+
+  /**
+   * Enable inline mode.
+   * @type {boolean}
+   */
   inline: false,
 
-  // Show the button on the top-right of the viewer
+  /**
+   * Show the button on the top-right of the viewer.
+   * @type {boolean}
+   */
   button: true,
 
-  // Show the navbar
+  /**
+   * Show the navbar.
+   * @type {boolean | number}
+   */
   navbar: true,
 
-  // Show the title
+  /**
+   * Specify the visibility and the content of the title.
+   * @type {boolean | number | Function | Array}
+   */
   title: true,
 
-  // Show the toolbar
+  /**
+   * Show the toolbar.
+   * @type {boolean | number | Object}
+   */
   toolbar: true,
 
-  // Show the tooltip with image ratio (percentage) when zoom in or zoom out
+  /**
+   * Show the tooltip with image ratio (percentage) when zoom in or zoom out.
+   * @type {boolean}
+   */
   tooltip: true,
 
-  // Enable to move the image
+  /**
+   * Enable to move the image.
+   * @type {boolean}
+   */
   movable: true,
 
-  // Enable to zoom the image
+  /**
+   * Enable to zoom the image.
+   * @type {boolean}
+   */
   zoomable: true,
 
-  // Enable to rotate the image
+  /**
+   * Enable to rotate the image.
+   * @type {boolean}
+   */
   rotatable: true,
 
-  // Enable to scale the image
+  /**
+   * Enable to scale the image.
+   * @type {boolean}
+   */
   scalable: true,
 
-  // Enable CSS3 Transition for some special elements
+  /**
+   * Enable CSS3 Transition for some special elements.
+   * @type {boolean}
+   */
   transition: true,
 
-  // Enable to request fullscreen when play
+  /**
+   * Enable to request fullscreen when play.
+   * @type {boolean}
+   */
   fullscreen: true,
 
-  // The amount of time to delay between automatically cycling an image when playing.
+  /**
+   * The amount of time to delay between automatically cycling an image when playing.
+   * @type {number}
+   */
   interval: 5000,
 
-  // Enable keyboard support
+  /**
+   * Enable keyboard support.
+   * @type {boolean}
+   */
   keyboard: true,
 
-  // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
+  /**
+   * Enable a modal backdrop, specify `static` for a backdrop
+   * which doesn't close the modal on click.
+   * @type {boolean}
+   */
   backdrop: true,
 
-  // Indicate if show a loading spinner when load image or not.
+  /**
+   * Indicate if show a loading spinner when load image or not.
+   * @type {boolean}
+   */
   loading: true,
 
-  // Indicate if enable loop viewing or not.
+  /**
+   * Indicate if enable loop viewing or not.
+   * @type {boolean}
+   */
   loop: true,
 
-  // Min width of the viewer in inline mode
+  /**
+   * Min width of the viewer in inline mode.
+   * @type {number}
+   */
   minWidth: 200,
 
-  // Min height of the viewer in inline mode
+  /**
+   * Min height of the viewer in inline mode.
+   * @type {number}
+   */
   minHeight: 100,
 
-  // Define the ratio when zoom the image by wheeling mouse
+  /**
+   * Define the ratio when zoom the image by wheeling mouse.
+   * @type {number}
+   */
   zoomRatio: 0.1,
 
-  // Define the min ratio of the image when zoom out
+  /**
+   * Define the min ratio of the image when zoom out.
+   * @type {number}
+   */
   minZoomRatio: 0.01,
 
-  // Define the max ratio of the image when zoom in
+  /**
+   * Define the max ratio of the image when zoom in.
+   * @type {number}
+   */
   maxZoomRatio: 100,
 
-  // Define the CSS `z-index` value of viewer in modal mode.
+  /**
+   * Define the CSS `z-index` value of viewer in modal mode.
+   * @type {number}
+   */
   zIndex: 2015,
 
-  // Define the CSS `z-index` value of viewer in inline mode.
+  /**
+   * Define the CSS `z-index` value of viewer in inline mode.
+   * @type {number}
+   */
   zIndexInline: 0,
 
-  // Define where to get the original image URL for viewing
-  // Type: String (an image attribute) or Function (should return an image URL)
+  /**
+   * Define where to get the original image URL for viewing.
+   * @type {string | Function}
+   */
   url: 'src',
 
-  // Define where to put the viewer in modal mode.
-  // Type: String | Element
+  /**
+   * Define where to put the viewer in modal mode.
+   * @type {string | Element}
+   */
   container: 'body',
 
-  // Filter the images for viewing.
-  // Type: Function (return true if the image is viewable)
+  /**
+   * Filter the images for viewing. Return true if the image is viewable.
+   * @type {Function}
+   */
   filter: null,
 
-  // Event shortcuts
+  /**
+   * Indicate if toggle the image size between its natural size
+   * and initial size when double click on the image or not.
+   * @type {boolean}
+   */
+  toggleOnDblclick: true,
+
+  /**
+   * Event shortcuts.
+   * @type {Function}
+   */
   ready: null,
   show: null,
   shown: null,
@@ -136,25 +231,26 @@ var CLASS_SHOW = NAMESPACE + '-show';
 var CLASS_TRANSITION = NAMESPACE + '-transition';
 
 // Events
-var EVENT_READY = 'ready';
-var EVENT_SHOW = 'show';
-var EVENT_SHOWN = 'shown';
-var EVENT_HIDE = 'hide';
-var EVENT_HIDDEN = 'hidden';
-var EVENT_VIEW = 'view';
-var EVENT_VIEWED = 'viewed';
-var EVENT_ZOOM = 'zoom';
-var EVENT_ZOOMED = 'zoomed';
 var EVENT_CLICK = 'click';
+var EVENT_DBLCLICK = 'dblclick';
 var EVENT_DRAG_START = 'dragstart';
+var EVENT_HIDDEN = 'hidden';
+var EVENT_HIDE = 'hide';
 var EVENT_KEY_DOWN = 'keydown';
 var EVENT_LOAD = 'load';
 var EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
 var EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'touchmove mousemove';
 var EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+var EVENT_READY = 'ready';
 var EVENT_RESIZE = 'resize';
+var EVENT_SHOW = 'show';
+var EVENT_SHOWN = 'shown';
 var EVENT_TRANSITION_END = 'transitionend';
+var EVENT_VIEW = 'view';
+var EVENT_VIEWED = 'viewed';
 var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+var EVENT_ZOOM = 'zoom';
+var EVENT_ZOOMED = 'zoomed';
 
 // Data keys
 var DATA_ACTION = NAMESPACE + 'Action';
@@ -450,7 +546,9 @@ function hyphenate(value) {
 function getData(element, name) {
   if (isObject(element[name])) {
     return element[name];
-  } else if (element.dataset) {
+  }
+
+  if (element.dataset) {
     return element.dataset[name];
   }
 
@@ -1081,28 +1179,40 @@ var render = {
 
 var events = {
   bind: function bind() {
-    var element = this.element,
+    var canvas = this.canvas,
+        element = this.element,
         viewer = this.viewer;
 
 
     addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
     addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this));
     addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
-    addListener(this.canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
+
+    if (this.options.toggleOnDblclick) {
+      addListener(canvas, EVENT_DBLCLICK, this.onDblclick = this.dblclick.bind(this));
+    }
+
+    addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
     addListener(element.ownerDocument, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
     addListener(element.ownerDocument, EVENT_POINTER_UP, this.onPointerUp = this.pointerup.bind(this));
     addListener(element.ownerDocument, EVENT_KEY_DOWN, this.onKeyDown = this.keydown.bind(this));
     addListener(window, EVENT_RESIZE, this.onResize = this.resize.bind(this));
   },
   unbind: function unbind() {
-    var element = this.element,
+    var canvas = this.canvas,
+        element = this.element,
         viewer = this.viewer;
 
 
     removeListener(viewer, EVENT_CLICK, this.onClick);
     removeListener(viewer, EVENT_WHEEL, this.onWheel);
     removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
-    removeListener(this.canvas, EVENT_POINTER_DOWN, this.onPointerDown);
+
+    if (this.options.toggleOnDblclick) {
+      removeListener(canvas, EVENT_DBLCLICK, this.onDblclick);
+    }
+
+    removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
     removeListener(element.ownerDocument, EVENT_POINTER_MOVE, this.onPointerMove);
     removeListener(element.ownerDocument, EVENT_POINTER_UP, this.onPointerUp);
     removeListener(element.ownerDocument, EVENT_KEY_DOWN, this.onKeyDown);
@@ -1190,6 +1300,11 @@ var handlers = {
         if (this.played) {
           this.stop();
         }
+    }
+  },
+  dblclick: function dblclick(event) {
+    if (event.target.parentElement === this.canvas) {
+      this.toggle();
     }
   },
   load: function load() {
@@ -1657,7 +1772,7 @@ var methods = {
   view: function view() {
     var _this = this;
 
-    var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.initialViewIndex;
 
     index = Number(index) || 0;
 
@@ -1727,8 +1842,9 @@ var methods = {
     var onViewed = function onViewed() {
       var imageData = _this.imageData;
 
+      var render = Array.isArray(options.title) ? options.title[1] : options.title;
 
-      title.textContent = alt + ' (' + imageData.naturalWidth + ' \xD7 ' + imageData.naturalHeight + ')';
+      title.innerHTML = isFunction(render) ? render.call(_this, image, imageData) : alt + ' (' + imageData.naturalWidth + ' \xD7 ' + imageData.naturalHeight + ')';
     };
     var onLoad = void 0;
 
@@ -2699,7 +2815,7 @@ var Viewer = function () {
     this.fulled = false;
     this.hiding = false;
     this.imageData = {};
-    this.index = 0;
+    this.index = this.options.initialViewIndex;
     this.isImg = false;
     this.isShown = false;
     this.length = 0;
@@ -2852,7 +2968,7 @@ var Viewer = function () {
       this.player = viewer.querySelector('.' + NAMESPACE + '-player');
       this.list = viewer.querySelector('.' + NAMESPACE + '-list');
 
-      addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
+      addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title) ? options.title[0] : options.title));
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);
 
@@ -2983,7 +3099,7 @@ var Viewer = function () {
       }
 
       if (this.ready && options.inline) {
-        this.view();
+        this.view(this.index);
       }
     }
 

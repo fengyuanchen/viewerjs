@@ -38,7 +38,7 @@ window.onload = function () {
       console.log(e.type);
     }
   };
-  var viewer;
+  var viewer = new Viewer(pictures, options);
 
   function toggleButtons(mode) {
     var targets;
@@ -67,35 +67,6 @@ window.onload = function () {
       element.attachEvent('on' + type, handler);
     }
   }
-
-  addEventListener(pictures, 'ready', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'show', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'shown', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'hide', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'hidden', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'view', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'viewed', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'zoom', function (e) {
-    console.log(e.type);
-  });
-  addEventListener(pictures, 'zoomed', function (e) {
-    console.log(e.type);
-  });
-  viewer = new Viewer(pictures, options);
 
   toggleButtons(options.inline ? 'inline' : 'modal');
 
