@@ -1,99 +1,184 @@
 export default {
-  // Define the initial index of image for viewing.
+  /**
+   * Define the initial index of image for viewing.
+   * @type {number}
+   */
   initialViewIndex: 0,
 
-  // Enable inline mode
+  /**
+   * Enable inline mode.
+   * @type {boolean}
+   */
   inline: false,
 
-  // Show the button on the top-right of the viewer
+  /**
+   * Show the button on the top-right of the viewer.
+   * @type {boolean}
+   */
   button: true,
 
-  // Show the navbar
+  /**
+   * Show the navbar.
+   * @type {boolean | number}
+   */
   navbar: true,
 
   /**
    * Specify the visibility and the content of the title.
-   * @type {boolean|number|Function|Array}
+   * @type {boolean | number | Function | Array}
    */
   title: true,
 
-  // Show the toolbar
+  /**
+   * Show the toolbar.
+   * @type {boolean | number | Object}
+   */
   toolbar: true,
 
-  // Show the tooltip with image ratio (percentage) when zoom in or zoom out
+  /**
+   * Show the tooltip with image ratio (percentage) when zoom in or zoom out.
+   * @type {boolean}
+   */
   tooltip: true,
 
-  // Enable to move the image
+  /**
+   * Enable to move the image.
+   * @type {boolean}
+   */
   movable: true,
 
-  // Enable to zoom the image
+  /**
+   * Enable to zoom the image.
+   * @type {boolean}
+   */
   zoomable: true,
 
-  // Enable to rotate the image
+  /**
+   * Enable to rotate the image.
+   * @type {boolean}
+   */
   rotatable: true,
 
-  // Enable to scale the image
+  /**
+   * Enable to scale the image.
+   * @type {boolean}
+   */
   scalable: true,
 
-  // Enable CSS3 Transition for some special elements
+  /**
+   * Enable CSS3 Transition for some special elements.
+   * @type {boolean}
+   */
   transition: true,
 
-  // Enable to request fullscreen when play
+  /**
+   * Enable to request fullscreen when play.
+   * @type {boolean}
+   */
   fullscreen: true,
 
-  // The amount of time to delay between automatically cycling an image when playing.
+  /**
+   * The amount of time to delay between automatically cycling an image when playing.
+   * @type {number}
+   */
   interval: 5000,
 
-  // Enable keyboard support
+  /**
+   * Enable keyboard support.
+   * @type {boolean}
+   */
   keyboard: true,
 
-  // Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click
+  /**
+   * Enable a modal backdrop, specify `static` for a backdrop
+   * which doesn't close the modal on click.
+   * @type {boolean}
+   */
   backdrop: true,
 
-  // Indicate if show a loading spinner when load image or not.
+  /**
+   * Indicate if show a loading spinner when load image or not.
+   * @type {boolean}
+   */
   loading: true,
 
-  // Indicate if enable loop viewing or not.
+  /**
+   * Indicate if enable loop viewing or not.
+   * @type {boolean}
+   */
   loop: true,
 
-  // Min width of the viewer in inline mode
+  /**
+   * Min width of the viewer in inline mode.
+   * @type {number}
+   */
   minWidth: 200,
 
-  // Min height of the viewer in inline mode
+  /**
+   * Min height of the viewer in inline mode.
+   * @type {number}
+   */
   minHeight: 100,
 
-  // Define the ratio when zoom the image by wheeling mouse
+  /**
+   * Define the ratio when zoom the image by wheeling mouse.
+   * @type {number}
+   */
   zoomRatio: 0.1,
 
-  // Define the min ratio of the image when zoom out
+  /**
+   * Define the min ratio of the image when zoom out.
+   * @type {number}
+   */
   minZoomRatio: 0.01,
 
-  // Define the max ratio of the image when zoom in
+  /**
+   * Define the max ratio of the image when zoom in.
+   * @type {number}
+   */
   maxZoomRatio: 100,
 
-  // Define the CSS `z-index` value of viewer in modal mode.
+  /**
+   * Define the CSS `z-index` value of viewer in modal mode.
+   * @type {number}
+   */
   zIndex: 2015,
 
-  // Define the CSS `z-index` value of viewer in inline mode.
+  /**
+   * Define the CSS `z-index` value of viewer in inline mode.
+   * @type {number}
+   */
   zIndexInline: 0,
 
-  // Define where to get the original image URL for viewing
-  // Type: String (an image attribute) or Function (should return an image URL)
+  /**
+   * Define where to get the original image URL for viewing.
+   * @type {string | Function}
+   */
   url: 'src',
 
-  // Define where to put the viewer in modal mode.
-  // Type: String | Element
+  /**
+   * Define where to put the viewer in modal mode.
+   * @type {string | Element}
+   */
   container: 'body',
 
-  // Filter the images for viewing.
-  // Type: Function (return true if the image is viewable)
+  /**
+   * Filter the images for viewing. Return true if the image is viewable.
+   * @type {Function}
+   */
   filter: null,
 
-  // Indicate if toggle the image size between its natural size
-  // and initial size when double click on the image or not.
+  /**
+   * Indicate if toggle the image size between its natural size
+   * and initial size when double click on the image or not.
+   * @type {boolean}
+   */
   toggleOnDblclick: true,
 
-  // Event shortcuts
+  /**
+   * Event shortcuts.
+   * @type {Function}
+   */
   ready: null,
   show: null,
   shown: null,
