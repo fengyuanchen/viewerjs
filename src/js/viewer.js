@@ -26,7 +26,6 @@ import {
   assign,
   dispatchEvent,
   forEach,
-  getData,
   getResponsiveClass,
   hyphenate,
   isFunction,
@@ -81,11 +80,11 @@ class Viewer {
   init() {
     const { element, options } = this;
 
-    if (getData(element, NAMESPACE)) {
+    if (element[NAMESPACE]) {
       return;
     }
 
-    setData(element, NAMESPACE, this);
+    element[NAMESPACE] = this;
 
     const isImg = element.tagName.toLowerCase() === 'img';
     const images = [];

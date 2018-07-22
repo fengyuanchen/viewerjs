@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Improve viewer instance storage to avoid side effect.
+
 ## 1.2.0 (Jul 15, 2018)
 
 - Add 2 new options: `toggleOnDblclick` (#173) and `initialViewIndex` (#183).

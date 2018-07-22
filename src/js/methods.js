@@ -34,7 +34,6 @@ import {
   isNumber,
   isUndefined,
   removeClass,
-  removeData,
   removeListener,
   setStyle,
   toggleClass,
@@ -941,7 +940,7 @@ export default {
   destroy() {
     const { element, options } = this;
 
-    if (!getData(element, NAMESPACE)) {
+    if (!element[NAMESPACE]) {
       return this;
     }
 
@@ -991,7 +990,7 @@ export default {
       removeListener(element, EVENT_CLICK, this.onStart);
     }
 
-    removeData(element, NAMESPACE);
+    element[NAMESPACE] = undefined;
     return this;
   },
 };
