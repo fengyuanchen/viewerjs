@@ -1,6 +1,6 @@
 # Viewer.js
 
-[![Build Status](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs) [![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs)
+[![Build Status](https://travis-ci.org/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs) [![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Donate on Patreon](https://img.shields.io/badge/donate-on%20patreon-fa7664.svg)](https://www.patreon.com/chenfengyuan)
 
 > JavaScript image viewer.
 
@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 36 [options](#options)
+- Supports 38 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
