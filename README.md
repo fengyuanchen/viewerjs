@@ -184,7 +184,7 @@ Specify the visibility and the content of the title.
 For example, `title: 4` equals to:
 
 ```js
-title: [4, (image, imageData) => `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`]
+title: [4, (image, imageData) => `${image.alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`]
 ```
 
 ### toolbar
