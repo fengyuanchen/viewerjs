@@ -7,15 +7,17 @@ module.exports = (config) => {
   config.set({
     autoWatch: false,
     basePath: '..',
-    browsers: ['ChromeHeadlessWithoutSandbox'],
-    customLaunchers: {
-      ChromeHeadlessWithoutSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox'],
+    browsers: ['ChromeHeadless'],
+    client: {
+      mocha: {
+        timeout: 10000,
       },
     },
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly', 'text-summary'],
+    },
     files: [
-      'dist/viewer.js',
+      'src/index.js',
       'dist/viewer.css',
       'test/helpers.js',
       'test/specs/**/*.spec.js',
@@ -26,14 +28,17 @@ module.exports = (config) => {
     ],
     frameworks: ['mocha', 'chai'],
     preprocessors: {
+      'src/index.js': ['rollup'],
       'test/helpers.js': ['rollup'],
       'test/specs/**/*.spec.js': ['rollup'],
     },
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage-istanbul'],
     rollupPreprocessor: {
       plugins: rollupConfig.plugins,
       output: {
         format: 'iife',
+        name: rollupConfig.output[0].name,
+        sourcemap: 'inline',
       },
     },
     singleRun: true,
