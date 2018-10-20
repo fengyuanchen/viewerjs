@@ -100,6 +100,8 @@ declare class Viewer {
   view(index?: number): Viewer;
   zoom(ratio: number, hasTooltip?: boolean): Viewer;
   zoomTo(ratio: number, hasTooltip?: boolean): Viewer;
+  static noConflict(): Viewer;
+  static setDefaults(options: Viewer.Options): void;
 }
 
 declare module 'viewerjs' {
