@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "unpkg": "dist/viewer.js",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "author": {
     "name": "Chen Fengyuan",
-    "url": "http://chenfengyuan.com"
+    "url": "https://chenfengyuan.com"
   },
   "files": [
     "src",

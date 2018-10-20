@@ -1,5 +1,4 @@
 window.onload = function () {
-
   'use strict';
 
   var Viewer = window.Viewer;

@@ -1,8 +1,9 @@
 # Changelog
 
-## next
+## 1.2.1 (Oct 20, 2018)
 
 - Improve viewer instance storage to avoid side effect.
+- Fix parameter error of `Object.assign` in iOS devices.
 
 ## 1.2.0 (Jul 15, 2018)
 
