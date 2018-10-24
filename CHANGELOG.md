@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Fix wrong click action when the target image is ignored by the `filter` option (#211)
+
 ## 1.2.1 (Oct 20, 2018)
 
 - Improve viewer instance storage to avoid side effect.
