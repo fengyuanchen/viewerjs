@@ -36,6 +36,7 @@ declare namespace Viewer {
   export interface Options {
     backdrop?: boolean | string;
     button?: boolean;
+    className?: string;
     container?: string | Element;
     filter?: Function;
     fullscreen?: boolean;

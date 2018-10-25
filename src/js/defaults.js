@@ -163,6 +163,12 @@ export default {
   container: 'body',
 
   /**
+   * Custom class name(s) to add to the viewer's root element.
+   * @type {string}
+   */
+  className: '',
+
+  /**
    * Filter the images for viewing. Return true if the image is viewable.
    * @type {Function}
    */

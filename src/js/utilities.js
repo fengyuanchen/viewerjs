@@ -3,6 +3,7 @@ import {
   CLASS_HIDE_SM_DOWN,
   CLASS_HIDE_XS_DOWN,
   IN_BROWSER,
+  REGEXP_SPACES,
   WINDOW,
 } from './constants';
 
@@ -309,7 +310,6 @@ export function removeData(element, name) {
   }
 }
 
-const REGEXP_SPACES = /\s\s*/;
 const onceSupported = (() => {
   let supported = false;
 

@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 38 [options](#options)
+- Supports 39 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
@@ -401,6 +401,13 @@ new Viewer(image, {
 The container to put the viewer in modal mode.
 
 > Only available when the `inline` option is set to `false`.
+
+### className
+
+- Type: `String`
+- Default: `''`
+
+Custom class name(s) to add to the viewer's root element.
 
 ### filter
 

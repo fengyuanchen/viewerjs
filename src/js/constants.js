@@ -63,3 +63,6 @@ export const BUTTONS = [
   'flip-horizontal',
   'flip-vertical',
 ];
+
+// RegExps
+export const REGEXP_SPACES = /\s\s*/;
