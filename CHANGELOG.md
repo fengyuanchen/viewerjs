@@ -1,7 +1,8 @@
 # Changelog
 
-## next
+## 1.3.0 (Oct 25, 2018)
 
+- Add a new option: `className` (#209).
 - Fix wrong click action when the target image is ignored by the `filter` option (#211)
 
 ## 1.2.1 (Oct 20, 2018)

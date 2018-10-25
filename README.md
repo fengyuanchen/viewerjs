@@ -128,21 +128,12 @@ var viewer = new Viewer(document.getElementById('images'));
 You may set viewer options with `new Viewer(image, options)`.
 If you want to change the global default options, You may use `Viewer.setDefaults(options)`.
 
-### initialViewIndex
+### backdrop
 
-- Type: `Number`
-- Default: `0`
+- Type: `Boolean` or `String`
+- Default: `true`
 
-Define the initial index of image for viewing.
-
-> Also used as the default parameter value of the `view` method.
-
-### inline
-
-- Type: `Boolean`
-- Default: `false`
-
-Enable inline mode.
+Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click.
 
 ### button
 
@@ -227,12 +218,112 @@ toolbar: {
 }
 ```
 
-### tooltip
+### className
+
+- Type: `String`
+- Default: `''`
+
+Custom class name(s) to add to the viewer's root element.
+
+### container
+
+- Type: `Element` or `String`
+- Default: `'body'`
+- An element or a valid selector for [Document.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
+
+The container to put the viewer in modal mode.
+
+> Only available when the `inline` option is set to `false`.
+
+### filter
+
+- Type: `Function`
+- Default: `null`
+
+Filter the images for viewing (should return `true` if the image is viewable).
+
+For example:
+
+```js
+new Viewer(images, {
+  filter(image) {
+    return image.complete;
+  },
+});
+```
+
+### fullscreen
 
 - Type: `Boolean`
 - Default: `true`
 
-Show the tooltip with image ratio (percentage) when zoom in or zoom out.
+Enable to request full screen when play.
+
+> Requires the browser supports [Full Screen API](http://caniuse.com/fullscreen).
+
+### initialViewIndex
+
+- Type: `Number`
+- Default: `0`
+
+Define the initial index of image for viewing.
+
+> Also used as the default parameter value of the `view` method.
+
+### inline
+
+- Type: `Boolean`
+- Default: `false`
+
+Enable inline mode.
+
+### interval
+
+- Type: `Number`
+- Default: `5000`
+
+The amount of time to delay between automatically cycling an image when playing.
+
+### keyboard
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable keyboard support.
+
+### loading
+
+- Type: `Boolean`
+- Default: `true`
+
+Indicate if show a loading spinner when load image or not.
+
+### loop
+
+- Type: `Boolean`
+- Default: `true`
+
+Indicate if enable loop viewing or not.
+
+> If the current image is the last one, then the next one to view is the first one, and vice versa.
+
+### minWidth
+
+- Type: `Number`
+- Default: 200
+
+Define the minimum width of the viewer.
+
+> Only available in inline mode (set the `inline` option to `true`).
+
+### minHeight
+
+- Type: `Number`
+- Default: 100
+
+Define the minimum height of the viewer.
+
+> Only available in inline mode (set the `inline` option to `true`).
 
 ### movable
 
@@ -262,6 +353,24 @@ Enable to rotate the image.
 
 Enable to scale the image.
 
+### toggleOnDblclick
+
+- Type: `Boolean`
+- Default: `true`
+
+Indicate if toggle the image size between its natural size and initial size when double click on the image or not.
+
+In other words, call the [`toggle`](#toggle) method automatically when double click on the image.
+
+> Requires [`dblclick`](https://developer.mozilla.org/en-US/docs/Web/Events/dblclick) event support.
+
+### tooltip
+
+- Type: `Boolean`
+- Default: `true`
+
+Show the tooltip with image ratio (percentage) when zoom in or zoom out.
+
 ### transition
 
 - Type: `Boolean`
@@ -269,69 +378,19 @@ Enable to scale the image.
 
 Enable CSS3 Transition for some special elements.
 
-### fullscreen
-
-- Type: `Boolean`
-- Default: `true`
-
-Enable to request full screen when play.
-
-> Requires the browser supports [Full Screen API](http://caniuse.com/fullscreen).
-
-### keyboard
-
-- Type: `Boolean`
-- Default: `true`
-
-Enable keyboard support.
-
-### backdrop
-
-- Type: `Boolean` or `String`
-- Default: `true`
-
-Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click.
-
-### loading
-
-- Type: `Boolean`
-- Default: `true`
-
-Indicate if show a loading spinner when load image or not.
-
-### loop
-
-- Type: `Boolean`
-- Default: `true`
-
-Indicate if enable loop viewing or not.
-
-> If the current image is the last one, then the next one to view is the first one, and vice versa.
-
-### interval
+### zIndex
 
 - Type: `Number`
-- Default: `5000`
+- Default: `2015`
 
-The amount of time to delay between automatically cycling an image when playing.
+Define the CSS `z-index` value of viewer in modal mode.
 
-### minWidth
-
-- Type: `Number`
-- Default: 200
-
-Define the minimum width of the viewer.
-
-> Only available in inline mode (set the `inline` option to `true`).
-
-### minHeight
+### zIndexInline
 
 - Type: `Number`
-- Default: 100
+- Default: `0`
 
-Define the minimum height of the viewer.
-
-> Only available in inline mode (set the `inline` option to `true`).
+Define the CSS `z-index` value of viewer in inline mode.
 
 ### zoomRatio
 
@@ -353,20 +412,6 @@ Define the min ratio of the image when zoom out.
 - Default: `100`
 
 Define the max ratio of the image when zoom in.
-
-### zIndex
-
-- Type: `Number`
-- Default: `2015`
-
-Define the CSS `z-index` value of viewer in modal mode.
-
-### zIndexInline
-
-- Type: `Number`
-- Default: `0`
-
-Define the CSS `z-index` value of viewer in inline mode.
 
 ### url
 
@@ -391,51 +436,6 @@ new Viewer(image, {
   },
 });
 ```
-
-### container
-
-- Type: `Element` or `String`
-- Default: `'body'`
-- An element or a valid selector for [Document.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
-
-The container to put the viewer in modal mode.
-
-> Only available when the `inline` option is set to `false`.
-
-### className
-
-- Type: `String`
-- Default: `''`
-
-Custom class name(s) to add to the viewer's root element.
-
-### filter
-
-- Type: `Function`
-- Default: `null`
-
-Filter the images for viewing (should return `true` if the image is viewable).
-
-For example:
-
-```js
-new Viewer(images, {
-  filter(image) {
-    return image.complete;
-  },
-});
-```
-
-### toggleOnDblclick
-
-- Type: `Boolean`
-- Default: `true`
-
-Indicate if toggle the image size between its natural size and initial size when double click on the image or not.
-
-In other words, call the [`toggle`](#toggle) method automatically when double click on the image.
-
-> Requires [`dblclick`](https://developer.mozilla.org/en-US/docs/Web/Events/dblclick) event support.
 
 ### ready
 
