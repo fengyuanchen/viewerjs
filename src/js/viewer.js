@@ -208,19 +208,19 @@ class Viewer {
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(button, CLASS_HIDE, !options.button);
 
-    if (isString(options.className) && options.className) {
-      // In case there are multiple class names
-      options.className.split(REGEXP_SPACES).forEach((className) => {
-        addClass(viewer, className);
-      });
-    }
-
     if (options.backdrop) {
       addClass(viewer, `${NAMESPACE}-backdrop`);
 
       if (!options.inline && options.backdrop === true) {
         setData(canvas, DATA_ACTION, 'hide');
       }
+    }
+
+    if (isString(options.className) && options.className) {
+      // In case there are multiple class names
+      options.className.split(REGEXP_SPACES).forEach((className) => {
+        addClass(viewer, className);
+      });
     }
 
     if (options.toolbar) {
