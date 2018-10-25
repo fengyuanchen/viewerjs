@@ -165,7 +165,7 @@ class Viewer {
     } else {
       addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
         if (target.tagName.toLowerCase() === 'img'
-          && isFunction(options.filter) && options.filter.call(this, target)) {
+          && (!isFunction(options.filter) || options.filter.call(this, target))) {
           this.view(this.images.indexOf(target));
         }
       }));
