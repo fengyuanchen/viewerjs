@@ -56,12 +56,14 @@ dist/
 npm install viewerjs
 ```
 
-Include files:
+In browser:
 
 ```html
 <link  href="/path/to/viewer.css" rel="stylesheet">
 <script src="/path/to/viewer.js"></script>
 ```
+
+The [cdnjs](https://github.com/cdnjs/cdnjs) provides CDN support for Viewer.js's CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/viewerjs).
 
 ### Usage
 
@@ -97,15 +99,19 @@ new Viewer(element[, options])
 ```
 
 ```js
-var viewer = new Viewer(document.getElementById('image'), {
+// import 'viewerjs/dist/viewer.css';
+import Viewer from 'viewerjs';
+
+// View an image
+const viewer = new Viewer(document.getElementById('image'), {
   inline: true,
-  viewed: function() {
+  viewed() {
     viewer.zoomTo(1);
-  }
+  },
 });
 
 // View a list of images
-var viewer = new Viewer(document.getElementById('images'));
+const gallery = new Viewer(document.getElementById('images'));
 ```
 
 ## Keyboard support
@@ -175,7 +181,9 @@ Specify the visibility and the content of the title.
 For example, `title: 4` equals to:
 
 ```js
-title: [4, (image, imageData) => `${image.alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`]
+new Viewer(image, {
+  title: [4, (image, imageData) => `${image.alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`]
+});
 ```
 
 ### toolbar
@@ -200,22 +208,24 @@ Specify the visibility and layout of the toolbar its buttons.
 For example, `toolbar: 4` equals to:
 
 ```js
-toolbar: {
-  zoomIn: 4,
-  zoomOut: 4,
-  oneToOne: 4,
-  reset: 4,
-  prev: 4,
-  play: {
-    show: 4,
-    size: 'large',
+new Viewer(image, {
+  toolbar: {
+    zoomIn: 4,
+    zoomOut: 4,
+    oneToOne: 4,
+    reset: 4,
+    prev: 4,
+    play: {
+      show: 4,
+      size: 'large',
+    },
+    next: 4,
+    rotateLeft: 4,
+    rotateRight: 4,
+    flipHorizontal: 4,
+    flipVertical: 4,
   },
-  next: 4,
-  rotateLeft: 4,
-  rotateRight: 4,
-  flipHorizontal: 4,
-  flipVertical: 4,
-}
+});
 ```
 
 ### className
@@ -245,7 +255,7 @@ Filter the images for viewing (should return `true` if the image is viewable).
 For example:
 
 ```js
-new Viewer(images, {
+new Viewer(image, {
   filter(image) {
     return image.complete;
   },
@@ -510,13 +520,13 @@ As there are some **asynchronous** processes when start the viewer, you should c
 
 ```js
 new Viewer(image, {
-  ready: function () {
+  ready() {
     // 2 methods are available here: "show" and "destroy".
   },
-  shown: function () {
+  shown() {
     // 9 methods are available here: "hide", "view", "prev", "next", "play", "stop", "full", "exit" and "destroy".
   },
-  viewed: function () {
+  viewed() {
     // All methods are available here except "show".
     this.viewer.zoomTo(1).rotateTo(180);
   }
@@ -783,12 +793,12 @@ All events can access the viewer instance with `this.viewer` in its handler.
 
 
 ```js
-var viewer;
+let viewer;
 
 image.addEventListener('viewed', function () {
   console.log(this.viewer === viewer);
-  // -> true
-}, false);
+  // > true
+});
 
 viewer = new Viewer(image);
 ```
