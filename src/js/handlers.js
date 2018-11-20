@@ -327,7 +327,6 @@ export default {
 
     if (e.changedTouches) {
       forEach(e.changedTouches, (touch) => {
-        // // The first parameter should not be undefined in some browsers
         assign(pointers[touch.identifier] || {}, getPointer(touch, true));
       });
     } else {

@@ -100,10 +100,6 @@ class Viewer {
       }
     });
 
-    if (!images.length) {
-      return;
-    }
-
     this.isImg = isImg;
     this.length = images.length;
     this.images = images;

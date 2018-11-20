@@ -22,4 +22,35 @@ describe('update (method)', () => {
       },
     });
   });
+
+  it('should view the new image', (done) => {
+    const container = window.createContainer();
+    const image = window.createImage();
+    const viewer = new Viewer(container, {
+      viewed(event) {
+        expect(event.detail.originalImage).to.equal(image);
+        viewer.hide(true);
+        done();
+      },
+    });
+
+    container.appendChild(image);
+    viewer.update();
+    image.click();
+  });
+
+  it('should view the new image in inline mode', (done) => {
+    const container = window.createContainer();
+    const image = window.createImage();
+    const viewer = new Viewer(container, {
+      inline: true,
+      viewed(event) {
+        expect(event.detail.originalImage).to.equal(image);
+        done();
+      },
+    });
+
+    container.appendChild(image);
+    viewer.update();
+  });
 });

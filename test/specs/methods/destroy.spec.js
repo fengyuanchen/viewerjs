@@ -1,4 +1,24 @@
 describe('destroy (method)', () => {
+  it('should destroy successfully when there are not any images', () => {
+    const container = window.createContainer();
+    const viewer = new Viewer(container);
+
+    expect(container.viewer).to.be.an.instanceof(Viewer);
+    viewer.destroy();
+    expect(container.viewer).to.be.undefined;
+  });
+
+  it('should destroy successfully when there are not any images in inline mode', () => {
+    const container = window.createContainer();
+    const viewer = new Viewer(container, {
+      inline: true,
+    });
+
+    expect(container.viewer).to.be.an.instanceof(Viewer);
+    viewer.destroy();
+    expect(container.viewer).to.be.undefined;
+  });
+
   it('should destroy before ready', () => {
     const image = window.createImage();
     const viewer = new Viewer(image);
