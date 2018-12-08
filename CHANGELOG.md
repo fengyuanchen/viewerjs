@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Emulate click (single tap) and double click (double tap) in touch devices to support backdrop and image zooming (#210).
+
 ## 1.3.0 (Oct 25, 2018)
 
 - Add a new option: `className` (#209).

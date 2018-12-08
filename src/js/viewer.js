@@ -59,6 +59,7 @@ class Viewer {
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
+    this.imageClicked = false;
     this.imageData = {};
     this.index = this.options.initialViewIndex;
     this.isImg = false;
@@ -207,7 +208,7 @@ class Viewer {
     if (options.backdrop) {
       addClass(viewer, `${NAMESPACE}-backdrop`);
 
-      if (!options.inline && options.backdrop === true) {
+      if (!options.inline && options.backdrop !== 'static') {
         setData(canvas, DATA_ACTION, 'hide');
       }
     }

@@ -116,7 +116,7 @@ export default {
     }
   },
 
-  change(e) {
+  change(event) {
     const { options, pointers } = this;
     const pointer = pointers[Object.keys(pointers)[0]];
     const offsetX = pointer.endX - pointer.startX;
@@ -130,7 +130,7 @@ export default {
 
       // Zoom the current image
       case ACTION_ZOOM:
-        this.zoom(getMaxZoomRatio(pointers), false, e);
+        this.zoom(getMaxZoomRatio(pointers), false, event);
         break;
 
       case ACTION_SWITCH: {
