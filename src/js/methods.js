@@ -431,6 +431,14 @@ export default {
       pointers,
       imageData,
     } = this;
+    const {
+      width,
+      height,
+      left,
+      top,
+      naturalWidth,
+      naturalHeight,
+    } = imageData;
 
     ratio = Math.max(0, ratio);
 
@@ -446,9 +454,11 @@ export default {
         ratio = 1;
       }
 
-      const newWidth = imageData.naturalWidth * ratio;
-      const newHeight = imageData.naturalHeight * ratio;
-      const oldRatio = imageData.width / imageData.naturalWidth;
+      const newWidth = naturalWidth * ratio;
+      const newHeight = naturalHeight * ratio;
+      const offsetWidth = newWidth - width;
+      const offsetHeight = newHeight - height;
+      const oldRatio = width / naturalWidth;
 
       if (isFunction(options.zoom)) {
         addListener(element, EVENT_ZOOM, options.zoom, {
@@ -474,16 +484,12 @@ export default {
         };
 
         // Zoom from the triggering point of the event
-        imageData.left -= (newWidth - imageData.width) * (
-          ((center.pageX - offset.left) - imageData.left) / imageData.width
-        );
-        imageData.top -= (newHeight - imageData.height) * (
-          ((center.pageY - offset.top) - imageData.top) / imageData.height
-        );
+        imageData.left -= offsetWidth * (((center.pageX - offset.left) - left) / width);
+        imageData.top -= offsetHeight * (((center.pageY - offset.top) - top) / height);
       } else {
         // Zoom from the center of the image
-        imageData.left -= (newWidth - imageData.width) / 2;
-        imageData.top -= (newHeight - imageData.height) / 2;
+        imageData.left -= offsetWidth / 2;
+        imageData.top -= offsetHeight / 2;
       }
 
       imageData.width = newWidth;
