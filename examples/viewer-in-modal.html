@@ -9,24 +9,23 @@
   <link rel="stylesheet" href="../dist/viewer.css">
   <style>
     .pictures {
+      list-style: none;
       margin: 0;
       padding: 0;
-      list-style: none;
     }
 
     .pictures > li {
-      float: left;
-      width: 33.3%;
-      height: 33.3%;
-      margin: 0 -1px -1px 0;
       border: 1px solid transparent;
+      float: left;
+      height: calc(100% / 3);
+      margin: 0 -1px -1px 0;
       overflow: hidden;
+      width: calc(100% / 3);
     }
 
     .pictures > li > img {
-      width: 100%;
-      cursor: -webkit-zoom-in;
       cursor: zoom-in;
+      width: 100%;
     }
   </style>
 </head>

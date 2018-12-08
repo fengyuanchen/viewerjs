@@ -1,25 +1,27 @@
-.viewer-zoom-in::before,
-.viewer-zoom-out::before,
-.viewer-one-to-one::before,
-.viewer-reset::before,
-.viewer-prev::before,
-.viewer-play::before,
-.viewer-next::before,
-.viewer-rotate-left::before,
-.viewer-rotate-right::before,
-.viewer-flip-horizontal::before,
-.viewer-flip-vertical::before,
-.viewer-fullscreen::before,
-.viewer-fullscreen-exit::before,
-.viewer-close::before {
-  background-image: url('../images/icons.png');
-  background-repeat: no-repeat;
-  color: transparent;
-  display: block;
-  font-size: 0;
-  height: 20px;
-  line-height: 0;
-  width: 20px;
+.viewer-zoom-in,
+.viewer-zoom-out,
+.viewer-one-to-one,
+.viewer-reset,
+.viewer-prev,
+.viewer-play,
+.viewer-next,
+.viewer-rotate-left,
+.viewer-rotate-right,
+.viewer-flip-horizontal,
+.viewer-flip-vertical,
+.viewer-fullscreen,
+.viewer-fullscreen-exit,
+.viewer-close {
+  &::before {
+    background-image: url('../images/icons.png');
+    background-repeat: no-repeat;
+    color: transparent;
+    display: block;
+    font-size: 0;
+    height: 20px;
+    line-height: 0;
+    width: 20px;
+  }
 }
 
 .viewer-zoom-in::before {
@@ -103,8 +105,8 @@
   right: 0;
   -webkit-tap-highlight-color: transparent;
   top: 0;
-  -webkit-touch-callout: none;
   touch-action: none;
+  -webkit-touch-callout: none;
   user-select: none;
 
   &::selection,
@@ -149,7 +151,7 @@
 }
 
 .viewer-navbar {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 
@@ -167,13 +169,13 @@
     font-size: 0;
     height: 50px;
     line-height: 0;
-    opacity: .5;
+    opacity: 0.5;
     overflow: hidden;
-    transition: opacity .15s;
+    transition: opacity 0.15s;
     width: 30px;
 
     &:hover {
-      opacity: .75;
+      opacity: 0.75;
     }
 
     & + li {
@@ -195,7 +197,7 @@
 
   & > .viewer-active,
   & > .viewer-active:hover {
-     opacity: 1;
+    opacity: 1;
   }
 }
 
@@ -224,17 +226,17 @@
     padding: 3px 0;
 
     & > li {
-      background-color: rgba(0, 0, 0, .5);
+      background-color: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
       cursor: pointer;
       float: left;
       height: 24px;
       overflow: hidden;
-      transition: background-color .15s;
+      transition: background-color 0.15s;
       width: 24px;
 
       &:hover {
-        background-color: rgba(0, 0, 0, .8);
+        background-color: rgba(0, 0, 0, 0.8);
       }
 
       &::before {
@@ -294,10 +296,10 @@
   line-height: 1;
   margin: 0 5% 5px;
   max-width: 90%;
-  opacity: .8;
+  opacity: 0.8;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: opacity .15s;
+  transition: opacity 0.15s;
   white-space: nowrap;
 
   &:hover {
@@ -306,7 +308,7 @@
 }
 
 .viewer-button {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
   height: 80px;
@@ -314,12 +316,12 @@
   position: absolute;
   right: -40px;
   top: -40px;
-  transition: background-color .15s;
+  transition: background-color 0.15s;
   width: 80px;
 
   &:focus,
   &:hover {
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, 0.8);
   }
 
   &::before {
@@ -346,7 +348,7 @@
 }
 
 .viewer-backdrop {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .viewer-invisible {
@@ -367,7 +369,7 @@
 }
 
 .viewer-transition {
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 @keyframes viewer-spinner {
@@ -383,8 +385,8 @@
 .viewer-loading {
   &::after {
     animation: viewer-spinner 1s linear infinite;
-    border: 4px solid rgba(255, 255, 255, .1);
-    border-left-color: rgba(255, 255, 255, .5);
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     content: '';
     display: inline-block;
