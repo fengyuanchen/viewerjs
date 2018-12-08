@@ -299,7 +299,18 @@ export default {
   pointerdown(event) {
     const { options, pointers } = this;
 
-    if (!this.viewed || this.showing || this.viewing || this.hiding) {
+    if (
+      !this.viewed
+      || this.showing
+      || this.viewing
+      || this.hiding
+
+      // No primary button (usually the left button)
+      || !(event.buttons === 1 || event.button === 0)
+
+      // Open context menu
+      || event.ctrlKey
+    ) {
       return;
     }
 
