@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.3.1 (Dec 9, 2018)
 
 - Emulate click (single tap) and double click (double tap) in touch devices to support backdrop and image zooming (#210).
 - Ignore pointer events when not the primary button was pressed (#221).

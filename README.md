@@ -791,7 +791,6 @@ All events can access the viewer instance with `this.viewer` in its handler.
 
 > Be careful to use these events in other component which has the same event names, e.g.: [Bootstrap](https://getbootstrap.com/)'s modal.
 
-
 ```js
 let viewer;
 

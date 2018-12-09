@@ -1,10 +1,10 @@
 .btn {
-  padding-left: .75rem;
-  padding-right: .75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .list-group-item {
-  padding: .25rem 1rem;
+  padding: 0.25rem 1rem;
 }
 
 .d-flex > .btn {
@@ -12,9 +12,9 @@
 }
 
 .carbonads {
-  border-radius: .25rem;
   border: 1px solid #ccc;
-  font-size: .875rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
   overflow: hidden;
   padding: 1rem;
 }
@@ -59,7 +59,7 @@
 }
 
 .footer {
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .heart {
@@ -92,31 +92,31 @@
 .heart::after {
   background-color: #fff;
   content: "♥";
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   position: relative;
   z-index: 1;
 }
 
 .docs-pictures {
+  list-style: none;
   margin: 0;
   padding: 0;
-  list-style: none;
 }
 
 .docs-pictures > li {
-  float: left;
-  width: 33.3%;
-  height: 33.3%;
-  margin: 0 -1px -1px 0;
   border: 1px solid transparent;
+  float: left;
+  height: calc(100% / 3);
+  margin: 0 -1px -1px 0;
   overflow: hidden;
+  width: calc(100% / 3);
 }
 
 .docs-pictures > li > img {
-  width: 100%;
   cursor: -webkit-zoom-in;
   cursor: zoom-in;
+  width: 100%;
 }
 
 .docs-toggles > .btn,
@@ -126,8 +126,8 @@
 
 .docs-buttons > .btn-group,
 .docs-buttons > .input-group {
-  width: 100%;
   margin-bottom: 5px;
+  width: 100%;
 }
 
 .docs-buttons .input-group-prepend {

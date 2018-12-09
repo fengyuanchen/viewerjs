@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.3.0
+ * Viewer.js v1.3.1
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-10-25T12:41:52.459Z
+ * Date: 2018-12-09T07:48:26.506Z
  */
 
 .viewer-zoom-in::before,
@@ -113,18 +113,13 @@
   right: 0;
   -webkit-tap-highlight-color: transparent;
   top: 0;
-  -webkit-touch-callout: none;
   -ms-touch-action: none;
   touch-action: none;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.viewer-container::-moz-selection,
-.viewer-container *::-moz-selection {
-  background-color: transparent;
 }
 
 .viewer-container::selection,
@@ -168,7 +163,7 @@
 }
 
 .viewer-navbar {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 
@@ -188,15 +183,15 @@
   font-size: 0;
   height: 50px;
   line-height: 0;
-  opacity: .5;
+  opacity: 0.5;
   overflow: hidden;
-  -webkit-transition: opacity .15s;
-  transition: opacity .15s;
+  -webkit-transition: opacity 0.15s;
+  transition: opacity 0.15s;
   width: 30px;
 }
 
 .viewer-list > li:hover {
-  opacity: .75;
+  opacity: 0.75;
 }
 
 .viewer-list > li + li {
@@ -245,19 +240,19 @@
 }
 
 .viewer-toolbar > ul > li {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
   float: left;
   height: 24px;
   overflow: hidden;
-  -webkit-transition: background-color .15s;
-  transition: background-color .15s;
+  -webkit-transition: background-color 0.15s;
+  transition: background-color 0.15s;
   width: 24px;
 }
 
 .viewer-toolbar > ul > li:hover {
-  background-color: rgba(0, 0, 0, .8);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .viewer-toolbar > ul > li::before {
@@ -314,11 +309,11 @@
   line-height: 1;
   margin: 0 5% 5px;
   max-width: 90%;
-  opacity: .8;
+  opacity: 0.8;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-transition: opacity .15s;
-  transition: opacity .15s;
+  -webkit-transition: opacity 0.15s;
+  transition: opacity 0.15s;
   white-space: nowrap;
 }
 
@@ -327,7 +322,7 @@
 }
 
 .viewer-button {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
   height: 80px;
@@ -335,14 +330,14 @@
   position: absolute;
   right: -40px;
   top: -40px;
-  -webkit-transition: background-color .15s;
-  transition: background-color .15s;
+  -webkit-transition: background-color 0.15s;
+  transition: background-color 0.15s;
   width: 80px;
 }
 
 .viewer-button:focus,
 .viewer-button:hover {
-  background-color: rgba(0, 0, 0, .8);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .viewer-button::before {
@@ -368,7 +363,7 @@
 }
 
 .viewer-backdrop {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .viewer-invisible {
@@ -390,8 +385,8 @@
 }
 
 .viewer-transition {
-  -webkit-transition: all .3s;
-  transition: all .3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
 }
 
 @-webkit-keyframes viewer-spinner {
@@ -421,8 +416,8 @@
 .viewer-loading::after {
   -webkit-animation: viewer-spinner 1s linear infinite;
   animation: viewer-spinner 1s linear infinite;
-  border: 4px solid rgba(255, 255, 255, .1);
-  border-left-color: rgba(255, 255, 255, .5);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   content: '';
   display: inline-block;
