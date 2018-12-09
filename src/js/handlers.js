@@ -24,6 +24,7 @@ import {
   getPointer,
   getTransforms,
   isFunction,
+  isNumber,
   removeClass,
   setStyle,
   toggleClass,
@@ -298,6 +299,7 @@ export default {
 
   pointerdown(event) {
     const { options, pointers } = this;
+    const { buttons, button } = event;
 
     if (
       !this.viewed
@@ -306,7 +308,9 @@ export default {
       || this.hiding
 
       // No primary button (usually the left button)
-      || !(event.buttons === 1 || event.button === 0)
+      // Note: Touch events does not contain `buttons` and `button` properties
+      || (isNumber(buttons) && buttons > 1)
+      || (isNumber(button) && button > 0)
 
       // Open context menu
       || event.ctrlKey
@@ -399,6 +403,8 @@ export default {
       if (options.toggleOnDblclick && this.viewed && event.target === this.image) {
         if (this.imageClicked) {
           this.imageClicked = false;
+
+          // This timeout will be cleared later when a native dblclick event is triggering
           this.doubleClickImageTimeout = setTimeout(() => {
             dispatchEvent(this.image, EVENT_DBLCLICK);
           }, 50);
@@ -414,6 +420,7 @@ export default {
         this.imageClicked = false;
 
         if (options.backdrop && options.backdrop !== 'static' && event.target === this.canvas) {
+          // This timeout will be cleared later when a native click event is triggering
           this.clickCanvasTimeout = setTimeout(() => {
             dispatchEvent(this.canvas, EVENT_CLICK);
           }, 50);
