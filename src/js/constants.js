@@ -49,7 +49,7 @@ export const EVENT_SHOWN = 'shown';
 export const EVENT_TRANSITION_END = 'transitionend';
 export const EVENT_VIEW = 'view';
 export const EVENT_VIEWED = 'viewed';
-export const EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+export const EVENT_WHEEL = 'wheel';
 export const EVENT_ZOOM = 'zoom';
 export const EVENT_ZOOMED = 'zoomed';
 
