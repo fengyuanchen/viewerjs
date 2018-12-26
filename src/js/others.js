@@ -84,8 +84,12 @@ export default {
   requestFullscreen() {
     const document = this.element.ownerDocument;
 
-    if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement
-      && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+    if (this.fulled && !(
+      document.fullscreenElement
+      || document.mozFullScreenElement
+      || document.webkitFullscreenElement
+      || document.msFullscreenElement
+    )) {
       const { documentElement } = document;
 
       if (documentElement.requestFullscreen) {
@@ -101,7 +105,12 @@ export default {
   },
 
   exitFullscreen() {
-    if (this.fulled) {
+    if (this.fulled && (
+      document.fullscreenElement
+      || document.mozFullScreenElement
+      || document.webkitFullscreenElement
+      || document.msFullscreenElement
+    )) {
       const document = this.element.ownerDocument;
 
       if (document.exitFullscreen) {
