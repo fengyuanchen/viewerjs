@@ -446,11 +446,12 @@ export default {
     }
 
     if (this.played) {
-      if (this.options.fullscreen && this.fulled
-        && !document.fullscreenElement
-        && !document.mozFullScreenElement
-        && !document.webkitFullscreenElement
-        && !document.msFullscreenElement) {
+      if (this.options.fullscreen && this.fulled && !(
+        document.fullscreenElement
+        || document.webkitFullscreenElement
+        || document.mozFullScreenElement
+        || document.msFullscreenElement
+      )) {
         this.stop();
         return;
       }
