@@ -307,10 +307,10 @@ export default {
       || this.viewing
       || this.hiding
 
-      // No primary button (usually the left button)
-      // Note: Touch events does not contain `buttons` and `button` properties
-      || (isNumber(buttons) && buttons > 1)
-      || (isNumber(button) && button > 0)
+      // No primary button (Usually the left button)
+      // Note that touch events have no `buttons` or `button` property
+      || (isNumber(buttons) && buttons !== 1)
+      || (isNumber(button) && button !== 0)
 
       // Open context menu
       || event.ctrlKey

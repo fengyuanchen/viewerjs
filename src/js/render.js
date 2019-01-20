@@ -214,6 +214,8 @@ export default {
     setStyle(image, assign({
       width: imageData.width,
       height: imageData.height,
+
+      // XXX: Not to use translateX/Y to avoid image shaking when zooming
       marginLeft: imageData.left,
       marginTop: imageData.top,
     }, getTransforms(imageData)));
