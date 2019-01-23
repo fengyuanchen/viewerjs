@@ -6,14 +6,12 @@ Please check if your PR fulfills the following requirements:
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
 
-
 ## PR Type
 
 What kind of change does this PR introduce?
 
 <!-- Please check the one that applies to this PR using "x". -->
 
-```
 [ ] Bugfix
 [ ] Feature
 [ ] Code style update
@@ -21,8 +19,6 @@ What kind of change does this PR introduce?
 [ ] Build related changes
 [ ] Documentation content changes
 [ ] Other, Please describe:
-```
-
 
 ## What is the current behavior?
 
@@ -30,18 +26,15 @@ What kind of change does this PR introduce?
 
 Issue Number: N/A
 
-
 ## What is the new behavior?
 
+<!-- Describe what the new behavior would be. -->
 
 ## Does this PR introduce a breaking change?
 
-```
 [ ] Yes
 [ ] No
-```
 
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
-
 
 ## Other information
