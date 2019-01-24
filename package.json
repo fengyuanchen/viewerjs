@@ -41,8 +41,8 @@
     "compress:js": "uglifyjs dist/viewer.js -o dist/viewer.min.js -c -m --comments /^!/",
     "copy": "cpy dist/viewer.css docs/css",
     "lint": "npm run lint:js && npm run lint:css",
-    "lint:js": "eslint src test *.js --fix",
     "lint:css": "stylelint {src,docs,examples}/**/*.{css,scss,html} --fix",
+    "lint:js": "eslint src test *.js --fix",
     "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
     "start": "npm-run-all --parallel watch:*",
     "test": "cross-env NODE_ENV=test karma start test/karma.conf.js",
@@ -90,5 +90,37 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^2.0.0",
     "uglify-js": "^3.4.9"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not ie <= 8"
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{css,scss,html}": [
+        "stylelint --fix",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "{dist,docs}/**/*.js",
+      "*.min.*"
+    ]
   }
 }
