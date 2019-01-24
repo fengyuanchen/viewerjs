@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.3.1
+ * Viewer.js v1.3.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-12-09T07:48:29.436Z
+ * Date: 2019-01-24T11:01:33.473Z
  */
 
 (function (global, factory) {
@@ -298,7 +298,7 @@
   var EVENT_TRANSITION_END = 'transitionend';
   var EVENT_VIEW = 'view';
   var EVENT_VIEWED = 'viewed';
-  var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+  var EVENT_WHEEL = 'wheel';
   var EVENT_ZOOM = 'zoom';
   var EVENT_ZOOMED = 'zoomed'; // Data keys
 
@@ -1089,6 +1089,7 @@
       setStyle(image, assign({
         width: imageData.width,
         height: imageData.height,
+        // XXX: Not to use translateX/Y to avoid image shaking when zooming
         marginLeft: imageData.left,
         marginTop: imageData.top
       }, getTransforms(imageData)));
@@ -1135,7 +1136,10 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
-      addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this));
+      addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this), {
+        passive: false,
+        capture: true
+      });
       addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
       addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
       addListener(document, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
@@ -1153,7 +1157,10 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       removeListener(viewer, EVENT_CLICK, this.onClick);
-      removeListener(viewer, EVENT_WHEEL, this.onWheel);
+      removeListener(viewer, EVENT_WHEEL, this.onWheel, {
+        passive: false,
+        capture: true
+      });
       removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
       removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
       removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
@@ -1422,9 +1429,9 @@
       var buttons = event.buttons,
           button = event.button;
 
-      if (!this.viewed || this.showing || this.viewing || this.hiding // No primary button (usually the left button)
-      // Note: Touch events does not contain `buttons` and `button` properties
-      || isNumber(buttons) && buttons > 1 || isNumber(button) && button > 0 // Open context menu
+      if (!this.viewed || this.showing || this.viewing || this.hiding // No primary button (Usually the left button)
+      // Note that touch events have no `buttons` or `button` property
+      || isNumber(buttons) && buttons !== 1 || isNumber(button) && button !== 0 // Open context menu
       || event.ctrlKey) {
         return;
       } // Prevent default behaviours as page zooming in touch devices.
@@ -1553,7 +1560,7 @@
       }
 
       if (this.played) {
-        if (this.options.fullscreen && this.fulled && !document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        if (this.options.fullscreen && this.fulled && !(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
           this.stop();
           return;
         }
@@ -2600,32 +2607,33 @@
     requestFullscreen: function requestFullscreen() {
       var document = this.element.ownerDocument;
 
-      if (this.fulled && !document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        var documentElement = document.documentElement;
+      if (this.fulled && !(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
+        var documentElement = document.documentElement; // Element.requestFullscreen()
 
         if (documentElement.requestFullscreen) {
           documentElement.requestFullscreen();
-        } else if (documentElement.msRequestFullscreen) {
-          documentElement.msRequestFullscreen();
-        } else if (documentElement.mozRequestFullScreen) {
-          documentElement.mozRequestFullScreen();
         } else if (documentElement.webkitRequestFullscreen) {
           documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (documentElement.mozRequestFullScreen) {
+          documentElement.mozRequestFullScreen();
+        } else if (documentElement.msRequestFullscreen) {
+          documentElement.msRequestFullscreen();
         }
       }
     },
     exitFullscreen: function exitFullscreen() {
-      if (this.fulled) {
-        var document = this.element.ownerDocument;
+      var document = this.element.ownerDocument;
 
+      if (this.fulled && (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
+        // Document.exitFullscreen()
         if (document.exitFullscreen) {
           document.exitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
         } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
         }
       }
     },

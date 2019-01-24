@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.2 (Jan 24, 2019)
+
+- Fix `Document not active` error when call the `exit` method.
+- Improve wheel event listening for better performance (#102).
+
 ## 1.3.1 (Dec 9, 2018)
 
 - Emulate click (single tap) and double click (double tap) in touch devices to support backdrop and image zooming (#210).
