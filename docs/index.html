@@ -29,12 +29,30 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse" role="navigation">
-        <nav class="nav navbar-nav">
-          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/README.md" data-toggle="tooltip" title="View the documentation">Docs</a>
-          <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs" data-toggle="tooltip" title="View the GitHub project">GitHub</a>
-          <a class="nav-link" href="https://fengyuanchen.github.io" data-toggle="tooltip" title="Explore more projects">Explore</a>
-          <a class="nav-link" href="https://chenfengyuan.com" data-toggle="tooltip" title="About the author">About</a>
-        </nav>
+        <ul class="nav navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/README.md" data-toggle="tooltip" title="View the documentation">Docs</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Examples
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="examples/custom-toolbar.html">Custom toolbar</a>
+              <a class="dropdown-item" href="examples/dynamic-viewer.html">Dynamic Viewer</a>
+              <a class="dropdown-item" href="examples/viewer-in-modal.html">Viewer in modal</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs" data-toggle="tooltip" title="View the GitHub project">GitHub</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="https://fengyuanchen.github.io" data-toggle="tooltip" title="Explore more projects">Explore</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="https://chenfengyuan.com" data-toggle="tooltip" title="About the author">About</a>
+          </li>
+        </ul>
       </div>
     </div>
   </header>
@@ -268,7 +286,6 @@
       <nav class="nav flex-wrap justify-content-center mb-3">
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs">GitHub</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/releases">Releases</a>
-        <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/examples">Examples</a>
         <a class="nav-link" href="https://github.com/fengyuanchen/viewerjs/blob/master/LICENSE">License</a>
         <a class="nav-link" href="https://chenfengyuan.com">About</a>
       </nav>
@@ -278,7 +295,7 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
-  <script src="https://fengyuanchen.github.io/js/common.js"></script>
+  <script src="https://fengyuanchen.github.io/shared/google-analytics.js"></script>
   <script src="js/viewer.js"></script>
   <script src="js/main.js"></script>
 </body>
