@@ -278,6 +278,8 @@ export default {
             this.imageInitializing.abort();
           }
         } else {
+          // Cancel download to save bandwidth.
+          image.src = '';
           removeListener(image, EVENT_LOAD, onLoad);
 
           if (this.timeout) {
