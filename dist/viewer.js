@@ -161,6 +161,12 @@
     movable: true,
 
     /**
+     * Enable the control of movement so that it does not exceed the limits of the screen.
+     * @type {boolean}
+     */
+    movableLimit: false,
+
+    /**
      * Enable to zoom the image.
      * @type {boolean}
      */
@@ -909,6 +915,34 @@
       pageX: pageX,
       pageY: pageY
     };
+  }
+
+  /**
+   * Checks if image is being moved horizontally to "off screen."
+   * @param {number} offsetX - The relative offset distance on the x-axis.
+   * @param {number} imageLeftPosition - The current position of the image on the left.
+   * @param {number} imageWidth - The width of the image.
+   * @param {number} viewerDataWidth - The width of the Viewer.
+   * @returns {boolean} Returns `true` if the image is being moved to "off-screen", else `false`.
+   */
+  function movingXOutOfScreen(offsetX, imageLeftPosition, imageWidth, viewerDataWidth) {
+    if (offsetX === 0) return false;
+    if (offsetX < 0) return (imageLeftPosition < 0);
+    if (offsetX > 0) return ((imageLeftPosition + imageWidth) > viewerDataWidth);
+  }
+
+  /**
+   * Checks if image is being moved vertically to "off screen."
+   * @param {number} offsetY - The relative offset distance on the y-axis.
+   * @param  {[type]} imageTopPosition - The current position of the image on the top.
+   * @param  {[type]} imageHeight - The height of the image.
+   * @param  {[type]} viewerDataHeight - The height of the Viewer.
+   * @returns {boolean} Returns `true` if the image is being moved to "off-screen", else `false`.
+   */
+  function movingYOutOfScreen(offsetY, imageTopPosition, imageHeight, viewerDataHeight) {
+    if (offsetY === 0) return false;
+    if (offsetY < 0) return (imageTopPosition < 0);
+    if (offsetY > 0) return ((imageTopPosition + imageHeight) > viewerDataHeight);
   }
 
   var render = {
@@ -2647,6 +2681,16 @@
       switch (this.action) {
         // Move the current image
         case ACTION_MOVE:
+          if (options.movableLimit) {
+            if (movingXOutOfScreen(offsetX, this.imageData.left, this.imageData.width, this.viewerData.width)) {
+              offsetX = 0;
+            }
+
+            if (movingYOutOfScreen(offsetY, this.imageData.top, this.imageData.height, this.viewerData.height)) {
+              offsetY = 0;
+            }
+          }
+
           this.move(offsetX, offsetY);
           break;
         // Zoom the current image
