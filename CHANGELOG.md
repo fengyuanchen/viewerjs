@@ -1,8 +1,12 @@
 # Changelog
 
+## next
+
+- Fix unexpected modal exiting behavior when the mouse is pressed (#255).
+
 ## 1.3.2 (Jan 24, 2019)
 
-- Fix `Document not active` error when call the `exit` method.
+- Fix `Document not active` error when calling the `exit` method.
 - Improve wheel event listening for better performance (#102).
 
 ## 1.3.1 (Dec 9, 2018)
