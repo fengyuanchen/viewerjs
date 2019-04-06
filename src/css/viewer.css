@@ -15,6 +15,7 @@
   &::before {
     background-image: url('../images/icons.png');
     background-repeat: no-repeat;
+    background-size: 280px;
     color: transparent;
     display: block;
     font-size: 0;
