@@ -1,8 +1,9 @@
 # Changelog
 
-## next
+## 1.3.3 (Apr 6, 2019)
 
 - Fix unexpected modal exiting behavior when the mouse is pressed (#255).
+- Abort image downloading when cancel viewing for better performance.
 
 ## 1.3.2 (Jan 24, 2019)
 

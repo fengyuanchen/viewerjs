@@ -1,18 +1,18 @@
 /*!
- * Viewer.js v1.3.2
+ * Viewer.js v1.3.3
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-01-24T11:01:33.473Z
+ * Date: 2019-04-06T14:06:28.301Z
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.Viewer = factory());
-}(this, (function () { 'use strict';
+  (global = global || self, global.Viewer = factory());
+}(this, function () { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -1728,9 +1728,9 @@
               removeListener(viewer, EVENT_TRANSITION_END, hidden);
             }
           }
-        };
+        }; // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
 
-        if (this.viewed) {
+        if (this.viewed && hasClass(this.image, CLASS_TRANSITION)) {
           addListener(this.image, EVENT_TRANSITION_END, hide, {
             once: true
           });
@@ -1836,6 +1836,8 @@
               this.imageInitializing.abort();
             }
           } else {
+            // Cancel download to save bandwidth.
+            image.src = '';
             removeListener(image, EVENT_LOAD, onLoad);
 
             if (this.timeout) {
@@ -3017,4 +3019,4 @@
 
   return Viewer;
 
-})));
+}));
