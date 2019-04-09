@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-04-09T10:30:16.435Z
+ * Date: 2019-04-09T11:07:44.859Z
  */
 
 function _typeof(obj) {
@@ -1475,6 +1475,45 @@ var handlers = {
 
     this.change(event);
   },
+  autofit: function autofit(image, canvas) {
+    // Control image cannot leave canvas
+    var canvasHeight = canvas.offsetHeight;
+    var canvasWidth = canvas.offsetWidth;
+    var x = image.offsetLeft;
+    var y = image.offsetTop;
+    var imgHeight = image.offsetHeight;
+    var imgWidth = image.offsetWidth;
+    var moveX = 0;
+    var moveY = 0;
+
+    if (x < 0) {
+      if (imgWidth < canvasWidth) {
+        this.move(-x, 0);
+      } else if (x < canvasWidth - imgWidth) {
+        moveX = canvasWidth - imgWidth - x;
+        this.move(moveX, 0);
+      }
+    } else if (imgWidth < canvasWidth && x > canvasWidth - imgWidth) {
+      moveX = canvasWidth - (imgWidth + x);
+      this.move(moveX, 0);
+    } else if (imgWidth > canvasWidth) {
+      this.move(-x, 0);
+    }
+
+    if (y < 0) {
+      if (imgHeight < canvasHeight) {
+        this.move(0, -y);
+      } else if (y < canvasHeight - imgHeight) {
+        moveY = canvasHeight - imgHeight - y;
+        this.move(0, moveY);
+      }
+    } else if (imgHeight < canvasHeight && y > canvasHeight - imgHeight) {
+      moveY = canvasHeight - (imgHeight + y);
+      this.move(0, moveY);
+    } else if (imgHeight > canvasHeight) {
+      this.move(0, -y);
+    }
+  },
   pointerup: function pointerup(event) {
     var _this2 = this;
 
@@ -2634,49 +2673,6 @@ var others = {
         document.mozCancelFullScreen();
       } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
-      }
-    }
-  },
-  autofit: function autofit(image, canvas) {
-    //Control image cannot leave canvas
-    var canvasHeight = canvas.offsetHeight,
-        canvasWidth = canvas.offsetWidth;
-    var x = image.offsetLeft,
-        y = image.offsetTop,
-        imgHeight = image.offsetHeight,
-        imgWidth = image.offsetWidth;
-    var moveX = 0,
-        moveY = 0;
-
-    if (x < 0) {
-      if (imgWidth < canvasWidth) {
-        this.move(-x, 0);
-      } else if (x < canvasWidth - imgWidth) {
-        moveX = canvasWidth - imgWidth - x;
-        this.move(moveX, 0);
-      }
-    } else {
-      if (imgWidth < canvasWidth && x > canvasWidth - imgWidth) {
-        moveX = canvasWidth - (imgWidth + x);
-        this.move(moveX, 0);
-      } else if (imgWidth > canvasWidth) {
-        this.move(-x, 0);
-      }
-    }
-
-    if (y < 0) {
-      if (imgHeight < canvasHeight) {
-        this.move(0, -y);
-      } else if (y < canvasHeight - imgHeight) {
-        moveY = canvasHeight - imgHeight - y;
-        this.move(0, moveY);
-      }
-    } else {
-      if (imgHeight < canvasHeight && y > canvasHeight - imgHeight) {
-        moveY = canvasHeight - (imgHeight + y);
-        this.move(0, moveY);
-      } else if (imgHeight > canvasHeight) {
-        this.move(0, -y);
       }
     }
   },
