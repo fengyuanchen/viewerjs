@@ -4,6 +4,7 @@ import {
   ACTION_ZOOM,
   CLASS_HIDE,
   CLASS_OPEN,
+  CLASS_MOVE,
   EVENT_HIDDEN,
   EVENT_SHOWN,
 } from './constants';
@@ -126,7 +127,41 @@ export default {
       }
     }
   },
-
+  autofit(image, canvas) { // Control image cannot leave canvas
+    const canvasHeight = canvas.offsetHeight;
+    const canvasWidth = canvas.offsetWidth;
+    const x = image.offsetLeft;
+    const y = image.offsetTop;
+    const imgHeight = image.offsetHeight;
+    const imgWidth = image.offsetWidth;
+    let moveX = 0; let moveY = 0;
+    if (x < 0) {
+      if (imgWidth < canvasWidth) {
+        this.move(-x, 0);
+      } else if (x < canvasWidth - imgWidth) {
+        moveX = canvasWidth - imgWidth - x;
+        this.move(moveX, 0);
+      }
+    } else if (imgWidth < canvasWidth && x > canvasWidth - imgWidth) {
+      moveX = canvasWidth - (imgWidth + x);
+      this.move(moveX, 0);
+    } else if (imgWidth > canvasWidth) {
+      this.move(-x, 0);
+    }
+    if (y < 0) {
+      if (imgHeight < canvasHeight) {
+        this.move(0, -y);
+      } else if (y < canvasHeight - imgHeight) {
+        moveY = canvasHeight - imgHeight - y;
+        this.move(0, moveY);
+      }
+    } else if (imgHeight < canvasHeight && y > canvasHeight - imgHeight) {
+      moveY = canvasHeight - (imgHeight + y);
+      this.move(0, moveY);
+    } else if (imgHeight > canvasHeight) {
+      this.move(0, -y);
+    }
+  },
   change(event) {
     const { options, pointers } = this;
     const pointer = pointers[Object.keys(pointers)[0]];
@@ -136,7 +171,7 @@ export default {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        this.move(offsetX, offsetY);
+        if (event.target.className.indexOf(CLASS_MOVE) > -1) this.move(offsetX, offsetY);
         break;
 
       // Zoom the current image

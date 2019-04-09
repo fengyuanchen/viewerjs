@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-04-06T14:06:28.301Z
+ * Date: 2019-04-09T10:30:16.435Z
  */
 
 'use strict';
@@ -1482,7 +1482,9 @@ var handlers = {
 
     var options = this.options,
         action = this.action,
-        pointers = this.pointers;
+        pointers = this.pointers,
+        image = this.image,
+        canvas = this.canvas;
     var pointer;
 
     if (event.changedTouches) {
@@ -1536,6 +1538,8 @@ var handlers = {
         }
       }
     }
+
+    this.autofit(image, canvas);
   },
   resize: function resize() {
     var _this3 = this;
@@ -2635,6 +2639,49 @@ var others = {
       }
     }
   },
+  autofit: function autofit(image, canvas) {
+    //Control image cannot leave canvas
+    var canvasHeight = canvas.offsetHeight,
+        canvasWidth = canvas.offsetWidth;
+    var x = image.offsetLeft,
+        y = image.offsetTop,
+        imgHeight = image.offsetHeight,
+        imgWidth = image.offsetWidth;
+    var moveX = 0,
+        moveY = 0;
+
+    if (x < 0) {
+      if (imgWidth < canvasWidth) {
+        this.move(-x, 0);
+      } else if (x < canvasWidth - imgWidth) {
+        moveX = canvasWidth - imgWidth - x;
+        this.move(moveX, 0);
+      }
+    } else {
+      if (imgWidth < canvasWidth && x > canvasWidth - imgWidth) {
+        moveX = canvasWidth - (imgWidth + x);
+        this.move(moveX, 0);
+      } else if (imgWidth > canvasWidth) {
+        this.move(-x, 0);
+      }
+    }
+
+    if (y < 0) {
+      if (imgHeight < canvasHeight) {
+        this.move(0, -y);
+      } else if (y < canvasHeight - imgHeight) {
+        moveY = canvasHeight - imgHeight - y;
+        this.move(0, moveY);
+      }
+    } else {
+      if (imgHeight < canvasHeight && y > canvasHeight - imgHeight) {
+        moveY = canvasHeight - (imgHeight + y);
+        this.move(0, moveY);
+      } else if (imgHeight > canvasHeight) {
+        this.move(0, -y);
+      }
+    }
+  },
   change: function change(event) {
     var options = this.options,
         pointers = this.pointers;
@@ -2645,7 +2692,7 @@ var others = {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        this.move(offsetX, offsetY);
+        if (event.target.className.indexOf(CLASS_MOVE) > -1) this.move(offsetX, offsetY);
         break;
       // Zoom the current image
 

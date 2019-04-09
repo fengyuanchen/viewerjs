@@ -365,7 +365,9 @@ export default {
   },
 
   pointerup(event) {
-    const { options, action, pointers } = this;
+    const {
+      options, action, pointers, image, canvas,
+    } = this;
     let pointer;
 
     if (event.changedTouches) {
@@ -427,6 +429,7 @@ export default {
         }
       }
     }
+    this.autofit(image, canvas);
   },
 
   resize() {
