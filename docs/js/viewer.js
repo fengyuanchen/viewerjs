@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-04-09T11:07:44.859Z
+ * Date: 2019-04-10T02:25:11.977Z
  */
 
 (function (global, factory) {
@@ -2692,7 +2692,11 @@
       switch (this.action) {
         // Move the current image
         case ACTION_MOVE:
-          if (event.target.className.indexOf(CLASS_MOVE) > -1) this.move(offsetX, offsetY);
+          if (event.target.className.indexOf(CLASS_MOVE) > -1) {
+            // only when touch image
+            this.move(offsetX, offsetY);
+          }
+
           break;
         // Zoom the current image
 

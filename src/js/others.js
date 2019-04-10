@@ -136,8 +136,9 @@ export default {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        if (event.target.className.indexOf(CLASS_MOVE) > -1) 
-        this.move(offsetX, offsetY);
+        if (event.target.className.indexOf(CLASS_MOVE) > -1) { // only when touch image
+          this.move(offsetX, offsetY);
+        }
         break;
 
       // Zoom the current image
