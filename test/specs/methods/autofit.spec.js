@@ -6,7 +6,7 @@ describe('autofit (method)', () => {
 
       viewed() {
         const { imageData, canvas } = viewer;
-        const { offsetWidth,offsetHeight } = canvas;
+        const { offsetWidth, offsetHeight } = canvas;
 
         viewer.moveTo(0, 0);
         viewer.autofit(imageData, canvas);
