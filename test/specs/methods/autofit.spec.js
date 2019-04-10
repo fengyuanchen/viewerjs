@@ -6,6 +6,7 @@ describe('autofit (method)', () => {
 
       viewed() {
         const { imageData, canvas } = viewer;
+        const { offsetWidth,offsetHeight } = canvas;
 
         viewer.moveTo(0, 0);
         viewer.autofit(imageData, canvas);
@@ -16,10 +17,10 @@ describe('autofit (method)', () => {
         expect(imageData.left).to.equal(0);
         expect(imageData.top).to.equal(0);
         viewer.zoomTo(4);
-        viewer.moveTo(-imageData.width + canvas.offsetWidth - 10, -imageData.height + canvas.offsetHeight - 10);
+        viewer.moveTo(-imageData.width + offsetWidth - 10, -imageData.height + offsetHeight - 10);
         viewer.autofit(imageData, canvas);
-        expect(imageData.left).to.equal(-imageData.width + canvas.offsetWidth);
-        expect(imageData.top).to.equal(-imageData.height + canvas.offsetHeight);
+        expect(imageData.left).to.equal(-imageData.width + offsetWidth);
+        expect(imageData.top).to.equal(-imageData.height + offsetHeight);
         done();
       },
     });
