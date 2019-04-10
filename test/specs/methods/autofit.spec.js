@@ -16,11 +16,19 @@ describe('autofit (method)', () => {
         viewer.autofit(imageData, canvas);
         expect(imageData.left).to.equal(0);
         expect(imageData.top).to.equal(0);
+        viewer.moveTo(offsetWidth, offsetHeight);
+        viewer.autofit(imageData, canvas);
+        expect(imageData.left).not.to.equal(offsetWidth);
+        expect(imageData.top).not.to.equal(offsetHeight);
         viewer.zoomTo(4);
         viewer.moveTo(-imageData.width + offsetWidth - 10, -imageData.height + offsetHeight - 10);
         viewer.autofit(imageData, canvas);
         expect(imageData.left).to.equal(-imageData.width + offsetWidth);
         expect(imageData.top).to.equal(-imageData.height + offsetHeight);
+        viewer.moveTo(10, 10);
+        viewer.autofit(imageData, canvas);
+        expect(imageData.left).to.equal(0);
+        expect(imageData.top).to.equal(0);
         done();
       },
     });
