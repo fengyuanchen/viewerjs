@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-04-10T03:50:51.366Z
+ * Date: 2019-04-10T09:26:40.527Z
  */
 
 function _typeof(obj) {
@@ -1475,14 +1475,14 @@ var handlers = {
 
     this.change(event);
   },
-  autofit: function autofit(image, canvas) {
+  autofit: function autofit(imageData, canvas) {
     // Control image cannot leave canvas
     var canvasHeight = canvas.offsetHeight;
     var canvasWidth = canvas.offsetWidth;
-    var x = image.offsetLeft;
-    var y = image.offsetTop;
-    var imgHeight = image.offsetHeight;
-    var imgWidth = image.offsetWidth;
+    var x = imageData.left;
+    var y = imageData.top;
+    var imgHeight = imageData.height;
+    var imgWidth = imageData.width;
     var moveX = 0;
     var moveY = 0;
 
@@ -1520,7 +1520,7 @@ var handlers = {
     var options = this.options,
         action = this.action,
         pointers = this.pointers,
-        image = this.image,
+        imageData = this.imageData,
         canvas = this.canvas;
     var pointer;
 
@@ -1576,7 +1576,7 @@ var handlers = {
       }
     }
 
-    this.autofit(image, canvas);
+    this.autofit(imageData, canvas);
   },
   resize: function resize() {
     var _this3 = this;

@@ -363,13 +363,13 @@ export default {
 
     this.change(event);
   },
-  autofit(image, canvas) { // Control image cannot leave canvas
+  autofit(imageData, canvas) { // Control image cannot leave canvas
     const canvasHeight = canvas.offsetHeight;
     const canvasWidth = canvas.offsetWidth;
-    const x = image.offsetLeft;
-    const y = image.offsetTop;
-    const imgHeight = image.offsetHeight;
-    const imgWidth = image.offsetWidth;
+    const x = imageData.left;
+    const y = imageData.top;
+    const imgHeight = imageData.height;
+    const imgWidth = imageData.width;
     let moveX = 0; let moveY = 0;
     if (x < 0) {
       if (imgWidth < canvasWidth) {
@@ -400,7 +400,7 @@ export default {
   },
   pointerup(event) {
     const {
-      options, action, pointers, image, canvas,
+      options, action, pointers, imageData, canvas,
     } = this;
     let pointer;
 
@@ -463,7 +463,7 @@ export default {
         }
       }
     }
-    this.autofit(image, canvas);
+    this.autofit(imageData, canvas);
   },
 
   resize() {
