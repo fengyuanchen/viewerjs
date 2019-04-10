@@ -15,6 +15,11 @@ describe('autofit (method)', () => {
         viewer.autofit(imageData, canvas);
         expect(imageData.left).to.equal(0);
         expect(imageData.top).to.equal(0);
+        viewer.zoomTo(4);
+        viewer.moveTo(-imageData.width + canvas.offsetWidth - 10, -imageData.height + canvas.offsetHeight - 10);
+        viewer.autofit(imageData, canvas);
+        expect(imageData.left).to.equal(-imageData.width + canvas.offsetWidth);
+        expect(imageData.top).to.equal(-imageData.height + canvas.offsetHeight);
         done();
       },
     });
