@@ -151,12 +151,12 @@ export function setStyle(element, styles) {
  * @returns {String} Returns the escaped string.
  */
 export function escapeHTMLEntities(value) {
-  return String(value)
+  return isString(value) ? value
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;') : value;
 }
 
 /**
