@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Escape all strings that use in HTML for better security (#269).
+
 ## 1.3.3 (Apr 6, 2019)
 
 - Fix unexpected modal exiting behavior when the mouse is pressed (#255).

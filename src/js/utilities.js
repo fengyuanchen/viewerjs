@@ -146,6 +146,20 @@ export function setStyle(element, styles) {
 }
 
 /**
+ * Escape a string for using in HTML.
+ * @param {String} value - The string to escape.
+ * @returns {String} Returns the escaped string.
+ */
+export function escapeHTMLEntities(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
  * Check if the given element has a special class.
  * @param {Element} element - The element to check.
  * @param {string} value - The class to search.

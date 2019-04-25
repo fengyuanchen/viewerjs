@@ -25,6 +25,7 @@ import {
   addListener,
   assign,
   dispatchEvent,
+  escapeHTMLEntities,
   forEach,
   getData,
   getOffset,
@@ -211,8 +212,8 @@ export default {
     } = this;
     const item = this.items[index];
     const img = item.querySelector('img');
-    const url = getData(img, 'originalUrl');
-    const alt = img.getAttribute('alt');
+    const url = escapeHTMLEntities(getData(img, 'originalUrl'));
+    const alt = escapeHTMLEntities(img.getAttribute('alt'));
     const image = document.createElement('img');
 
     image.src = url;
@@ -258,9 +259,9 @@ export default {
       const { imageData } = this;
       const render = Array.isArray(options.title) ? options.title[1] : options.title;
 
-      title.innerHTML = isFunction(render)
+      title.innerHTML = escapeHTMLEntities(isFunction(render)
         ? render.call(this, image, imageData)
-        : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`;
+        : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
     };
     let onLoad;
 
@@ -634,8 +635,8 @@ export default {
       const img = item.querySelector('img');
       const image = document.createElement('img');
 
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
+      image.src = escapeHTMLEntities(getData(img, 'originalUrl'));
+      image.alt = escapeHTMLEntities(img.getAttribute('alt'));
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);

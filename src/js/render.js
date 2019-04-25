@@ -9,6 +9,7 @@ import {
   addClass,
   addListener,
   assign,
+  escapeHTMLEntities,
   forEach,
   getImageNameFromURL,
   getImageNaturalSizes,
@@ -67,14 +68,14 @@ export default {
     const items = [];
 
     forEach(this.images, (image, i) => {
-      const { src } = image;
-      const alt = image.alt || getImageNameFromURL(src);
+      const src = escapeHTMLEntities(image.src);
+      const alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
       let { url } = options;
 
       if (isString(url)) {
-        url = image.getAttribute(url);
+        url = escapeHTMLEntities(image.getAttribute(url));
       } else if (isFunction(url)) {
-        url = url.call(this, image);
+        url = escapeHTMLEntities(url.call(this, image));
       }
 
       if (src || url) {
