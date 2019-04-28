@@ -153,7 +153,7 @@ export default {
           once: true,
         });
       };
-      removeClass(viewer, CLASS_IN);
+      removeClass(viewer, CLASS_IN);//trigger fadeOut
 
       this.transitioning = {
         abort() {
