@@ -152,8 +152,8 @@ export default {
         addListener(viewer, EVENT_TRANSITION_END, hidden, {
           once: true,
         });
-        removeClass(viewer, CLASS_IN);
       };
+      removeClass(viewer, CLASS_IN);
 
       this.transitioning = {
         abort() {
