@@ -149,6 +149,7 @@ export default {
     if (options.transition && !immediate) {
       const hidden = this.hidden.bind(this);
       const hide = () => {
+        // XXX: It seems the `event.stopPropagation()` method does not work here
         setTimeout(() => {
           addListener(viewer, EVENT_TRANSITION_END, hidden, {
             once: true,
