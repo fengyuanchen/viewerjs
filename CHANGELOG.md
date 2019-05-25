@@ -3,6 +3,7 @@
 ## next
 
 - Escape all strings that use in HTML for better security (#269).
+- Fix the missing fide out transition when hide the viewer (#275).
 
 ## 1.3.3 (Apr 6, 2019)
 

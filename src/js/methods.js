@@ -149,10 +149,12 @@ export default {
     if (options.transition && !immediate) {
       const hidden = this.hidden.bind(this);
       const hide = () => {
-        addListener(viewer, EVENT_TRANSITION_END, hidden, {
-          once: true,
-        });
-        removeClass(viewer, CLASS_IN);
+        setTimeout(() => {
+          addListener(viewer, EVENT_TRANSITION_END, hidden, {
+            once: true,
+          });
+          removeClass(viewer, CLASS_IN);
+        }, 0);
       };
 
       this.transitioning = {
