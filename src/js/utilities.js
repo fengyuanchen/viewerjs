@@ -513,7 +513,7 @@ export function getTransforms({
  * @returns {string} A string contains the image name.
  */
 export function getImageNameFromURL(url) {
-  return isString(url) ? url.replace(/^.*\//, '').replace(/[?&#].*$/, '') : '';
+  return isString(url) ? decodeURIComponent(url.replace(/^.*\//, '').replace(/[?&#].*$/, '')) : '';
 }
 
 const IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(WINDOW.navigator.userAgent);
