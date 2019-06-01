@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.3.4 (Jun 1, 2019)
 
 - Escape all strings that use in HTML for better security (#269).
 - Fix the missing fide out transition when hide the viewer (#275).
