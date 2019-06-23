@@ -65,7 +65,7 @@ export default {
 
   initList() {
     const { element, options, list } = this;
-    const items = [];
+    let items = '';
 
     forEach(this.images, (image, i) => {
       const src = escapeHTMLEntities(image.src);
@@ -79,7 +79,7 @@ export default {
       }
 
       if (src || url) {
-        items.push('<li>'
+        items += ('<li>'
           + '<img'
             + ` src="${src || url}"`
             + ' role="button"'
@@ -92,7 +92,7 @@ export default {
       }
     });
 
-    list.innerHTML = items.join('');
+    list.innerHTML = items;
     this.items = list.getElementsByTagName('li');
     forEach(this.items, (item) => {
       const image = item.firstElementChild;
