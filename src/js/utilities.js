@@ -152,7 +152,7 @@ export function setStyle(element, styles) {
  */
 export function escapeHTMLEntities(value) {
   return isString(value) ? value
-    .replace(/&/g, '&amp;')
+    .replace(/&(?!amp;|quot;|#39;|lt;|gt;)/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')
     .replace(/</g, '&lt;')
