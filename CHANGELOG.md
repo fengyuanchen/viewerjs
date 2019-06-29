@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.3.5 (Jun 29, 2019)
 
 - Improve escaping function to avoid to escape HTML entities repeatedly.
 

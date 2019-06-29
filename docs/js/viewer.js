@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.3.4
+ * Viewer.js v1.3.5
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-06-01T03:32:35.881Z
+ * Date: 2019-06-29T10:32:18.607Z
  */
 
 (function (global, factory) {
@@ -455,7 +455,7 @@
    */
 
   function escapeHTMLEntities(value) {
-    return isString(value) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
+    return isString(value) ? value.replace(/&(?!amp;|quot;|#39;|lt;|gt;)/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
   }
   /**
    * Check if the given element has a special class.
@@ -963,7 +963,7 @@
       var element = this.element,
           options = this.options,
           list = this.list;
-      var items = [];
+      var items = '';
       forEach(this.images, function (image, i) {
         var src = escapeHTMLEntities(image.src);
         var alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
@@ -976,10 +976,10 @@
         }
 
         if (src || url) {
-          items.push('<li>' + '<img' + " src=\"".concat(src || url, "\"") + ' role="button"' + ' data-viewer-action="view"' + " data-index=\"".concat(i, "\"") + " data-original-url=\"".concat(url || src, "\"") + " alt=\"".concat(alt, "\"") + '>' + '</li>');
+          items += '<li>' + '<img' + " src=\"".concat(src || url, "\"") + ' role="button"' + ' data-viewer-action="view"' + " data-index=\"".concat(i, "\"") + " data-original-url=\"".concat(url || src, "\"") + " alt=\"".concat(alt, "\"") + '>' + '</li>';
         }
       });
-      list.innerHTML = items.join('');
+      list.innerHTML = items;
       this.items = list.getElementsByTagName('li');
       forEach(this.items, function (item) {
         var image = item.firstElementChild;
