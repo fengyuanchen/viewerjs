@@ -216,7 +216,7 @@ export default {
     const item = this.items[index];
     const img = item.querySelector('img');
     const url = getData(img, 'originalUrl');
-    const alt = escapeHTMLEntities(img.getAttribute('alt'));
+    const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
     image.src = url;
@@ -639,7 +639,7 @@ export default {
       const image = document.createElement('img');
 
       image.src = getData(img, 'originalUrl');
-      image.alt = escapeHTMLEntities(img.getAttribute('alt'));
+      image.alt = img.getAttribute('alt');
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);
