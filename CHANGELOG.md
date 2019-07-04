@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.3.6 (Jul 4, 2019)
 
 - Avoid using the `innerHTML` property for security (#269).
 - Avoid escaping URLs (#298, #301).

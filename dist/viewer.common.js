@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-06-29T10:32:18.607Z
+ * Date: 2019-07-04T11:00:16.790Z
  */
 
 'use strict';
@@ -959,25 +959,34 @@ var render = {
     var element = this.element,
         options = this.options,
         list = this.list;
-    var items = '';
-    forEach(this.images, function (image, i) {
-      var src = escapeHTMLEntities(image.src);
+    var items = [];
+    forEach(this.images, function (image, index) {
+      var src = image.src;
       var alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
       var url = options.url;
 
       if (isString(url)) {
-        url = escapeHTMLEntities(image.getAttribute(url));
+        url = image.getAttribute(url);
       } else if (isFunction(url)) {
-        url = escapeHTMLEntities(url.call(_this, image));
+        url = url.call(_this, image);
       }
 
       if (src || url) {
-        items += '<li>' + '<img' + " src=\"".concat(src || url, "\"") + ' role="button"' + ' data-viewer-action="view"' + " data-index=\"".concat(i, "\"") + " data-original-url=\"".concat(url || src, "\"") + " alt=\"".concat(alt, "\"") + '>' + '</li>';
+        var item = document.createElement('li');
+        var img = document.createElement('img');
+        img.src = src || url;
+        img.alt = alt;
+        img.setAttribute('data-index', index);
+        img.setAttribute('data-original-url', url || src);
+        img.setAttribute('data-viewer-action', 'view');
+        img.setAttribute('role', 'button');
+        item.appendChild(img);
+        list.appendChild(item);
+        items.push(item);
       }
     });
-    list.innerHTML = items;
-    this.items = list.getElementsByTagName('li');
-    forEach(this.items, function (item) {
+    this.items = items;
+    forEach(items, function (item) {
       var image = item.firstElementChild;
       setData(image, 'filled', true);
 
@@ -1784,7 +1793,7 @@ var methods = {
         canvas = this.canvas;
     var item = this.items[index];
     var img = item.querySelector('img');
-    var url = escapeHTMLEntities(getData(img, 'originalUrl'));
+    var url = getData(img, 'originalUrl');
     var alt = escapeHTMLEntities(img.getAttribute('alt'));
     var image = document.createElement('img');
     image.src = url;
@@ -2198,7 +2207,7 @@ var methods = {
     forEach(this.items, function (item, i) {
       var img = item.querySelector('img');
       var image = document.createElement('img');
-      image.src = escapeHTMLEntities(getData(img, 'originalUrl'));
+      image.src = getData(img, 'originalUrl');
       image.alt = escapeHTMLEntities(img.getAttribute('alt'));
       total += 1;
       addClass(image, CLASS_FADE);
