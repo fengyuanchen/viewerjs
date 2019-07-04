@@ -68,14 +68,14 @@ export default {
     let items = '';
 
     forEach(this.images, (image, i) => {
-      const src = escapeHTMLEntities(image.src);
+      const { src } = image;
       const alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
       let { url } = options;
 
       if (isString(url)) {
-        url = escapeHTMLEntities(image.getAttribute(url));
+        url = image.getAttribute(url);
       } else if (isFunction(url)) {
-        url = escapeHTMLEntities(url.call(this, image));
+        url = url.call(this, image);
       }
 
       if (src || url) {

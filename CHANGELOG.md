@@ -1,8 +1,12 @@
 # Changelog
 
+## next
+
+- Avoid escaping URLs (#298, #301).
+
 ## 1.3.5 (Jun 29, 2019)
 
-- Improve escaping function to avoid to escape HTML entities repeatedly.
+- Improve the escaping function to avoid to escape HTML entities repeatedly.
 
 ## 1.3.4 (Jun 1, 2019)
 
