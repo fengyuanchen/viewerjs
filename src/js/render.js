@@ -65,9 +65,9 @@ export default {
 
   initList() {
     const { element, options, list } = this;
-    let items = '';
+    const items = [];
 
-    forEach(this.images, (image, i) => {
+    forEach(this.images, (image, index) => {
       const { src } = image;
       const alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
       let { url } = options;
@@ -79,22 +79,24 @@ export default {
       }
 
       if (src || url) {
-        items += ('<li>'
-          + '<img'
-            + ` src="${src || url}"`
-            + ' role="button"'
-            + ' data-viewer-action="view"'
-            + ` data-index="${i}"`
-            + ` data-original-url="${url || src}"`
-            + ` alt="${alt}"`
-          + '>'
-        + '</li>');
+        const item = document.createElement('li');
+        const img = document.createElement('img');
+
+        img.src = src || url;
+        img.alt = alt;
+        img.setAttribute('data-index', index);
+        img.setAttribute('data-original-url', url || src);
+        img.setAttribute('data-viewer-action', 'view');
+        img.setAttribute('role', 'button');
+        item.appendChild(img);
+        list.appendChild(item);
+        items.push(item);
       }
     });
 
-    list.innerHTML = items;
-    this.items = list.getElementsByTagName('li');
-    forEach(this.items, (item) => {
+    this.items = items;
+
+    forEach(items, (item) => {
       const image = item.firstElementChild;
 
       setData(image, 'filled', true);

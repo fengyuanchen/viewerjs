@@ -2,6 +2,7 @@
 
 ## next
 
+- Avoid using the `innerHTML` property for security (#269).
 - Avoid escaping URLs (#298, #301).
 
 ## 1.3.5 (Jun 29, 2019)
@@ -51,14 +52,14 @@
 
 ## 1.0.1 (May 20, 2018)
 
-- Add namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.
+- Add a namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.
 - Make sure the image data is a non-null object to avoid unexpected errors.
 - Fix broken zoom feature in iOS browsers (#167).
 
 ## 1.0.0 (Apr 1, 2018)
 
 - Add in browser checking to support to import in Node.js.
-- Cancel update when there are no images when call the `update` method.
+- Cancel update when there are no images when calling the `update` method.
 
 ## 1.0.0-rc.1 (Mar 13, 2018)
 
@@ -71,7 +72,7 @@
 - Add a new option: `loading`.
 - Add type definitions file for TypeScript.
 - Enhance the `show`, `hide` and `play` methods.
-- Change the default value of `loop` option from `false` to `true`.
+- Change the default value of the `loop` option from `false` to `true`.
 
 ## 1.0.0-beta.2 (Feb 13, 2018)
 
@@ -97,7 +98,7 @@
 
 - Add a new option: `filter`.
 - Enhance the `prev` and `next` methods (#47).
-- Support to customize the layout of toolbar (#79).
+- Support to customize the layout of the toolbar (#79).
 - Disallow to show again if it had shown.
 
 ## 0.8.0 (Oct 8, 2017)
@@ -108,8 +109,8 @@
 
 ## 0.7.2 (Aug 19, 2017)
 
-- Ignore mouse down event when the viewer is hiding (#70).
-- Fixed multiple active items in navbar (#75).
+- Ignore the mouse down event when the viewer is hiding (#70).
+- Fixed multiple active items in the navbar (#75).
 
 ## 0.7.1 (May 14, 2017)
 
@@ -127,7 +128,7 @@
 
 ## 0.6.1 (Feb 18, 2017)
 
-- Prevented the default behaviour of drag action (#63).
+- Prevented the default behavior of drag action (#63).
 
 ## 0.6.0 (Jan 24, 2017)
 
@@ -136,12 +137,12 @@
 
 ## 0.5.1 (Jan 2, 2017)
 
-- Improved event handler for Pointer Events.
+- Improve event handler for Pointer Events.
 
 ## 0.5.0 (July 22, 2016)
 
 - Improve modal opening and closing.
-- Remove `build` event.
+- Remove the `build` event.
 - Rename `built` event to `ready`.
 - Fixed a bug of `data-*` attributes setting and getting (#33).
 
@@ -151,22 +152,22 @@
 
 ## 0.3.3 (Mar 19, 2016)
 
-- Fix the issue of hiding wrong element in the "view" method (#19).
+- Fix the issue of hiding the wrong element in the "view" method (#19).
 
 ## 0.3.2 (Mar 11, 2016)
 
-- Fix the parameters error on the "url" option when it is a function.
+- Fix the error of the parameters on the "url" option when it is a function.
 
 ## 0.3.1 (Feb 2, 2016)
 
 - Added tests.
-- Ignored invalid class name.
+- Ignored the invalid class name.
 - Re-render image only when viewed.
 
 ## 0.3.0 (Jan 21, 2016)
 
 - Add more available values to the "title", "toolbar" and "navbar" options.
-- Support to toggle the visibility of title, toolbar and navbar between different screen widths.
+- Support to toggle the visibility of title, toolbar, and navbar between different screen widths.
 - Exit fullscreen when stop playing.
 - Fixed title not generated bug.
 
