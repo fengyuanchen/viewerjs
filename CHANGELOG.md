@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Do nothing if the `index` value is invalid when call the `view` method (#312).
+
 ## 1.3.6 (Jul 4, 2019)
 
 - Avoid using the `innerHTML` property for security (#269).

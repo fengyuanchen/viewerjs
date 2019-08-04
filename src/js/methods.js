@@ -193,14 +193,14 @@ export default {
   view(index = this.options.initialViewIndex) {
     index = Number(index) || 0;
 
-    if (!this.isShown) {
-      this.index = index;
-      return this.show();
-    }
-
     if (this.hiding || this.played || index < 0 || index >= this.length
       || (this.viewed && index === this.index)) {
       return this;
+    }
+
+    if (!this.isShown) {
+      this.index = index;
+      return this.show();
     }
 
     if (this.viewing) {

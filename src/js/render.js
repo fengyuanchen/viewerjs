@@ -65,6 +65,7 @@ export default {
   initList() {
     const { element, options, list } = this;
     const items = [];
+
     // initList may be called in this.update, so should keep idempotent
     list.innerHTML = '';
 
