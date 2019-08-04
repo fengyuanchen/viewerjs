@@ -9,7 +9,6 @@ import {
   addClass,
   addListener,
   assign,
-  escapeHTMLEntities,
   forEach,
   getImageNameFromURL,
   getImageNaturalSizes,
@@ -66,10 +65,12 @@ export default {
   initList() {
     const { element, options, list } = this;
     const items = [];
+    // initList may be called in this.update, so should keep idempotent
+    list.innerHTML = '';
 
     forEach(this.images, (image, index) => {
       const { src } = image;
-      const alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
+      const alt = image.alt || getImageNameFromURL(src);
       let { url } = options;
 
       if (isString(url)) {
