@@ -212,6 +212,10 @@ export function removeClass(element, value) {
     return;
   }
 
+  if (!element) {
+    return;
+  }
+
   if (isNumber(element.length)) {
     forEach(element, (elem) => {
       removeClass(elem, value);
