@@ -166,6 +166,10 @@ export function escapeHTMLEntities(value) {
  * @returns {boolean} Returns `true` if the special class was found.
  */
 export function hasClass(element, value) {
+  if (!element) {
+    return false;
+  }
+
   return element.classList
     ? element.classList.contains(value)
     : element.className.indexOf(value) > -1;
