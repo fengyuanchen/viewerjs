@@ -166,7 +166,7 @@ export function escapeHTMLEntities(value) {
  * @returns {boolean} Returns `true` if the special class was found.
  */
 export function hasClass(element, value) {
-  if (!element) {
+  if (!element || !value) {
     return false;
   }
 
@@ -181,7 +181,7 @@ export function hasClass(element, value) {
  * @param {string} value - The classes to be added.
  */
 export function addClass(element, value) {
-  if (!value) {
+  if (!element || !value) {
     return;
   }
 
@@ -212,11 +212,7 @@ export function addClass(element, value) {
  * @param {string} value - The classes to be removed.
  */
 export function removeClass(element, value) {
-  if (!value) {
-    return;
-  }
-
-  if (!element) {
+  if (!element || !value) {
     return;
   }
 
