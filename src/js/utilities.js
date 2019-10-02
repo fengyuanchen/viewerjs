@@ -596,7 +596,7 @@ export function getResponsiveClass(type) {
  * @returns {number} The result ratio.
  */
 export function getMaxZoomRatio(pointers) {
-  const pointers2 = assign({}, pointers);
+  const pointers2 = { ...pointers };
   const ratios = [];
 
   forEach(pointers, (pointer, pointerId) => {
@@ -632,11 +632,12 @@ export function getPointer({ pageX, pageY }, endOnly) {
     endY: pageY,
   };
 
-  return endOnly ? end : assign({
+  return endOnly ? end : ({
     timeStamp: Date.now(),
     startX: pageX,
     startY: pageY,
-  }, end);
+    ...end,
+  });
 }
 
 /**

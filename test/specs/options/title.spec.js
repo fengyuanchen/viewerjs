@@ -50,7 +50,7 @@ describe('title (option)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       inline: true,
-      title: [3, img => img.alt],
+      title: [3, (img) => img.alt],
 
       ready() {
         expect(viewer.title.className).to.include('viewer-hide-sm-down');
