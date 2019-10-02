@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.3.5
+ * Viewer.js v1.3.7
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-07-04T11:00:16.790Z
+ * Date: 2019-10-02T09:29:13.426Z
  */
 
 function _typeof(obj) {
@@ -42,6 +42,55 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
 }
 
 var DEFAULTS = {
@@ -244,7 +293,7 @@ var DEFAULTS = {
 
 var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
-var IS_BROWSER = typeof window !== 'undefined';
+var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var WINDOW = IS_BROWSER ? window : {};
 var IS_TOUCH_DEVICE = IS_BROWSER ? 'ontouchstart' in WINDOW.document.documentElement : false;
 var HAS_POINTER_EVENT = IS_BROWSER ? 'PointerEvent' in WINDOW : false;
@@ -459,6 +508,10 @@ function escapeHTMLEntities(value) {
  */
 
 function hasClass(element, value) {
+  if (!element || !value) {
+    return false;
+  }
+
   return element.classList ? element.classList.contains(value) : element.className.indexOf(value) > -1;
 }
 /**
@@ -468,7 +521,7 @@ function hasClass(element, value) {
  */
 
 function addClass(element, value) {
-  if (!value) {
+  if (!element || !value) {
     return;
   }
 
@@ -499,7 +552,7 @@ function addClass(element, value) {
  */
 
 function removeClass(element, value) {
-  if (!value) {
+  if (!element || !value) {
     return;
   }
 
@@ -849,7 +902,8 @@ function getResponsiveClass(type) {
  */
 
 function getMaxZoomRatio(pointers) {
-  var pointers2 = assign({}, pointers);
+  var pointers2 = _objectSpread2({}, pointers);
+
   var ratios = [];
   forEach(pointers, function (pointer, pointerId) {
     delete pointers2[pointerId];
@@ -883,7 +937,7 @@ function getPointer(_ref2, endOnly) {
     endX: pageX,
     endY: pageY
   };
-  return endOnly ? end : assign({
+  return endOnly ? end : _objectSpread2({
     timeStamp: Date.now(),
     startX: pageX,
     startY: pageY
@@ -957,10 +1011,12 @@ var render = {
     var element = this.element,
         options = this.options,
         list = this.list;
-    var items = [];
+    var items = []; // initList may be called in this.update, so should keep idempotent
+
+    list.innerHTML = '';
     forEach(this.images, function (image, index) {
       var src = image.src;
-      var alt = escapeHTMLEntities(image.alt || getImageNameFromURL(src));
+      var alt = image.alt || getImageNameFromURL(src);
       var url = options.url;
 
       if (isString(url)) {
@@ -1441,10 +1497,10 @@ var handlers = {
     var buttons = event.buttons,
         button = event.button;
 
-    if (!this.viewed || this.showing || this.viewing || this.hiding // No primary button (Usually the left button)
-    // Note that touch events have no `buttons` or `button` property
-    || isNumber(buttons) && buttons !== 1 || isNumber(button) && button !== 0 // Open context menu
-    || event.ctrlKey) {
+    if (!this.viewed || this.showing || this.viewing || this.hiding // Handle mouse event and pointer event and ignore touch event
+    || (event.type === 'mousedown' || event.type === 'pointerdown' && event.pointerType === 'mouse') && ( // No primary button (Usually the left button)
+    isNumber(buttons) && buttons !== 1 || isNumber(button) && button !== 0 // Open context menu
+    || event.ctrlKey)) {
       return;
     } // Prevent default behaviours as page zooming in touch devices.
 
@@ -1772,13 +1828,13 @@ var methods = {
     var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.initialViewIndex;
     index = Number(index) || 0;
 
+    if (this.hiding || this.played || index < 0 || index >= this.length || this.viewed && index === this.index) {
+      return this;
+    }
+
     if (!this.isShown) {
       this.index = index;
       return this.show();
-    }
-
-    if (this.hiding || this.played || index < 0 || index >= this.length || this.viewed && index === this.index) {
-      return this;
     }
 
     if (this.viewing) {
@@ -1792,7 +1848,7 @@ var methods = {
     var item = this.items[index];
     var img = item.querySelector('img');
     var url = getData(img, 'originalUrl');
-    var alt = escapeHTMLEntities(img.getAttribute('alt'));
+    var alt = img.getAttribute('alt');
     var image = document.createElement('img');
     image.src = url;
     image.alt = alt;
@@ -2206,7 +2262,7 @@ var methods = {
       var img = item.querySelector('img');
       var image = document.createElement('img');
       image.src = getData(img, 'originalUrl');
-      image.alt = escapeHTMLEntities(img.getAttribute('alt'));
+      image.alt = img.getAttribute('alt');
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);

@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.3.7 (Oct 2, 2019)
 
 - Do nothing if the `index` value is invalid when call the `view` method (#312).
 - Ignore invalid `element` parameter on the class utility functions (#317).
