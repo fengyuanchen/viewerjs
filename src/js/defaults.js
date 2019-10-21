@@ -97,6 +97,12 @@ export default {
   minWidth: 200,
 
   /**
+   * Disable the mouse wheel binding
+   * @type {boolean}
+   */
+  disableWheelBinding: false,
+
+  /**
    * Min height of the viewer in inline mode.
    * @type {number}
    */

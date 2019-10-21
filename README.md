@@ -306,6 +306,13 @@ Enable keyboard support.
 - Type: `Boolean`
 - Default: `true`
 
+### disableWheelBinding
+
+- Type: `Boolean`
+- Default: `false`
+
+
+
 Indicate if show a loading spinner when load image or not.
 
 ### loop

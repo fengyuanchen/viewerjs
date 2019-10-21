@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-10-02T09:29:13.426Z
+ * Date: 2019-10-21T14:23:30.743Z
  */
 
 (function (global, factory) {
@@ -196,6 +196,12 @@
      * @type {number}
      */
     minWidth: 200,
+
+    /**
+     * Disable the mouse wheel binding
+     * @type {boolean}
+     */
+    disableWheelBinding: false,
 
     /**
      * Min height of the viewer in inline mode.
@@ -1210,10 +1216,14 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
-      addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this), {
-        passive: false,
-        capture: true
-      });
+
+      if (!options.disableWheelBinding) {
+        addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this), {
+          passive: false,
+          capture: true
+        });
+      }
+
       addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
       addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
       addListener(document, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
@@ -1231,10 +1241,14 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       removeListener(viewer, EVENT_CLICK, this.onClick);
-      removeListener(viewer, EVENT_WHEEL, this.onWheel, {
-        passive: false,
-        capture: true
-      });
+
+      if (!options.disableWheelBinding) {
+        removeListener(viewer, EVENT_WHEEL, this.onWheel, {
+          passive: false,
+          capture: true
+        });
+      }
+
       removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
       removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
       removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
