@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.4.0 (Oct 26, 2019)
 
 - Add two new options: `zoomOnTouch` and `zoomOnWheel`(#329).
 

@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.3.7",
+  "version": "1.4.0",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
@@ -27,7 +27,7 @@
     "lint:js": "eslint src test *.js --fix",
     "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
     "start": "npm-run-all --parallel watch:*",
-    "test": "cross-env NODE_ENV=test karma start test/karma.conf.js",
+    "test": "karma start",
     "watch:css": "postcss src/index.css -o docs/css/viewer.css -m -w",
     "watch:js": "rollup -c -m -w"
   },
@@ -56,8 +56,8 @@
   },
   "homepage": "https://fengyuanchen.github.io/viewerjs",
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
     "babel-plugin-istanbul": "^5.2.0",
@@ -66,22 +66,21 @@
     "codecov": "^3.6.1",
     "cpy-cli": "^2.0.0",
     "create-banner": "^1.0.0",
-    "cross-env": "^6.0.2",
     "cssnano": "^4.1.10",
     "del-cli": "^3.0.0",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "husky": "^3.0.8",
-    "karma": "^4.3.0",
+    "husky": "^3.0.9",
+    "karma": "^4.4.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage-istanbul-reporter": "^2.1.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-rollup-preprocessor": "^7.0.2",
-    "lint-staged": "^8.2.1",
-    "mocha": "^6.2.1",
+    "lint-staged": "^9.4.2",
+    "mocha": "^6.2.2",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^6.1.3",
     "postcss-header": "^1.0.0",
@@ -89,13 +88,13 @@
     "postcss-preset-env": "^6.7.0",
     "postcss-url": "^8.0.0",
     "puppeteer": "^1.20.0",
-    "rollup": "^1.22.0",
+    "rollup": "^1.25.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-watch": "^4.3.1",
-    "stylelint": "^11.0.0",
+    "stylelint": "^11.1.1",
     "stylelint-config-standard": "^19.0.0",
     "stylelint-order": "^3.1.1",
-    "uglify-js": "^3.6.0"
+    "uglify-js": "^3.6.4"
   },
   "browserslist": [
     "last 2 versions",
@@ -114,19 +113,13 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "eslint --fix",
-        "git add"
-      ],
-      "*.{css,scss,html}": [
-        "stylelint --fix",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "{dist,docs}/**/*.js",
-      "*.min.*"
+    "{src,test}/**/*.js|*.conf*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "{src,docs}*.{css,scss,html}": [
+      "stylelint --fix",
+      "git add"
     ]
   }
 }

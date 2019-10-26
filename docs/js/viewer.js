@@ -1,18 +1,18 @@
 /*!
- * Viewer.js v1.3.7
+ * Viewer.js v1.4.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-10-02T09:29:13.426Z
+ * Date: 2019-10-26T07:09:40.792Z
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.Viewer = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -210,12 +210,6 @@
     movable: true,
 
     /**
-     * Enable to zoom the image.
-     * @type {boolean}
-     */
-    zoomable: true,
-
-    /**
      * Enable to rotate the image.
      * @type {boolean}
      */
@@ -226,6 +220,24 @@
      * @type {boolean}
      */
     scalable: true,
+
+    /**
+     * Enable to zoom the image.
+     * @type {boolean}
+     */
+    zoomable: true,
+
+    /**
+     * Enable to zoom the image by dragging touch.
+     * @type {boolean}
+     */
+    zoomOnTouch: true,
+
+    /**
+     * Enable to zoom the image by wheeling mouse.
+     * @type {boolean}
+     */
+    zoomOnWheel: true,
 
     /**
      * Indicate if toggle the image size between its natural size
@@ -1210,16 +1222,19 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
-      addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this), {
-        passive: false,
-        capture: true
-      });
       addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
       addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
       addListener(document, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
       addListener(document, EVENT_POINTER_UP, this.onPointerUp = this.pointerup.bind(this));
       addListener(document, EVENT_KEY_DOWN, this.onKeyDown = this.keydown.bind(this));
       addListener(window, EVENT_RESIZE, this.onResize = this.resize.bind(this));
+
+      if (options.zoomable && options.zoomOnWheel) {
+        addListener(viewer, EVENT_WHEEL, this.onWheel = this.wheel.bind(this), {
+          passive: false,
+          capture: true
+        });
+      }
 
       if (options.toggleOnDblclick) {
         addListener(canvas, EVENT_DBLCLICK, this.onDblclick = this.dblclick.bind(this));
@@ -1231,16 +1246,19 @@
           canvas = this.canvas;
       var document = this.element.ownerDocument;
       removeListener(viewer, EVENT_CLICK, this.onClick);
-      removeListener(viewer, EVENT_WHEEL, this.onWheel, {
-        passive: false,
-        capture: true
-      });
       removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
       removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
       removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
       removeListener(document, EVENT_POINTER_UP, this.onPointerUp);
       removeListener(document, EVENT_KEY_DOWN, this.onKeyDown);
       removeListener(window, EVENT_RESIZE, this.onResize);
+
+      if (options.zoomable && options.zoomOnWheel) {
+        removeListener(viewer, EVENT_WHEEL, this.onWheel, {
+          passive: false,
+          capture: true
+        });
+      }
 
       if (options.toggleOnDblclick) {
         removeListener(canvas, EVENT_DBLCLICK, this.onDblclick);
@@ -1488,8 +1506,6 @@
           }
 
           break;
-
-        default:
       }
     },
     dragstart: function dragstart(event) {
@@ -1523,7 +1539,7 @@
 
       var action = options.movable ? ACTION_MOVE : false;
 
-      if (Object.keys(pointers).length > 1) {
+      if (Object.keys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {
         action = ACTION_ZOOM;
       } else if ((event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
         action = ACTION_SWITCH;
@@ -2752,8 +2768,6 @@
 
             break;
           }
-
-        default:
       } // Override
 
 
@@ -3096,4 +3110,4 @@
 
   return Viewer;
 
-}));
+})));
