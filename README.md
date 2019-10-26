@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 39 [options](#options)
+- Supports 41 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
@@ -342,13 +342,6 @@ Define the minimum height of the viewer.
 
 Enable to move the image.
 
-### zoomable
-
-- Type: `Boolean`
-- Default: `true`
-
-Enable to zoom the image.
-
 ### rotatable
 
 - Type: `Boolean`
@@ -362,6 +355,27 @@ Enable to rotate the image.
 - Default: `true`
 
 Enable to scale the image.
+
+### zoomable
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to zoom the image.
+
+### zoomOnTouch
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to zoom the image by dragging touch.
+
+### zoomOnWheel
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to zoom the image by wheeling mouse.
 
 ### toggleOnDblclick
 

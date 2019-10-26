@@ -336,7 +336,7 @@ export default {
 
     let action = options.movable ? ACTION_MOVE : false;
 
-    if (Object.keys(pointers).length > 1) {
+    if (Object.keys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {
       action = ACTION_ZOOM;
     } else if ((event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;

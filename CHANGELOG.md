@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add two new options: `zoomOnTouch` and `zoomOnWheel`(#329).
+
 ## 1.3.7 (Oct 2, 2019)
 
 - Do nothing if the `index` value is invalid when call the `view` method (#312).

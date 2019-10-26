@@ -109,12 +109,6 @@ export default {
   movable: true,
 
   /**
-   * Enable to zoom the image.
-   * @type {boolean}
-   */
-  zoomable: true,
-
-  /**
    * Enable to rotate the image.
    * @type {boolean}
    */
@@ -125,6 +119,24 @@ export default {
    * @type {boolean}
    */
   scalable: true,
+
+  /**
+   * Enable to zoom the image.
+   * @type {boolean}
+   */
+  zoomable: true,
+
+  /**
+   * Enable to zoom the image by dragging touch.
+   * @type {boolean}
+   */
+  zoomOnTouch: true,
+
+  /**
+   * Enable to zoom the image by wheeling mouse.
+   * @type {boolean}
+   */
+  zoomOnWheel: true,
 
   /**
    * Indicate if toggle the image size between its natural size
