@@ -1,8 +1,12 @@
 # Changelog
 
+## next
+
+- Detect if the queried image is existing when update image list (#333).
+
 ## 1.4.0 (Oct 26, 2019)
 
-- Add two new options: `zoomOnTouch` and `zoomOnWheel`(#329).
+- Add two new options: `zoomOnTouch` and `zoomOnWheel` (#329).
 
 ## 1.3.7 (Oct 2, 2019)
 

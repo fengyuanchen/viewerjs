@@ -906,7 +906,7 @@ export default {
         const img = item.querySelector('img');
         const image = images[i];
 
-        if (image) {
+        if (image && img) {
           if (image.src !== img.src) {
             indexes.push(i);
           }
