@@ -14,7 +14,6 @@ import {
   getImageNaturalSizes,
   getTransforms,
   isFunction,
-  isString,
   removeClass,
   removeListener,
   setData,
@@ -65,6 +64,7 @@ export default {
   initList() {
     const { element, options, list } = this;
     const items = [];
+    const urls = [];
 
     // initList may be called in this.update, so should keep idempotent
     list.innerHTML = '';
@@ -72,22 +72,21 @@ export default {
     forEach(this.images, (image, index) => {
       const { src } = image;
       const alt = image.alt || getImageNameFromURL(src);
-      let { url } = options;
+      const { url } = options;
 
-      if (isString(url)) {
-        url = image.getAttribute(url);
-      } else if (isFunction(url)) {
-        url = url.call(this, image);
-      }
+      const isUrlFunction = isFunction(url);
+      const strUrl = isUrlFunction ? undefined : image.getAttribute(`${url}`);
 
-      if (src || url) {
+      urls.push(isUrlFunction ? () => url.call(this, image) : () => strUrl);
+
+
+      if (src || strUrl) {
         const item = document.createElement('li');
         const img = document.createElement('img');
 
-        img.src = src || url;
+        img.src = src || strUrl;
         img.alt = alt;
         img.setAttribute('data-index', index);
-        img.setAttribute('data-original-url', url || src);
         img.setAttribute('data-viewer-action', 'view');
         img.setAttribute('role', 'button');
         item.appendChild(img);
@@ -97,6 +96,7 @@ export default {
     });
 
     this.items = items;
+    this.urls = urls;
 
     forEach(items, (item) => {
       const image = item.firstElementChild;

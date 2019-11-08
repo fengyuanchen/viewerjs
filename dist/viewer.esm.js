@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-10-26T07:09:40.792Z
+ * Date: 2019-11-08T09:46:41.417Z
  */
 
 function _typeof(obj) {
@@ -1023,27 +1023,28 @@ var render = {
     var element = this.element,
         options = this.options,
         list = this.list;
-    var items = []; // initList may be called in this.update, so should keep idempotent
+    var items = [];
+    var urls = []; // initList may be called in this.update, so should keep idempotent
 
     list.innerHTML = '';
     forEach(this.images, function (image, index) {
       var src = image.src;
       var alt = image.alt || getImageNameFromURL(src);
       var url = options.url;
+      var isUrlFunction = isFunction(url);
+      var strUrl = isUrlFunction ? undefined : image.getAttribute("".concat(url));
+      urls.push(isUrlFunction ? function () {
+        return url.call(_this, image);
+      } : function () {
+        return strUrl;
+      });
 
-      if (isString(url)) {
-        url = image.getAttribute(url);
-      } else if (isFunction(url)) {
-        url = url.call(_this, image);
-      }
-
-      if (src || url) {
+      if (src || strUrl) {
         var item = document.createElement('li');
         var img = document.createElement('img');
-        img.src = src || url;
+        img.src = src || strUrl;
         img.alt = alt;
         img.setAttribute('data-index', index);
-        img.setAttribute('data-original-url', url || src);
         img.setAttribute('data-viewer-action', 'view');
         img.setAttribute('role', 'button');
         item.appendChild(img);
@@ -1052,6 +1053,7 @@ var render = {
       }
     });
     this.items = items;
+    this.urls = urls;
     forEach(items, function (item) {
       var image = item.firstElementChild;
       setData(image, 'filled', true);
@@ -1863,95 +1865,97 @@ var methods = {
         canvas = this.canvas;
     var item = this.items[index];
     var img = item.querySelector('img');
-    var url = getData(img, 'originalUrl');
+    var url = this.urls[index];
     var alt = img.getAttribute('alt');
     var image = document.createElement('img');
-    image.src = url;
-    image.alt = alt;
+    Promise.resolve(url()).then(function (_url) {
+      image.src = _url;
+      image.alt = alt;
 
-    if (isFunction(options.view)) {
-      addListener(element, EVENT_VIEW, options.view, {
+      if (isFunction(options.view)) {
+        addListener(element, EVENT_VIEW, options.view, {
+          once: true
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_VIEW, {
+        originalImage: _this.images[index],
+        index: index,
+        image: image
+      }) === false || !_this.isShown || _this.hiding || _this.played) {
+        return;
+      }
+
+      _this.image = image;
+      removeClass(_this.items[_this.index], CLASS_ACTIVE);
+      addClass(item, CLASS_ACTIVE);
+      _this.viewed = false;
+      _this.index = index;
+      _this.imageData = {};
+      addClass(image, CLASS_INVISIBLE);
+
+      if (options.loading) {
+        addClass(canvas, CLASS_LOADING);
+      }
+
+      canvas.innerHTML = '';
+      canvas.appendChild(image); // Center current item
+
+      _this.renderList(); // Clear title
+
+
+      title.innerHTML = ''; // Generate title after viewed
+
+      var onViewed = function onViewed() {
+        var imageData = _this.imageData;
+        var render = Array.isArray(options.title) ? options.title[1] : options.title;
+        title.innerHTML = escapeHTMLEntities(isFunction(render) ? render.call(_this, image, imageData) : "".concat(alt, " (").concat(imageData.naturalWidth, " \xD7 ").concat(imageData.naturalHeight, ")"));
+      };
+
+      var onLoad;
+      addListener(element, EVENT_VIEWED, onViewed, {
         once: true
       });
-    }
+      _this.viewing = {
+        abort: function abort() {
+          removeListener(element, EVENT_VIEWED, onViewed);
 
-    if (dispatchEvent(element, EVENT_VIEW, {
-      originalImage: this.images[index],
-      index: index,
-      image: image
-    }) === false || !this.isShown || this.hiding || this.played) {
-      return this;
-    }
+          if (image.complete) {
+            if (this.imageRendering) {
+              this.imageRendering.abort();
+            } else if (this.imageInitializing) {
+              this.imageInitializing.abort();
+            }
+          } else {
+            // Cancel download to save bandwidth.
+            image.src = '';
+            removeListener(image, EVENT_LOAD, onLoad);
 
-    this.image = image;
-    removeClass(this.items[this.index], CLASS_ACTIVE);
-    addClass(item, CLASS_ACTIVE);
-    this.viewed = false;
-    this.index = index;
-    this.imageData = {};
-    addClass(image, CLASS_INVISIBLE);
-
-    if (options.loading) {
-      addClass(canvas, CLASS_LOADING);
-    }
-
-    canvas.innerHTML = '';
-    canvas.appendChild(image); // Center current item
-
-    this.renderList(); // Clear title
-
-    title.innerHTML = ''; // Generate title after viewed
-
-    var onViewed = function onViewed() {
-      var imageData = _this.imageData;
-      var render = Array.isArray(options.title) ? options.title[1] : options.title;
-      title.innerHTML = escapeHTMLEntities(isFunction(render) ? render.call(_this, image, imageData) : "".concat(alt, " (").concat(imageData.naturalWidth, " \xD7 ").concat(imageData.naturalHeight, ")"));
-    };
-
-    var onLoad;
-    addListener(element, EVENT_VIEWED, onViewed, {
-      once: true
-    });
-    this.viewing = {
-      abort: function abort() {
-        removeListener(element, EVENT_VIEWED, onViewed);
-
-        if (image.complete) {
-          if (this.imageRendering) {
-            this.imageRendering.abort();
-          } else if (this.imageInitializing) {
-            this.imageInitializing.abort();
-          }
-        } else {
-          // Cancel download to save bandwidth.
-          image.src = '';
-          removeListener(image, EVENT_LOAD, onLoad);
-
-          if (this.timeout) {
-            clearTimeout(this.timeout);
+            if (this.timeout) {
+              clearTimeout(this.timeout);
+            }
           }
         }
+      };
+
+      if (image.complete) {
+        _this.load();
+      } else {
+        addListener(image, EVENT_LOAD, onLoad = _this.load.bind(_this), {
+          once: true
+        });
+
+        if (_this.timeout) {
+          clearTimeout(_this.timeout);
+        } // Make the image visible if it fails to load within 1s
+
+
+        _this.timeout = setTimeout(function () {
+          removeClass(image, CLASS_INVISIBLE);
+          _this.timeout = false;
+        }, 1000);
       }
-    };
-
-    if (image.complete) {
-      this.load();
-    } else {
-      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
-        once: true
-      });
-
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      } // Make the image visible if it fails to load within 1s
-
-
-      this.timeout = setTimeout(function () {
-        removeClass(image, CLASS_INVISIBLE);
-        _this.timeout = false;
-      }, 1000);
-    }
-
+    });
     return this;
   },
 
@@ -2277,40 +2281,42 @@ var methods = {
     forEach(this.items, function (item, i) {
       var img = item.querySelector('img');
       var image = document.createElement('img');
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
-      total += 1;
-      addClass(image, CLASS_FADE);
-      toggleClass(image, CLASS_TRANSITION, options.transition);
+      var url = _this3.urls[i];
+      Promise.resolve(url()).then(function (_url) {
+        image.src = _url;
+        image.alt = img.getAttribute('alt');
+        addClass(image, CLASS_FADE);
+        toggleClass(image, CLASS_TRANSITION, options.transition);
 
-      if (hasClass(item, CLASS_ACTIVE)) {
-        addClass(image, CLASS_IN);
-        index = i;
-      }
+        if (hasClass(item, CLASS_ACTIVE)) {
+          addClass(image, CLASS_IN);
+          index = i;
+        }
 
-      list.push(image);
-      addListener(image, EVENT_LOAD, onLoad, {
-        once: true
+        addListener(image, EVENT_LOAD, onLoad, {
+          once: true
+        });
       });
+      total += 1;
+      list.push(image);
       player.appendChild(image);
-    });
 
-    if (isNumber(options.interval) && options.interval > 0) {
-      var play = function play() {
-        _this3.playing = setTimeout(function () {
-          removeClass(list[index], CLASS_IN);
-          index += 1;
-          index = index < total ? index : 0;
-          addClass(list[index], CLASS_IN);
+      if (isNumber(options.interval) && options.interval > 0) {
+        var play = function play() {
+          _this3.playing = setTimeout(function () {
+            removeClass(list[index], CLASS_IN);
+            index += 1;
+            index = index < total ? index : 0;
+            addClass(list[index], CLASS_IN);
+            play();
+          }, options.interval);
+        };
+
+        if (total > 1) {
           play();
-        }, options.interval);
-      };
-
-      if (total > 1) {
-        play();
+        }
       }
-    }
-
+    });
     return this;
   },
   // Stop play
@@ -2536,7 +2542,7 @@ var methods = {
         var img = item.querySelector('img');
         var image = images[i];
 
-        if (image) {
+        if (image && img) {
           if (image.src !== img.src) {
             indexes.push(i);
           }

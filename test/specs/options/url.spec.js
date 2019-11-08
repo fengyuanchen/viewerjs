@@ -9,7 +9,7 @@ describe('url (option)', () => {
   it('should support string', (done) => {
     const image = window.createImage();
 
-    image.dataset.url = image.url;
+    image.dataset.src = image.src;
 
     new Viewer(image, {
       inline: true,
@@ -24,7 +24,7 @@ describe('url (option)', () => {
   it('should support function', (done) => {
     const image = window.createImage();
 
-    image.dataset.url = image.url;
+    image.dataset.src = image.src;
 
     new Viewer(image, {
       inline: true,
@@ -33,6 +33,26 @@ describe('url (option)', () => {
         expect(this).to.be.an.instanceof(Viewer);
 
         return img.dataset.src;
+      },
+
+      viewed() {
+        done();
+      },
+    });
+  });
+
+  it('should support async function', (done) => {
+    const image = window.createImage();
+
+    image.dataset.src = image.src;
+
+    new Viewer(image, {
+      inline: true,
+
+      url(img) {
+        expect(this).to.be.an.instanceof(Viewer);
+
+        return new Promise((r) => { setTimeout(() => r(img.dataset.src), 3000); });
       },
 
       viewed() {

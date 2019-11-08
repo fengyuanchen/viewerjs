@@ -27,7 +27,6 @@ import {
   dispatchEvent,
   escapeHTMLEntities,
   forEach,
-  getData,
   getOffset,
   getPointersCenter,
   hasClass,
@@ -215,103 +214,104 @@ export default {
     } = this;
     const item = this.items[index];
     const img = item.querySelector('img');
-    const url = getData(img, 'originalUrl');
+    const url = this.urls[index];
     const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
-    image.src = url;
-    image.alt = alt;
+    Promise.resolve(url()).then((_url) => {
+      image.src = _url;
+      image.alt = alt;
 
-    if (isFunction(options.view)) {
-      addListener(element, EVENT_VIEW, options.view, {
-        once: true,
-      });
-    }
-
-    if (dispatchEvent(element, EVENT_VIEW, {
-      originalImage: this.images[index],
-      index,
-      image,
-    }) === false || !this.isShown || this.hiding || this.played) {
-      return this;
-    }
-
-    this.image = image;
-    removeClass(this.items[this.index], CLASS_ACTIVE);
-    addClass(item, CLASS_ACTIVE);
-    this.viewed = false;
-    this.index = index;
-    this.imageData = {};
-    addClass(image, CLASS_INVISIBLE);
-
-    if (options.loading) {
-      addClass(canvas, CLASS_LOADING);
-    }
-
-    canvas.innerHTML = '';
-    canvas.appendChild(image);
-
-    // Center current item
-    this.renderList();
-
-    // Clear title
-    title.innerHTML = '';
-
-    // Generate title after viewed
-    const onViewed = () => {
-      const { imageData } = this;
-      const render = Array.isArray(options.title) ? options.title[1] : options.title;
-
-      title.innerHTML = escapeHTMLEntities(isFunction(render)
-        ? render.call(this, image, imageData)
-        : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
-    };
-    let onLoad;
-
-    addListener(element, EVENT_VIEWED, onViewed, {
-      once: true,
-    });
-
-    this.viewing = {
-      abort() {
-        removeListener(element, EVENT_VIEWED, onViewed);
-
-        if (image.complete) {
-          if (this.imageRendering) {
-            this.imageRendering.abort();
-          } else if (this.imageInitializing) {
-            this.imageInitializing.abort();
-          }
-        } else {
-          // Cancel download to save bandwidth.
-          image.src = '';
-          removeListener(image, EVENT_LOAD, onLoad);
-
-          if (this.timeout) {
-            clearTimeout(this.timeout);
-          }
-        }
-      },
-    };
-
-    if (image.complete) {
-      this.load();
-    } else {
-      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
-        once: true,
-      });
-
-      if (this.timeout) {
-        clearTimeout(this.timeout);
+      if (isFunction(options.view)) {
+        addListener(element, EVENT_VIEW, options.view, {
+          once: true,
+        });
       }
 
-      // Make the image visible if it fails to load within 1s
-      this.timeout = setTimeout(() => {
-        removeClass(image, CLASS_INVISIBLE);
-        this.timeout = false;
-      }, 1000);
-    }
+      if (dispatchEvent(element, EVENT_VIEW, {
+        originalImage: this.images[index],
+        index,
+        image,
+      }) === false || !this.isShown || this.hiding || this.played) {
+        return;
+      }
 
+      this.image = image;
+      removeClass(this.items[this.index], CLASS_ACTIVE);
+      addClass(item, CLASS_ACTIVE);
+      this.viewed = false;
+      this.index = index;
+      this.imageData = {};
+      addClass(image, CLASS_INVISIBLE);
+
+      if (options.loading) {
+        addClass(canvas, CLASS_LOADING);
+      }
+
+      canvas.innerHTML = '';
+      canvas.appendChild(image);
+
+      // Center current item
+      this.renderList();
+
+      // Clear title
+      title.innerHTML = '';
+
+      // Generate title after viewed
+      const onViewed = () => {
+        const { imageData } = this;
+        const render = Array.isArray(options.title) ? options.title[1] : options.title;
+
+        title.innerHTML = escapeHTMLEntities(isFunction(render)
+          ? render.call(this, image, imageData)
+          : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
+      };
+      let onLoad;
+
+      addListener(element, EVENT_VIEWED, onViewed, {
+        once: true,
+      });
+
+      this.viewing = {
+        abort() {
+          removeListener(element, EVENT_VIEWED, onViewed);
+
+          if (image.complete) {
+            if (this.imageRendering) {
+              this.imageRendering.abort();
+            } else if (this.imageInitializing) {
+              this.imageInitializing.abort();
+            }
+          } else {
+            // Cancel download to save bandwidth.
+            image.src = '';
+            removeListener(image, EVENT_LOAD, onLoad);
+
+            if (this.timeout) {
+              clearTimeout(this.timeout);
+            }
+          }
+        },
+      };
+
+      if (image.complete) {
+        this.load();
+      } else {
+        addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
+          once: true,
+        });
+
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+
+        // Make the image visible if it fails to load within 1s
+        this.timeout = setTimeout(() => {
+          removeClass(image, CLASS_INVISIBLE);
+          this.timeout = false;
+        }, 1000);
+      }
+    });
     return this;
   },
 
@@ -637,40 +637,41 @@ export default {
     forEach(this.items, (item, i) => {
       const img = item.querySelector('img');
       const image = document.createElement('img');
+      const url = this.urls[i];
+      Promise.resolve(url()).then((_url) => {
+        image.src = _url;
+        image.alt = img.getAttribute('alt');
+        addClass(image, CLASS_FADE);
+        toggleClass(image, CLASS_TRANSITION, options.transition);
 
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
-      total += 1;
-      addClass(image, CLASS_FADE);
-      toggleClass(image, CLASS_TRANSITION, options.transition);
-
-      if (hasClass(item, CLASS_ACTIVE)) {
-        addClass(image, CLASS_IN);
-        index = i;
-      }
-
-      list.push(image);
-      addListener(image, EVENT_LOAD, onLoad, {
-        once: true,
+        if (hasClass(item, CLASS_ACTIVE)) {
+          addClass(image, CLASS_IN);
+          index = i;
+        }
+        addListener(image, EVENT_LOAD, onLoad, {
+          once: true,
+        });
       });
+      total += 1;
+      list.push(image);
       player.appendChild(image);
-    });
 
-    if (isNumber(options.interval) && options.interval > 0) {
-      const play = () => {
-        this.playing = setTimeout(() => {
-          removeClass(list[index], CLASS_IN);
-          index += 1;
-          index = index < total ? index : 0;
-          addClass(list[index], CLASS_IN);
+      if (isNumber(options.interval) && options.interval > 0) {
+        const play = () => {
+          this.playing = setTimeout(() => {
+            removeClass(list[index], CLASS_IN);
+            index += 1;
+            index = index < total ? index : 0;
+            addClass(list[index], CLASS_IN);
+            play();
+          }, options.interval);
+        };
+
+        if (total > 1) {
           play();
-        }, options.interval);
-      };
-
-      if (total > 1) {
-        play();
+        }
       }
-    }
+    });
 
     return this;
   },
