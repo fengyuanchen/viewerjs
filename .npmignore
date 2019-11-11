@@ -1,0 +1,12 @@
+coverage
+docs
+node_modules
+test
+.babelrc
+.editorconfig
+.eslintrc
+.stylelintrc
+.travis.yml
+karma.conf.js
+postcss.config.js
+rollup.config.js
