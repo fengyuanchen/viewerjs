@@ -4,7 +4,7 @@
 }
 
 .list-group-item {
-  padding: 0.125rem 1rem;
+  padding: 0.0625rem 1rem;
 }
 
 .d-flex > .btn {
@@ -117,11 +117,6 @@
   cursor: -webkit-zoom-in;
   cursor: zoom-in;
   width: 100%;
-}
-
-.docs-toggles > .btn,
-.docs-toggles > .btn-group {
-  margin-bottom: 10px;
 }
 
 .docs-buttons > .btn-group,

@@ -368,7 +368,7 @@ Enable to zoom the image.
 - Type: `Boolean`
 - Default: `true`
 
-Enable to zoom the image by dragging touch.
+Enable to zoom the current image by dragging on the touch screen.
 
 ### zoomOnWheel
 
@@ -376,6 +376,13 @@ Enable to zoom the image by dragging touch.
 - Default: `true`
 
 Enable to zoom the image by wheeling mouse.
+
+### slideOnTouch
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to slide to the next or previous image by swiping on the touch screen.
 
 ### toggleOnDblclick
 

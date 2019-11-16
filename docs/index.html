@@ -92,13 +92,49 @@
               <input type="radio" class="sr-only" name="inline" data-value="true" autocomplete="off"> Inline mode
             </label>
           </div>
-          <button class="btn btn-primary btn-block d-md-none" id="toggle-options" data-target="#options" data-toggle="collapse" aria-expanded="true">Toggle options</button>
-          <div class="docs-collapse collapse d-md-block" id="options" aria-labelledby="toggle-options">
+          <button class="btn btn-primary btn-block mb-3 d-md-none" id="toggle-options" data-target="#options" data-toggle="collapse" aria-expanded="true">Toggle options</button>
+          <div class="docs-collapse collapse d-md-block mb-3" id="options" aria-labelledby="toggle-options">
             <ul class="list-group">
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="backdrop" type="checkbox" name="backdrop" checked>
+                  <label for="backdrop" class="form-check-label">backdrop</label>
+                </div>
+              </li>
               <li class="list-group-item">
                 <div class="form-check">
                   <input class="form-check-input" id="button" type="checkbox" name="button" checked>
                   <label for="button" class="form-check-label">button</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="fullscreen" type="checkbox" name="fullscreen" checked>
+                  <label for="fullscreen" class="form-check-label">fullscreen</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="loading" type="checkbox" name="loading" checked>
+                  <label for="loading" class="form-check-label">loading</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="loop" type="checkbox" name="loop" checked>
+                  <label for="loop" class="form-check-label">loop</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="keyboard" type="checkbox" name="keyboard" checked>
+                  <label for="keyboard" class="form-check-label">keyboard</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="movable" type="checkbox" name="movable" checked>
+                  <label for="movable" class="form-check-label">movable</label>
                 </div>
               </li>
               <li class="list-group-item">
@@ -109,8 +145,32 @@
               </li>
               <li class="list-group-item">
                 <div class="form-check">
+                  <input class="form-check-input" id="rotatable" type="checkbox" name="rotatable" checked>
+                  <label for="rotatable" class="form-check-label">rotatable</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="scalable" type="checkbox" name="scalable" checked>
+                  <label for="scalable" class="form-check-label">scalable</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="slideOnTouch" type="checkbox" name="slideOnTouch" checked>
+                  <label for="slideOnTouch" class="form-check-label">slideOnTouch</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
                   <input class="form-check-input" id="title" type="checkbox" name="title" checked>
                   <label for="title" class="form-check-label">title</label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <input class="form-check-input" id="toggleOnDblclick" type="checkbox" name="toggleOnDblclick" checked>
+                  <label for="toggleOnDblclick" class="form-check-label">toggleOnDblclick</label>
                 </div>
               </li>
               <li class="list-group-item">
@@ -127,20 +187,8 @@
               </li>
               <li class="list-group-item">
                 <div class="form-check">
-                  <input class="form-check-input" id="movable" type="checkbox" name="movable" checked>
-                  <label for="movable" class="form-check-label">movable</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="rotatable" type="checkbox" name="rotatable" checked>
-                  <label for="rotatable" class="form-check-label">rotatable</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="scalable" type="checkbox" name="scalable" checked>
-                  <label for="scalable" class="form-check-label">scalable</label>
+                  <input class="form-check-input" id="transition" type="checkbox" name="transition" checked>
+                  <label for="transition" class="form-check-label">transition</label>
                 </div>
               </li>
               <li class="list-group-item">
@@ -161,42 +209,6 @@
                   <label for="zoomOnWheel" class="form-check-label">zoomOnWheel</label>
                 </div>
               </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="transition" type="checkbox" name="transition" checked>
-                  <label for="transition" class="form-check-label">transition</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="fullscreen" type="checkbox" name="fullscreen" checked>
-                  <label for="fullscreen" class="form-check-label">fullscreen</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="keyboard" type="checkbox" name="keyboard" checked>
-                  <label for="keyboard" class="form-check-label">keyboard</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="backdrop" type="checkbox" name="backdrop" checked>
-                  <label for="backdrop" class="form-check-label">backdrop</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="loop" type="checkbox" name="loop" checked>
-                  <label for="loop" class="form-check-label">loop</label>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="form-check">
-                  <input class="form-check-input" id="loading" type="checkbox" name="loading" checked>
-                  <label for="loading" class="form-check-label">loading</label>
-                </div>
-              </li>
             </ul>
           </div>
         </div>
@@ -204,7 +216,7 @@
       <div class="col-sm-8 col-md-6">
         <h3>Demo</h3>
         <hr>
-        <div class="docs-galley">
+        <div class="docs-galley mb-3">
           <ul class="docs-pictures clearfix">
             <li><img data-original="images/tibet-1.jpg" src="images/thumbnails/tibet-1.jpg" alt="Cuo Na Lake"></li>
             <li><img data-original="images/tibet-2.jpg" src="images/thumbnails/tibet-2.jpg" alt="Tibetan Plateau"></li>

@@ -127,7 +127,7 @@ export default {
   zoomable: true,
 
   /**
-   * Enable to zoom the image by dragging touch.
+   * Enable to zoom the current image by dragging on the touch screen.
    * @type {boolean}
    */
   zoomOnTouch: true,
@@ -137,6 +137,12 @@ export default {
    * @type {boolean}
    */
   zoomOnWheel: true,
+
+  /**
+   * Enable to slide to the next or previous image by swiping on the touch screen.
+   * @type {boolean}
+   */
+  slideOnTouch: true,
 
   /**
    * Indicate if toggle the image size between its natural size

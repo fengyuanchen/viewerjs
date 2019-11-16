@@ -2,6 +2,7 @@
 
 ## next
 
+- Add a new option: `slideOnTouch` (#340).
 - Detect if the queried image is existing when update image list (#333).
 
 ## 1.4.0 (Oct 26, 2019)
