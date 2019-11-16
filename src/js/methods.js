@@ -97,7 +97,7 @@ export default {
 
       // Force reflow to enable CSS3 transition
       // eslint-disable-next-line
-      viewer.offsetWidth;
+      viewer.style.width = viewer.offsetWidth + 'px'; //viewer.offsetWidth; 代码在打包压缩工具中会被移除，导致EVENT_TRANSITION_END无法正常执行
       addListener(viewer, EVENT_TRANSITION_END, shown, {
         once: true,
       });
