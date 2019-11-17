@@ -96,8 +96,7 @@ export default {
       addClass(viewer, CLASS_TRANSITION);
 
       // Force reflow to enable CSS3 transition
-      // eslint-disable-next-line
-      viewer.offsetWidth;
+      viewer.initialOffsetWidth = viewer.offsetWidth;
       addListener(viewer, EVENT_TRANSITION_END, shown, {
         once: true,
       });
@@ -817,8 +816,7 @@ export default {
         addClass(tooltipBox, CLASS_TRANSITION);
 
         // Force reflow to enable CSS3 transition
-        // eslint-disable-next-line
-        tooltipBox.offsetWidth;
+        tooltipBox.initialOffsetWidth = tooltipBox.offsetWidth;
         addClass(tooltipBox, CLASS_IN);
       } else {
         addClass(tooltipBox, CLASS_SHOW);

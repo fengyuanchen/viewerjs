@@ -2,6 +2,7 @@
 
 ## next
 
+- Force reflow element in a new way to avoid side effect (#343).
 - Add a new option: `slideOnTouch` (#340).
 - Detect if the queried image is existing when update image list (#333).
 
