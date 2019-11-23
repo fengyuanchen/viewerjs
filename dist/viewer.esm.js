@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.4.0
+ * Viewer.js v1.5.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-10-26T07:09:40.792Z
+ * Date: 2019-11-23T05:10:26.193Z
  */
 
 function _typeof(obj) {
@@ -78,13 +78,13 @@ function _objectSpread2(target) {
     var source = arguments[i] != null ? arguments[i] : {};
 
     if (i % 2) {
-      ownKeys(source, true).forEach(function (key) {
+      ownKeys(Object(source), true).forEach(function (key) {
         _defineProperty(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
-      ownKeys(source).forEach(function (key) {
+      ownKeys(Object(source)).forEach(function (key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
@@ -222,7 +222,7 @@ var DEFAULTS = {
   zoomable: true,
 
   /**
-   * Enable to zoom the image by dragging touch.
+   * Enable to zoom the current image by dragging on the touch screen.
    * @type {boolean}
    */
   zoomOnTouch: true,
@@ -232,6 +232,12 @@ var DEFAULTS = {
    * @type {boolean}
    */
   zoomOnWheel: true,
+
+  /**
+   * Enable to slide to the next or previous image by swiping on the touch screen.
+   * @type {boolean}
+   */
+  slideOnTouch: true,
 
   /**
    * Indicate if toggle the image size between its natural size
@@ -843,7 +849,7 @@ function getTransforms(_ref) {
  * @param {string} url - The target url.
  * @example
  * // picture.jpg
- * getImageNameFromURL('http://domain.com/path/to/picture.jpg?size=1280×960')
+ * getImageNameFromURL('https://domain.com/path/to/picture.jpg?size=1280×960')
  * @returns {string} A string contains the image name.
  */
 
@@ -1533,9 +1539,9 @@ var handlers = {
 
     var action = options.movable ? ACTION_MOVE : false;
 
-    if (Object.keys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {
+    if (options.zoomOnTouch && options.zoomable && Object.keys(pointers).length > 1) {
       action = ACTION_ZOOM;
-    } else if ((event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
+    } else if (options.slideOnTouch && (event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;
     }
 
@@ -1741,9 +1747,8 @@ var methods = {
         }
       };
       addClass(viewer, CLASS_TRANSITION); // Force reflow to enable CSS3 transition
-      // eslint-disable-next-line
 
-      viewer.offsetWidth;
+      viewer.initialOffsetWidth = viewer.offsetWidth;
       addListener(viewer, EVENT_TRANSITION_END, shown, {
         once: true
       });
@@ -2452,9 +2457,8 @@ var methods = {
         addClass(tooltipBox, CLASS_SHOW);
         addClass(tooltipBox, CLASS_FADE);
         addClass(tooltipBox, CLASS_TRANSITION); // Force reflow to enable CSS3 transition
-        // eslint-disable-next-line
 
-        tooltipBox.offsetWidth;
+        tooltipBox.initialOffsetWidth = tooltipBox.offsetWidth;
         addClass(tooltipBox, CLASS_IN);
       } else {
         addClass(tooltipBox, CLASS_SHOW);
@@ -2536,7 +2540,7 @@ var methods = {
         var img = item.querySelector('img');
         var image = images[i];
 
-        if (image) {
+        if (image && img) {
           if (image.src !== img.src) {
             indexes.push(i);
           }

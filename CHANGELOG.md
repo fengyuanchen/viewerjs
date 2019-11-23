@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.5.0 (Nov 23, 2019)
 
 - Force reflow element in a new way to avoid side effect (#343).
 - Add a new option: `slideOnTouch` (#340).
