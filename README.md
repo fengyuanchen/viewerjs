@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 41 [options](#options)
+- Supports 42 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
@@ -269,7 +269,7 @@ new Viewer(image, {
 
 Enable to request full screen when play.
 
-> Requires the browser supports [Full Screen API](http://caniuse.com/fullscreen).
+> Requires the browser supports [Full Screen API](https://caniuse.com/fullscreen).
 
 ### initialViewIndex
 
@@ -931,6 +931,6 @@ Maintained under the [Semantic Versioning guidelines](https://semver.org/).
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT) © [Chen Fengyuan](https://chenfengyuan.com)
+[MIT](https://opensource.org/licenses/MIT) © [Chen Fengyuan](https://chenfengyuan.com/)
 
 [⬆ back to top](#table-of-contents)

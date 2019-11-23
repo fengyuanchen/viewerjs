@@ -513,7 +513,7 @@ export function getTransforms({
  * @param {string} url - The target url.
  * @example
  * // picture.jpg
- * getImageNameFromURL('http://domain.com/path/to/picture.jpg?size=1280×960')
+ * getImageNameFromURL('https://domain.com/path/to/picture.jpg?size=1280×960')
  * @returns {string} A string contains the image name.
  */
 export function getImageNameFromURL(url) {
