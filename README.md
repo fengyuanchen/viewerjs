@@ -99,7 +99,7 @@ new Viewer(element[, options])
 ```
 
 ```js
-// import 'viewerjs/dist/viewer.css';
+import 'viewerjs/dist/viewer.css';
 import Viewer from 'viewerjs';
 
 // View an image
@@ -109,7 +109,7 @@ const viewer = new Viewer(document.getElementById('image'), {
     viewer.zoomTo(1);
   },
 });
-
+viewer.show(); // envolve instance method show to show viewer immediately
 // View a list of images
 const gallery = new Viewer(document.getElementById('images'));
 ```
