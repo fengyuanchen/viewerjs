@@ -99,6 +99,7 @@ new Viewer(element[, options])
 ```
 
 ```js
+// You should import the CSS file.
 // import 'viewerjs/dist/viewer.css';
 import Viewer from 'viewerjs';
 
@@ -109,9 +110,11 @@ const viewer = new Viewer(document.getElementById('image'), {
     viewer.zoomTo(1);
   },
 });
+// Then, show the image by click it, or call `viewer.show()`.
 
 // View a list of images
 const gallery = new Viewer(document.getElementById('images'));
+// Then, show one image by click it, or call `gallery.show()`.
 ```
 
 ## Keyboard support
