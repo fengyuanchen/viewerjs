@@ -145,7 +145,7 @@ export default {
 
     const { viewer } = this;
 
-    if (options.transition && !immediate) {
+    if (options.transition && hasClass(this.image, CLASS_TRANSITION) && !immediate) {
       const hidden = this.hidden.bind(this);
       const hide = () => {
         // XXX: It seems the `event.stopPropagation()` method does not work here
@@ -168,7 +168,7 @@ export default {
       };
 
       // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
-      if (this.viewed && hasClass(this.image, CLASS_TRANSITION)) {
+      if (this.viewed) {
         addListener(this.image, EVENT_TRANSITION_END, hide, {
           once: true,
         });

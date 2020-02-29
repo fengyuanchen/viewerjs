@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Improve the `hide` method for unexpected calling (#367).
+
 ## 1.5.0 (Nov 23, 2019)
 
 - Force reflow element in a new way to avoid side effect (#343).
