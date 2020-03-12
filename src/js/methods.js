@@ -212,6 +212,11 @@ export default {
       title,
       canvas,
     } = this;
+    if (this.options.beforeView) {
+      const isView = this.options.beforeView(this, index);
+      if (!isView) return this;
+    }
+    
     const item = this.items[index];
     const img = item.querySelector('img');
     const url = getData(img, 'originalUrl');
