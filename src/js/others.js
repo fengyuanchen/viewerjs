@@ -23,7 +23,9 @@ export default {
 
     addClass(body, CLASS_OPEN);
 
-    body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight) || 0)}px`;
+    // body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight)
+    // || 0)}px`;
+    body.style.paddingRight = '100%'; // TODO: Under review
   },
 
   close() {
