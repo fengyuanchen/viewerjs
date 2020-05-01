@@ -25,7 +25,7 @@ export default {
 
     // body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight)
     // || 0)}px`;
-    body.style.paddingRight = '100%'; // TODO: Under review
+    body.style.paddingRight = '0'; // TODO: Under review
   },
 
   close() {
