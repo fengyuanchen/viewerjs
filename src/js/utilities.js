@@ -8,6 +8,42 @@ import {
 } from './constants';
 
 /**
+ * Check if a DOM element is a canvas.
+ * @param {Object} element - The DOM element.
+ * @returns {Object} True if it is canvas, False if not.
+ */
+function isCanvas(element) {
+  return element.tagName.toLowerCase() === 'canvas';
+}
+export { isCanvas };
+
+/**
+ * Draw a canvas given its source image.
+ * @param {*} canvas - The canvas DOM element to be drawn.
+ * @param {*} parentNode - The DOM parent of the canvas.
+ */
+function drawCanvas(canvas, parentNode = canvas.parentNode) {
+  const context = canvas.getContext('2d');
+  const image = new Image();
+  const { src } = canvas.dataset;
+
+  canvas.width = parentNode.clientWidth;
+  canvas.height = parentNode.clientHeight;
+
+  image.onload = () => {
+    context.drawImage(
+      image,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+  };
+  image.src = src;
+}
+export { drawCanvas };
+
+/**
  * Check if the given value is a string.
  * @param {*} value - The value to check.
  * @returns {boolean} Returns `true` if the given value is a string, else `false`.

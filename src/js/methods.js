@@ -25,12 +25,16 @@ import {
   addListener,
   assign,
   dispatchEvent,
+  drawCanvas,
   escapeHTMLEntities,
   forEach,
   getData,
+  getImageNaturalSizes,
   getOffset,
   getPointersCenter,
+  getTransforms,
   hasClass,
+  isCanvas,
   isFunction,
   isNumber,
   isUndefined,
@@ -213,13 +217,20 @@ export default {
       canvas,
     } = this;
     const item = this.items[index];
-    const img = item.querySelector('img');
+    const img = item.querySelector('img') || item.querySelector('canvas');
     const url = getData(img, 'originalUrl');
     const alt = img.getAttribute('alt');
-    const image = document.createElement('img');
+    const image = document.createElement(img.tagName.toLowerCase());
 
     image.src = url;
     image.alt = alt;
+
+    if (isCanvas(image)) {
+      image.dataset.src = url;
+      image.dataset.alt = img.dataset.alt;
+
+      drawCanvas(image, canvas);
+    }
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {
@@ -275,7 +286,7 @@ export default {
       abort() {
         removeListener(element, EVENT_VIEWED, onViewed);
 
-        if (image.complete) {
+        if (image.complete || isCanvas(image)) {
           if (this.imageRendering) {
             this.imageRendering.abort();
           } else if (this.imageInitializing) {
@@ -293,7 +304,7 @@ export default {
       },
     };
 
-    if (image.complete) {
+    if (image.complete || isCanvas(image)) {
       this.load();
     } else {
       addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
@@ -634,8 +645,8 @@ export default {
 
     addClass(player, CLASS_SHOW);
     forEach(this.items, (item, i) => {
-      const img = item.querySelector('img');
-      const image = document.createElement('img');
+      const img = item.querySelector('img') || item.querySelector('canvas');
+      const image = document.createElement(img.tagName.toLowerCase());
 
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
@@ -653,6 +664,13 @@ export default {
         once: true,
       });
       player.appendChild(image);
+
+      if (isCanvas(img)) {
+        image.dataset.src = getData(img, 'originalUrl');
+        image.dataset.alt = img.dataset.alt;
+
+        drawCanvas(image);
+      }
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
@@ -684,7 +702,7 @@ export default {
 
     this.played = false;
     clearTimeout(this.playing);
-    forEach(player.getElementsByTagName('img'), (image) => {
+    forEach(player.getElementsByTagName('img, canvas'), (image) => {
       removeListener(image, EVENT_LOAD, this.onLoadWhenPlay);
     });
     removeClass(player, CLASS_SHOW);
@@ -880,7 +898,7 @@ export default {
 
     const images = [];
 
-    forEach(isImg ? [element] : element.querySelectorAll('img'), (image) => {
+    forEach(isImg ? [element] : element.querySelectorAll('img, canvas'), (image) => {
       if (options.filter) {
         if (options.filter(image)) {
           images.push(image);
@@ -901,11 +919,11 @@ export default {
       const indexes = [];
 
       forEach(this.items, (item, i) => {
-        const img = item.querySelector('img');
+        const img = item.querySelector('img') || item.querySelector('canvas');
         const image = images[i];
 
         if (image && img) {
-          if (image.src !== img.src) {
+          if (image.src !== img.src || image.dataset.src !== img.dataset.src) {
             indexes.push(i);
           }
         } else {
@@ -1003,5 +1021,38 @@ export default {
 
     element[NAMESPACE] = undefined;
     return this;
+  },
+
+  setupImageDimensions(image) {
+    const parent = image.parentNode;
+    const parentWidth = parent.offsetWidth || 30;
+    const parentHeight = parent.offsetHeight || 50;
+    const filled = !!getData(image, 'filled');
+
+    getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
+      const aspectRatio = naturalWidth / naturalHeight;
+      let width = parentWidth;
+      let height = parentHeight;
+
+      if (parentHeight * aspectRatio > parentWidth) {
+        if (filled) {
+          width = parentHeight * aspectRatio;
+        } else {
+          height = parentWidth / aspectRatio;
+        }
+      } else if (filled) {
+        height = parentWidth / aspectRatio;
+      } else {
+        width = parentHeight * aspectRatio;
+      }
+
+      setStyle(image, assign({
+        width,
+        height,
+      }, getTransforms({
+        translateX: (parentWidth - width) / 2,
+        translateY: (parentHeight - height) / 2,
+      })));
+    });
   },
 };

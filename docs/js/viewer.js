@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-11-23T05:10:26.193Z
+ * Date: 2020-05-02T21:55:01.617Z
  */
 
 (function (global, factory) {
@@ -15,6 +15,8 @@
 }(this, (function () { 'use strict';
 
   function _typeof(obj) {
+    "@babel/helpers - typeof";
+
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) {
         return typeof obj;
@@ -319,7 +321,7 @@
 
   var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
   var WINDOW = IS_BROWSER ? window : {};
-  var IS_TOUCH_DEVICE = IS_BROWSER ? 'ontouchstart' in WINDOW.document.documentElement : false;
+  var IS_TOUCH_DEVICE = IS_BROWSER && WINDOW.document.documentElement ? 'ontouchstart' in WINDOW.document.documentElement : false;
   var HAS_POINTER_EVENT = IS_BROWSER ? 'PointerEvent' in WINDOW : false;
   var NAMESPACE = 'viewer'; // Actions
 
@@ -375,6 +377,35 @@
 
   var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
 
+  /**
+   * Check if a DOM element is a canvas.
+   * @param {Object} element - The DOM element.
+   * @returns {Object} True if it is canvas, False if not.
+   */
+
+  function isCanvas(element) {
+    return element.tagName.toLowerCase() === 'canvas';
+  }
+  /**
+   * Draw a canvas given its source image.
+   * @param {*} canvas - The canvas DOM element to be drawn.
+   * @param {*} parentNode - The DOM parent of the canvas.
+   */
+
+  function drawCanvas(canvas) {
+    var parentNode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : canvas.parentNode;
+    var context = canvas.getContext('2d');
+    var image = new Image();
+    var src = canvas.dataset.src;
+    canvas.width = parentNode.clientWidth;
+    canvas.height = parentNode.clientHeight;
+
+    image.onload = function () {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    };
+
+    image.src = src;
+  }
   /**
    * Check if the given value is a string.
    * @param {*} value - The value to check.
@@ -1051,14 +1082,20 @@
 
         if (src || url) {
           var item = document.createElement('li');
-          var img = document.createElement('img');
-          img.src = src || url;
-          img.alt = alt;
-          img.setAttribute('data-index', index);
-          img.setAttribute('data-original-url', url || src);
-          img.setAttribute('data-viewer-action', 'view');
-          img.setAttribute('role', 'button');
-          item.appendChild(img);
+          var node = document.createElement(image.tagName.toLowerCase());
+          node.src = src || url;
+          node.alt = alt;
+          node.setAttribute('role', 'button');
+          node.setAttribute('data-index', index);
+          node.setAttribute('data-original-url', url || src);
+          node.setAttribute('data-viewer-action', 'view');
+
+          if (isCanvas(image)) {
+            node.setAttribute('data-src', src || url);
+            node.setAttribute('data-alt', image.dataset.alt);
+          }
+
+          item.appendChild(node);
           list.appendChild(item);
           items.push(item);
         }
@@ -1081,6 +1118,16 @@
         }, {
           once: true
         });
+
+        if (isCanvas(image)) {
+          _this.setupImageDimensions(image);
+
+          drawCanvas(image);
+
+          if (options.loading) {
+            removeClass(item, CLASS_LOADING);
+          }
+        }
       });
 
       if (options.transition) {
@@ -1093,7 +1140,8 @@
     },
     renderList: function renderList(index) {
       var i = index || this.index;
-      var width = this.items[i].offsetWidth || 30;
+      var item = this.items[i];
+      var width = item.offsetWidth || 30;
       var outerWidth = width + 1; // 1 pixel of `margin-left` width
       // Place the active item in the center of the screen
 
@@ -1413,36 +1461,7 @@
       });
     },
     loadImage: function loadImage(event) {
-      var image = event.target;
-      var parent = image.parentNode;
-      var parentWidth = parent.offsetWidth || 30;
-      var parentHeight = parent.offsetHeight || 50;
-      var filled = !!getData(image, 'filled');
-      getImageNaturalSizes(image, function (naturalWidth, naturalHeight) {
-        var aspectRatio = naturalWidth / naturalHeight;
-        var width = parentWidth;
-        var height = parentHeight;
-
-        if (parentHeight * aspectRatio > parentWidth) {
-          if (filled) {
-            width = parentHeight * aspectRatio;
-          } else {
-            height = parentWidth / aspectRatio;
-          }
-        } else if (filled) {
-          height = parentWidth / aspectRatio;
-        } else {
-          width = parentHeight * aspectRatio;
-        }
-
-        setStyle(image, assign({
-          width: width,
-          height: height
-        }, getTransforms({
-          translateX: (parentWidth - width) / 2,
-          translateY: (parentHeight - height) / 2
-        })));
-      });
+      this.setupImageDimensions(event.target);
     },
     keydown: function keydown(event) {
       var options = this.options;
@@ -1661,7 +1680,9 @@
           return;
         }
 
-        forEach(this.player.getElementsByTagName('img'), function (image) {
+        forEach(this.player.getElementsByTagName('img, canvas'), function (image) {
+          _this3.loadImage();
+
           addListener(image, EVENT_LOAD, _this3.loadImage.bind(_this3), {
             once: true
           });
@@ -1805,7 +1826,7 @@
 
       var viewer = this.viewer;
 
-      if (options.transition && !immediate) {
+      if (options.transition && hasClass(this.image, CLASS_TRANSITION) && !immediate) {
         var hidden = this.hidden.bind(this);
 
         var hide = function hide() {
@@ -1828,7 +1849,7 @@
           }
         }; // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
 
-        if (this.viewed && hasClass(this.image, CLASS_TRANSITION)) {
+        if (this.viewed) {
           addListener(this.image, EVENT_TRANSITION_END, hide, {
             once: true
           });
@@ -1873,12 +1894,18 @@
           title = this.title,
           canvas = this.canvas;
       var item = this.items[index];
-      var img = item.querySelector('img');
+      var img = item.querySelector('img') || item.querySelector('canvas');
       var url = getData(img, 'originalUrl');
       var alt = img.getAttribute('alt');
-      var image = document.createElement('img');
+      var image = document.createElement(img.tagName.toLowerCase());
       image.src = url;
       image.alt = alt;
+
+      if (isCanvas(image)) {
+        image.dataset.src = url;
+        image.dataset.alt = img.dataset.alt;
+        drawCanvas(image, canvas);
+      }
 
       if (isFunction(options.view)) {
         addListener(element, EVENT_VIEW, options.view, {
@@ -1927,7 +1954,7 @@
         abort: function abort() {
           removeListener(element, EVENT_VIEWED, onViewed);
 
-          if (image.complete) {
+          if (image.complete || isCanvas(image)) {
             if (this.imageRendering) {
               this.imageRendering.abort();
             } else if (this.imageInitializing) {
@@ -1945,7 +1972,7 @@
         }
       };
 
-      if (image.complete) {
+      if (image.complete || isCanvas(image)) {
         this.load();
       } else {
         addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
@@ -2286,8 +2313,8 @@
 
       addClass(player, CLASS_SHOW);
       forEach(this.items, function (item, i) {
-        var img = item.querySelector('img');
-        var image = document.createElement('img');
+        var img = item.querySelector('img') || item.querySelector('canvas');
+        var image = document.createElement(img.tagName.toLowerCase());
         image.src = getData(img, 'originalUrl');
         image.alt = img.getAttribute('alt');
         total += 1;
@@ -2304,6 +2331,12 @@
           once: true
         });
         player.appendChild(image);
+
+        if (isCanvas(img)) {
+          image.dataset.src = getData(img, 'originalUrl');
+          image.dataset.alt = img.getAttribute('alt');
+          drawCanvas(image);
+        }
       });
 
       if (isNumber(options.interval) && options.interval > 0) {
@@ -2335,7 +2368,7 @@
       var player = this.player;
       this.played = false;
       clearTimeout(this.playing);
-      forEach(player.getElementsByTagName('img'), function (image) {
+      forEach(player.getElementsByTagName('img, canvas'), function (image) {
         removeListener(image, EVENT_LOAD, _this4.onLoadWhenPlay);
       });
       removeClass(player, CLASS_SHOW);
@@ -2523,7 +2556,7 @@
       }
 
       var images = [];
-      forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
+      forEach(isImg ? [element] : element.querySelectorAll('img, canvas'), function (image) {
         if (options.filter) {
           if (options.filter(image)) {
             images.push(image);
@@ -2543,11 +2576,11 @@
       if (this.ready) {
         var indexes = [];
         forEach(this.items, function (item, i) {
-          var img = item.querySelector('img');
+          var img = item.querySelector('img') || item.querySelector('canvas');
           var image = images[i];
 
           if (image && img) {
-            if (image.src !== img.src) {
+            if (image.src !== img.src || image.dataset.src !== img.dataset.src) {
               indexes.push(i);
             }
           } else {
@@ -2643,6 +2676,37 @@
 
       element[NAMESPACE] = undefined;
       return this;
+    },
+    setupImageDimensions: function setupImageDimensions(image) {
+      var parent = image.parentNode;
+      var parentWidth = parent.offsetWidth || 30;
+      var parentHeight = parent.offsetHeight || 50;
+      var filled = !!getData(image, 'filled');
+      getImageNaturalSizes(image, function (naturalWidth, naturalHeight) {
+        var aspectRatio = naturalWidth / naturalHeight;
+        var width = parentWidth;
+        var height = parentHeight;
+
+        if (parentHeight * aspectRatio > parentWidth) {
+          if (filled) {
+            width = parentHeight * aspectRatio;
+          } else {
+            height = parentWidth / aspectRatio;
+          }
+        } else if (filled) {
+          height = parentWidth / aspectRatio;
+        } else {
+          width = parentHeight * aspectRatio;
+        }
+
+        setStyle(image, assign({
+          width: width,
+          height: height
+        }, getTransforms({
+          translateX: (parentWidth - width) / 2,
+          translateY: (parentHeight - height) / 2
+        })));
+      });
     }
   };
 
@@ -2789,9 +2853,7 @@
 
   var AnotherViewer = WINDOW.Viewer;
 
-  var Viewer =
-  /*#__PURE__*/
-  function () {
+  var Viewer = /*#__PURE__*/function () {
     /**
      * Create a new Viewer.
      * @param {Element} element - The target element for viewing.
@@ -2845,9 +2907,9 @@
         }
 
         element[NAMESPACE] = this;
-        var isImg = element.tagName.toLowerCase() === 'img';
+        var isImg = element.tagName.toLowerCase() === 'img' || isCanvas(element);
         var images = [];
-        forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
+        forEach(isImg ? [element] : element.querySelectorAll('img, canvas'), function (image) {
           if (isFunction(options.filter)) {
             if (options.filter.call(_this, image)) {
               images.push(image);
@@ -2855,6 +2917,9 @@
           } else {
             images.push(image);
           }
+        });
+        forEach(isCanvas(element) ? [element] : element.querySelectorAll('canvas'), function (canvas) {
+          drawCanvas(canvas);
         });
         this.isImg = isImg;
         this.length = images.length;
@@ -2902,7 +2967,7 @@
             }
           };
           forEach(images, function (image) {
-            if (image.complete) {
+            if (image.complete || isCanvas(image)) {
               progress();
             } else {
               addListener(image, EVENT_LOAD, progress, {
@@ -2914,7 +2979,7 @@
           addListener(element, EVENT_CLICK, this.onStart = function (_ref) {
             var target = _ref.target;
 
-            if (target.tagName.toLowerCase() === 'img' && (!isFunction(options.filter) || options.filter.call(_this, target))) {
+            if ((target.tagName.toLowerCase() === 'img' || target.tagName.toLowerCase() === 'canvas') && (!isFunction(options.filter) || options.filter.call(_this, target))) {
               _this.view(_this.images.indexOf(target));
             }
           });

@@ -116,7 +116,8 @@
       background-color: transparent;
     }
 
-    & img {
+    & img,
+    canvas {
       display: block;
       height: auto;
       max-height: none !important;
@@ -135,7 +136,8 @@
     right: 0;
     top: 0;
 
-    & > img {
+    & > img,
+    canvas {
       height: auto;
       margin: 15px auto;
       max-width: 90% !important;
@@ -215,7 +217,8 @@
     right: 0;
     top: 0;
 
-    & > img {
+    & > img,
+    > canvas {
       left: 0;
       position: absolute;
       top: 0;

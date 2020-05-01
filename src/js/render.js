@@ -9,10 +9,12 @@ import {
   addClass,
   addListener,
   assign,
+  drawCanvas,
   forEach,
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
+  isCanvas,
   isFunction,
   isString,
   removeClass,
@@ -82,15 +84,21 @@ export default {
 
       if (src || url) {
         const item = document.createElement('li');
-        const img = document.createElement('img');
+        const node = document.createElement(image.tagName.toLowerCase());
 
-        img.src = src || url;
-        img.alt = alt;
-        img.setAttribute('data-index', index);
-        img.setAttribute('data-original-url', url || src);
-        img.setAttribute('data-viewer-action', 'view');
-        img.setAttribute('role', 'button');
-        item.appendChild(img);
+        node.src = src || url;
+        node.alt = alt;
+        node.setAttribute('role', 'button');
+        node.setAttribute('data-index', index);
+        node.setAttribute('data-original-url', url || src);
+        node.setAttribute('data-viewer-action', 'view');
+
+        if (isCanvas(image)) {
+          node.setAttribute('data-src', src || url);
+          node.setAttribute('data-alt', image.dataset.alt);
+        }
+
+        item.appendChild(node);
         list.appendChild(item);
         items.push(item);
       }
@@ -116,6 +124,16 @@ export default {
       }, {
         once: true,
       });
+
+      if (isCanvas(image)) {
+        this.setupImageDimensions(image);
+
+        drawCanvas(image);
+
+        if (options.loading) {
+          removeClass(item, CLASS_LOADING);
+        }
+      }
     });
 
     if (options.transition) {
@@ -129,7 +147,8 @@ export default {
 
   renderList(index) {
     const i = index || this.index;
-    const width = this.items[i].offsetWidth || 30;
+    const item = this.items[i];
+    const width = item.offsetWidth || 30;
     const outerWidth = width + 1; // 1 pixel of `margin-left` width
 
     // Place the active item in the center of the screen

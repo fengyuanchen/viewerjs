@@ -133,7 +133,8 @@
   background-color: transparent;
 }
 
-.viewer-container img {
+.viewer-container img,
+.viewer-container canvas {
   display: block;
   height: auto;
   max-height: none !important;
@@ -152,7 +153,8 @@
   top: 0;
 }
 
-.viewer-canvas > img {
+.viewer-canvas > img,
+.viewer-canvas canvas {
   height: auto;
   margin: 15px auto;
   max-width: 90% !important;
@@ -232,7 +234,8 @@
   top: 0;
 }
 
-.viewer-player > img {
+.viewer-player > img,
+.viewer-player > canvas {
   left: 0;
   position: absolute;
   top: 0;

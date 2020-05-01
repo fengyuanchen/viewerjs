@@ -26,9 +26,11 @@ import {
   addListener,
   assign,
   dispatchEvent,
+  drawCanvas,
   forEach,
   getResponsiveClass,
   hyphenate,
+  isCanvas,
   isFunction,
   isNumber,
   isPlainObject,
@@ -88,10 +90,10 @@ class Viewer {
 
     element[NAMESPACE] = this;
 
-    const isImg = element.tagName.toLowerCase() === 'img';
+    const isImg = element.tagName.toLowerCase() === 'img' || isCanvas(element);
     const images = [];
 
-    forEach(isImg ? [element] : element.querySelectorAll('img'), (image) => {
+    forEach(isImg ? [element] : element.querySelectorAll('img, canvas'), (image) => {
       if (isFunction(options.filter)) {
         if (options.filter.call(this, image)) {
           images.push(image);
@@ -99,6 +101,10 @@ class Viewer {
       } else {
         images.push(image);
       }
+    });
+
+    forEach(isCanvas(element) ? [element] : element.querySelectorAll('canvas'), (canvas) => {
+      drawCanvas(canvas);
     });
 
     this.isImg = isImg;
@@ -151,7 +157,7 @@ class Viewer {
       };
 
       forEach(images, (image) => {
-        if (image.complete) {
+        if (image.complete || isCanvas(image)) {
           progress();
         } else {
           addListener(image, EVENT_LOAD, progress, {
@@ -161,7 +167,7 @@ class Viewer {
       });
     } else {
       addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
-        if (target.tagName.toLowerCase() === 'img'
+        if ((target.tagName.toLowerCase() === 'img' || target.tagName.toLowerCase() === 'canvas')
           && (!isFunction(options.filter) || options.filter.call(this, target))) {
           this.view(this.images.indexOf(target));
         }

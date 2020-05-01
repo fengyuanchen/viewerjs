@@ -20,13 +20,10 @@ import {
   dispatchEvent,
   forEach,
   getData,
-  getImageNaturalSizes,
   getPointer,
-  getTransforms,
   isFunction,
   isNumber,
   removeClass,
-  setStyle,
   toggleClass,
 } from './utilities';
 
@@ -182,37 +179,7 @@ export default {
   },
 
   loadImage(event) {
-    const image = event.target;
-    const parent = image.parentNode;
-    const parentWidth = parent.offsetWidth || 30;
-    const parentHeight = parent.offsetHeight || 50;
-    const filled = !!getData(image, 'filled');
-
-    getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
-      const aspectRatio = naturalWidth / naturalHeight;
-      let width = parentWidth;
-      let height = parentHeight;
-
-      if (parentHeight * aspectRatio > parentWidth) {
-        if (filled) {
-          width = parentHeight * aspectRatio;
-        } else {
-          height = parentWidth / aspectRatio;
-        }
-      } else if (filled) {
-        height = parentWidth / aspectRatio;
-      } else {
-        width = parentHeight * aspectRatio;
-      }
-
-      setStyle(image, assign({
-        width,
-        height,
-      }, getTransforms({
-        translateX: (parentWidth - width) / 2,
-        translateY: (parentHeight - height) / 2,
-      })));
-    });
+    this.setupImageDimensions(event.target);
   },
 
   keydown(event) {
@@ -461,7 +428,8 @@ export default {
         return;
       }
 
-      forEach(this.player.getElementsByTagName('img'), (image) => {
+      forEach(this.player.getElementsByTagName('img, canvas'), (image) => {
+        this.loadImage();
         addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
           once: true,
         });
