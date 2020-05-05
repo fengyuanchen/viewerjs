@@ -9,8 +9,10 @@ import {
   addClass,
   addListener,
   assign,
+  createImageNode,
   drawCanvas,
   forEach,
+  getHiddenData,
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
@@ -72,31 +74,24 @@ export default {
     list.innerHTML = '';
 
     forEach(this.images, (image, index) => {
-      const { src } = image;
-      const alt = image.alt || getImageNameFromURL(src);
-      let { url } = options;
+      const src = image.src || getHiddenData(image, 'src');
+      const alt = image.alt || getHiddenData(image, 'alt') || getImageNameFromURL(src);
+      const urlKey = options.url;
+      let url;
 
-      if (isString(url)) {
-        url = image.getAttribute(url);
+      if (isString(urlKey)) {
+        url = image.getAttribute(urlKey) || getHiddenData(image, urlKey);
       } else if (isFunction(url)) {
         url = url.call(this, image);
       }
 
       if (src || url) {
         const item = document.createElement('li');
-        const node = document.createElement(image.tagName.toLowerCase());
+        const node = createImageNode(image.tagName, item, src || url, alt, url || src, urlKey);
 
-        node.src = src || url;
-        node.alt = alt;
         node.setAttribute('role', 'button');
         node.setAttribute('data-index', index);
-        node.setAttribute('data-original-url', url || src);
         node.setAttribute('data-viewer-action', 'view');
-
-        if (isCanvas(image)) {
-          node.setAttribute('data-src', src || url);
-          node.setAttribute('data-alt', image.dataset.alt);
-        }
 
         item.appendChild(node);
         list.appendChild(item);
@@ -128,7 +123,7 @@ export default {
       if (isCanvas(image)) {
         this.setupImageDimensions(image);
 
-        drawCanvas(image);
+        drawCanvas(image, getHiddenData(image, 'src'));
 
         if (options.loading) {
           removeClass(item, CLASS_LOADING);

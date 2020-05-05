@@ -1,6 +1,8 @@
 const babel = require('rollup-plugin-babel');
 const changeCase = require('change-case');
 const createBanner = require('create-banner');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
 const pkg = require('./package');
 
 pkg.name = pkg.name.replace('js', '');
@@ -41,5 +43,14 @@ module.exports = {
   ],
   plugins: [
     babel(),
+    nodeResolve(),
+    commonjs({
+      namedExports: {
+        'node_modules/crypto-js/index.js': ['isValidElementType'],
+      },
+      include: [
+        /node_modules\/crypto-js/,
+      ],
+    }),
   ],
 };

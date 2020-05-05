@@ -5,6 +5,7 @@ import events from './events';
 import handlers from './handlers';
 import methods from './methods';
 import others from './others';
+import DataDiv from './custom-element/data-div';
 import {
   BUTTONS,
   CLASS_CLOSE,
@@ -26,9 +27,9 @@ import {
   addListener,
   assign,
   dispatchEvent,
-  drawCanvas,
   forEach,
   getResponsiveClass,
+  hideNodeDataset,
   hyphenate,
   isCanvas,
   isFunction,
@@ -40,6 +41,7 @@ import {
   setData,
   setStyle,
   toggleClass,
+  drawCanvas,
 } from './utilities';
 
 const AnotherViewer = WINDOW.Viewer;
@@ -93,6 +95,13 @@ class Viewer {
     const isImg = element.tagName.toLowerCase() === 'img' || isCanvas(element);
     const images = [];
 
+    forEach(isCanvas(element) ? [element] : element.querySelectorAll('canvas'), (canvas) => {
+      const { src } = canvas.dataset;
+
+      hideNodeDataset(canvas);
+      drawCanvas(canvas, src);
+    });
+
     forEach(isImg ? [element] : element.querySelectorAll('img, canvas'), (image) => {
       if (isFunction(options.filter)) {
         if (options.filter.call(this, image)) {
@@ -101,10 +110,6 @@ class Viewer {
       } else {
         images.push(image);
       }
-    });
-
-    forEach(isCanvas(element) ? [element] : element.querySelectorAll('canvas'), (canvas) => {
-      drawCanvas(canvas);
     });
 
     this.isImg = isImg;
@@ -371,6 +376,6 @@ class Viewer {
   }
 }
 
-assign(Viewer.prototype, render, events, handlers, methods, others);
+assign(Viewer.prototype, render, events, handlers, methods, others, DataDiv);
 
 export default Viewer;

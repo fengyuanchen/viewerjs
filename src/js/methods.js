@@ -24,11 +24,12 @@ import {
   addClass,
   addListener,
   assign,
+  createImageNode,
   dispatchEvent,
-  drawCanvas,
   escapeHTMLEntities,
   forEach,
   getData,
+  getHiddenData,
   getImageNaturalSizes,
   getOffset,
   getPointersCenter,
@@ -218,19 +219,9 @@ export default {
     } = this;
     const item = this.items[index];
     const img = item.querySelector('img') || item.querySelector('canvas');
-    const url = getData(img, 'originalUrl');
-    const alt = img.getAttribute('alt');
-    const image = document.createElement(img.tagName.toLowerCase());
-
-    image.src = url;
-    image.alt = alt;
-
-    if (isCanvas(image)) {
-      image.dataset.src = url;
-      image.dataset.alt = img.dataset.alt;
-
-      drawCanvas(image, canvas);
-    }
+    const url = getData(img, 'originalUrl') || getHiddenData(img, 'original-url');
+    const alt = img.getAttribute('alt') || getHiddenData(img, 'alt');
+    const image = createImageNode(img.tagName, canvas, url, alt);
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {
@@ -646,10 +637,10 @@ export default {
     addClass(player, CLASS_SHOW);
     forEach(this.items, (item, i) => {
       const img = item.querySelector('img') || item.querySelector('canvas');
-      const image = document.createElement(img.tagName.toLowerCase());
+      const src = getData(img, 'originalUrl') || getHiddenData(img, 'original-url');
+      const alt = img.getAttribute('alt') || getHiddenData(img, 'alt');
+      const image = createImageNode(img.tagName, player, src, alt);
 
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);
@@ -664,13 +655,6 @@ export default {
         once: true,
       });
       player.appendChild(image);
-
-      if (isCanvas(img)) {
-        image.dataset.src = getData(img, 'originalUrl');
-        image.dataset.alt = img.dataset.alt;
-
-        drawCanvas(image);
-      }
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
@@ -923,7 +907,7 @@ export default {
         const image = images[i];
 
         if (image && img) {
-          if (image.src !== img.src || image.dataset.src !== img.dataset.src) {
+          if (image.src !== img.src || getHiddenData(image, 'src') !== getHiddenData(img, 'src')) {
             indexes.push(i);
           }
         } else {

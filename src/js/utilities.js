@@ -8,40 +8,15 @@ import {
 } from './constants';
 
 /**
- * Check if a DOM element is a canvas.
- * @param {Object} element - The DOM element.
- * @returns {Object} True if it is canvas, False if not.
+ * Get hidden data attributes assigned to the given canvas.
+ * @param {HTMLElement} canvas - The canvas DOM element.
+ * @param {string} attribute - The attribute name to retrieve.
+ * @returns {Object} Map of attributes assigned to the canvas.
  */
-function isCanvas(element) {
-  return element.tagName.toLowerCase() === 'canvas';
+export function getHiddenData(canvas, attribute) {
+  const dataDiv = canvas.getElementsByTagName('data-div');
+  return dataDiv[0].getData(attribute);
 }
-export { isCanvas };
-
-/**
- * Draw a canvas given its source image.
- * @param {*} canvas - The canvas DOM element to be drawn.
- * @param {*} parentNode - The DOM parent of the canvas.
- */
-function drawCanvas(canvas, parentNode = canvas.parentNode) {
-  const context = canvas.getContext('2d');
-  const image = new Image();
-  const { src } = canvas.dataset;
-
-  canvas.width = parentNode.clientWidth;
-  canvas.height = parentNode.clientHeight;
-
-  image.onload = () => {
-    context.drawImage(
-      image,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-    );
-  };
-  image.src = src;
-}
-export { drawCanvas };
 
 /**
  * Check if the given value is a string.
@@ -583,7 +558,7 @@ export function getImageNaturalSizes(image, callback) {
     }
   };
 
-  newImage.src = image.src;
+  newImage.src = image.src || getHiddenData(image, 'src');
 
   // iOS Safari will convert the image automatically
   // with its orientation once append it into DOM
@@ -699,4 +674,88 @@ export function getPointersCenter(pointers) {
     pageX,
     pageY,
   };
+}
+
+/**
+ * Check if a DOM element is a canvas.
+ * @param {HTMLElement} element - The DOM element.
+ * @returns {boolean} True if it is canvas, False if not.
+ */
+export function isCanvas(element) {
+  return element.tagName.toLowerCase() === 'canvas';
+}
+
+/**
+ * Convert a string from hyphens to camel case.
+ * @param {string} text - Hyphens string to convert.
+ * @returns {string} String in camel case format.
+ */
+export function hyphensToCamelCase(text) {
+  return text.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
+/**
+ * Draw a canvas given its source image.
+ * @param {HTMLElement} canvas - The canvas DOM element to be drawn.
+ * @param {string} src - URL of the image to be drawn.
+ * @param {HTMLElement} container - The DOM element from which to get the canvas dimensions.
+ */
+export function drawCanvas(canvas, src, container = canvas.parentNode) {
+  const context = canvas.getContext('2d');
+  const image = new Image();
+
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+
+  image.onload = () => {
+    context.drawImage(
+      image,
+      0,
+      0,
+      container.clientWidth,
+      container.clientHeight,
+    );
+  };
+  image.src = src;
+}
+
+export function hideNodeDataset(node) {
+  const dataDiv = document.createElement('data-div');
+  const attributes = {};
+
+  Object.entries(node.dataset).forEach(([key, value]) => {
+    attributes[key] = value;
+    delete node.dataset[key];
+  });
+  dataDiv.attributes = attributes;
+
+  node.appendChild(dataDiv);
+}
+
+/**
+ * Create an image element.
+ * @param {string} tagName - Element tag name.
+ * @param {HTMLElement} container - Node in which the element will be appended.
+ * @param {string} src - URL for the image source.
+ * @param {string} alt - Alternative information of the image.
+ * @param {string} originalUrl - URL of the original image.
+ * @param {string} originalUrlKey - Attribute name of the original image URL.
+ * @returns {HTMLElement} Image node.
+ */
+export function createImageNode(tagName, container, src, alt, originalUrl = src) {
+  const node = document.createElement(tagName.toLowerCase());
+  node.dataset.originalUrl = originalUrl;
+
+  if (isCanvas(node)) {
+    drawCanvas(node, src, container);
+
+    node.dataset.src = src;
+    node.dataset.alt = alt;
+    hideNodeDataset(node);
+    return node;
+  }
+
+  node.src = src;
+  node.alt = alt;
+  return node;
 }
