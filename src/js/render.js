@@ -121,13 +121,12 @@ export default {
       });
 
       if (isCanvas(image)) {
-        this.setupImageDimensions(image);
-
-        drawCanvas(image, getHiddenData(image, 'src'));
-
-        if (options.loading) {
-          removeClass(item, CLASS_LOADING);
-        }
+        drawCanvas(image, getHiddenData(image, 'src'), item, (canvas) => {
+          if (options.loading) {
+            removeClass(item, CLASS_LOADING);
+          }
+          this.loadCanvas(canvas);
+        });
       }
     });
 

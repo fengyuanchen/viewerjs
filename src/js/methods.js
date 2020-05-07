@@ -26,6 +26,7 @@ import {
   assign,
   createImageNode,
   dispatchEvent,
+  drawCanvas,
   escapeHTMLEntities,
   forEach,
   getData,
@@ -235,6 +236,10 @@ export default {
       image,
     }) === false || !this.isShown || this.hiding || this.played) {
       return this;
+    }
+
+    if (isCanvas(image)) {
+      drawCanvas(image, getHiddenData(image, 'src'), canvas);
     }
 
     this.image = image;
@@ -650,6 +655,12 @@ export default {
         index = i;
       }
 
+      if (isCanvas(image)) {
+        drawCanvas(image, getHiddenData(image, 'src'), player, (canvas) => {
+          this.loadCanvas(canvas);
+        });
+      }
+
       list.push(image);
       addListener(image, EVENT_LOAD, onLoad, {
         once: true,
@@ -1007,8 +1018,7 @@ export default {
     return this;
   },
 
-  setupImageDimensions(image) {
-    const parent = image.parentNode;
+  setupImageDimensions(image, parent = image.parentNode) {
     const parentWidth = parent.offsetWidth || 30;
     const parentHeight = parent.offsetHeight || 50;
     const filled = !!getData(image, 'filled');

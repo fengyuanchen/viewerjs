@@ -699,13 +699,14 @@ export function hyphensToCamelCase(text) {
  * @param {HTMLElement} canvas - The canvas DOM element to be drawn.
  * @param {string} src - URL of the image to be drawn.
  * @param {HTMLElement} container - The DOM element from which to get the canvas dimensions.
+ * @param {Function} callback - Function to be called when image loaded.
  */
-export function drawCanvas(canvas, src, container = canvas.parentNode) {
+export function drawCanvas(canvas, src, container = canvas.parentNode, callback = () => {}) {
   const context = canvas.getContext('2d');
   const image = new Image();
 
   canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+  canvas.height = container.height || container.clientHeight;
 
   image.onload = () => {
     context.drawImage(
@@ -715,6 +716,8 @@ export function drawCanvas(canvas, src, container = canvas.parentNode) {
       container.clientWidth,
       container.clientHeight,
     );
+
+    callback(canvas);
   };
   image.src = src;
 }
@@ -747,8 +750,6 @@ export function createImageNode(tagName, container, src, alt, originalUrl = src)
   node.dataset.originalUrl = originalUrl;
 
   if (isCanvas(node)) {
-    drawCanvas(node, src, container);
-
     node.dataset.src = src;
     node.dataset.alt = alt;
     hideNodeDataset(node);

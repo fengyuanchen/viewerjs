@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-05-05T19:57:30.174Z
+ * Date: 2020-05-07T02:02:53.195Z
  */
 
 import crypto from 'crypto';
@@ -1204,17 +1204,20 @@ function isCanvas(element) {
  * @param {HTMLElement} canvas - The canvas DOM element to be drawn.
  * @param {string} src - URL of the image to be drawn.
  * @param {HTMLElement} container - The DOM element from which to get the canvas dimensions.
+ * @param {Function} callback - Function to be called when image loaded.
  */
 
 function drawCanvas(canvas, src) {
   var container = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : canvas.parentNode;
+  var callback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
   var context = canvas.getContext('2d');
   var image = new Image();
   canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+  canvas.height = container.height || container.clientHeight;
 
   image.onload = function () {
     context.drawImage(image, 0, 0, container.clientWidth, container.clientHeight);
+    callback(canvas);
   };
 
   image.src = src;
@@ -1250,7 +1253,6 @@ function createImageNode(tagName, container, src, alt) {
   node.dataset.originalUrl = originalUrl;
 
   if (isCanvas(node)) {
-    drawCanvas(node, src, container);
     node.dataset.src = src;
     node.dataset.alt = alt;
     hideNodeDataset(node);
@@ -1351,13 +1353,13 @@ var render = {
       });
 
       if (isCanvas(image)) {
-        _this.setupImageDimensions(image);
+        drawCanvas(image, getHiddenData(image, 'src'), item, function (canvas) {
+          if (options.loading) {
+            removeClass(item, CLASS_LOADING);
+          }
 
-        drawCanvas(image, getHiddenData(image, 'src'));
-
-        if (options.loading) {
-          removeClass(item, CLASS_LOADING);
-        }
+          _this.loadCanvas(canvas);
+        });
       }
     });
 
@@ -1694,6 +1696,9 @@ var handlers = {
   loadImage: function loadImage(event) {
     this.setupImageDimensions(event.target);
   },
+  loadCanvas: function loadCanvas(canvas) {
+    this.setupImageDimensions(canvas);
+  },
   keydown: function keydown(event) {
     var options = this.options;
 
@@ -1912,8 +1917,6 @@ var handlers = {
       }
 
       forEach(this.player.getElementsByTagName('img, canvas'), function (image) {
-        _this3.loadImage();
-
         addListener(image, EVENT_LOAD, _this3.loadImage.bind(_this3), {
           once: true
         });
@@ -2142,6 +2145,10 @@ var methods = {
       image: image
     }) === false || !this.isShown || this.hiding || this.played) {
       return this;
+    }
+
+    if (isCanvas(image)) {
+      drawCanvas(image, getHiddenData(image, 'src'), canvas);
     }
 
     this.image = image;
@@ -2549,6 +2556,12 @@ var methods = {
         index = i;
       }
 
+      if (isCanvas(image)) {
+        drawCanvas(image, getHiddenData(image, 'src'), player, function (canvas) {
+          _this3.loadCanvas(canvas);
+        });
+      }
+
       list.push(image);
       addListener(image, EVENT_LOAD, onLoad, {
         once: true
@@ -2895,7 +2908,7 @@ var methods = {
     return this;
   },
   setupImageDimensions: function setupImageDimensions(image) {
-    var parent = image.parentNode;
+    var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : image.parentNode;
     var parentWidth = parent.offsetWidth || 30;
     var parentHeight = parent.offsetHeight || 50;
     var filled = !!getData(image, 'filled');

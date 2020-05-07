@@ -182,6 +182,10 @@ export default {
     this.setupImageDimensions(event.target);
   },
 
+  loadCanvas(canvas) {
+    this.setupImageDimensions(canvas);
+  },
+
   keydown(event) {
     const { options } = this;
 
@@ -429,7 +433,6 @@ export default {
       }
 
       forEach(this.player.getElementsByTagName('img, canvas'), (image) => {
-        this.loadImage();
         addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
           once: true,
         });
