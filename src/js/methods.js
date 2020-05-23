@@ -218,6 +218,12 @@ export default {
     const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
+    // Inherit the referrerPolicy attribute of the original image
+    const referrerPolicy = img.referrerPolicy;
+    if (referrerPolicy) {
+      image.referrerPolicy = referrerPolicy;
+    }
+
     image.src = url;
     image.alt = alt;
 
@@ -636,6 +642,12 @@ export default {
     forEach(this.items, (item, i) => {
       const img = item.querySelector('img');
       const image = document.createElement('img');
+
+      // Inherit the referrerPolicy attribute of the original image
+      const referrerPolicy = img.referrerPolicy;
+      if (referrerPolicy) {
+        image.referrerPolicy = referrerPolicy;
+      }
 
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');

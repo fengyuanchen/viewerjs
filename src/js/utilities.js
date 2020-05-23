@@ -531,6 +531,12 @@ const IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit
 export function getImageNaturalSizes(image, callback) {
   const newImage = document.createElement('img');
 
+  // Inherit the referrerPolicy attribute of the original image
+  const referrerPolicy = image.referrerPolicy;
+  if (referrerPolicy) {
+    newImage.referrerPolicy = referrerPolicy;
+  }
+
   // Modern browsers (except Safari)
   if (image.naturalWidth && !IS_SAFARI) {
     callback(image.naturalWidth, image.naturalHeight);
