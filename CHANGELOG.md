@@ -4,6 +4,7 @@
 
 - Ignore images without the `src` attribute (#326).
 - Improve the `hide` method for unexpected calling (#367).
+- Reset the padding right of the `body` element when resizing (#379).
 - Remove unnecessary `padding-right: 0px` from the `body` element when close the viewer modal (#394).
 
 ## 1.5.0 (Nov 23, 2019)

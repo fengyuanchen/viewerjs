@@ -104,14 +104,7 @@ class Viewer {
     this.isImg = isImg;
     this.length = images.length;
     this.images = images;
-
-    const { ownerDocument } = element;
-    const body = ownerDocument.body || ownerDocument.documentElement;
-
-    this.body = body;
-    this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
-    this.initialBodyPaddingRight = body.style.paddingRight;
-    this.initialBodyComputedPaddingRight = window.getComputedStyle(body).paddingRight;
+    this.initBody();
 
     // Override `transition` option if it is not supported
     if (isUndefined(document.createElement(NAMESPACE).style.transition)) {

@@ -439,6 +439,12 @@ export default {
       return;
     }
 
+    if (this.fulled) {
+      this.close();
+      this.initBody();
+      this.open();
+    }
+
     this.initContainer();
     this.initViewer();
     this.renderViewer();

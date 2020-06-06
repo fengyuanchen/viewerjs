@@ -29,6 +29,16 @@ export default {
     this.renderViewer();
   },
 
+  initBody() {
+    const { ownerDocument } = this.element;
+    const body = ownerDocument.body || ownerDocument.documentElement;
+
+    this.body = body;
+    this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
+    this.initialBodyPaddingRight = body.style.paddingRight;
+    this.initialBodyComputedPaddingRight = window.getComputedStyle(body).paddingRight;
+  },
+
   initContainer() {
     this.containerData = {
       width: window.innerWidth,
