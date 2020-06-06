@@ -188,7 +188,7 @@ export default {
     const parentHeight = parent.offsetHeight || 50;
     const filled = !!getData(image, 'filled');
 
-    getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
+    getImageNaturalSizes(image, this.options, (naturalWidth, naturalHeight) => {
       const aspectRatio = naturalWidth / naturalHeight;
       let width = parentWidth;
       let height = parentHeight;

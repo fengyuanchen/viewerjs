@@ -7,10 +7,13 @@ window.createContainer = () => {
   return container;
 };
 
-window.createImage = () => {
+window.createImage = (attributes = {}) => {
   const container = window.createContainer();
   const image = document.createElement('img');
 
+  Object.keys(attributes).forEach((key) => {
+    image.setAttribute(key, attributes[key]);
+  });
   image.src = '/base/docs/images/tibet-1.jpg';
   container.appendChild(image);
 

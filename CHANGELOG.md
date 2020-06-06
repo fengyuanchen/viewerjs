@@ -2,6 +2,7 @@
 
 ## next
 
+- Add a new options: `inheritedAttributes`.
 - Ignore images without the `src` attribute (#326).
 - Improve the `hide` method for unexpected calling (#367).
 - Reset the padding right of the `body` element when resizing (#379).

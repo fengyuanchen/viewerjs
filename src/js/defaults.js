@@ -55,6 +55,21 @@ export default {
   fullscreen: true,
 
   /**
+   * Define the extra attributes to inherit from the original image.
+   * @type {Array}
+   */
+  inheritedAttributes: [
+    'crossOrigin',
+    'decoding',
+    'isMap',
+    'loading',
+    'referrerPolicy',
+    'sizes',
+    'srcset',
+    'useMap',
+  ],
+
+  /**
    * Define the initial index of image for viewing.
    * @type {number}
    */

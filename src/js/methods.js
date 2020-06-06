@@ -218,9 +218,16 @@ export default {
     const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
+    forEach(options.inheritedAttributes, (name) => {
+      const value = img.getAttribute(name);
+
+      if (value !== null) {
+        image.setAttribute(name, value);
+      }
+    });
+
     image.src = url;
     image.alt = alt;
-    image.referrerPolicy = img.referrerPolicy;
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {

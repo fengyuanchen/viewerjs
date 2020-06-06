@@ -94,9 +94,16 @@ export default {
         const item = document.createElement('li');
         const img = document.createElement('img');
 
+        forEach(options.inheritedAttributes, (name) => {
+          const value = image.getAttribute(name);
+
+          if (value !== null) {
+            img.setAttribute(name, value);
+          }
+        });
+
         img.src = src || url;
         img.alt = alt;
-        img.referrerPolicy = image.referrerPolicy;
         img.setAttribute('data-index', index);
         img.setAttribute('data-original-url', url || src);
         img.setAttribute('data-viewer-action', 'view');
@@ -175,7 +182,7 @@ export default {
       },
     };
 
-    sizingImage = getImageNaturalSizes(image, (naturalWidth, naturalHeight) => {
+    sizingImage = getImageNaturalSizes(image, options, (naturalWidth, naturalHeight) => {
       const aspectRatio = naturalWidth / naturalHeight;
       let width = viewerWidth;
       let height = viewerHeight;

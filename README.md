@@ -274,6 +274,15 @@ Enable to request full screen when play.
 
 > Requires the browser supports [Full Screen API](https://caniuse.com/fullscreen).
 
+### inheritedAttributes
+
+- Type: `Array`
+- Default: `['crossOrigin', 'decoding', 'isMap', 'loading', 'referrerPolicy', 'sizes', 'srcset', 'useMap']`
+
+Define the extra attributes to inherit from the original image.
+
+> Note that the basic attributes `src` and `alt` will always inherit from the original image.
+
 ### initialViewIndex
 
 - Type: `Number`

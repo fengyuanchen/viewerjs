@@ -525,10 +525,11 @@ const IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit
 /**
  * Get an image's natural sizes.
  * @param {string} image - The target image.
+ * @param {Object} options - The viewer options.
  * @param {Function} callback - The callback function.
  * @returns {HTMLImageElement} The new image.
  */
-export function getImageNaturalSizes(image, callback) {
+export function getImageNaturalSizes(image, options, callback) {
   const newImage = document.createElement('img');
 
   // Modern browsers (except Safari)
@@ -547,8 +548,15 @@ export function getImageNaturalSizes(image, callback) {
     }
   };
 
+  forEach(options.inheritedAttributes, (name) => {
+    const value = image.getAttribute(name);
+
+    if (value !== null) {
+      newImage.setAttribute(name, value);
+    }
+  });
+
   newImage.src = image.src;
-  newImage.referrerPolicy = image.referrerPolicy;
 
   // iOS Safari will convert the image automatically
   // with its orientation once append it into DOM
