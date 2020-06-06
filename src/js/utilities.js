@@ -548,6 +548,7 @@ export function getImageNaturalSizes(image, callback) {
   };
 
   newImage.src = image.src;
+  newImage.referrerPolicy = image.referrerPolicy;
 
   // iOS Safari will convert the image automatically
   // with its orientation once append it into DOM

@@ -86,6 +86,7 @@ export default {
 
         img.src = src || url;
         img.alt = alt;
+        img.referrerPolicy = image.referrerPolicy;
         img.setAttribute('data-index', index);
         img.setAttribute('data-original-url', url || src);
         img.setAttribute('data-viewer-action', 'view');

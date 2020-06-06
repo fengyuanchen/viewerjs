@@ -220,6 +220,7 @@ export default {
 
     image.src = url;
     image.alt = alt;
+    image.referrerPolicy = img.referrerPolicy;
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {
@@ -639,6 +640,7 @@ export default {
 
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
+      image.referrerPolicy = img.referrerPolicy;
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);
