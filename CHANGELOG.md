@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.6.0 (Jun 6, 2020)
 
 - Add a new options: `inheritedAttributes`.
 - Ignore images without the `src` attribute (#326).
@@ -10,9 +10,9 @@
 
 ## 1.5.0 (Nov 23, 2019)
 
-- Force reflow element in a new way to avoid side effect (#343).
-- Add a new option: `slideOnTouch` (#340).
 - Detect if the queried image is existing when update image list (#333).
+- Add a new option: `slideOnTouch` (#340).
+- Force reflow element in a new way to avoid side effect (#343).
 
 ## 1.4.0 (Oct 26, 2019)
 

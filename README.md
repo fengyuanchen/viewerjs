@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 42 [options](#options)
+- Supports 43 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
@@ -253,7 +253,7 @@ The container to put the viewer in modal mode.
 - Type: `Function`
 - Default: `null`
 
-Filter the images for viewing (should return `true` if the image is viewable).
+Filter the images for viewing (should return `true` if the image is viewable, return `false` to ignore the image).
 
 For example:
 
@@ -264,6 +264,8 @@ new Viewer(image, {
   },
 });
 ```
+
+> Note that images without the `src` attribute set will be ignored by default.
 
 ### fullscreen
 

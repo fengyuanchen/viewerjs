@@ -1,16 +1,18 @@
 /*!
- * Viewer.js v1.5.0
+ * Viewer.js v1.6.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-11-23T05:10:26.193Z
+ * Date: 2020-06-06T11:26:26.858Z
  */
 
 'use strict';
 
 function _typeof(obj) {
+  "@babel/helpers - typeof";
+
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
       return typeof obj;
@@ -150,6 +152,12 @@ var DEFAULTS = {
    * @type {boolean}
    */
   fullscreen: true,
+
+  /**
+   * Define the extra attributes to inherit from the original image.
+   * @type {Array}
+   */
+  inheritedAttributes: ['crossOrigin', 'decoding', 'isMap', 'loading', 'referrerPolicy', 'sizes', 'srcset', 'useMap'],
 
   /**
    * Define the initial index of image for viewing.
@@ -315,7 +323,7 @@ var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div clas
 
 var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var WINDOW = IS_BROWSER ? window : {};
-var IS_TOUCH_DEVICE = IS_BROWSER ? 'ontouchstart' in WINDOW.document.documentElement : false;
+var IS_TOUCH_DEVICE = IS_BROWSER && WINDOW.document.documentElement ? 'ontouchstart' in WINDOW.document.documentElement : false;
 var HAS_POINTER_EVENT = IS_BROWSER ? 'PointerEvent' in WINDOW : false;
 var NAMESPACE = 'viewer'; // Actions
 
@@ -862,11 +870,12 @@ var IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i
 /**
  * Get an image's natural sizes.
  * @param {string} image - The target image.
+ * @param {Object} options - The viewer options.
  * @param {Function} callback - The callback function.
  * @returns {HTMLImageElement} The new image.
  */
 
-function getImageNaturalSizes(image, callback) {
+function getImageNaturalSizes(image, options, callback) {
   var newImage = document.createElement('img'); // Modern browsers (except Safari)
 
   if (image.naturalWidth && !IS_SAFARI) {
@@ -884,6 +893,13 @@ function getImageNaturalSizes(image, callback) {
     }
   };
 
+  forEach(options.inheritedAttributes, function (name) {
+    var value = image.getAttribute(name);
+
+    if (value !== null) {
+      newImage.setAttribute(name, value);
+    }
+  });
   newImage.src = image.src; // iOS Safari will convert the image automatically
   // with its orientation once append it into DOM
 
@@ -995,6 +1011,14 @@ var render = {
     this.initList();
     this.renderViewer();
   },
+  initBody: function initBody() {
+    var ownerDocument = this.element.ownerDocument;
+    var body = ownerDocument.body || ownerDocument.documentElement;
+    this.body = body;
+    this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
+    this.initialBodyPaddingRight = body.style.paddingRight;
+    this.initialBodyComputedPaddingRight = window.getComputedStyle(body).paddingRight;
+  },
   initContainer: function initContainer() {
     this.containerData = {
       width: window.innerWidth,
@@ -1048,6 +1072,13 @@ var render = {
       if (src || url) {
         var item = document.createElement('li');
         var img = document.createElement('img');
+        forEach(options.inheritedAttributes, function (name) {
+          var value = image.getAttribute(name);
+
+          if (value !== null) {
+            img.setAttribute(name, value);
+          }
+        });
         img.src = src || url;
         img.alt = alt;
         img.setAttribute('data-index', index);
@@ -1123,7 +1154,7 @@ var render = {
         sizingImage.onload = null;
       }
     };
-    sizingImage = getImageNaturalSizes(image, function (naturalWidth, naturalHeight) {
+    sizingImage = getImageNaturalSizes(image, options, function (naturalWidth, naturalHeight) {
       var aspectRatio = naturalWidth / naturalHeight;
       var width = viewerWidth;
       var height = viewerHeight;
@@ -1414,7 +1445,7 @@ var handlers = {
     var parentWidth = parent.offsetWidth || 30;
     var parentHeight = parent.offsetHeight || 50;
     var filled = !!getData(image, 'filled');
-    getImageNaturalSizes(image, function (naturalWidth, naturalHeight) {
+    getImageNaturalSizes(image, this.options, function (naturalWidth, naturalHeight) {
       var aspectRatio = naturalWidth / naturalHeight;
       var width = parentWidth;
       var height = parentHeight;
@@ -1640,6 +1671,12 @@ var handlers = {
       return;
     }
 
+    if (this.fulled) {
+      this.close();
+      this.initBody();
+      this.open();
+    }
+
     this.initContainer();
     this.initViewer();
     this.renderViewer();
@@ -1801,7 +1838,7 @@ var methods = {
 
     var viewer = this.viewer;
 
-    if (options.transition && !immediate) {
+    if (options.transition && hasClass(this.image, CLASS_TRANSITION) && !immediate) {
       var hidden = this.hidden.bind(this);
 
       var hide = function hide() {
@@ -1824,7 +1861,7 @@ var methods = {
         }
       }; // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
 
-      if (this.viewed && hasClass(this.image, CLASS_TRANSITION)) {
+      if (this.viewed) {
         addListener(this.image, EVENT_TRANSITION_END, hide, {
           once: true
         });
@@ -1873,6 +1910,13 @@ var methods = {
     var url = getData(img, 'originalUrl');
     var alt = img.getAttribute('alt');
     var image = document.createElement('img');
+    forEach(options.inheritedAttributes, function (name) {
+      var value = img.getAttribute(name);
+
+      if (value !== null) {
+        image.setAttribute(name, value);
+      }
+    });
     image.src = url;
     image.alt = alt;
 
@@ -2286,6 +2330,7 @@ var methods = {
       var image = document.createElement('img');
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
+      image.referrerPolicy = img.referrerPolicy;
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);
@@ -2646,7 +2691,7 @@ var others = {
   open: function open() {
     var body = this.body;
     addClass(body, CLASS_OPEN);
-    body.style.paddingRight = "".concat(this.scrollbarWidth + (parseFloat(this.initialBodyPaddingRight) || 0), "px");
+    body.style.paddingRight = "".concat(this.scrollbarWidth + (parseFloat(this.initialBodyComputedPaddingRight) || 0), "px");
   },
   close: function close() {
     var body = this.body;
@@ -2785,9 +2830,7 @@ var others = {
 
 var AnotherViewer = WINDOW.Viewer;
 
-var Viewer =
-/*#__PURE__*/
-function () {
+var Viewer = /*#__PURE__*/function () {
   /**
    * Create a new Viewer.
    * @param {Element} element - The target element for viewing.
@@ -2848,18 +2891,14 @@ function () {
           if (options.filter.call(_this, image)) {
             images.push(image);
           }
-        } else {
+        } else if (image.src) {
           images.push(image);
         }
       });
       this.isImg = isImg;
       this.length = images.length;
       this.images = images;
-      var ownerDocument = element.ownerDocument;
-      var body = ownerDocument.body || ownerDocument.documentElement;
-      this.body = body;
-      this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
-      this.initialBodyPaddingRight = window.getComputedStyle(body).paddingRight; // Override `transition` option if it is not supported
+      this.initBody(); // Override `transition` option if it is not supported
 
       if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
         options.transition = false;
