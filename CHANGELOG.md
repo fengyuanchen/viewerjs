@@ -3,6 +3,7 @@
 ## next
 
 - Improve the `hide` method for unexpected calling (#367).
+- Remove unnecessary `padding-right: 0px` from the `body` element when close the viewer modal (#394).
 
 ## 1.5.0 (Nov 23, 2019)
 

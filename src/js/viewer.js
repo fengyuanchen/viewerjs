@@ -110,7 +110,8 @@ class Viewer {
 
     this.body = body;
     this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
-    this.initialBodyPaddingRight = window.getComputedStyle(body).paddingRight;
+    this.initialBodyPaddingRight = body.style.paddingRight;
+    this.initialBodyComputedPaddingRight = window.getComputedStyle(body).paddingRight;
 
     // Override `transition` option if it is not supported
     if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
