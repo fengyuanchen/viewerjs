@@ -96,7 +96,7 @@ class Viewer {
         if (options.filter.call(this, image)) {
           images.push(image);
         }
-      } else {
+      } else if (image.src) {
         images.push(image);
       }
     });

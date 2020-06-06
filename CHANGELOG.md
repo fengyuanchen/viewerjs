@@ -2,6 +2,7 @@
 
 ## next
 
+- Ignore images without the `src` attribute (#326).
 - Improve the `hide` method for unexpected calling (#367).
 - Remove unnecessary `padding-right: 0px` from the `body` element when close the viewer modal (#394).
 
