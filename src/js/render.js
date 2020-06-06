@@ -84,14 +84,9 @@ export default {
         const item = document.createElement('li');
         const img = document.createElement('img');
 
-        // Inherit the referrerPolicy attribute of the original image
-        const referrerPolicy = image.referrerPolicy;
-        if (referrerPolicy) {
-          img.referrerPolicy = referrerPolicy;
-        }
-
         img.src = src || url;
         img.alt = alt;
+        img.referrerPolicy = image.referrerPolicy;
         img.setAttribute('data-index', index);
         img.setAttribute('data-original-url', url || src);
         img.setAttribute('data-viewer-action', 'view');

@@ -218,14 +218,9 @@ export default {
     const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
-    // Inherit the referrerPolicy attribute of the original image
-    const referrerPolicy = img.referrerPolicy;
-    if (referrerPolicy) {
-      image.referrerPolicy = referrerPolicy;
-    }
-
     image.src = url;
     image.alt = alt;
+    image.referrerPolicy = img.referrerPolicy;
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {
@@ -643,14 +638,9 @@ export default {
       const img = item.querySelector('img');
       const image = document.createElement('img');
 
-      // Inherit the referrerPolicy attribute of the original image
-      const referrerPolicy = img.referrerPolicy;
-      if (referrerPolicy) {
-        image.referrerPolicy = referrerPolicy;
-      }
-
       image.src = getData(img, 'originalUrl');
       image.alt = img.getAttribute('alt');
+      image.referrerPolicy = img.referrerPolicy;
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, options.transition);
