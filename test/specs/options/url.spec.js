@@ -9,7 +9,7 @@ describe('url (option)', () => {
   it('should support string', (done) => {
     const image = window.createImage();
 
-    image.dataset.url = image.url;
+    image.dataset.src = image.src;
 
     new Viewer(image, {
       inline: true,
@@ -24,7 +24,7 @@ describe('url (option)', () => {
   it('should support function', (done) => {
     const image = window.createImage();
 
-    image.dataset.url = image.url;
+    image.dataset.src = image.src;
 
     new Viewer(image, {
       inline: true,
