@@ -890,11 +890,11 @@ export default {
     const images = [];
 
     forEach(isImg ? [element] : element.querySelectorAll('img'), (image) => {
-      if (options.filter) {
-        if (options.filter(image)) {
+      if (isFunction(options.filter)) {
+        if (options.filter.call(this, image)) {
           images.push(image);
         }
-      } else {
+      } else if (this.getImageURL(image)) {
         images.push(image);
       }
     });

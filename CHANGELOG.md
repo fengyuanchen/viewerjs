@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Improve image filtering.
+
 ## 1.6.0 (Jun 6, 2020)
 
 - Add a new options: `inheritedAttributes`.

@@ -13,8 +13,6 @@ import {
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
-  isFunction,
-  isString,
   removeClass,
   removeListener,
   setData,
@@ -82,13 +80,7 @@ export default {
     forEach(this.images, (image, index) => {
       const { src } = image;
       const alt = image.alt || getImageNameFromURL(src);
-      let { url } = options;
-
-      if (isString(url)) {
-        url = image.getAttribute(url);
-      } else if (isFunction(url)) {
-        url = url.call(this, image);
-      }
+      const url = this.getImageURL(image);
 
       if (src || url) {
         const item = document.createElement('li');

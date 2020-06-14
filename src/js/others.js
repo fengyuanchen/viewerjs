@@ -14,10 +14,25 @@ import {
   forEach,
   getMaxZoomRatio,
   isFunction,
+  isString,
   removeClass,
 } from './utilities';
 
 export default {
+  getImageURL(image) {
+    let { url } = this.options;
+
+    if (isString(url)) {
+      url = image.getAttribute(url);
+    } else if (isFunction(url)) {
+      url = url.call(this, image);
+    } else {
+      url = '';
+    }
+
+    return url;
+  },
+
   open() {
     const { body } = this;
 
