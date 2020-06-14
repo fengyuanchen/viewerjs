@@ -158,7 +158,7 @@ export default {
       };
 
       this.transitioning = {
-        abort() {
+        abort: () => {
           if (this.viewed) {
             removeListener(this.image, EVENT_TRANSITION_END, hide);
           } else {
@@ -280,7 +280,7 @@ export default {
     });
 
     this.viewing = {
-      abort() {
+      abort: () => {
         removeListener(element, EVENT_VIEWED, onViewed);
 
         if (image.complete) {
