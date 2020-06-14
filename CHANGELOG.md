@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.6.1 (Jun 14, 2020)
 
 - Improve image filtering.
 

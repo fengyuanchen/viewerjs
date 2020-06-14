@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.6.0
+ * Viewer.js v1.6.1
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-06-06T11:26:26.858Z
+ * Date: 2020-06-14T07:47:18.114Z
  */
 
 (function (global, factory) {
@@ -1065,13 +1065,8 @@
       forEach(this.images, function (image, index) {
         var src = image.src;
         var alt = image.alt || getImageNameFromURL(src);
-        var url = options.url;
 
-        if (isString(url)) {
-          url = image.getAttribute(url);
-        } else if (isFunction(url)) {
-          url = url.call(_this, image);
-        }
+        var url = _this.getImageURL(image);
 
         if (src || url) {
           var item = document.createElement('li');
@@ -2559,6 +2554,8 @@
     },
     // Update viewer when images changed
     update: function update() {
+      var _this8 = this;
+
       var element = this.element,
           options = this.options,
           isImg = this.isImg; // Destroy viewer if the target image was deleted
@@ -2569,11 +2566,11 @@
 
       var images = [];
       forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
-        if (options.filter) {
-          if (options.filter(image)) {
+        if (isFunction(options.filter)) {
+          if (options.filter.call(_this8, image)) {
             images.push(image);
           }
-        } else {
+        } else if (_this8.getImageURL(image)) {
           images.push(image);
         }
       });
@@ -2692,6 +2689,19 @@
   };
 
   var others = {
+    getImageURL: function getImageURL(image) {
+      var url = this.options.url;
+
+      if (isString(url)) {
+        url = image.getAttribute(url);
+      } else if (isFunction(url)) {
+        url = url.call(this, image);
+      } else {
+        url = '';
+      }
+
+      return url;
+    },
     open: function open() {
       var body = this.body;
       addClass(body, CLASS_OPEN);
@@ -2895,7 +2905,7 @@
             if (options.filter.call(_this, image)) {
               images.push(image);
             }
-          } else if (image.src) {
+          } else if (_this.getImageURL(image)) {
             images.push(image);
           }
         });
