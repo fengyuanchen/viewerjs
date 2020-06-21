@@ -169,7 +169,7 @@ export default {
     let sizingImage;
 
     this.imageInitializing = {
-      abort() {
+      abort: () => {
         sizingImage.onload = null;
       },
     };
@@ -243,7 +243,7 @@ export default {
         };
 
         this.imageRendering = {
-          abort() {
+          abort: () => {
             removeListener(image, EVENT_TRANSITION_END, onTransitionEnd);
           },
         };

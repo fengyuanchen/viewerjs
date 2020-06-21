@@ -87,7 +87,7 @@ export default {
       const shown = this.shown.bind(this);
 
       this.transitioning = {
-        abort() {
+        abort: () => {
           removeListener(viewer, EVENT_TRANSITION_END, shown);
           removeClass(viewer, CLASS_IN);
         },

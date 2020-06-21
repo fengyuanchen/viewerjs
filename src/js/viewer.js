@@ -135,7 +135,7 @@ class Viewer {
       };
 
       this.initializing = {
-        abort() {
+        abort: () => {
           forEach(images, (image) => {
             if (!image.complete) {
               removeListener(image, EVENT_LOAD, progress);
