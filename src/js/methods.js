@@ -464,7 +464,7 @@ export default {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (_originalEvent && ratio > 0.95 && ratio < 1.05) {
+      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
         ratio = 1;
       }
 

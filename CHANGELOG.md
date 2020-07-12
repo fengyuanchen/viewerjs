@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Improve the wheel zoom behavior (#396).
+
 ## 1.6.1 (Jun 14, 2020)
 
 - Improve image filtering.
