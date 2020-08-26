@@ -259,10 +259,12 @@ export default {
       });
     }
 
+    const newImageData = {};
     if (dispatchEvent(element, EVENT_VIEW, {
       originalImage: this.images[index],
       index,
       image,
+      imageData: newImageData,
     }) === false || !this.isShown || this.hiding || this.played) {
       return this;
     }
@@ -284,7 +286,7 @@ export default {
     this.image = image;
     this.viewed = false;
     this.index = index;
-    this.imageData = {};
+    this.imageData = newImageData;
     addClass(image, CLASS_INVISIBLE);
 
     if (options.loading) {
