@@ -143,42 +143,52 @@ export default {
       this.viewing.abort();
     }
 
-    const { viewer } = this;
+    const { viewer, image } = this;
+    const hideImmediately = () => {
+      removeClass(viewer, CLASS_IN);
+      this.hidden();
+    };
 
-    if (options.transition && hasClass(this.image, CLASS_TRANSITION) && !immediate) {
-      const hidden = this.hidden.bind(this);
-      const hide = () => {
-        // XXX: It seems the `event.stopPropagation()` method does not work here
-        setTimeout(() => {
-          addListener(viewer, EVENT_TRANSITION_END, hidden, {
-            once: true,
-          });
+    if (options.transition && !immediate) {
+      const onViewerTransitionEnd = (event) => {
+        // Ignore all propagating `transitionend` events (#275).
+        if (event && event.target === viewer) {
+          removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
+          this.hidden();
+        }
+      };
+      const onImageTransitionEnd = () => {
+        // In case of show the viewer by `viewer.show(true)` previously (#407).
+        if (hasClass(viewer, CLASS_TRANSITION)) {
+          addListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
           removeClass(viewer, CLASS_IN);
-        }, 0);
+        } else {
+          hideImmediately();
+        }
       };
 
       this.transitioning = {
         abort: () => {
-          if (this.viewed) {
-            removeListener(this.image, EVENT_TRANSITION_END, hide);
-          } else {
-            removeListener(viewer, EVENT_TRANSITION_END, hidden);
+          if (this.viewed && hasClass(image, CLASS_TRANSITION)) {
+            removeListener(image, EVENT_TRANSITION_END, onImageTransitionEnd);
+          } else if (hasClass(viewer, CLASS_TRANSITION)) {
+            removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
           }
         },
       };
 
-      // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
-      if (this.viewed) {
-        addListener(this.image, EVENT_TRANSITION_END, hide, {
+      // In case of hiding the viewer when holding on the image (#255),
+      // note that the `CLASS_TRANSITION` class will be removed on pointer down.
+      if (this.viewed && hasClass(image, CLASS_TRANSITION)) {
+        addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true,
         });
         this.zoomTo(0, false, false, true);
       } else {
-        hide();
+        onImageTransitionEnd();
       }
     } else {
-      removeClass(viewer, CLASS_IN);
-      this.hidden();
+      hideImmediately();
     }
 
     return this;

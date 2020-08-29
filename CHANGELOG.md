@@ -3,6 +3,7 @@
 ## next
 
 - Improve the wheel zoom behavior (#396).
+- Improve the `hide` method for some edge cases (#407).
 
 ## 1.6.1 (Jun 14, 2020)
 
