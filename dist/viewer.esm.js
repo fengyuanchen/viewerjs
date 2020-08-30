@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.6.1
+ * Viewer.js v1.6.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-06-14T07:47:18.114Z
+ * Date: 2020-08-30T02:33:40.250Z
  */
 
 function _typeof(obj) {
@@ -1799,6 +1799,8 @@ var methods = {
    * @returns {Viewer} this
    */
   hide: function hide() {
+    var _this = this;
+
     var immediate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var element = this.element,
         options = this.options;
@@ -1829,42 +1831,56 @@ var methods = {
       this.viewing.abort();
     }
 
-    var viewer = this.viewer;
+    var viewer = this.viewer,
+        image = this.image;
 
-    if (options.transition && hasClass(this.image, CLASS_TRANSITION) && !immediate) {
-      var hidden = this.hidden.bind(this);
+    var hideImmediately = function hideImmediately() {
+      removeClass(viewer, CLASS_IN);
 
-      var hide = function hide() {
-        // XXX: It seems the `event.stopPropagation()` method does not work here
-        setTimeout(function () {
-          addListener(viewer, EVENT_TRANSITION_END, hidden, {
-            once: true
-          });
+      _this.hidden();
+    };
+
+    if (options.transition && !immediate) {
+      var onViewerTransitionEnd = function onViewerTransitionEnd(event) {
+        // Ignore all propagating `transitionend` events (#275).
+        if (event && event.target === viewer) {
+          removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
+
+          _this.hidden();
+        }
+      };
+
+      var onImageTransitionEnd = function onImageTransitionEnd() {
+        // In case of show the viewer by `viewer.show(true)` previously (#407).
+        if (hasClass(viewer, CLASS_TRANSITION)) {
+          addListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
           removeClass(viewer, CLASS_IN);
-        }, 0);
+        } else {
+          hideImmediately();
+        }
       };
 
       this.transitioning = {
         abort: function abort() {
-          if (this.viewed) {
-            removeListener(this.image, EVENT_TRANSITION_END, hide);
-          } else {
-            removeListener(viewer, EVENT_TRANSITION_END, hidden);
+          if (_this.viewed && hasClass(image, CLASS_TRANSITION)) {
+            removeListener(image, EVENT_TRANSITION_END, onImageTransitionEnd);
+          } else if (hasClass(viewer, CLASS_TRANSITION)) {
+            removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
           }
         }
-      }; // Note that the `CLASS_TRANSITION` class will be removed on pointer down (#255)
+      }; // In case of hiding the viewer when holding on the image (#255),
+      // note that the `CLASS_TRANSITION` class will be removed on pointer down.
 
-      if (this.viewed) {
-        addListener(this.image, EVENT_TRANSITION_END, hide, {
+      if (this.viewed && hasClass(image, CLASS_TRANSITION)) {
+        addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true
         });
         this.zoomTo(0, false, false, true);
       } else {
-        hide();
+        onImageTransitionEnd();
       }
     } else {
-      removeClass(viewer, CLASS_IN);
-      this.hidden();
+      hideImmediately();
     }
 
     return this;
@@ -1876,7 +1892,7 @@ var methods = {
    * @returns {Viewer} this
    */
   view: function view() {
-    var _this = this;
+    var _this2 = this;
 
     var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.initialViewIndex;
     index = Number(index) || 0;
@@ -1947,9 +1963,9 @@ var methods = {
     title.innerHTML = ''; // Generate title after viewed
 
     var onViewed = function onViewed() {
-      var imageData = _this.imageData;
+      var imageData = _this2.imageData;
       var render = Array.isArray(options.title) ? options.title[1] : options.title;
-      title.innerHTML = escapeHTMLEntities(isFunction(render) ? render.call(_this, image, imageData) : "".concat(alt, " (").concat(imageData.naturalWidth, " \xD7 ").concat(imageData.naturalHeight, ")"));
+      title.innerHTML = escapeHTMLEntities(isFunction(render) ? render.call(_this2, image, imageData) : "".concat(alt, " (").concat(imageData.naturalWidth, " \xD7 ").concat(imageData.naturalHeight, ")"));
     };
 
     var onLoad;
@@ -1961,18 +1977,18 @@ var methods = {
         removeListener(element, EVENT_VIEWED, onViewed);
 
         if (image.complete) {
-          if (this.imageRendering) {
-            this.imageRendering.abort();
-          } else if (this.imageInitializing) {
-            this.imageInitializing.abort();
+          if (_this2.imageRendering) {
+            _this2.imageRendering.abort();
+          } else if (_this2.imageInitializing) {
+            _this2.imageInitializing.abort();
           }
         } else {
           // Cancel download to save bandwidth.
           image.src = '';
           removeListener(image, EVENT_LOAD, onLoad);
 
-          if (this.timeout) {
-            clearTimeout(this.timeout);
+          if (_this2.timeout) {
+            clearTimeout(_this2.timeout);
           }
         }
       }
@@ -1992,7 +2008,7 @@ var methods = {
 
       this.timeout = setTimeout(function () {
         removeClass(image, CLASS_INVISIBLE);
-        _this.timeout = false;
+        _this2.timeout = false;
       }, 1000);
     }
 
@@ -2115,7 +2131,7 @@ var methods = {
    * @returns {Viewer} this
    */
   zoomTo: function zoomTo(ratio) {
-    var _this2 = this;
+    var _this3 = this;
 
     var hasTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -2142,7 +2158,7 @@ var methods = {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (_originalEvent && ratio > 0.95 && ratio < 1.05) {
+      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
         ratio = 1;
       }
 
@@ -2187,7 +2203,7 @@ var methods = {
       imageData.height = newHeight;
       imageData.ratio = ratio;
       this.renderImage(function () {
-        _this2.zooming = false;
+        _this3.zooming = false;
 
         if (isFunction(options.zoomed)) {
           addListener(element, EVENT_ZOOMED, options.zoomed, {
@@ -2296,7 +2312,7 @@ var methods = {
    * @returns {Viewer} this
    */
   play: function play() {
-    var _this3 = this;
+    var _this4 = this;
 
     var fullscreen = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -2342,7 +2358,7 @@ var methods = {
 
     if (isNumber(options.interval) && options.interval > 0) {
       var play = function play() {
-        _this3.playing = setTimeout(function () {
+        _this4.playing = setTimeout(function () {
           removeClass(list[index], CLASS_IN);
           index += 1;
           index = index < total ? index : 0;
@@ -2360,7 +2376,7 @@ var methods = {
   },
   // Stop play
   stop: function stop() {
-    var _this4 = this;
+    var _this5 = this;
 
     if (!this.played) {
       return this;
@@ -2370,7 +2386,7 @@ var methods = {
     this.played = false;
     clearTimeout(this.playing);
     forEach(player.getElementsByTagName('img'), function (image) {
-      removeListener(image, EVENT_LOAD, _this4.onLoadWhenPlay);
+      removeListener(image, EVENT_LOAD, _this5.onLoadWhenPlay);
     });
     removeClass(player, CLASS_SHOW);
     player.innerHTML = '';
@@ -2379,7 +2395,7 @@ var methods = {
   },
   // Enter modal mode (only available in inline mode)
   full: function full() {
-    var _this5 = this;
+    var _this6 = this;
 
     var options = this.options,
         viewer = this.viewer,
@@ -2413,7 +2429,7 @@ var methods = {
 
     if (this.viewed) {
       this.initImage(function () {
-        _this5.renderImage(function () {
+        _this6.renderImage(function () {
           if (options.transition) {
             setTimeout(function () {
               addClass(image, CLASS_TRANSITION);
@@ -2428,7 +2444,7 @@ var methods = {
   },
   // Exit modal mode (only available in inline mode)
   exit: function exit() {
-    var _this6 = this;
+    var _this7 = this;
 
     var options = this.options,
         viewer = this.viewer,
@@ -2461,7 +2477,7 @@ var methods = {
 
     if (this.viewed) {
       this.initImage(function () {
-        _this6.renderImage(function () {
+        _this7.renderImage(function () {
           if (options.transition) {
             setTimeout(function () {
               addClass(image, CLASS_TRANSITION);
@@ -2476,7 +2492,7 @@ var methods = {
   },
   // Show the current ratio of the image with percentage
   tooltip: function tooltip() {
-    var _this7 = this;
+    var _this8 = this;
 
     var options = this.options,
         tooltipBox = this.tooltipBox,
@@ -2513,17 +2529,17 @@ var methods = {
           removeClass(tooltipBox, CLASS_SHOW);
           removeClass(tooltipBox, CLASS_FADE);
           removeClass(tooltipBox, CLASS_TRANSITION);
-          _this7.fading = false;
+          _this8.fading = false;
         }, {
           once: true
         });
         removeClass(tooltipBox, CLASS_IN);
-        _this7.fading = true;
+        _this8.fading = true;
       } else {
         removeClass(tooltipBox, CLASS_SHOW);
       }
 
-      _this7.tooltipping = false;
+      _this8.tooltipping = false;
     }, 1000);
     return this;
   },
@@ -2548,7 +2564,7 @@ var methods = {
   },
   // Update viewer when images changed
   update: function update() {
-    var _this8 = this;
+    var _this9 = this;
 
     var element = this.element,
         options = this.options,
@@ -2561,10 +2577,10 @@ var methods = {
     var images = [];
     forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
       if (isFunction(options.filter)) {
-        if (options.filter.call(_this8, image)) {
+        if (options.filter.call(_this9, image)) {
           images.push(image);
         }
-      } else if (_this8.getImageURL(image)) {
+      } else if (_this9.getImageURL(image)) {
         images.push(image);
       }
     });

@@ -1,7 +1,8 @@
 # Changelog
 
-## next
+## 1.6.2 (Sep 30, 2020)
 
+- Fix wrong usage about `this` in ES6+ (#395).
 - Improve the wheel zoom behavior (#396).
 - Improve the `hide` method for some edge cases (#407).
 
