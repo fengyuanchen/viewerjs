@@ -917,18 +917,23 @@ export default {
     this.length = images.length;
 
     if (this.ready) {
-      const indexes = [];
+      const changedIndexes = [];
 
       forEach(this.items, (item, i) => {
         const img = item.querySelector('img');
         const image = images[i];
 
         if (image && img) {
-          if (image.src !== img.src) {
-            indexes.push(i);
+          if (
+            image.src !== img.src
+
+            // Title changed (#408)
+            || image.alt !== img.alt
+          ) {
+            changedIndexes.push(i);
           }
         } else {
-          indexes.push(i);
+          changedIndexes.push(i);
         }
       });
 
@@ -941,12 +946,13 @@ export default {
       if (this.isShown) {
         if (this.length) {
           if (this.viewed) {
-            const index = indexes.indexOf(this.index);
+            const changedIndex = changedIndexes.indexOf(this.index);
 
-            if (index >= 0) {
+            if (changedIndex >= 0) {
               this.viewed = false;
-              this.view(Math.max(this.index - (index + 1), 0));
+              this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
             } else {
+              // Reactivate the current viewing item after reset the list.
               addClass(this.items[this.index], CLASS_ACTIVE);
             }
           }
