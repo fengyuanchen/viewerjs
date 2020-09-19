@@ -44,4 +44,20 @@ describe('viewed (event)', () => {
       inline: true,
     });
   });
+
+  it('should not cancel the `viewed` event', (done) => {
+    const image = window.createImage();
+    let viewer;
+
+    image.addEventListener('viewed', (event) => {
+      expect(event.defaultPrevented).to.false;
+      event.preventDefault();
+      expect(event.defaultPrevented).to.false;
+      viewer.hide(true);
+      done();
+    });
+
+    viewer = new Viewer(image);
+    viewer.show();
+  });
 });

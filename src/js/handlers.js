@@ -176,6 +176,8 @@ export default {
           originalImage: this.images[index],
           index,
           image,
+        }, {
+          cancelable: false,
         });
       });
     });

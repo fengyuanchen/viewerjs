@@ -57,4 +57,24 @@ describe('zoomed (event)', () => {
       inline: true,
     });
   });
+
+  it('should not cancel the `zoomed` event', (done) => {
+    const image = window.createImage();
+    let viewer;
+
+    image.addEventListener('viewed', () => {
+      viewer.zoomTo(1);
+    });
+
+    image.addEventListener('zoomed', (event) => {
+      expect(event.defaultPrevented).to.false;
+      event.preventDefault();
+      expect(event.defaultPrevented).to.false;
+      viewer.hide(true);
+      done();
+    });
+
+    viewer = new Viewer(image);
+    viewer.show();
+  });
 });

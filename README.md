@@ -853,11 +853,19 @@ viewer = new Viewer(image);
 
 ### ready
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
+
 This event fires when a viewer instance is ready for viewing.
 
 > In modal mode, this event will not be triggered until you click on one of the images.
 
 ### show
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
 
 This event fires when the viewer modal starts to show.
 
@@ -865,11 +873,19 @@ This event fires when the viewer modal starts to show.
 
 ### shown
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
+
 This event fires when the viewer modal has shown.
 
 > Only available in modal mode.
 
 ### hide
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
 
 This event fires when the viewer modal starts to hide.
 
@@ -877,20 +893,24 @@ This event fires when the viewer modal starts to hide.
 
 ### hidden
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+- **event.detail**: `null`
+
 This event fires when the viewer modal has hidden.
 
 > Only available in modal mode.
 
 ### view
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
 - **event.detail.originalImage**:
   - Type: `HTMLImageElement`
   - The original image.
-
 - **event.detail.index**:
   - Type: `Number`
   - The index of the original image.
-
 - **event.detail.image**:
   - Type: `HTMLImageElement`
   - The current image (a clone of the original image).
@@ -899,20 +919,22 @@ This event fires when a viewer starts to show (view) an image.
 
 ### viewed
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
 - **event.detail**: the same as the `view` event.
 
 This event fires when a viewer has shown (viewed) an image.
 
 ### zoom
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
 - **event.detail.originalEvent**:
   - Type: `Event`
   - Options: `wheel`, `touchmove`.
-
 - **event.detail.oldRatio**:
   - Type: `Number`
   - The old (current) ratio of the image.
-
 - **event.detail.ratio**:
   - Type: `Number`
   - The new (next) ratio of the image (`imageData.width / imageData.naturalWidth`).
@@ -921,23 +943,31 @@ This event fires when a viewer starts to zoom (in or out) an image.
 
 ### zoomed
 
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
 - **event.detail**: the same as the `zoom` event.
 
 This event fires when a viewer has zoomed (in or out) an image.
 
 ### play
 
-- bubbles: `true`
-- cancelable: `true`
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
 
 This event fires when the viewer starts to play.
 
+> You can abort the playing process by calling `event.preventDefault()`.
+
 ### stop
 
-- bubbles: `true`
-- cancelable: `true`
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail**: `null`
 
 This event fires when the viewer starts to stop.
+
+> You can abort the stopping process by calling `event.preventDefault()`.
 
 [⬆ back to top](#table-of-contents)
 

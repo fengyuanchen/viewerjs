@@ -534,6 +534,8 @@ export default {
           ratio,
           oldRatio,
           originalEvent: _originalEvent,
+        }, {
+          cancelable: false,
         });
       });
 

@@ -3,6 +3,7 @@
 ## next
 
 - Add 2 new events: `play` and `stop` (#411).
+- Let the `viewed`, `zoomed` and `hidden` events can not be canceled.
 
 ## 1.6.2 (Sep 30, 2020)
 

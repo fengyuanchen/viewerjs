@@ -32,4 +32,23 @@ describe('hidden (event)', () => {
       },
     });
   });
+
+  it('should not cancel the `hidden` event', (done) => {
+    const image = window.createImage();
+
+    image.addEventListener('hidden', (event) => {
+      expect(event.defaultPrevented).to.false;
+      event.preventDefault();
+      expect(event.defaultPrevented).to.false;
+      done();
+    });
+
+    const viewer = new Viewer(image, {
+      shown() {
+        viewer.hide(true);
+      },
+    });
+
+    viewer.show();
+  });
 });

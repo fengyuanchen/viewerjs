@@ -430,17 +430,19 @@ export function addListener(element, type, listener, options = {}) {
  * @param {Element} element - The event target.
  * @param {string} type - The event type(s).
  * @param {Object} data - The additional event data.
+ * @param {Object} options - The additional event options.
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
-export function dispatchEvent(element, type, data) {
+export function dispatchEvent(element, type, data, options) {
   let event;
 
   // Event and CustomEvent on IE9-11 are global objects, not constructors
   if (isFunction(Event) && isFunction(CustomEvent)) {
     event = new CustomEvent(type, {
-      detail: data,
       bubbles: true,
       cancelable: true,
+      detail: data,
+      ...options,
     });
   } else {
     event = document.createEvent('CustomEvent');

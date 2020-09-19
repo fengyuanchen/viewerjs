@@ -92,7 +92,9 @@ export default {
         });
       }
 
-      dispatchEvent(element, EVENT_HIDDEN);
+      dispatchEvent(element, EVENT_HIDDEN, null, {
+        cancelable: false,
+      });
     }
   },
 
