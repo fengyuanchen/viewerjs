@@ -18,6 +18,8 @@ import {
   EVENT_VIEWED,
   EVENT_ZOOM,
   EVENT_ZOOMED,
+  EVENT_PLAY,
+  EVENT_STOP,
   NAMESPACE,
 } from './constants';
 import {
@@ -637,7 +639,19 @@ export default {
       return this;
     }
 
-    const { options, player } = this;
+    const { element, options } = this;
+
+    if (isFunction(options.play)) {
+      addListener(element, EVENT_PLAY, options.play, {
+        once: true,
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_PLAY) === false) {
+      return this;
+    }
+
+    const { player } = this;
     const onLoad = this.loadImage.bind(this);
     const list = [];
     let total = 0;
@@ -696,6 +710,18 @@ export default {
   // Stop play
   stop() {
     if (!this.played) {
+      return this;
+    }
+
+    const { element, options } = this;
+
+    if (isFunction(options.stop)) {
+      addListener(element, EVENT_STOP, options.stop, {
+        once: true,
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_STOP) === false) {
       return this;
     }
 

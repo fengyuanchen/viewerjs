@@ -35,6 +35,12 @@ window.onload = function () {
     },
     zoomed: function (e) {
       console.log(e.type);
+    },
+    play: function (e) {
+      console.log(e.type);
+    },
+    stop: function (e) {
+      console.log(e.type);
     }
   };
   var viewer = new Viewer(pictures, options);

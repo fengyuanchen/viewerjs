@@ -26,7 +26,7 @@
 
 - Supports 43 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 9 [events](#events)
+- Supports 11 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -545,6 +545,20 @@ A shortcut of the `zoom` event.
 
 A shortcut of the `zoomed` event.
 
+### play
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `play` event.
+
+### stop
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `stop` event.
+
 [⬆ back to top](#table-of-contents)
 
 ## Methods
@@ -910,6 +924,20 @@ This event fires when a viewer starts to zoom (in or out) an image.
 - **event.detail**: the same as the `zoom` event.
 
 This event fires when a viewer has zoomed (in or out) an image.
+
+### play
+
+- bubbles: `true`
+- cancelable: `true`
+
+This event fires when the viewer starts to play.
+
+### stop
+
+- bubbles: `true`
+- cancelable: `true`
+
+This event fires when the viewer starts to stop.
 
 [⬆ back to top](#table-of-contents)
 

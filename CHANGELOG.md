@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add 2 new events: `play` and `stop` (#411).
+
 ## 1.6.2 (Sep 30, 2020)
 
 - Fix wrong usage about `this` in ES6+ (#395).

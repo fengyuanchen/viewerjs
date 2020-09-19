@@ -52,6 +52,8 @@ export const EVENT_VIEWED = 'viewed';
 export const EVENT_WHEEL = 'wheel';
 export const EVENT_ZOOM = 'zoom';
 export const EVENT_ZOOMED = 'zoomed';
+export const EVENT_PLAY = 'play';
+export const EVENT_STOP = 'stop';
 
 // Data keys
 export const DATA_ACTION = `${NAMESPACE}Action`;
