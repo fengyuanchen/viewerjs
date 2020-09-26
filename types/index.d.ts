@@ -33,15 +33,30 @@ declare namespace Viewer {
     zoomOut?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
   }
 
+  export interface ZoomEventData {
+    originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent;
+    oldRatio: number;
+    ratio: number;
+  }
+
+  export interface ZoomEvent extends CustomEvent {
+    detail: ZoomEventData;
+  }
+
+  export interface ZoomedEvent extends CustomEvent {
+    detail: ZoomEventData;
+  }
+
   export interface Options {
     backdrop?: boolean | string;
     button?: boolean;
     className?: string;
-    container?: string | Element;
+    container?: string | HTMLElement;
     filter?: Function;
     fullscreen?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
+    inheritedAttributes: string[];
     initialViewIndex?: number;
     inline?: boolean;
     interval?: number;
@@ -54,11 +69,14 @@ declare namespace Viewer {
     minZoomRatio?: number;
     movable?: boolean;
     navbar?: boolean | Visibility;
+    play?(event: CustomEvent): void;
     ready?(event: CustomEvent): void;
     rotatable?: boolean;
     scalable?: boolean;
     show?(event: CustomEvent): void;
     shown?(event: CustomEvent): void;
+    slideOnTouch?: boolean;
+    stop?(event: CustomEvent): void;
     title?: boolean | Visibility | Function | [Visibility, Function];
     toggleOnDblclick?: boolean;
     toolbar?: boolean | Visibility | ToolbarOptions;
@@ -69,15 +87,17 @@ declare namespace Viewer {
     viewed?(event: CustomEvent): void;
     zIndex?: number;
     zIndexInline?: number;
-    zoom?(event: CustomEvent): void;
+    zoom?(event: ZoomEvent): void;
+    zoomOnTouch?: boolean;
+    zoomOnWheel?: boolean;
     zoomRatio?: number;
     zoomable?: boolean;
-    zoomed?(event: CustomEvent): void;
+    zoomed?(event: ZoomedEvent): void;
   }
 }
 
 declare class Viewer {
-  constructor(element: Element, options?: Viewer.Options);
+  constructor(element: HTMLElement, options?: Viewer.Options);
   destroy(): Viewer;
   exit(): Viewer;
   full(): Viewer;

@@ -4,6 +4,7 @@
 
 - Add 2 new events: `play` and `stop` (#411).
 - Let the `viewed`, `zoomed` and `hidden` events can not be canceled.
+- Improve the TypeScript declarations in the `types/index.d.ts` file.
 
 ## 1.6.2 (Sep 30, 2020)
 
