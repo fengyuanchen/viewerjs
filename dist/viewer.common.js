@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.6.2
+ * Viewer.js v1.7.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-08-30T02:33:40.250Z
+ * Date: 2020-09-26T06:58:07.157Z
  */
 
 'use strict';
@@ -316,7 +316,9 @@ var DEFAULTS = {
   view: null,
   viewed: null,
   zoom: null,
-  zoomed: null
+  zoomed: null,
+  play: null,
+  stop: null
 };
 
 var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
@@ -371,7 +373,9 @@ var EVENT_VIEW = 'view';
 var EVENT_VIEWED = 'viewed';
 var EVENT_WHEEL = 'wheel';
 var EVENT_ZOOM = 'zoom';
-var EVENT_ZOOMED = 'zoomed'; // Data keys
+var EVENT_ZOOMED = 'zoomed';
+var EVENT_PLAY = 'play';
+var EVENT_STOP = 'stop'; // Data keys
 
 var DATA_ACTION = "".concat(NAMESPACE, "Action"); // RegExps
 
@@ -780,18 +784,19 @@ function addListener(element, type, listener) {
  * @param {Element} element - The event target.
  * @param {string} type - The event type(s).
  * @param {Object} data - The additional event data.
+ * @param {Object} options - The additional event options.
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
 
-function dispatchEvent(element, type, data) {
+function dispatchEvent(element, type, data, options) {
   var event; // Event and CustomEvent on IE9-11 are global objects, not constructors
 
   if (isFunction(Event) && isFunction(CustomEvent)) {
-    event = new CustomEvent(type, {
-      detail: data,
+    event = new CustomEvent(type, _objectSpread2({
       bubbles: true,
-      cancelable: true
-    });
+      cancelable: true,
+      detail: data
+    }, options));
   } else {
     event = document.createEvent('CustomEvent');
     event.initCustomEvent(type, true, true, data);
@@ -1430,6 +1435,8 @@ var handlers = {
           originalImage: _this.images[index],
           index: index,
           image: image
+        }, {
+          cancelable: false
         });
       });
     });
@@ -2217,6 +2224,8 @@ var methods = {
           ratio: ratio,
           oldRatio: oldRatio,
           originalEvent: _originalEvent
+        }, {
+          cancelable: false
         });
       });
 
@@ -2322,8 +2331,20 @@ var methods = {
       return this;
     }
 
-    var options = this.options,
-        player = this.player;
+    var element = this.element,
+        options = this.options;
+
+    if (isFunction(options.play)) {
+      addListener(element, EVENT_PLAY, options.play, {
+        once: true
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_PLAY) === false) {
+      return this;
+    }
+
+    var player = this.player;
     var onLoad = this.loadImage.bind(this);
     var list = [];
     var total = 0;
@@ -2381,6 +2402,19 @@ var methods = {
     var _this5 = this;
 
     if (!this.played) {
+      return this;
+    }
+
+    var element = this.element,
+        options = this.options;
+
+    if (isFunction(options.stop)) {
+      addListener(element, EVENT_STOP, options.stop, {
+        once: true
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_STOP) === false) {
       return this;
     }
 
@@ -2595,17 +2629,18 @@ var methods = {
     this.length = images.length;
 
     if (this.ready) {
-      var indexes = [];
+      var changedIndexes = [];
       forEach(this.items, function (item, i) {
         var img = item.querySelector('img');
         var image = images[i];
 
         if (image && img) {
-          if (image.src !== img.src) {
-            indexes.push(i);
+          if (image.src !== img.src // Title changed (#408)
+          || image.alt !== img.alt) {
+            changedIndexes.push(i);
           }
         } else {
-          indexes.push(i);
+          changedIndexes.push(i);
         }
       });
       setStyle(this.list, {
@@ -2616,12 +2651,13 @@ var methods = {
       if (this.isShown) {
         if (this.length) {
           if (this.viewed) {
-            var index = indexes.indexOf(this.index);
+            var changedIndex = changedIndexes.indexOf(this.index);
 
-            if (index >= 0) {
+            if (changedIndex >= 0) {
               this.viewed = false;
-              this.view(Math.max(this.index - (index + 1), 0));
+              this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
             } else {
+              // Reactivate the current viewing item after reset the list.
               addClass(this.items[this.index], CLASS_ACTIVE);
             }
           }
@@ -2767,7 +2803,9 @@ var others = {
         });
       }
 
-      dispatchEvent(element, EVENT_HIDDEN);
+      dispatchEvent(element, EVENT_HIDDEN, null, {
+        cancelable: false
+      });
     }
   },
   requestFullscreen: function requestFullscreen() {

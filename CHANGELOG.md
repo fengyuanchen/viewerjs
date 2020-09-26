@@ -1,12 +1,12 @@
 # Changelog
 
-## next
+## 1.7.0 (Sep 26, 2020)
 
 - Add 2 new events: `play` and `stop` (#411).
 - Let the `viewed`, `zoomed` and `hidden` events can not be canceled.
 - Improve the TypeScript declarations in the `types/index.d.ts` file.
 
-## 1.6.2 (Sep 30, 2020)
+## 1.6.2 (Aug 30, 2020)
 
 - Fix wrong usage about `this` in ES6+ (#395).
 - Improve the wheel zoom behavior (#396).
