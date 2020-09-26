@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 43 [options](#options)
+- Supports 45 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 11 [events](#events)
 - Supports modal and inline modes
@@ -931,7 +931,7 @@ This event fires when a viewer has shown (viewed) an image.
 - **event.cancelable**: `true`
 - **event.detail.originalEvent**:
   - Type: `Event`
-  - Options: `wheel`, `touchmove`.
+  - Options: `wheel`, `pointermove`, `touchmove`, and `mousemove`.
 - **event.detail.oldRatio**:
   - Type: `Number`
   - The old (current) ratio of the image.
