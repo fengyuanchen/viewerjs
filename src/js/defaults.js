@@ -227,4 +227,6 @@ export default {
   viewed: null,
   zoom: null,
   zoomed: null,
+  play: null,
+  stop: null,
 };
