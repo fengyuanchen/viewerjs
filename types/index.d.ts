@@ -56,7 +56,7 @@ declare namespace Viewer {
     fullscreen?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
-    inheritedAttributes: string[];
+    inheritedAttributes?: string[];
     initialViewIndex?: number;
     inline?: boolean;
     interval?: number;
