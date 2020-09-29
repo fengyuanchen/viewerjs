@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1 (Sep 29, 2020)
+
+- Fix an issue in the `types/index.d.ts` file (#414).
+
 ## 1.7.0 (Sep 26, 2020)
 
 - Add 2 new events: `play` and `stop` (#411).
