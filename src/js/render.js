@@ -96,10 +96,15 @@ export default {
 
         img.src = src || url;
         img.alt = alt;
-        img.setAttribute('data-index', index);
         img.setAttribute('data-original-url', url || src);
-        img.setAttribute('data-viewer-action', 'view');
-        img.setAttribute('role', 'button');
+        item.setAttribute('data-index', index);
+        item.setAttribute('data-viewer-action', 'view');
+        item.setAttribute('role', 'button');
+
+        if (options.keyboard) {
+          item.setAttribute('tabindex', 0);
+        }
+
         item.appendChild(img);
         list.appendChild(item);
         items.push(item);

@@ -41,6 +41,10 @@ import {
 } from './utilities';
 
 const AnotherViewer = WINDOW.Viewer;
+const getUniqueID = ((id) => (() => {
+  id += 1;
+  return id;
+}))(-1);
 
 class Viewer {
   /**
@@ -76,6 +80,7 @@ class Viewer {
     this.viewing = false;
     this.wheeling = false;
     this.zooming = false;
+    this.id = getUniqueID();
     this.init();
   }
 
@@ -88,7 +93,12 @@ class Viewer {
 
     element[NAMESPACE] = this;
 
-    const isImg = element.tagName.toLowerCase() === 'img';
+    // The `focus` option requires the `keyboard` option set to `true`.
+    if (options.focus && !options.keyboard) {
+      options.focus = false;
+    }
+
+    const isImg = element.localName === 'img';
     const images = [];
 
     forEach(isImg ? [element] : element.querySelectorAll('img'), (image) => {
@@ -155,8 +165,7 @@ class Viewer {
       });
     } else {
       addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
-        if (target.tagName.toLowerCase() === 'img'
-          && (!isFunction(options.filter) || options.filter.call(this, target))) {
+        if (target.localName === 'img' && (!isFunction(options.filter) || options.filter.call(this, target))) {
           this.view(this.images.indexOf(target));
         }
       }));
@@ -193,11 +202,17 @@ class Viewer {
     this.player = viewer.querySelector(`.${NAMESPACE}-player`);
     this.list = viewer.querySelector(`.${NAMESPACE}-list`);
 
+    viewer.id = `${NAMESPACE}${this.id}`;
+    title.id = `${NAMESPACE}Title${this.id}`;
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
       ? options.title[0]
       : options.title));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(button, CLASS_HIDE, !options.button);
+
+    if (options.keyboard) {
+      button.setAttribute('tabindex', 0);
+    }
 
     if (options.backdrop) {
       addClass(viewer, `${NAMESPACE}-backdrop`);
@@ -242,6 +257,10 @@ class Viewer {
         const size = deep && !isUndefined(value.size) ? value.size : value;
         const click = deep && !isUndefined(value.click) ? value.click : value;
         const item = document.createElement('li');
+
+        if (options.keyboard) {
+          item.setAttribute('tabindex', 0);
+        }
 
         item.setAttribute('role', 'button');
         addClass(item, `${NAMESPACE}-${name}`);

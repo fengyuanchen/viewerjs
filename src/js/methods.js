@@ -84,6 +84,10 @@ export default {
     const { viewer } = this;
 
     removeClass(viewer, CLASS_HIDE);
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-labelledby', this.title.id);
+    viewer.setAttribute('aria-modal', true);
+    viewer.removeAttribute('aria-hidden');
 
     if (options.transition && !immediate) {
       const shown = this.shown.bind(this);
@@ -255,9 +259,18 @@ export default {
       return this;
     }
 
-    this.image = image;
-    removeClass(this.items[this.index], CLASS_ACTIVE);
+    const activeItem = this.items[this.index];
+
+    removeClass(activeItem, CLASS_ACTIVE);
+    activeItem.removeAttribute('aria-selected');
     addClass(item, CLASS_ACTIVE);
+    item.setAttribute('aria-selected', true);
+
+    if (options.focus) {
+      item.focus();
+    }
+
+    this.image = image;
     this.viewed = false;
     this.index = index;
     this.imageData = {};
@@ -767,10 +780,17 @@ export default {
     }
 
     addClass(viewer, CLASS_FIXED);
-    viewer.setAttribute('style', '');
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-labelledby', this.title.id);
+    viewer.setAttribute('aria-modal', true);
+    viewer.removeAttribute('style');
     setStyle(viewer, {
       zIndex: options.zIndex,
     });
+
+    if (options.focus) {
+      this.enforceFocus();
+    }
 
     this.initContainer();
     this.viewerData = assign({}, this.containerData);
@@ -817,6 +837,13 @@ export default {
       }
     }
 
+    if (options.focus) {
+      this.clearEnforceFocus();
+    }
+
+    viewer.removeAttribute('role');
+    viewer.removeAttribute('aria-labelledby');
+    viewer.removeAttribute('aria-modal');
     removeClass(viewer, CLASS_FIXED);
     setStyle(viewer, {
       zIndex: options.zIndexInline,
@@ -861,12 +888,14 @@ export default {
         addClass(tooltipBox, CLASS_SHOW);
         addClass(tooltipBox, CLASS_FADE);
         addClass(tooltipBox, CLASS_TRANSITION);
+        tooltipBox.removeAttribute('aria-hidden');
 
         // Force reflow to enable CSS3 transition
         tooltipBox.initialOffsetWidth = tooltipBox.offsetWidth;
         addClass(tooltipBox, CLASS_IN);
       } else {
         addClass(tooltipBox, CLASS_SHOW);
+        tooltipBox.removeAttribute('aria-hidden');
       }
     } else {
       clearTimeout(this.tooltipping);
@@ -878,6 +907,7 @@ export default {
           removeClass(tooltipBox, CLASS_SHOW);
           removeClass(tooltipBox, CLASS_FADE);
           removeClass(tooltipBox, CLASS_TRANSITION);
+          tooltipBox.setAttribute('aria-hidden', true);
           this.fading = false;
         }, {
           once: true,
@@ -887,6 +917,7 @@ export default {
         this.fading = true;
       } else {
         removeClass(tooltipBox, CLASS_SHOW);
+        tooltipBox.setAttribute('aria-hidden', true);
       }
 
       this.tooltipping = false;
@@ -980,8 +1011,11 @@ export default {
               this.viewed = false;
               this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
             } else {
+              const activeItem = this.items[this.index];
+
               // Reactivate the current viewing item after reset the list.
-              addClass(this.items[this.index], CLASS_ACTIVE);
+              addClass(activeItem, CLASS_ACTIVE);
+              activeItem.setAttribute('aria-selected', true);
             }
           }
         } else {
