@@ -9,12 +9,12 @@ describe('stop (event)', () => {
         expect(viewer.played).to.true;
         viewer.stop();
         expect(viewer.played).to.false;
+        done();
       }, 500);
     });
 
     image.addEventListener('stop', (event) => {
       expect(event.type).to.equal('stop');
-      done();
     });
 
     viewer = new Viewer(image);
@@ -31,13 +31,13 @@ describe('stop (event)', () => {
         expect(viewer.played).to.true;
         viewer.stop();
         expect(viewer.played).to.true;
+        done();
       }, 500);
     });
 
     image.addEventListener('stop', (event) => {
       expect(event.type).to.equal('stop');
       event.preventDefault();
-      done();
     });
 
     viewer = new Viewer(image);

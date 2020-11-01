@@ -7,11 +7,11 @@ describe('play (event)', () => {
       expect(viewer.played).to.false;
       viewer.play();
       expect(viewer.played).to.true;
+      done();
     });
 
     image.addEventListener('play', (event) => {
       expect(event.type).to.equal('play');
-      done();
     });
 
     viewer = new Viewer(image);
@@ -26,12 +26,12 @@ describe('play (event)', () => {
       expect(viewer.played).to.false;
       viewer.play();
       expect(viewer.played).to.false;
+      done();
     });
 
     image.addEventListener('play', (event) => {
       expect(event.type).to.equal('play');
       event.preventDefault();
-      done();
     });
 
     viewer = new Viewer(image);

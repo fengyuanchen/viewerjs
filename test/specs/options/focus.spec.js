@@ -3,7 +3,7 @@ describe('focus (option)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       viewed() {
-        expect(document.activeElement).to.equal(viewer.image.parentElement);
+        expect(document.activeElement).to.equal(viewer.items[viewer.index]);
         viewer.hide(true);
         done();
       },
@@ -19,7 +19,7 @@ describe('focus (option)', () => {
       focus: false,
 
       viewed() {
-        expect(document.activeElement).to.not.equal(viewer.image.parentElement);
+        expect(document.activeElement).to.not.equal(viewer.items[viewer.index]);
         viewer.hide(true);
         done();
       },
