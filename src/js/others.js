@@ -4,6 +4,7 @@ import {
   ACTION_ZOOM,
   CLASS_HIDE,
   CLASS_OPEN,
+  EVENT_FOCUSIN,
   EVENT_HIDDEN,
   EVENT_SHOWN,
 } from './constants';
@@ -16,6 +17,7 @@ import {
   isFunction,
   isString,
   removeClass,
+  removeListener,
 } from './utilities';
 
 export default {
@@ -31,6 +33,24 @@ export default {
     }
 
     return url;
+  },
+
+  enforceFocus() {
+    this.clearEnforceFocus();
+    addListener(document, EVENT_FOCUSIN, (this.onFocusin = ({ target }) => {
+      const { viewer } = this;
+
+      if (target !== document && target !== viewer && !viewer.contains(target)) {
+        viewer.focus();
+      }
+    }));
+  },
+
+  clearEnforceFocus() {
+    if (this.onFocusin) {
+      removeListener(document, EVENT_FOCUSIN, this.onFocusin);
+      this.onFocusin = null;
+    }
   },
 
   open() {
@@ -49,13 +69,18 @@ export default {
   },
 
   shown() {
-    const { element, options } = this;
+    const { element, options, viewer } = this;
 
     this.fulled = true;
     this.isShown = true;
     this.render();
     this.bind();
     this.showing = false;
+
+    if (options.focus) {
+      viewer.focus();
+      this.enforceFocus();
+    }
 
     if (isFunction(options.shown)) {
       addListener(element, EVENT_SHOWN, options.shown, {
@@ -73,14 +98,22 @@ export default {
   },
 
   hidden() {
-    const { element, options } = this;
+    const { element, options, viewer } = this;
+
+    if (options.fucus) {
+      this.clearEnforceFocus();
+    }
 
     this.fulled = false;
     this.viewed = false;
     this.isShown = false;
     this.close();
     this.unbind();
-    addClass(this.viewer, CLASS_HIDE);
+    addClass(viewer, CLASS_HIDE);
+    viewer.removeAttribute('role');
+    viewer.removeAttribute('aria-labelledby');
+    viewer.removeAttribute('aria-modal');
+    viewer.setAttribute('aria-hidden', true);
     this.resetList();
     this.resetImage();
     this.hiding = false;

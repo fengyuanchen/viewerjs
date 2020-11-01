@@ -94,6 +94,12 @@ export default {
   keyboard: true,
 
   /**
+   * Focus the viewer when initialized.
+   * @type {boolean}
+   */
+  focus: true,
+
+  /**
    * Indicate if show a loading spinner when load image or not.
    * @type {boolean}
    */

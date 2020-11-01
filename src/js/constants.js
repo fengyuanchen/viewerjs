@@ -32,6 +32,7 @@ export const CLASS_TRANSITION = `${NAMESPACE}-transition`;
 export const EVENT_CLICK = 'click';
 export const EVENT_DBLCLICK = 'dblclick';
 export const EVENT_DRAG_START = 'dragstart';
+export const EVENT_FOCUSIN = 'focusin';
 export const EVENT_HIDDEN = 'hidden';
 export const EVENT_HIDE = 'hide';
 export const EVENT_KEY_DOWN = 'keydown';

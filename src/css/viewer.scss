@@ -116,6 +116,10 @@
       background-color: transparent;
     }
 
+    &:focus {
+      outline: 0;
+    }
+
     & img {
       display: block;
       height: auto;
@@ -176,8 +180,13 @@
       transition: opacity 0.15s;
       width: 30px;
 
+      &:focus,
       &:hover {
         opacity: 0.75;
+      }
+
+      &:focus {
+        outline: 0;
       }
 
       & + li {
@@ -199,6 +208,7 @@
 
     & > .viewer-active {
       &,
+      &:focus,
       &:hover {
         opacity: 1;
       }
@@ -214,6 +224,7 @@
     position: absolute;
     right: 0;
     top: 0;
+    z-index: 1;
 
     & > img {
       left: 0;
@@ -227,7 +238,7 @@
       display: inline-block;
       margin: 0 auto 5px;
       overflow: hidden;
-      padding: 3px 0;
+      padding: 6px 3px;
 
       & > li {
         background-color: rgba(0, 0, 0, 0.5);
@@ -239,8 +250,16 @@
         transition: background-color 0.15s;
         width: 24px;
 
+        &:focus,
         &:hover {
           background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        &:focus {
+          box-shadow: 0 0 3px #fff;
+          outline: 0;
+          position: relative;
+          z-index: 1;
         }
 
         &::before {
@@ -326,6 +345,11 @@
     &:focus,
     &:hover {
       background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    &:focus {
+      box-shadow: 0 0 3px #fff;
+      outline: 0;
     }
 
     &::before {

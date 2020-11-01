@@ -32,9 +32,14 @@ import {
 
 export default {
   click(event) {
-    const { target } = event;
     const { options, imageData } = this;
-    const action = getData(target, DATA_ACTION);
+    let { target } = event;
+    let action = getData(target, DATA_ACTION);
+
+    if (!action && target.localName === 'img' && target.parentElement.localName === 'li') {
+      target = target.parentElement;
+      action = getData(target, DATA_ACTION);
+    }
 
     // Cancel the emulated click when the native click event was triggered.
     if (IS_TOUCH_DEVICE && event.isTrusted && target === this.canvas) {
@@ -220,11 +225,29 @@ export default {
   keydown(event) {
     const { options } = this;
 
-    if (!this.fulled || !options.keyboard) {
+    if (!options.keyboard) {
       return;
     }
 
-    switch (event.keyCode || event.which || event.charCode) {
+    const keyCode = event.keyCode || event.which || event.charCode;
+
+    switch (keyCode) {
+      // Enter
+      case 13:
+        if (this.viewer.contains(event.target)) {
+          this.click(event);
+        }
+
+        break;
+
+      default:
+    }
+
+    if (!this.fulled) {
+      return;
+    }
+
+    switch (keyCode) {
       // Escape
       case 27:
         if (this.played) {
@@ -294,7 +317,7 @@ export default {
   },
 
   dragstart(event) {
-    if (event.target.tagName.toLowerCase() === 'img') {
+    if (event.target.localName === 'img') {
       event.preventDefault();
     }
   },

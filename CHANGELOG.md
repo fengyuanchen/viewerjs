@@ -1,5 +1,11 @@
 # Changelog
 
+## next
+
+- Add a new option: `focus` .
+- Add ARIA attributes for better accessibility.
+- Add the `Tab` and `Enter` keys to the keyboard support.
+
 ## 1.7.1 (Sep 29, 2020)
 
 - Fix an issue in the `types/index.d.ts` file (#414).

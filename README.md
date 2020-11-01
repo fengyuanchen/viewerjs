@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 45 [options](#options)
+- Supports 46 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 11 [events](#events)
 - Supports modal and inline modes
@@ -123,6 +123,8 @@ const gallery = new Viewer(document.getElementById('images'));
 
 - `Esc`: Exit full screen or close the viewer or exit modal mode or stop play.
 - `Space`: Stop play.
+- `Tab`: Switch the focus state on the buttons in the viewer.
+- `Enter`: Trigger the click event handler on the button.
 - `←`: View the previous image.
 - `→`: View the next image.
 - `↑`: Zoom in the image.
@@ -314,6 +316,15 @@ The amount of time to delay between automatically cycling an image when playing.
 - Default: `true`
 
 Enable keyboard support.
+
+### focus
+
+- Type: `Boolean`
+- Default: `true`
+
+Focus the active item in the navbar when initialized.
+
+> Requires the `keyboard` option set to `true`.
 
 ### loading
 
