@@ -28,4 +28,13 @@ describe('focus (option)', () => {
     expect(viewer.options.focus).to.be.false;
     viewer.show();
   });
+
+  it('should be disabled when the `keyboard` option to set to `false`', () => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      keyboard: false,
+    });
+
+    expect(viewer.options.focus).to.be.false;
+  });
 });
