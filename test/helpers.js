@@ -1,3 +1,8 @@
+// XXX: Disable the `focus` option globally to avoid side effects.
+window.Viewer.setDefaults({
+  focus: false,
+});
+
 window.createContainer = () => {
   const container = document.createElement('div');
 
