@@ -180,6 +180,12 @@ export default {
   change(event) {
     const { options, pointers } = this;
     const pointer = pointers[Object.keys(pointers)[0]];
+
+    // In the case of the `pointers` object is empty (#421)
+    if (!pointer) {
+      return;
+    }
+
     const offsetX = pointer.endX - pointer.startX;
     const offsetY = pointer.endY - pointer.startY;
 
