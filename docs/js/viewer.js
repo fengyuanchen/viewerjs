@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.7.1
+ * Viewer.js v1.8.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-09-29T13:45:20.981Z
+ * Date: 2020-11-08T05:28:37.365Z
  */
 
 (function (global, factory) {
@@ -188,6 +188,12 @@
     keyboard: true,
 
     /**
+     * Focus the viewer when initialized.
+     * @type {boolean}
+     */
+    focus: true,
+
+    /**
      * Indicate if show a loading spinner when load image or not.
      * @type {boolean}
      */
@@ -325,7 +331,7 @@
     stop: null
   };
 
-  var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+  var TEMPLATE = '<div class="viewer-container" tabindex="-1" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list" role="navigation"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip" role="alert" aria-hidden="true"></div>' + '<div class="viewer-button" data-viewer-action="mix" role="button"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
   var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
   var WINDOW = IS_BROWSER ? window : {};
@@ -358,6 +364,7 @@
   var EVENT_CLICK = 'click';
   var EVENT_DBLCLICK = 'dblclick';
   var EVENT_DRAG_START = 'dragstart';
+  var EVENT_FOCUSIN = 'focusin';
   var EVENT_HIDDEN = 'hidden';
   var EVENT_HIDE = 'hide';
   var EVENT_KEY_DOWN = 'keydown';
@@ -1085,10 +1092,15 @@
           });
           img.src = src || url;
           img.alt = alt;
-          img.setAttribute('data-index', index);
           img.setAttribute('data-original-url', url || src);
-          img.setAttribute('data-viewer-action', 'view');
-          img.setAttribute('role', 'button');
+          item.setAttribute('data-index', index);
+          item.setAttribute('data-viewer-action', 'view');
+          item.setAttribute('role', 'button');
+
+          if (options.keyboard) {
+            item.setAttribute('tabindex', 0);
+          }
+
           item.appendChild(img);
           list.appendChild(item);
           items.push(item);
@@ -1305,10 +1317,16 @@
 
   var handlers = {
     click: function click(event) {
-      var target = event.target;
       var options = this.options,
           imageData = this.imageData;
-      var action = getData(target, DATA_ACTION); // Cancel the emulated click when the native click event was triggered.
+      var target = event.target;
+      var action = getData(target, DATA_ACTION);
+
+      if (!action && target.localName === 'img' && target.parentElement.localName === 'li') {
+        target = target.parentElement;
+        action = getData(target, DATA_ACTION);
+      } // Cancel the emulated click when the native click event was triggered.
+
 
       if (IS_TOUCH_DEVICE && event.isTrusted && target === this.canvas) {
         clearTimeout(this.clickCanvasTimeout);
@@ -1480,11 +1498,27 @@
     keydown: function keydown(event) {
       var options = this.options;
 
-      if (!this.fulled || !options.keyboard) {
+      if (!options.keyboard) {
         return;
       }
 
-      switch (event.keyCode || event.which || event.charCode) {
+      var keyCode = event.keyCode || event.which || event.charCode;
+
+      switch (keyCode) {
+        // Enter
+        case 13:
+          if (this.viewer.contains(event.target)) {
+            this.click(event);
+          }
+
+          break;
+      }
+
+      if (!this.fulled) {
+        return;
+      }
+
+      switch (keyCode) {
         // Escape
         case 27:
           if (this.played) {
@@ -1548,7 +1582,7 @@
       }
     },
     dragstart: function dragstart(event) {
-      if (event.target.tagName.toLowerCase() === 'img') {
+      if (event.target.localName === 'img') {
         event.preventDefault();
       }
     },
@@ -1782,6 +1816,10 @@
       this.open();
       var viewer = this.viewer;
       removeClass(viewer, CLASS_HIDE);
+      viewer.setAttribute('role', 'dialog');
+      viewer.setAttribute('aria-labelledby', this.title.id);
+      viewer.setAttribute('aria-modal', true);
+      viewer.removeAttribute('aria-hidden');
 
       if (options.transition && !immediate) {
         var shown = this.shown.bind(this);
@@ -1956,9 +1994,17 @@
         return this;
       }
 
-      this.image = image;
-      removeClass(this.items[this.index], CLASS_ACTIVE);
+      var activeItem = this.items[this.index];
+      removeClass(activeItem, CLASS_ACTIVE);
+      activeItem.removeAttribute('aria-selected');
       addClass(item, CLASS_ACTIVE);
+      item.setAttribute('aria-selected', true);
+
+      if (options.focus) {
+        item.focus();
+      }
+
+      this.image = image;
       this.viewed = false;
       this.index = index;
       this.imageData = {};
@@ -2459,10 +2505,18 @@
       }
 
       addClass(viewer, CLASS_FIXED);
-      viewer.setAttribute('style', '');
+      viewer.setAttribute('role', 'dialog');
+      viewer.setAttribute('aria-labelledby', this.title.id);
+      viewer.setAttribute('aria-modal', true);
+      viewer.removeAttribute('style');
       setStyle(viewer, {
         zIndex: options.zIndex
       });
+
+      if (options.focus) {
+        this.enforceFocus();
+      }
+
       this.initContainer();
       this.viewerData = assign({}, this.containerData);
       this.renderList();
@@ -2507,6 +2561,13 @@
         }
       }
 
+      if (options.focus) {
+        this.clearEnforceFocus();
+      }
+
+      viewer.removeAttribute('role');
+      viewer.removeAttribute('aria-labelledby');
+      viewer.removeAttribute('aria-modal');
       removeClass(viewer, CLASS_FIXED);
       setStyle(viewer, {
         zIndex: options.zIndexInline
@@ -2552,12 +2613,14 @@
 
           addClass(tooltipBox, CLASS_SHOW);
           addClass(tooltipBox, CLASS_FADE);
-          addClass(tooltipBox, CLASS_TRANSITION); // Force reflow to enable CSS3 transition
+          addClass(tooltipBox, CLASS_TRANSITION);
+          tooltipBox.removeAttribute('aria-hidden'); // Force reflow to enable CSS3 transition
 
           tooltipBox.initialOffsetWidth = tooltipBox.offsetWidth;
           addClass(tooltipBox, CLASS_IN);
         } else {
           addClass(tooltipBox, CLASS_SHOW);
+          tooltipBox.removeAttribute('aria-hidden');
         }
       } else {
         clearTimeout(this.tooltipping);
@@ -2569,6 +2632,7 @@
             removeClass(tooltipBox, CLASS_SHOW);
             removeClass(tooltipBox, CLASS_FADE);
             removeClass(tooltipBox, CLASS_TRANSITION);
+            tooltipBox.setAttribute('aria-hidden', true);
             _this8.fading = false;
           }, {
             once: true
@@ -2577,6 +2641,7 @@
           _this8.fading = true;
         } else {
           removeClass(tooltipBox, CLASS_SHOW);
+          tooltipBox.setAttribute('aria-hidden', true);
         }
 
         _this8.tooltipping = false;
@@ -2661,8 +2726,10 @@
                 this.viewed = false;
                 this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
               } else {
-                // Reactivate the current viewing item after reset the list.
-                addClass(this.items[this.index], CLASS_ACTIVE);
+                var activeItem = this.items[this.index]; // Reactivate the current viewing item after reset the list.
+
+                addClass(activeItem, CLASS_ACTIVE);
+                activeItem.setAttribute('aria-selected', true);
               }
             }
           } else {
@@ -2754,6 +2821,25 @@
 
       return url;
     },
+    enforceFocus: function enforceFocus() {
+      var _this = this;
+
+      this.clearEnforceFocus();
+      addListener(document, EVENT_FOCUSIN, this.onFocusin = function (_ref) {
+        var target = _ref.target;
+        var viewer = _this.viewer;
+
+        if (target !== document && target !== viewer && !viewer.contains(target)) {
+          viewer.focus();
+        }
+      });
+    },
+    clearEnforceFocus: function clearEnforceFocus() {
+      if (this.onFocusin) {
+        removeListener(document, EVENT_FOCUSIN, this.onFocusin);
+        this.onFocusin = null;
+      }
+    },
     open: function open() {
       var body = this.body;
       addClass(body, CLASS_OPEN);
@@ -2766,12 +2852,18 @@
     },
     shown: function shown() {
       var element = this.element,
-          options = this.options;
+          options = this.options,
+          viewer = this.viewer;
       this.fulled = true;
       this.isShown = true;
       this.render();
       this.bind();
       this.showing = false;
+
+      if (options.focus) {
+        viewer.focus();
+        this.enforceFocus();
+      }
 
       if (isFunction(options.shown)) {
         addListener(element, EVENT_SHOWN, options.shown, {
@@ -2789,13 +2881,23 @@
     },
     hidden: function hidden() {
       var element = this.element,
-          options = this.options;
+          options = this.options,
+          viewer = this.viewer;
+
+      if (options.fucus) {
+        this.clearEnforceFocus();
+      }
+
       this.fulled = false;
       this.viewed = false;
       this.isShown = false;
       this.close();
       this.unbind();
-      addClass(this.viewer, CLASS_HIDE);
+      addClass(viewer, CLASS_HIDE);
+      viewer.removeAttribute('role');
+      viewer.removeAttribute('aria-labelledby');
+      viewer.removeAttribute('aria-modal');
+      viewer.setAttribute('aria-hidden', true);
       this.resetList();
       this.resetImage();
       this.hiding = false;
@@ -2848,7 +2950,12 @@
     change: function change(event) {
       var options = this.options,
           pointers = this.pointers;
-      var pointer = pointers[Object.keys(pointers)[0]];
+      var pointer = pointers[Object.keys(pointers)[0]]; // In the case of the `pointers` object is empty (#421)
+
+      if (!pointer) {
+        return;
+      }
+
       var offsetX = pointer.endX - pointer.startX;
       var offsetY = pointer.endY - pointer.startY;
 
@@ -2898,6 +3005,13 @@
 
   var AnotherViewer = WINDOW.Viewer;
 
+  var getUniqueID = function (id) {
+    return function () {
+      id += 1;
+      return id;
+    };
+  }(-1);
+
   var Viewer = /*#__PURE__*/function () {
     /**
      * Create a new Viewer.
@@ -2936,6 +3050,7 @@
       this.viewing = false;
       this.wheeling = false;
       this.zooming = false;
+      this.id = getUniqueID();
       this.init();
     }
 
@@ -2951,8 +3066,13 @@
           return;
         }
 
-        element[NAMESPACE] = this;
-        var isImg = element.tagName.toLowerCase() === 'img';
+        element[NAMESPACE] = this; // The `focus` option requires the `keyboard` option set to `true`.
+
+        if (options.focus && !options.keyboard) {
+          options.focus = false;
+        }
+
+        var isImg = element.localName === 'img';
         var images = [];
         forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
           if (isFunction(options.filter)) {
@@ -3017,7 +3137,7 @@
           addListener(element, EVENT_CLICK, this.onStart = function (_ref) {
             var target = _ref.target;
 
-            if (target.tagName.toLowerCase() === 'img' && (!isFunction(options.filter) || options.filter.call(_this, target))) {
+            if (target.localName === 'img' && (!isFunction(options.filter) || options.filter.call(_this, target))) {
               _this.view(_this.images.indexOf(target));
             }
           });
@@ -3052,9 +3172,15 @@
         this.tooltipBox = viewer.querySelector(".".concat(NAMESPACE, "-tooltip"));
         this.player = viewer.querySelector(".".concat(NAMESPACE, "-player"));
         this.list = viewer.querySelector(".".concat(NAMESPACE, "-list"));
+        viewer.id = "".concat(NAMESPACE).concat(this.id);
+        title.id = "".concat(NAMESPACE, "Title").concat(this.id);
         addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title) ? options.title[0] : options.title));
         addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
         toggleClass(button, CLASS_HIDE, !options.button);
+
+        if (options.keyboard) {
+          button.setAttribute('tabindex', 0);
+        }
 
         if (options.backdrop) {
           addClass(viewer, "".concat(NAMESPACE, "-backdrop"));
@@ -3094,6 +3220,11 @@
             var size = deep && !isUndefined(value.size) ? value.size : value;
             var click = deep && !isUndefined(value.click) ? value.click : value;
             var item = document.createElement('li');
+
+            if (options.keyboard) {
+              item.setAttribute('tabindex', 0);
+            }
+
             item.setAttribute('role', 'button');
             addClass(item, "".concat(NAMESPACE, "-").concat(name));
 

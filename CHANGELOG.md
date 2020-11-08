@@ -1,10 +1,11 @@
 # Changelog
 
-## next
+## 1.8.0 (Nov 8, 2020)
 
 - Add a new option: `focus` .
 - Add ARIA attributes for better accessibility.
 - Add the `Tab` and `Enter` keys to the keyboard support.
+- Check if the `pointer` object is defined or not for better compatibility (#421).
 
 ## 1.7.1 (Sep 29, 2020)
 

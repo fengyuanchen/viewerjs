@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.7.1
+ * Viewer.js v1.8.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-09-29T13:45:16.438Z
+ * Date: 2020-11-08T05:28:32.068Z
  */
 
 .viewer-zoom-in::before,
@@ -133,6 +133,10 @@
   background-color: transparent;
 }
 
+.viewer-container:focus {
+  outline: 0;
+}
+
 .viewer-container img {
   display: block;
   height: auto;
@@ -196,8 +200,13 @@
   width: 30px;
 }
 
+.viewer-list > li:focus,
 .viewer-list > li:hover {
   opacity: 0.75;
+}
+
+.viewer-list > li:focus {
+  outline: 0;
 }
 
 .viewer-list > li + li {
@@ -217,6 +226,7 @@
 }
 
 .viewer-list > .viewer-active,
+.viewer-list > .viewer-active:focus,
 .viewer-list > .viewer-active:hover {
   opacity: 1;
 }
@@ -230,6 +240,7 @@
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 1;
 }
 
 .viewer-player > img {
@@ -242,7 +253,7 @@
   display: inline-block;
   margin: 0 auto 5px;
   overflow: hidden;
-  padding: 3px 0;
+  padding: 6px 3px;
 }
 
 .viewer-toolbar > ul > li {
@@ -257,8 +268,17 @@
   width: 24px;
 }
 
+.viewer-toolbar > ul > li:focus,
 .viewer-toolbar > ul > li:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.viewer-toolbar > ul > li:focus {
+  -webkit-box-shadow: 0 0 3px #fff;
+  box-shadow: 0 0 3px #fff;
+  outline: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .viewer-toolbar > ul > li::before {
@@ -344,6 +364,12 @@
 .viewer-button:focus,
 .viewer-button:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.viewer-button:focus {
+  -webkit-box-shadow: 0 0 3px #fff;
+  box-shadow: 0 0 3px #fff;
+  outline: 0;
 }
 
 .viewer-button::before {
