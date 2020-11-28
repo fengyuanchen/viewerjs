@@ -1,6 +1,6 @@
 # Viewer.js
 
-[![Build Status](https://img.shields.io/travis/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs) [![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Dependencies](https://img.shields.io/david/fengyuanchen/viewerjs.svg)](https://www.npmjs.com/package/viewerjs)
+[![Build Status](https://img.shields.io/travis/fengyuanchen/viewerjs.svg)](https://travis-ci.org/fengyuanchen/viewerjs) [![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/viewerjs.svg)](https://unpkg.com/viewerjs/dist/viewer.common.js) [![Dependencies](https://img.shields.io/david/fengyuanchen/viewerjs.svg)](https://www.npmjs.com/package/viewerjs)
 
 > JavaScript image viewer.
 
