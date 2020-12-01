@@ -221,6 +221,18 @@ export default {
   url: 'src',
 
   /**
+   * Enable edge limitation on move.
+   * @type {boolean}
+   */
+  edgeLimit: false,
+
+  /**
+   * Define edge limit ratio based on current image width.
+   * @type {number}
+   */
+  edgeRatio: 0.5,
+
+  /**
    * Event shortcuts.
    * @type {Function}
    */

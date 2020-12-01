@@ -675,3 +675,38 @@ export function getPointersCenter(pointers) {
     pageY,
   };
 }
+
+/**
+ * Limit the image to an edge point.
+ * @param {Viewer} viewer - Viewer Object
+ * @param {number} left - The x-axis coordinate.
+ * @param {number} top - The y-axis coordinate.
+ * @returns {Object} - The result x and y-axis based on edge limitation.
+ */
+export function edgeThresholdValue(viewer, left, top) {
+  const { imageData, viewerData, options } = viewer;
+  const { edgeRatio } = options;
+  const widthLimiter = imageData.width * edgeRatio;
+  const heightLimiter = imageData.height * edgeRatio;
+
+  if (left < -(widthLimiter)) {
+    left = -widthLimiter;
+  }
+
+  if (left > (viewerData.width - widthLimiter)) {
+    left = viewerData.width - widthLimiter;
+  }
+
+  if (top < -(heightLimiter)) {
+    top = -heightLimiter;
+  }
+
+  if (top > (viewerData.height - heightLimiter)) {
+    top = viewerData.height - heightLimiter;
+  }
+
+  return {
+    left,
+    top,
+  };
+}

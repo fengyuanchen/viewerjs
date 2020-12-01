@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-11-08T05:28:37.365Z
+ * Date: 2020-12-01T01:27:02.286Z
  */
 
 (function (global, factory) {
@@ -313,6 +313,18 @@
      * @type {string | Function}
      */
     url: 'src',
+
+    /**
+     * Enable edge limitation on move.
+     * @type {boolean}
+     */
+    edgeLimit: false,
+
+    /**
+     * Define edge limit ratio based on current image width.
+     * @type {number}
+     */
+    edgeRatio: 0.5,
 
     /**
      * Event shortcuts.
@@ -1017,6 +1029,43 @@
     return {
       pageX: pageX,
       pageY: pageY
+    };
+  }
+  /**
+   * Limit the image to an edge point.
+   * @param {Viewer} viewer - Viewer Object
+   * @param {number} left - The x-axis coordinate.
+   * @param {number} top - The y-axis coordinate.
+   * @returns {Object} - The result x and y-axis based on edge limitation.
+   */
+
+  function edgeThresholdValue(viewer, left, top) {
+    var imageData = viewer.imageData,
+        viewerData = viewer.viewerData,
+        options = viewer.options;
+    var edgeRatio = options.edgeRatio;
+    var widthLimiter = imageData.width * edgeRatio;
+    var heightLimiter = imageData.height * edgeRatio;
+
+    if (left < -widthLimiter) {
+      left = -widthLimiter;
+    }
+
+    if (left > viewerData.width - widthLimiter) {
+      left = viewerData.width - widthLimiter;
+    }
+
+    if (top < -heightLimiter) {
+      top = -heightLimiter;
+    }
+
+    if (top > viewerData.height - heightLimiter) {
+      top = viewerData.height - heightLimiter;
+    }
+
+    return {
+      left: left,
+      top: top
     };
   }
 
@@ -2131,20 +2180,28 @@
      */
     moveTo: function moveTo(x) {
       var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
-      var imageData = this.imageData;
+      var imageData = this.imageData,
+          options = this.options;
       x = Number(x);
       y = Number(y);
+
+      var _ref = options.edgeLimit ? edgeThresholdValue(this, x, y) : {
+        left: x,
+        top: y
+      },
+          left = _ref.left,
+          top = _ref.top;
 
       if (this.viewed && !this.played && this.options.movable) {
         var changed = false;
 
-        if (isNumber(x)) {
-          imageData.left = x;
+        if (isNumber(left)) {
+          imageData.left = left;
           changed = true;
         }
 
-        if (isNumber(y)) {
-          imageData.top = y;
+        if (isNumber(top)) {
+          imageData.top = top;
           changed = true;
         }
 
@@ -3349,3 +3406,4 @@
   return Viewer;
 
 })));
+//# sourceMappingURL=viewer.js.map

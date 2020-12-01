@@ -40,6 +40,7 @@ import {
   removeListener,
   setStyle,
   toggleClass,
+  edgeThresholdValue,
 } from './utilities';
 
 export default {
@@ -406,21 +407,23 @@ export default {
    * @returns {Viewer} this
    */
   moveTo(x, y = x) {
-    const { imageData } = this;
+    const { imageData, options } = this;
 
     x = Number(x);
     y = Number(y);
 
+    const { left, top } = options.edgeLimit ? edgeThresholdValue(this, x, y) : { left: x, top: y };
+
     if (this.viewed && !this.played && this.options.movable) {
       let changed = false;
 
-      if (isNumber(x)) {
-        imageData.left = x;
+      if (isNumber(left)) {
+        imageData.left = left;
         changed = true;
       }
 
-      if (isNumber(y)) {
-        imageData.top = y;
+      if (isNumber(top)) {
+        imageData.top = top;
         changed = true;
       }
 
