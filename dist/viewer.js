@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.8.0
+ * Viewer.js v1.9.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2020-11-08T05:28:37.365Z
+ * Date: 2020-12-06T11:25:15.688Z
  */
 
 (function (global, factory) {
@@ -325,6 +325,12 @@
     hidden: null,
     view: null,
     viewed: null,
+    move: null,
+    moved: null,
+    rotate: null,
+    rotated: null,
+    scale: null,
+    scaled: null,
     zoom: null,
     zoomed: null,
     play: null,
@@ -359,30 +365,37 @@
   var CLASS_MOVE = "".concat(NAMESPACE, "-move");
   var CLASS_OPEN = "".concat(NAMESPACE, "-open");
   var CLASS_SHOW = "".concat(NAMESPACE, "-show");
-  var CLASS_TRANSITION = "".concat(NAMESPACE, "-transition"); // Events
+  var CLASS_TRANSITION = "".concat(NAMESPACE, "-transition"); // Native events
 
   var EVENT_CLICK = 'click';
   var EVENT_DBLCLICK = 'dblclick';
   var EVENT_DRAG_START = 'dragstart';
   var EVENT_FOCUSIN = 'focusin';
-  var EVENT_HIDDEN = 'hidden';
-  var EVENT_HIDE = 'hide';
   var EVENT_KEY_DOWN = 'keydown';
   var EVENT_LOAD = 'load';
-  var EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
-  var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
   var EVENT_TOUCH_END = IS_TOUCH_DEVICE ? 'touchend touchcancel' : 'mouseup';
+  var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
+  var EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
   var EVENT_POINTER_DOWN = HAS_POINTER_EVENT ? 'pointerdown' : EVENT_TOUCH_START;
   var EVENT_POINTER_MOVE = HAS_POINTER_EVENT ? 'pointermove' : EVENT_TOUCH_MOVE;
   var EVENT_POINTER_UP = HAS_POINTER_EVENT ? 'pointerup pointercancel' : EVENT_TOUCH_END;
-  var EVENT_READY = 'ready';
   var EVENT_RESIZE = 'resize';
+  var EVENT_TRANSITION_END = 'transitionend';
+  var EVENT_WHEEL = 'wheel'; // Custom events
+
+  var EVENT_READY = 'ready';
   var EVENT_SHOW = 'show';
   var EVENT_SHOWN = 'shown';
-  var EVENT_TRANSITION_END = 'transitionend';
+  var EVENT_HIDE = 'hide';
+  var EVENT_HIDDEN = 'hidden';
   var EVENT_VIEW = 'view';
   var EVENT_VIEWED = 'viewed';
-  var EVENT_WHEEL = 'wheel';
+  var EVENT_MOVE = 'move';
+  var EVENT_MOVED = 'moved';
+  var EVENT_ROTATE = 'rotate';
+  var EVENT_ROTATED = 'rotated';
+  var EVENT_SCALE = 'scale';
+  var EVENT_SCALED = 'scaled';
   var EVENT_ZOOM = 'zoom';
   var EVENT_ZOOMED = 'zoomed';
   var EVENT_PLAY = 'play';
@@ -1184,15 +1197,19 @@
 
         width = Math.min(width * 0.9, naturalWidth);
         height = Math.min(height * 0.9, naturalHeight);
+        var left = (viewerWidth - width) / 2;
+        var top = (viewerHeight - height) / 2;
         var imageData = {
-          naturalWidth: naturalWidth,
-          naturalHeight: naturalHeight,
-          aspectRatio: aspectRatio,
-          ratio: width / naturalWidth,
+          left: left,
+          top: top,
+          x: left,
+          y: top,
           width: width,
           height: height,
-          left: (viewerWidth - width) / 2,
-          top: (viewerHeight - height) / 2
+          ratio: width / naturalWidth,
+          aspectRatio: aspectRatio,
+          naturalWidth: naturalWidth,
+          naturalHeight: naturalHeight
         };
         var initialImageData = assign({}, imageData);
 
@@ -1225,12 +1242,12 @@
         width: imageData.width,
         height: imageData.height,
         // XXX: Not to use translateX/Y to avoid image shaking when zooming
-        marginLeft: imageData.left,
-        marginTop: imageData.top
+        marginLeft: imageData.x,
+        marginTop: imageData.y
       }, getTransforms(imageData)));
 
       if (done) {
-        if ((this.viewing || this.zooming) && this.options.transition) {
+        if ((this.viewing || this.moving || this.rotating || this.scaling || this.zooming) && this.options.transition && hasClass(image, CLASS_TRANSITION)) {
           var onTransitionEnd = function onTransitionEnd() {
             _this3.imageRendering = false;
             done();
@@ -2113,43 +2130,253 @@
 
     /**
      * Move the image with relative offsets.
-     * @param {number} offsetX - The relative offset distance on the x-axis.
-     * @param {number} offsetY - The relative offset distance on the y-axis.
+     * @param {number} x - The moving distance in the horizontal direction.
+     * @param {number} [y=x] The moving distance in the vertical direction.
      * @returns {Viewer} this
      */
-    move: function move(offsetX, offsetY) {
+    move: function move(x) {
+      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
       var imageData = this.imageData;
-      this.moveTo(isUndefined(offsetX) ? offsetX : imageData.left + Number(offsetX), isUndefined(offsetY) ? offsetY : imageData.top + Number(offsetY));
+      this.moveTo(isUndefined(x) ? x : imageData.x + Number(x), isUndefined(y) ? y : imageData.y + Number(y));
       return this;
     },
 
     /**
      * Move the image to an absolute point.
-     * @param {number} x - The x-axis coordinate.
-     * @param {number} [y=x] - The y-axis coordinate.
+     * @param {number} x - The new position in the horizontal direction.
+     * @param {number} [y=x] - The new position in the vertical direction.
+     * @param {Event} [_originalEvent=null] - The original event if any.
      * @returns {Viewer} this
      */
     moveTo: function moveTo(x) {
+      var _this3 = this;
+
       var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
-      var imageData = this.imageData;
+
+      var _originalEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      var element = this.element,
+          options = this.options,
+          imageData = this.imageData;
       x = Number(x);
       y = Number(y);
 
-      if (this.viewed && !this.played && this.options.movable) {
+      if (this.viewed && !this.played && options.movable) {
+        var oldX = imageData.x;
+        var oldY = imageData.y;
         var changed = false;
 
         if (isNumber(x)) {
-          imageData.left = x;
           changed = true;
+        } else {
+          x = oldX;
         }
 
         if (isNumber(y)) {
-          imageData.top = y;
           changed = true;
+        } else {
+          y = oldY;
         }
 
         if (changed) {
-          this.renderImage();
+          if (isFunction(options.move)) {
+            addListener(element, EVENT_MOVE, options.move, {
+              once: true
+            });
+          }
+
+          if (dispatchEvent(element, EVENT_MOVE, {
+            x: x,
+            y: y,
+            oldX: oldX,
+            oldY: oldY,
+            originalEvent: _originalEvent
+          }) === false) {
+            return this;
+          }
+
+          imageData.x = x;
+          imageData.y = y;
+          imageData.left = x;
+          imageData.top = y;
+          this.moving = true;
+          this.renderImage(function () {
+            _this3.moving = false;
+
+            if (isFunction(options.moved)) {
+              addListener(element, EVENT_MOVED, options.moved, {
+                once: true
+              });
+            }
+
+            dispatchEvent(element, EVENT_MOVED, {
+              x: x,
+              y: y,
+              oldX: oldX,
+              oldY: oldY,
+              originalEvent: _originalEvent
+            }, {
+              cancelable: false
+            });
+          });
+        }
+      }
+
+      return this;
+    },
+
+    /**
+     * Rotate the image with a relative degree.
+     * @param {number} degree - The rotate degree.
+     * @returns {Viewer} this
+     */
+    rotate: function rotate(degree) {
+      this.rotateTo((this.imageData.rotate || 0) + Number(degree));
+      return this;
+    },
+
+    /**
+     * Rotate the image to an absolute degree.
+     * @param {number} degree - The rotate degree.
+     * @returns {Viewer} this
+     */
+    rotateTo: function rotateTo(degree) {
+      var _this4 = this;
+
+      var element = this.element,
+          options = this.options,
+          imageData = this.imageData;
+      degree = Number(degree);
+
+      if (isNumber(degree) && this.viewed && !this.played && options.rotatable) {
+        var oldDegree = imageData.rotate;
+
+        if (isFunction(options.rotate)) {
+          addListener(element, EVENT_ROTATE, options.rotate, {
+            once: true
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_ROTATE, {
+          degree: degree,
+          oldDegree: oldDegree
+        }) === false) {
+          return this;
+        }
+
+        imageData.rotate = degree;
+        this.rotating = true;
+        this.renderImage(function () {
+          _this4.rotating = false;
+
+          if (isFunction(options.rotated)) {
+            addListener(element, EVENT_ROTATED, options.rotated, {
+              once: true
+            });
+          }
+
+          dispatchEvent(element, EVENT_ROTATED, {
+            degree: degree,
+            oldDegree: oldDegree
+          }, {
+            cancelable: false
+          });
+        });
+      }
+
+      return this;
+    },
+
+    /**
+     * Scale the image on the x-axis.
+     * @param {number} scaleX - The scale ratio on the x-axis.
+     * @returns {Viewer} this
+     */
+    scaleX: function scaleX(_scaleX) {
+      this.scale(_scaleX, this.imageData.scaleY);
+      return this;
+    },
+
+    /**
+     * Scale the image on the y-axis.
+     * @param {number} scaleY - The scale ratio on the y-axis.
+     * @returns {Viewer} this
+     */
+    scaleY: function scaleY(_scaleY) {
+      this.scale(this.imageData.scaleX, _scaleY);
+      return this;
+    },
+
+    /**
+     * Scale the image.
+     * @param {number} scaleX - The scale ratio on the x-axis.
+     * @param {number} [scaleY=scaleX] - The scale ratio on the y-axis.
+     * @returns {Viewer} this
+     */
+    scale: function scale(scaleX) {
+      var _this5 = this;
+
+      var scaleY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scaleX;
+      var element = this.element,
+          options = this.options,
+          imageData = this.imageData;
+      scaleX = Number(scaleX);
+      scaleY = Number(scaleY);
+
+      if (this.viewed && !this.played && options.scalable) {
+        var oldScaleX = imageData.scaleX;
+        var oldScaleY = imageData.scaleY;
+        var changed = false;
+
+        if (isNumber(scaleX)) {
+          changed = true;
+        } else {
+          scaleX = oldScaleX;
+        }
+
+        if (isNumber(scaleY)) {
+          changed = true;
+        } else {
+          scaleY = oldScaleY;
+        }
+
+        if (changed) {
+          if (isFunction(options.scale)) {
+            addListener(element, EVENT_SCALE, options.scale, {
+              once: true
+            });
+          }
+
+          if (dispatchEvent(element, EVENT_SCALE, {
+            scaleX: scaleX,
+            scaleY: scaleY,
+            oldScaleX: oldScaleX,
+            oldScaleY: oldScaleY
+          }) === false) {
+            return this;
+          }
+
+          imageData.scaleX = scaleX;
+          imageData.scaleY = scaleY;
+          this.scaling = true;
+          this.renderImage(function () {
+            _this5.scaling = false;
+
+            if (isFunction(options.scaled)) {
+              addListener(element, EVENT_SCALED, options.scaled, {
+                once: true
+              });
+            }
+
+            dispatchEvent(element, EVENT_SCALED, {
+              scaleX: scaleX,
+              scaleY: scaleY,
+              oldScaleX: oldScaleX,
+              oldScaleY: oldScaleY
+            }, {
+              cancelable: false
+            });
+          });
         }
       }
 
@@ -2190,7 +2417,7 @@
      * @returns {Viewer} this
      */
     zoomTo: function zoomTo(ratio) {
-      var _this3 = this;
+      var _this6 = this;
 
       var hasTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -2202,10 +2429,10 @@
           options = this.options,
           pointers = this.pointers,
           imageData = this.imageData;
-      var width = imageData.width,
+      var x = imageData.x,
+          y = imageData.y,
+          width = imageData.width,
           height = imageData.height,
-          left = imageData.left,
-          top = imageData.top,
           naturalWidth = imageData.naturalWidth,
           naturalHeight = imageData.naturalHeight;
       ratio = Math.max(0, ratio);
@@ -2250,19 +2477,21 @@
             pageY: _originalEvent.pageY
           }; // Zoom from the triggering point of the event
 
-          imageData.left -= offsetWidth * ((center.pageX - offset.left - left) / width);
-          imageData.top -= offsetHeight * ((center.pageY - offset.top - top) / height);
+          imageData.x -= offsetWidth * ((center.pageX - offset.left - x) / width);
+          imageData.y -= offsetHeight * ((center.pageY - offset.top - y) / height);
         } else {
           // Zoom from the center of the image
-          imageData.left -= offsetWidth / 2;
-          imageData.top -= offsetHeight / 2;
+          imageData.x -= offsetWidth / 2;
+          imageData.y -= offsetHeight / 2;
         }
 
+        imageData.left = imageData.x;
+        imageData.top = imageData.y;
         imageData.width = newWidth;
         imageData.height = newHeight;
         imageData.ratio = ratio;
         this.renderImage(function () {
-          _this3.zooming = false;
+          _this6.zooming = false;
 
           if (isFunction(options.zoomed)) {
             addListener(element, EVENT_ZOOMED, options.zoomed, {
@@ -2288,92 +2517,12 @@
     },
 
     /**
-     * Rotate the image with a relative degree.
-     * @param {number} degree - The rotate degree.
-     * @returns {Viewer} this
-     */
-    rotate: function rotate(degree) {
-      this.rotateTo((this.imageData.rotate || 0) + Number(degree));
-      return this;
-    },
-
-    /**
-     * Rotate the image to an absolute degree.
-     * @param {number} degree - The rotate degree.
-     * @returns {Viewer} this
-     */
-    rotateTo: function rotateTo(degree) {
-      var imageData = this.imageData;
-      degree = Number(degree);
-
-      if (isNumber(degree) && this.viewed && !this.played && this.options.rotatable) {
-        imageData.rotate = degree;
-        this.renderImage();
-      }
-
-      return this;
-    },
-
-    /**
-     * Scale the image on the x-axis.
-     * @param {number} scaleX - The scale ratio on the x-axis.
-     * @returns {Viewer} this
-     */
-    scaleX: function scaleX(_scaleX) {
-      this.scale(_scaleX, this.imageData.scaleY);
-      return this;
-    },
-
-    /**
-     * Scale the image on the y-axis.
-     * @param {number} scaleY - The scale ratio on the y-axis.
-     * @returns {Viewer} this
-     */
-    scaleY: function scaleY(_scaleY) {
-      this.scale(this.imageData.scaleX, _scaleY);
-      return this;
-    },
-
-    /**
-     * Scale the image.
-     * @param {number} scaleX - The scale ratio on the x-axis.
-     * @param {number} [scaleY=scaleX] - The scale ratio on the y-axis.
-     * @returns {Viewer} this
-     */
-    scale: function scale(scaleX) {
-      var scaleY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scaleX;
-      var imageData = this.imageData;
-      scaleX = Number(scaleX);
-      scaleY = Number(scaleY);
-
-      if (this.viewed && !this.played && this.options.scalable) {
-        var changed = false;
-
-        if (isNumber(scaleX)) {
-          imageData.scaleX = scaleX;
-          changed = true;
-        }
-
-        if (isNumber(scaleY)) {
-          imageData.scaleY = scaleY;
-          changed = true;
-        }
-
-        if (changed) {
-          this.renderImage();
-        }
-      }
-
-      return this;
-    },
-
-    /**
      * Play the images
      * @param {boolean} [fullscreen=false] - Indicate if request fullscreen or not.
      * @returns {Viewer} this
      */
     play: function play() {
-      var _this4 = this;
+      var _this7 = this;
 
       var fullscreen = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -2431,7 +2580,7 @@
 
       if (isNumber(options.interval) && options.interval > 0) {
         var play = function play() {
-          _this4.playing = setTimeout(function () {
+          _this7.playing = setTimeout(function () {
             removeClass(list[index], CLASS_IN);
             index += 1;
             index = index < total ? index : 0;
@@ -2449,7 +2598,7 @@
     },
     // Stop play
     stop: function stop() {
-      var _this5 = this;
+      var _this8 = this;
 
       if (!this.played) {
         return this;
@@ -2472,7 +2621,7 @@
       this.played = false;
       clearTimeout(this.playing);
       forEach(player.getElementsByTagName('img'), function (image) {
-        removeListener(image, EVENT_LOAD, _this5.onLoadWhenPlay);
+        removeListener(image, EVENT_LOAD, _this8.onLoadWhenPlay);
       });
       removeClass(player, CLASS_SHOW);
       player.innerHTML = '';
@@ -2481,7 +2630,7 @@
     },
     // Enter modal mode (only available in inline mode)
     full: function full() {
-      var _this6 = this;
+      var _this9 = this;
 
       var options = this.options,
           viewer = this.viewer,
@@ -2523,7 +2672,7 @@
 
       if (this.viewed) {
         this.initImage(function () {
-          _this6.renderImage(function () {
+          _this9.renderImage(function () {
             if (options.transition) {
               setTimeout(function () {
                 addClass(image, CLASS_TRANSITION);
@@ -2538,7 +2687,7 @@
     },
     // Exit modal mode (only available in inline mode)
     exit: function exit() {
-      var _this7 = this;
+      var _this10 = this;
 
       var options = this.options,
           viewer = this.viewer,
@@ -2578,7 +2727,7 @@
 
       if (this.viewed) {
         this.initImage(function () {
-          _this7.renderImage(function () {
+          _this10.renderImage(function () {
             if (options.transition) {
               setTimeout(function () {
                 addClass(image, CLASS_TRANSITION);
@@ -2593,7 +2742,7 @@
     },
     // Show the current ratio of the image with percentage
     tooltip: function tooltip() {
-      var _this8 = this;
+      var _this11 = this;
 
       var options = this.options,
           tooltipBox = this.tooltipBox,
@@ -2633,18 +2782,18 @@
             removeClass(tooltipBox, CLASS_FADE);
             removeClass(tooltipBox, CLASS_TRANSITION);
             tooltipBox.setAttribute('aria-hidden', true);
-            _this8.fading = false;
+            _this11.fading = false;
           }, {
             once: true
           });
           removeClass(tooltipBox, CLASS_IN);
-          _this8.fading = true;
+          _this11.fading = true;
         } else {
           removeClass(tooltipBox, CLASS_SHOW);
           tooltipBox.setAttribute('aria-hidden', true);
         }
 
-        _this8.tooltipping = false;
+        _this11.tooltipping = false;
       }, 1000);
       return this;
     },
@@ -2669,7 +2818,7 @@
     },
     // Update viewer when images changed
     update: function update() {
-      var _this9 = this;
+      var _this12 = this;
 
       var element = this.element,
           options = this.options,
@@ -2682,10 +2831,10 @@
       var images = [];
       forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
         if (isFunction(options.filter)) {
-          if (options.filter.call(_this9, image)) {
+          if (options.filter.call(_this12, image)) {
             images.push(image);
           }
-        } else if (_this9.getImageURL(image)) {
+        } else if (_this12.getImageURL(image)) {
           images.push(image);
         }
       });
@@ -2962,7 +3111,7 @@
       switch (this.action) {
         // Move the current image
         case ACTION_MOVE:
-          this.move(offsetX, offsetY);
+          this.move(offsetX, offsetY, event);
           break;
         // Zoom the current image
 
@@ -2999,7 +3148,7 @@
     isSwitchable: function isSwitchable() {
       var imageData = this.imageData,
           viewerData = this.viewerData;
-      return this.length > 1 && imageData.left >= 0 && imageData.top >= 0 && imageData.width <= viewerData.width && imageData.height <= viewerData.height;
+      return this.length > 1 && imageData.x >= 0 && imageData.y >= 0 && imageData.width <= viewerData.width && imageData.height <= viewerData.height;
     }
   };
 
@@ -3039,10 +3188,13 @@
       this.isImg = false;
       this.isShown = false;
       this.length = 0;
+      this.moving = false;
       this.played = false;
       this.playing = false;
       this.pointers = {};
       this.ready = false;
+      this.rotating = false;
+      this.scaling = false;
       this.showing = false;
       this.timeout = false;
       this.tooltipping = false;
