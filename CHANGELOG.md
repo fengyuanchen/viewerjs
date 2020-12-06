@@ -2,8 +2,8 @@
 
 ## 1.9.0 (Dec 6, 2020)
 
-- Add 4 new events: `move`, `moved`, `rotate`, and `rotated`.
-- Add example for limiting the moving range with the help of the `move` event.
+- Add 6 new events: `move`, `moved`, `rotate`, `rotated`, `scale`, and `scaled`.
+- Add an example for limiting the moving range with the help of the `move` event.
 
 ## 1.8.0 (Nov 8, 2020)
 
