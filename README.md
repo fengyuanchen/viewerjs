@@ -688,16 +688,16 @@ View the previous image.
 
 View the next image.
 
-### move(offsetX[, offsetY])
+### move(x[, y = x])
 
-- **offsetX**:
+- **x**:
   - Type: `Number`
-  - Moving size (px) in the horizontal direction
+  - The moving distance in the horizontal direction.
 
-- **offsetY** (optional):
+- **y** (optional):
   - Type: `Number`
-  - Moving size (px) in the vertical direction.
-  - If not present, its default value is `offsetX`
+  - The moving distance in the vertical direction.
+  - If not present, its default value is `x`
 
 Move the image with relative offsets.
 
@@ -709,55 +709,18 @@ viewer.move(0, -1); // Move up
 viewer.move(0, 1);  // Move down
 ```
 
-### moveTo(x[, y])
+### moveTo(x[, y = x])
 
 - **x**:
   - Type: `Number`
-  - The `left` value of the image
+  - The new position in the horizontal direction.
 
 - **y** (optional):
   - Type: `Number`
-  - The `top` value of the image
+  - The new position in the vertical direction.
   - If not present, its default value is `x`.
 
 Move the image to an absolute point.
-
-### zoom(ratio[, hasTooltip])
-
-- **ratio**:
-  - Type: `Number`
-  - Zoom in: requires a positive number (ratio > 0)
-  - Zoom out: requires a negative number (ratio < 0)
-
-- **hasTooltip** (optional):
-  - Type: `Boolean`
-  - Default: `false`
-  - Show tooltip
-
-Zoom the image with a relative ratio
-
-```js
-viewer.zoom(0.1);
-viewer.zoom(-0.1);
-```
-
-### zoomTo(ratio[, hasTooltip])
-
-- **ratio**:
-  - Type: `Number`
-  - Requires a positive number (ratio > 0)
-
-- **hasTooltip** (optional):
-  - Type: `Boolean`
-  - Default: `false`
-  - Show tooltip
-
-Zoom the image to an absolute ratio.
-
-```js
-viewer.zoomTo(0); // Zoom to zero size (0%)
-viewer.zoomTo(1); // Zoom to natural size (100%)
-```
 
 ### rotate(degree)
 
@@ -832,6 +795,43 @@ Scale the ordinate of the image.
 
 ```js
 viewer.scaleY(-1); // Flip vertical
+```
+
+### zoom(ratio[, hasTooltip])
+
+- **ratio**:
+  - Type: `Number`
+  - Zoom in: requires a positive number (ratio > 0)
+  - Zoom out: requires a negative number (ratio < 0)
+
+- **hasTooltip** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Show tooltip
+
+Zoom the image with a relative ratio
+
+```js
+viewer.zoom(0.1);
+viewer.zoom(-0.1);
+```
+
+### zoomTo(ratio[, hasTooltip])
+
+- **ratio**:
+  - Type: `Number`
+  - Requires a positive number (ratio > 0)
+
+- **hasTooltip** (optional):
+  - Type: `Boolean`
+  - Default: `false`
+  - Show tooltip
+
+Zoom the image to an absolute ratio.
+
+```js
+viewer.zoomTo(0); // Zoom to zero size (0%)
+viewer.zoomTo(1); // Zoom to natural size (100%)
 ```
 
 ### play([fullscreen])
@@ -958,15 +958,15 @@ This event fires when the viewer modal has hidden.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail.originalImage**:
-  - Type: `HTMLImageElement`
-  - The original image.
 - **event.detail.index**:
   - Type: `Number`
   - The index of the original image.
 - **event.detail.image**:
   - Type: `HTMLImageElement`
   - The current image (a clone of the original image).
+- **event.detail.originalImage**:
+  - Type: `HTMLImageElement`
+  - The original image.
 
 This event fires when a viewer starts to show (view) an image.
 
@@ -1060,15 +1060,15 @@ This event fires when a viewer has scaled an image.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail.originalEvent**:
-  - Type: `Event` or `null`
-  - Options: `wheel`, `pointermove`, `touchmove`, and `mousemove`.
-- **event.detail.oldRatio**:
-  - Type: `Number`
-  - The old (current) ratio of the image.
 - **event.detail.ratio**:
   - Type: `Number`
   - The new (next) ratio of the image (`imageData.width / imageData.naturalWidth`).
+- **event.detail.oldRatio**:
+  - Type: `Number`
+  - The old (current) ratio of the image.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
+  - Options: `wheel`, `pointermove`, `touchmove`, and `mousemove`.
 
 This event fires when a viewer starts to zoom (in or out) an image.
 

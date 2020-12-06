@@ -390,16 +390,16 @@ export default {
 
   /**
    * Move the image with relative offsets.
-   * @param {number} offsetX - The relative offset distance on the x-axis.
-   * @param {number} offsetY - The relative offset distance on the y-axis.
+   * @param {number} x - The moving distance in the horizontal direction.
+   * @param {number} [y=x] The moving distance in the vertical direction.
    * @returns {Viewer} this
    */
-  move(offsetX, offsetY) {
+  move(x, y = x) {
     const { imageData } = this;
 
     this.moveTo(
-      isUndefined(offsetX) ? offsetX : imageData.x + Number(offsetX),
-      isUndefined(offsetY) ? offsetY : imageData.y + Number(offsetY),
+      isUndefined(x) ? x : imageData.x + Number(x),
+      isUndefined(y) ? y : imageData.y + Number(y),
     );
 
     return this;
@@ -407,8 +407,8 @@ export default {
 
   /**
    * Move the image to an absolute point.
-   * @param {number} x - The x-axis coordinate.
-   * @param {number} [y=x] - The y-axis coordinate.
+   * @param {number} x - The new position in the horizontal direction.
+   * @param {number} [y=x] - The new position in the vertical direction.
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
@@ -476,136 +476,6 @@ export default {
             cancelable: false,
           });
         });
-      }
-    }
-
-    return this;
-  },
-
-  /**
-   * Zoom the image with a relative ratio.
-   * @param {number} ratio - The target ratio.
-   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
-   * @param {Event} [_originalEvent=null] - The original event if any.
-   * @returns {Viewer} this
-   */
-  zoom(ratio, hasTooltip = false, _originalEvent = null) {
-    const { imageData } = this;
-
-    ratio = Number(ratio);
-
-    if (ratio < 0) {
-      ratio = 1 / (1 - ratio);
-    } else {
-      ratio = 1 + ratio;
-    }
-
-    this.zoomTo((imageData.width * ratio) / imageData.naturalWidth, hasTooltip, _originalEvent);
-
-    return this;
-  },
-
-  /**
-   * Zoom the image to an absolute ratio.
-   * @param {number} ratio - The target ratio.
-   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
-   * @param {Event} [_originalEvent=null] - The original event if any.
-   * @param {Event} [_zoomable=false] - Indicates if the current zoom is available or not.
-   * @returns {Viewer} this
-   */
-  zoomTo(ratio, hasTooltip = false, _originalEvent = null, _zoomable = false) {
-    const {
-      element,
-      options,
-      pointers,
-      imageData,
-    } = this;
-    const {
-      x,
-      y,
-      width,
-      height,
-      naturalWidth,
-      naturalHeight,
-    } = imageData;
-
-    ratio = Math.max(0, ratio);
-
-    if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
-      if (!_zoomable) {
-        const minZoomRatio = Math.max(0.01, options.minZoomRatio);
-        const maxZoomRatio = Math.min(100, options.maxZoomRatio);
-
-        ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
-      }
-
-      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
-        ratio = 1;
-      }
-
-      const newWidth = naturalWidth * ratio;
-      const newHeight = naturalHeight * ratio;
-      const offsetWidth = newWidth - width;
-      const offsetHeight = newHeight - height;
-      const oldRatio = width / naturalWidth;
-
-      if (isFunction(options.zoom)) {
-        addListener(element, EVENT_ZOOM, options.zoom, {
-          once: true,
-        });
-      }
-
-      if (dispatchEvent(element, EVENT_ZOOM, {
-        ratio,
-        oldRatio,
-        originalEvent: _originalEvent,
-      }) === false) {
-        return this;
-      }
-
-      this.zooming = true;
-
-      if (_originalEvent) {
-        const offset = getOffset(this.viewer);
-        const center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
-          pageX: _originalEvent.pageX,
-          pageY: _originalEvent.pageY,
-        };
-
-        // Zoom from the triggering point of the event
-        imageData.x -= offsetWidth * (((center.pageX - offset.left) - x) / width);
-        imageData.y -= offsetHeight * (((center.pageY - offset.top) - y) / height);
-      } else {
-        // Zoom from the center of the image
-        imageData.x -= offsetWidth / 2;
-        imageData.y -= offsetHeight / 2;
-      }
-
-      imageData.left = imageData.x;
-      imageData.top = imageData.y;
-      imageData.width = newWidth;
-      imageData.height = newHeight;
-      imageData.ratio = ratio;
-      this.renderImage(() => {
-        this.zooming = false;
-
-        if (isFunction(options.zoomed)) {
-          addListener(element, EVENT_ZOOMED, options.zoomed, {
-            once: true,
-          });
-        }
-
-        dispatchEvent(element, EVENT_ZOOMED, {
-          ratio,
-          oldRatio,
-          originalEvent: _originalEvent,
-        }, {
-          cancelable: false,
-        });
-      });
-
-      if (hasTooltip) {
-        this.tooltip();
       }
     }
 
@@ -760,6 +630,136 @@ export default {
             cancelable: false,
           });
         });
+      }
+    }
+
+    return this;
+  },
+
+  /**
+   * Zoom the image with a relative ratio.
+   * @param {number} ratio - The target ratio.
+   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
+   * @param {Event} [_originalEvent=null] - The original event if any.
+   * @returns {Viewer} this
+   */
+  zoom(ratio, hasTooltip = false, _originalEvent = null) {
+    const { imageData } = this;
+
+    ratio = Number(ratio);
+
+    if (ratio < 0) {
+      ratio = 1 / (1 - ratio);
+    } else {
+      ratio = 1 + ratio;
+    }
+
+    this.zoomTo((imageData.width * ratio) / imageData.naturalWidth, hasTooltip, _originalEvent);
+
+    return this;
+  },
+
+  /**
+   * Zoom the image to an absolute ratio.
+   * @param {number} ratio - The target ratio.
+   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
+   * @param {Event} [_originalEvent=null] - The original event if any.
+   * @param {Event} [_zoomable=false] - Indicates if the current zoom is available or not.
+   * @returns {Viewer} this
+   */
+  zoomTo(ratio, hasTooltip = false, _originalEvent = null, _zoomable = false) {
+    const {
+      element,
+      options,
+      pointers,
+      imageData,
+    } = this;
+    const {
+      x,
+      y,
+      width,
+      height,
+      naturalWidth,
+      naturalHeight,
+    } = imageData;
+
+    ratio = Math.max(0, ratio);
+
+    if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
+      if (!_zoomable) {
+        const minZoomRatio = Math.max(0.01, options.minZoomRatio);
+        const maxZoomRatio = Math.min(100, options.maxZoomRatio);
+
+        ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
+      }
+
+      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
+        ratio = 1;
+      }
+
+      const newWidth = naturalWidth * ratio;
+      const newHeight = naturalHeight * ratio;
+      const offsetWidth = newWidth - width;
+      const offsetHeight = newHeight - height;
+      const oldRatio = width / naturalWidth;
+
+      if (isFunction(options.zoom)) {
+        addListener(element, EVENT_ZOOM, options.zoom, {
+          once: true,
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_ZOOM, {
+        ratio,
+        oldRatio,
+        originalEvent: _originalEvent,
+      }) === false) {
+        return this;
+      }
+
+      this.zooming = true;
+
+      if (_originalEvent) {
+        const offset = getOffset(this.viewer);
+        const center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
+          pageX: _originalEvent.pageX,
+          pageY: _originalEvent.pageY,
+        };
+
+        // Zoom from the triggering point of the event
+        imageData.x -= offsetWidth * (((center.pageX - offset.left) - x) / width);
+        imageData.y -= offsetHeight * (((center.pageY - offset.top) - y) / height);
+      } else {
+        // Zoom from the center of the image
+        imageData.x -= offsetWidth / 2;
+        imageData.y -= offsetHeight / 2;
+      }
+
+      imageData.left = imageData.x;
+      imageData.top = imageData.y;
+      imageData.width = newWidth;
+      imageData.height = newHeight;
+      imageData.ratio = ratio;
+      this.renderImage(() => {
+        this.zooming = false;
+
+        if (isFunction(options.zoomed)) {
+          addListener(element, EVENT_ZOOMED, options.zoomed, {
+            once: true,
+          });
+        }
+
+        dispatchEvent(element, EVENT_ZOOMED, {
+          ratio,
+          oldRatio,
+          originalEvent: _originalEvent,
+        }, {
+          cancelable: false,
+        });
+      });
+
+      if (hasTooltip) {
+        this.tooltip();
       }
     }
 
