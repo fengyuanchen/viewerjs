@@ -36,16 +36,22 @@ window.onload = function () {
     moved: function (e) {
       console.log(e.type);
     },
-    zoom: function (e) {
-      console.log(e.type);
-    },
-    zoomed: function (e) {
-      console.log(e.type);
-    },
     rotate: function (e) {
       console.log(e.type);
     },
     rotated: function (e) {
+      console.log(e.type);
+    },
+    scale: function (e) {
+      console.log(e.type);
+    },
+    scaled: function (e) {
+      console.log(e.type);
+    },
+    zoom: function (e) {
+      console.log(e.type);
+    },
+    zoomed: function (e) {
       console.log(e.type);
     },
     play: function (e) {

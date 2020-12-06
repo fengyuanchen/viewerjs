@@ -24,9 +24,9 @@
 
 ## Features
 
-- Supports 50 [options](#options)
+- Supports 52 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 15 [events](#events)
+- Supports 17 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -556,20 +556,6 @@ A shortcut of the `move` event.
 
 A shortcut of the `moved` event.
 
-### zoom
-
-- Type: `Function`
-- Default: `null`
-
-A shortcut of the `zoom` event.
-
-### zoomed
-
-- Type: `Function`
-- Default: `null`
-
-A shortcut of the `zoomed` event.
-
 ### rotate
 
 - Type: `Function`
@@ -583,6 +569,34 @@ A shortcut of the `rotate` event.
 - Default: `null`
 
 A shortcut of the `rotated` event.
+
+### scale
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `scale` event.
+
+### scaled
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `scaled` event.
+
+### zoom
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `zoom` event.
+
+### zoomed
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `zoomed` event.
 
 ### play
 
@@ -994,6 +1008,54 @@ This event fires when a viewer starts to move an image.
 
 This event fires when a viewer has moved an image.
 
+### rotate
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail.degree**:
+  - Type: `Number`
+  - The new rotation degrees.
+- **event.detail.oldDegree**:
+  - Type: `Number`
+  - The old rotation degrees.
+
+This event fires when a viewer starts to rotate an image.
+
+### rotated
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+- **event.detail**: the same as the `rotate` event.
+
+This event fires when a viewer has rotated an image.
+
+### scale
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail.scaleX**:
+  - Type: `Number`
+  - The new scaling factor in the horizontal direction.
+- **event.detail.scaleY**:
+  - Type: `Number`
+  - The new scaling factor in the vertical direction.
+- **event.detail.oldScaleX**:
+  - Type: `Number`
+  - The old scaling factor in the horizontal direction.
+- **event.detail.oldScaleY**:
+  - Type: `Number`
+  - The old scaling factor in the vertical direction.
+
+This event fires when a viewer starts to scale an image.
+
+### scaled
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+- **event.detail**: the same as the `scale` event.
+
+This event fires when a viewer has scaled an image.
+
 ### zoom
 
 - **event.bubbles**: `true`
@@ -1017,27 +1079,6 @@ This event fires when a viewer starts to zoom (in or out) an image.
 - **event.detail**: the same as the `zoom` event.
 
 This event fires when a viewer has zoomed (in or out) an image.
-
-### rotate
-
-- **event.bubbles**: `true`
-- **event.cancelable**: `true`
-- **event.detail.degree**:
-  - Type: `Number`
-  - The new rotation degrees.
-- **event.detail.oldDegree**:
-  - Type: `Number`
-  - The old rotation degrees.
-
-This event fires when a viewer starts to rotate an image.
-
-### rotated
-
-- **event.bubbles**: `true`
-- **event.cancelable**: `false`
-- **event.detail**: the same as the `rotate` event.
-
-This event fires when a viewer has rotated an image.
 
 ### play
 

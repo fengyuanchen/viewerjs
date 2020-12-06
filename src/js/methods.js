@@ -12,19 +12,21 @@ import {
   EVENT_CLICK,
   EVENT_HIDE,
   EVENT_LOAD,
+  EVENT_MOVE,
+  EVENT_MOVED,
+  EVENT_PLAY,
+  EVENT_ROTATE,
+  EVENT_ROTATED,
+  EVENT_SCALE,
+  EVENT_SCALED,
   EVENT_SHOW,
+  EVENT_STOP,
   EVENT_TRANSITION_END,
   EVENT_VIEW,
   EVENT_VIEWED,
   EVENT_ZOOM,
   EVENT_ZOOMED,
-  EVENT_PLAY,
-  EVENT_STOP,
   NAMESPACE,
-  EVENT_MOVE,
-  EVENT_MOVED,
-  EVENT_ROTATE,
-  EVENT_ROTATED,
 } from './constants';
 import {
   addClass,
@@ -699,26 +701,65 @@ export default {
    * @returns {Viewer} this
    */
   scale(scaleX, scaleY = scaleX) {
-    const { imageData } = this;
+    const { element, options, imageData } = this;
 
     scaleX = Number(scaleX);
     scaleY = Number(scaleY);
 
-    if (this.viewed && !this.played && this.options.scalable) {
+    if (this.viewed && !this.played && options.scalable) {
+      const oldScaleX = imageData.scaleX;
+      const oldScaleY = imageData.scaleY;
       let changed = false;
 
       if (isNumber(scaleX)) {
-        imageData.scaleX = scaleX;
         changed = true;
+      } else {
+        scaleX = oldScaleX;
       }
 
       if (isNumber(scaleY)) {
-        imageData.scaleY = scaleY;
         changed = true;
+      } else {
+        scaleY = oldScaleY;
       }
 
       if (changed) {
-        this.renderImage();
+        if (isFunction(options.scale)) {
+          addListener(element, EVENT_SCALE, options.scale, {
+            once: true,
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_SCALE, {
+          scaleX,
+          scaleY,
+          oldScaleX,
+          oldScaleY,
+        }) === false) {
+          return this;
+        }
+
+        imageData.scaleX = scaleX;
+        imageData.scaleY = scaleY;
+        this.scaling = true;
+        this.renderImage(() => {
+          this.scaling = false;
+
+          if (isFunction(options.scaled)) {
+            addListener(element, EVENT_SCALED, options.scaled, {
+              once: true,
+            });
+          }
+
+          dispatchEvent(element, EVENT_SCALED, {
+            scaleX,
+            scaleY,
+            oldScaleX,
+            oldScaleY,
+          }, {
+            cancelable: false,
+          });
+        });
       }
     }
 

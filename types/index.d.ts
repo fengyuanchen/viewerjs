@@ -49,6 +49,34 @@ declare namespace Viewer {
     detail: MoveEventData;
   }
 
+  export interface RotateEventData {
+    degree: number;
+    oldDegree: number;
+  }
+
+  export interface RotateEvent extends CustomEvent {
+    detail: RotateEventData;
+  }
+
+  export interface RotatedEvent extends CustomEvent {
+    detail: RotateEventData;
+  }
+
+  export interface ScaleEventData {
+    scaleX: number;
+    scaleY: number;
+    oldScaleX: number;
+    oldScaleY: number;
+  }
+
+  export interface ScaleEvent extends CustomEvent {
+    detail: ScaleEventData;
+  }
+
+  export interface ScaledEvent extends CustomEvent {
+    detail: ScaleEventData;
+  }
+
   export interface ZoomEventData {
     originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent;
     oldRatio: number;
@@ -61,19 +89,6 @@ declare namespace Viewer {
 
   export interface ZoomedEvent extends CustomEvent {
     detail: ZoomEventData;
-  }
-
-  export interface RotateEventData {
-    degree: number;
-    oldDegree: number;
-  }
-
-  export interface RotateEvent extends CustomEvent {
-    detail: RotateEventData;
-  }
-
-  export interface RotatedEvent extends CustomEvent {
-    detail: RotateEventData;
   }
 
   export interface Options {
@@ -106,6 +121,8 @@ declare namespace Viewer {
     rotate?(event: RotateEvent): void;
     rotated?(event: RotatedEvent): void;
     scalable?: boolean;
+    scale?(event: ScaleEvent): void;
+    scaled?(event: ScaledEvent): void;
     show?(event: CustomEvent): void;
     shown?(event: CustomEvent): void;
     slideOnTouch?: boolean;
