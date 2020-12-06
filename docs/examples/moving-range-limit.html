@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Viewer.js</title>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@4/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/viewer.css">
+  <style>
+    .pictures {
+      list-style: none;
+      margin: 0;
+      max-width: 30rem;
+      padding: 0;
+    }
+
+    .pictures > li {
+      border: 1px solid transparent;
+      float: left;
+      height: calc(100% / 3);
+      margin: 0 -1px -1px 0;
+      overflow: hidden;
+      width: calc(100% / 3);
+    }
+
+    .pictures > li > img {
+      cursor: zoom-in;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Moving range limit</h1>
+    <div id="galley">
+      <ul class="pictures">
+        <li><img data-original="../images/tibet-1.jpg" src="../images/thumbnails/tibet-1.jpg" alt="Cuo Na Lake"></li>
+        <li><img data-original="../images/tibet-2.jpg" src="../images/thumbnails/tibet-2.jpg" alt="Tibetan Plateau"></li>
+        <li><img data-original="../images/tibet-3.jpg" src="../images/thumbnails/tibet-3.jpg" alt="Jokhang Temple"></li>
+        <li><img data-original="../images/tibet-4.jpg" src="../images/thumbnails/tibet-4.jpg" alt="Potala Palace 1"></li>
+        <li><img data-original="../images/tibet-5.jpg" src="../images/thumbnails/tibet-5.jpg" alt="Potala Palace 2"></li>
+        <li><img data-original="../images/tibet-6.jpg" src="../images/thumbnails/tibet-6.jpg" alt="Potala Palace 3"></li>
+        <li><img data-original="../images/tibet-7.jpg" src="../images/thumbnails/tibet-7.jpg" alt="Lhasa River"></li>
+        <li><img data-original="../images/tibet-8.jpg" src="../images/thumbnails/tibet-8.jpg" alt="Namtso 1"></li>
+        <li><img data-original="../images/tibet-9.jpg" src="../images/thumbnails/tibet-9.jpg" alt="Namtso 2"></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/jquery@3/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap@4/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="../js/viewer.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var galley = document.getElementById('galley');
+      var viewer = new Viewer(galley, {
+        url: 'data-original',
+        backdrop: 'static',
+        move: function (event) {
+          var viewerData = viewer.viewerData;
+          var imageData = viewer.imageData;
+          var maxOffsetPercentage = 0.9;
+          var maxOffsetHorizontal = viewerData.width * maxOffsetPercentage;
+          var maxOffsetVertical = viewerData.height * maxOffsetPercentage;
+          var detail = event.detail;
+          var left = detail.x;
+          var top = detail.y;
+          var right = viewerData.width - (left + imageData.width);
+          var bottom = viewerData.height - (top + imageData.height);
+          
+          if (
+            // Move up
+            (detail.y < detail.oldY && bottom > 0 && bottom > maxOffsetVertical)
+
+            // Move down
+            || (detail.y > detail.oldY && top > 0 && top > maxOffsetVertical)
+
+            // Move left
+            || (detail.x < detail.oldX && right > 0 && right > maxOffsetHorizontal)
+
+            // Move right
+            || (detail.x > detail.oldX && left > 0 && left > maxOffsetHorizontal)
+          ) {
+            event.preventDefault();
+          }
+        },
+      });
+    });
+  </script>
+</body>
+</html>
