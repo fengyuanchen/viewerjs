@@ -38,7 +38,7 @@ declare namespace Viewer {
     y: number;
     oldX: number;
     oldY: number;
-    originalEvent: PointerEvent | TouchEvent | MouseEvent;
+    originalEvent: PointerEvent | TouchEvent | MouseEvent | null;
   }
 
   export interface MoveEvent extends CustomEvent {
@@ -78,9 +78,9 @@ declare namespace Viewer {
   }
 
   export interface ZoomEventData {
-    originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent;
-    oldRatio: number;
     ratio: number;
+    oldRatio: number;
+    originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent | null;
   }
 
   export interface ZoomEvent extends CustomEvent {
