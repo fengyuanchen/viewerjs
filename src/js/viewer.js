@@ -74,6 +74,7 @@ class Viewer {
     this.playing = false;
     this.pointers = {};
     this.ready = false;
+    this.rotating = false;
     this.showing = false;
     this.timeout = false;
     this.tooltipping = false;

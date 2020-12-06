@@ -42,6 +42,12 @@ window.onload = function () {
     zoomed: function (e) {
       console.log(e.type);
     },
+    rotate: function (e) {
+      console.log(e.type);
+    },
+    rotated: function (e) {
+      console.log(e.type);
+    },
     play: function (e) {
       console.log(e.type);
     },

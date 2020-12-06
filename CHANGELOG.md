@@ -2,7 +2,7 @@
 
 ## next
 
-- Add 2 new events: `move` and `moved`.
+- Add 4 new events: `move`, `moved`, `rotate`, and `rotated`.
 
 ## 1.8.0 (Nov 8, 2020)
 

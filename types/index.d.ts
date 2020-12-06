@@ -63,6 +63,19 @@ declare namespace Viewer {
     detail: ZoomEventData;
   }
 
+  export interface RotateEventData {
+    degree: number;
+    oldDegree: number;
+  }
+
+  export interface RotateEvent extends CustomEvent {
+    detail: RotateEventData;
+  }
+
+  export interface RotatedEvent extends CustomEvent {
+    detail: RotateEventData;
+  }
+
   export interface Options {
     backdrop?: boolean | string;
     button?: boolean;
@@ -90,6 +103,8 @@ declare namespace Viewer {
     play?(event: CustomEvent): void;
     ready?(event: CustomEvent): void;
     rotatable?: boolean;
+    rotate?(event: RotateEvent): void;
+    rotated?(event: RotatedEvent): void;
     scalable?: boolean;
     show?(event: CustomEvent): void;
     shown?(event: CustomEvent): void;

@@ -24,9 +24,9 @@
 
 ## Features
 
-- Supports 48 [options](#options)
+- Supports 50 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 13 [events](#events)
+- Supports 15 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -570,6 +570,20 @@ A shortcut of the `zoom` event.
 
 A shortcut of the `zoomed` event.
 
+### rotate
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `rotate` event.
+
+### rotated
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `rotated` event.
+
 ### play
 
 - Type: `Function`
@@ -1003,6 +1017,27 @@ This event fires when a viewer starts to zoom (in or out) an image.
 - **event.detail**: the same as the `zoom` event.
 
 This event fires when a viewer has zoomed (in or out) an image.
+
+### rotate
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail.degree**:
+  - Type: `Number`
+  - The new rotation degrees.
+- **event.detail.oldDegree**:
+  - Type: `Number`
+  - The old rotation degrees.
+
+This event fires when a viewer starts to rotate an image.
+
+### rotated
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+- **event.detail**: the same as the `rotate` event.
+
+This event fires when a viewer has rotated an image.
 
 ### play
 

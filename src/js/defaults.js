@@ -235,6 +235,8 @@ export default {
   moved: null,
   zoom: null,
   zoomed: null,
+  rotate: null,
+  rotated: null,
   play: null,
   stop: null,
 };

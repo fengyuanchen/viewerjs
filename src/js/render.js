@@ -246,7 +246,8 @@ export default {
     }, getTransforms(imageData)));
 
     if (done) {
-      if ((this.viewing || this.moving || this.zooming) && this.options.transition) {
+      if ((this.viewing || this.moving || this.rotating || this.zooming)
+        && this.options.transition) {
         const onTransitionEnd = () => {
           this.imageRendering = false;
           done();

@@ -23,6 +23,8 @@ import {
   NAMESPACE,
   EVENT_MOVE,
   EVENT_MOVED,
+  EVENT_ROTATE,
+  EVENT_ROTATED,
 } from './constants';
 import {
   addClass,
@@ -625,13 +627,44 @@ export default {
    * @returns {Viewer} this
    */
   rotateTo(degree) {
-    const { imageData } = this;
+    const { element, options, imageData } = this;
 
     degree = Number(degree);
 
-    if (isNumber(degree) && this.viewed && !this.played && this.options.rotatable) {
+    if (isNumber(degree) && this.viewed && !this.played && options.rotatable) {
+      const oldDegree = imageData.rotate;
+
+      if (isFunction(options.rotate)) {
+        addListener(element, EVENT_ROTATE, options.rotate, {
+          once: true,
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_ROTATE, {
+        degree,
+        oldDegree,
+      }) === false) {
+        return this;
+      }
+
       imageData.rotate = degree;
-      this.renderImage();
+      this.rotating = true;
+      this.renderImage(() => {
+        this.rotating = false;
+
+        if (isFunction(options.rotated)) {
+          addListener(element, EVENT_ROTATED, options.rotated, {
+            once: true,
+          });
+        }
+
+        dispatchEvent(element, EVENT_ROTATED, {
+          degree,
+          oldDegree,
+        }, {
+          cancelable: false,
+        });
+      });
     }
 
     return this;
