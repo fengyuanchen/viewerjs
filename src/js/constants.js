@@ -28,29 +28,31 @@ export const CLASS_OPEN = `${NAMESPACE}-open`;
 export const CLASS_SHOW = `${NAMESPACE}-show`;
 export const CLASS_TRANSITION = `${NAMESPACE}-transition`;
 
-// Events
+// Native events
 export const EVENT_CLICK = 'click';
 export const EVENT_DBLCLICK = 'dblclick';
 export const EVENT_DRAG_START = 'dragstart';
 export const EVENT_FOCUSIN = 'focusin';
-export const EVENT_HIDDEN = 'hidden';
-export const EVENT_HIDE = 'hide';
 export const EVENT_KEY_DOWN = 'keydown';
 export const EVENT_LOAD = 'load';
-export const EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
-export const EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
 export const EVENT_TOUCH_END = IS_TOUCH_DEVICE ? 'touchend touchcancel' : 'mouseup';
+export const EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
+export const EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
 export const EVENT_POINTER_DOWN = HAS_POINTER_EVENT ? 'pointerdown' : EVENT_TOUCH_START;
 export const EVENT_POINTER_MOVE = HAS_POINTER_EVENT ? 'pointermove' : EVENT_TOUCH_MOVE;
 export const EVENT_POINTER_UP = HAS_POINTER_EVENT ? 'pointerup pointercancel' : EVENT_TOUCH_END;
-export const EVENT_READY = 'ready';
 export const EVENT_RESIZE = 'resize';
+export const EVENT_TRANSITION_END = 'transitionend';
+export const EVENT_WHEEL = 'wheel';
+
+// Custom events
+export const EVENT_READY = 'ready';
 export const EVENT_SHOW = 'show';
 export const EVENT_SHOWN = 'shown';
-export const EVENT_TRANSITION_END = 'transitionend';
+export const EVENT_HIDE = 'hide';
+export const EVENT_HIDDEN = 'hidden';
 export const EVENT_VIEW = 'view';
 export const EVENT_VIEWED = 'viewed';
-export const EVENT_WHEEL = 'wheel';
 export const EVENT_MOVE = 'move';
 export const EVENT_MOVED = 'moved';
 export const EVENT_ROTATE = 'rotate';
