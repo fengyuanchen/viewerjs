@@ -231,6 +231,8 @@ export default {
   hidden: null,
   view: null,
   viewed: null,
+  move: null,
+  moved: null,
   zoom: null,
   zoomed: null,
   play: null,

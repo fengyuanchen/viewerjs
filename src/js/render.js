@@ -195,15 +195,20 @@ export default {
       width = Math.min(width * 0.9, naturalWidth);
       height = Math.min(height * 0.9, naturalHeight);
 
+      const left = (viewerWidth - width) / 2;
+      const top = (viewerHeight - height) / 2;
+
       const imageData = {
-        naturalWidth,
-        naturalHeight,
-        aspectRatio,
-        ratio: width / naturalWidth,
+        left,
+        top,
+        x: left,
+        y: top,
         width,
         height,
-        left: (viewerWidth - width) / 2,
-        top: (viewerHeight - height) / 2,
+        ratio: width / naturalWidth,
+        aspectRatio,
+        naturalWidth,
+        naturalHeight,
       };
       const initialImageData = assign({}, imageData);
 
@@ -236,12 +241,12 @@ export default {
       height: imageData.height,
 
       // XXX: Not to use translateX/Y to avoid image shaking when zooming
-      marginLeft: imageData.left,
-      marginTop: imageData.top,
+      marginLeft: imageData.x,
+      marginTop: imageData.y,
     }, getTransforms(imageData)));
 
     if (done) {
-      if ((this.viewing || this.zooming) && this.options.transition) {
+      if ((this.viewing || this.moving || this.zooming) && this.options.transition) {
         const onTransitionEnd = () => {
           this.imageRendering = false;
           done();

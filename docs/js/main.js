@@ -30,6 +30,12 @@ window.onload = function () {
     viewed: function (e) {
       console.log(e.type);
     },
+    move: function (e) {
+      console.log(e.type);
+    },
+    moved: function (e) {
+      console.log(e.type);
+    },
     zoom: function (e) {
       console.log(e.type);
     },

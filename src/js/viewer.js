@@ -69,6 +69,7 @@ class Viewer {
     this.isImg = false;
     this.isShown = false;
     this.length = 0;
+    this.moving = false;
     this.played = false;
     this.playing = false;
     this.pointers = {};

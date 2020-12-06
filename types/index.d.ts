@@ -33,6 +33,22 @@ declare namespace Viewer {
     zoomOut?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
   }
 
+  export interface MoveEventData {
+    x: number;
+    y: number;
+    oldX: number;
+    oldY: number;
+    originalEvent: PointerEvent | TouchEvent | MouseEvent;
+  }
+
+  export interface MoveEvent extends CustomEvent {
+    detail: MoveEventData;
+  }
+
+  export interface MovedEvent extends CustomEvent {
+    detail: MoveEventData;
+  }
+
   export interface ZoomEventData {
     originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent;
     oldRatio: number;
@@ -68,6 +84,8 @@ declare namespace Viewer {
     minWidth?: number;
     minZoomRatio?: number;
     movable?: boolean;
+    move?(event: MoveEvent): void;
+    moved?(event: MovedEvent): void;
     navbar?: boolean | Visibility;
     play?(event: CustomEvent): void;
     ready?(event: CustomEvent): void;

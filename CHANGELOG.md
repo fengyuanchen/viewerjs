@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add 2 new events: `move` and `moved`.
+
 ## 1.8.0 (Nov 8, 2020)
 
 - Add a new option: `focus` .

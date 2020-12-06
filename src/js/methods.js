@@ -21,6 +21,8 @@ import {
   EVENT_PLAY,
   EVENT_STOP,
   NAMESPACE,
+  EVENT_MOVE,
+  EVENT_MOVED,
 } from './constants';
 import {
   addClass,
@@ -392,8 +394,8 @@ export default {
     const { imageData } = this;
 
     this.moveTo(
-      isUndefined(offsetX) ? offsetX : imageData.left + Number(offsetX),
-      isUndefined(offsetY) ? offsetY : imageData.top + Number(offsetY),
+      isUndefined(offsetX) ? offsetX : imageData.x + Number(offsetX),
+      isUndefined(offsetY) ? offsetY : imageData.y + Number(offsetY),
     );
 
     return this;
@@ -403,29 +405,73 @@ export default {
    * Move the image to an absolute point.
    * @param {number} x - The x-axis coordinate.
    * @param {number} [y=x] - The y-axis coordinate.
+   * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
-  moveTo(x, y = x) {
-    const { imageData } = this;
+  moveTo(x, y = x, _originalEvent = null) {
+    const { element, options, imageData } = this;
 
     x = Number(x);
     y = Number(y);
 
-    if (this.viewed && !this.played && this.options.movable) {
+    if (this.viewed && !this.played && options.movable) {
+      const oldX = imageData.x;
+      const oldY = imageData.y;
       let changed = false;
 
       if (isNumber(x)) {
-        imageData.left = x;
         changed = true;
+      } else {
+        x = oldX;
       }
 
       if (isNumber(y)) {
-        imageData.top = y;
         changed = true;
+      } else {
+        y = oldY;
       }
 
       if (changed) {
-        this.renderImage();
+        if (isFunction(options.move)) {
+          addListener(element, EVENT_MOVE, options.move, {
+            once: true,
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_MOVE, {
+          x,
+          y,
+          oldX,
+          oldY,
+          originalEvent: _originalEvent,
+        }) === false) {
+          return this;
+        }
+
+        imageData.x = x;
+        imageData.y = y;
+        imageData.left = x;
+        imageData.top = y;
+        this.moving = true;
+        this.renderImage(() => {
+          this.moving = false;
+
+          if (isFunction(options.moved)) {
+            addListener(element, EVENT_MOVED, options.moved, {
+              once: true,
+            });
+          }
+
+          dispatchEvent(element, EVENT_MOVED, {
+            x,
+            y,
+            oldX,
+            oldY,
+            originalEvent: _originalEvent,
+          }, {
+            cancelable: false,
+          });
+        });
       }
     }
 
@@ -471,10 +517,10 @@ export default {
       imageData,
     } = this;
     const {
+      x,
+      y,
       width,
       height,
-      left,
-      top,
       naturalWidth,
       naturalHeight,
     } = imageData;
@@ -523,14 +569,16 @@ export default {
         };
 
         // Zoom from the triggering point of the event
-        imageData.left -= offsetWidth * (((center.pageX - offset.left) - left) / width);
-        imageData.top -= offsetHeight * (((center.pageY - offset.top) - top) / height);
+        imageData.x -= offsetWidth * (((center.pageX - offset.left) - x) / width);
+        imageData.y -= offsetHeight * (((center.pageY - offset.top) - y) / height);
       } else {
         // Zoom from the center of the image
-        imageData.left -= offsetWidth / 2;
-        imageData.top -= offsetHeight / 2;
+        imageData.x -= offsetWidth / 2;
+        imageData.y -= offsetHeight / 2;
       }
 
+      imageData.left = imageData.x;
+      imageData.top = imageData.y;
       imageData.width = newWidth;
       imageData.height = newHeight;
       imageData.ratio = ratio;

@@ -192,7 +192,7 @@ export default {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        this.move(offsetX, offsetY);
+        this.move(offsetX, offsetY, event);
         break;
 
       // Zoom the current image
@@ -232,7 +232,7 @@ export default {
   isSwitchable() {
     const { imageData, viewerData } = this;
 
-    return this.length > 1 && imageData.left >= 0 && imageData.top >= 0
+    return this.length > 1 && imageData.x >= 0 && imageData.y >= 0
       && imageData.width <= viewerData.width
       && imageData.height <= viewerData.height;
   },

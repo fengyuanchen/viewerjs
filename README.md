@@ -24,9 +24,9 @@
 
 ## Features
 
-- Supports 46 [options](#options)
+- Supports 48 [options](#options)
 - Supports 23 [methods](#methods)
-- Supports 11 [events](#events)
+- Supports 13 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -542,6 +542,20 @@ A shortcut of the `view` event.
 
 A shortcut of the `viewed` event.
 
+### move
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `move` event.
+
+### moved
+
+- Type: `Function`
+- Default: `null`
+
+A shortcut of the `moved` event.
+
 ### zoom
 
 - Type: `Function`
@@ -936,12 +950,42 @@ This event fires when a viewer starts to show (view) an image.
 
 This event fires when a viewer has shown (viewed) an image.
 
+### move
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail.x**:
+  - Type: `Number`
+  - The new position in the horizontal direction.
+- **event.detail.y**:
+  - Type: `Number`
+  - The new position in the vertical direction.
+- **event.detail.oldX**:
+  - Type: `Number`
+  - The old position in the horizontal direction.
+- **event.detail.oldY**:
+  - Type: `Number`
+  - The old position in the vertical direction.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
+  - Options: `pointermove`, `touchmove`, and `mousemove`.
+
+This event fires when a viewer starts to move an image.
+
+### moved
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+- **event.detail**: the same as the `move` event.
+
+This event fires when a viewer has moved an image.
+
 ### zoom
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
 - **event.detail.originalEvent**:
-  - Type: `Event`
+  - Type: `Event` or `null`
   - Options: `wheel`, `pointermove`, `touchmove`, and `mousemove`.
 - **event.detail.oldRatio**:
   - Type: `Number`
