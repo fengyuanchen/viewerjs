@@ -13,6 +13,7 @@ import {
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
+  hasClass,
   removeClass,
   removeListener,
   setData,
@@ -247,7 +248,8 @@ export default {
 
     if (done) {
       if ((this.viewing || this.moving || this.rotating || this.scaling || this.zooming)
-        && this.options.transition) {
+        && this.options.transition
+        && hasClass(image, CLASS_TRANSITION)) {
         const onTransitionEnd = () => {
           this.imageRendering = false;
           done();
