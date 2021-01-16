@@ -19,18 +19,21 @@ declare namespace Viewer {
     size?: ToolbarButtonSize,
   }
 
+  type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions
+  
   export interface ToolbarOptions {
-    flipHorizontal?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    flipVertical?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    next?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    oneToOne?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    play?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    prev?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    reset?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    rotateLeft?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    rotateRight?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    zoomIn?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
-    zoomOut?: boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions;
+    flipHorizontal?: ToolbarOption;
+    flipVertical?: ToolbarOption;
+    next?: ToolbarOption;
+    oneToOne?: ToolbarOption;
+    play?: ToolbarOption;
+    prev?: ToolbarOption;
+    reset?: ToolbarOption;
+    rotateLeft?: ToolbarOption;
+    rotateRight?: ToolbarOption;
+    zoomIn?: ToolbarOption;
+    zoomOut?: ToolbarOption;
+    [x: string]: ToolbarOption;
   }
 
   export interface MoveEventData {
@@ -146,6 +149,22 @@ declare namespace Viewer {
   }
 }
 
+type ImageDataType = {
+  aspectRatio: number,
+  height: number,
+  left: number,
+  naturalHeight: number,
+  naturalWidth: number,
+  ratio: number,
+  rotate: number,
+  scaleX: number,
+  scaleY: number,
+  top: number,
+  width: number,
+  x: number,
+  y: number,
+}
+
 declare class Viewer {
   constructor(element: HTMLElement, options?: Viewer.Options);
   destroy(): Viewer;
@@ -173,6 +192,8 @@ declare class Viewer {
   zoomTo(ratio: number, hasTooltip?: boolean): Viewer;
   static noConflict(): Viewer;
   static setDefaults(options: Viewer.Options): void;
+  image?: HTMLElement;
+  imageData: Partial<Readonly<ImageDataType>>;
 }
 
 declare module 'viewerjs' {
