@@ -1,17 +1,7 @@
 declare namespace Viewer {
-  enum Visibility {
-    Hidden = 0,
-    Visible = 1,
-    VisibleOnMediumOrWiderScreen = 2,
-    VisibleOnLargeOrWiderScreen = 3,
-    VisibleOnExtraLargeOrWiderScreen = 4,
-  }
-
-  enum ToolbarButtonSize {
-    Small = 'small',
-    Medium = 'medium',
-    Large = 'large',
-  }
+  export type Visibility = 0 | 1 | 2 | 3 | 4;
+  export type ToolbarButtonSize = 'small' | 'medium' | 'large';
+  export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions
 
   export interface ToolbarButtonOptions {
     click?: Function,
@@ -19,8 +9,6 @@ declare namespace Viewer {
     size?: ToolbarButtonSize,
   }
 
-  type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions
-  
   export interface ToolbarOptions {
     flipHorizontal?: ToolbarOption;
     flipVertical?: ToolbarOption;
@@ -149,22 +137,6 @@ declare namespace Viewer {
   }
 }
 
-type ImageDataType = {
-  aspectRatio: number,
-  height: number,
-  left: number,
-  naturalHeight: number,
-  naturalWidth: number,
-  ratio: number,
-  rotate: number,
-  scaleX: number,
-  scaleY: number,
-  top: number,
-  width: number,
-  x: number,
-  y: number,
-}
-
 declare class Viewer {
   constructor(element: HTMLElement, options?: Viewer.Options);
   destroy(): Viewer;
@@ -192,8 +164,6 @@ declare class Viewer {
   zoomTo(ratio: number, hasTooltip?: boolean): Viewer;
   static noConflict(): Viewer;
   static setDefaults(options: Viewer.Options): void;
-  image?: HTMLElement;
-  imageData: Partial<Readonly<ImageDataType>>;
 }
 
 declare module 'viewerjs' {
