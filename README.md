@@ -96,6 +96,15 @@ new Viewer(element[, options])
     <li><img src="picture-3.jpg" alt="Picture 3"></li>
   </ul>
 </div>
+
+<div id="post">
+  <p>This is Picture 1:</p>
+  <img src="picture-1.jpg" alt="Picture 1">
+  <p>This is Picture 2:</p>
+  <img src="picture-2.jpg" alt="Picture 2">
+  <p>This is Picture 3:</p>
+  <img src="picture-3.jpg" alt="Picture 3">
+</div>
 ```
 
 ```js
@@ -114,6 +123,10 @@ const viewer = new Viewer(document.getElementById('image'), {
 
 // View a list of images
 const gallery = new Viewer(document.getElementById('images'));
+// Then, show one image by click it, or call `gallery.show()`.
+
+// View all images in a container element
+const gallery = new Viewer(document.getElementById('post'));
 // Then, show one image by click it, or call `gallery.show()`.
 ```
 
