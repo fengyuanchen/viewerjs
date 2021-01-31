@@ -103,7 +103,7 @@ new Viewer(element[, options])
 // import 'viewerjs/dist/viewer.css';
 import Viewer from 'viewerjs';
 
-// View an image
+// View an image.
 const viewer = new Viewer(document.getElementById('image'), {
   inline: true,
   viewed() {
@@ -112,7 +112,8 @@ const viewer = new Viewer(document.getElementById('image'), {
 });
 // Then, show the image by click it, or call `viewer.show()`.
 
-// View a list of images
+// View a list of images.
+// Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
 const gallery = new Viewer(document.getElementById('images'));
 // Then, show one image by click it, or call `gallery.show()`.
 ```
