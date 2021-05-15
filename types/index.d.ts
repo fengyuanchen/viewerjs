@@ -89,6 +89,7 @@ declare namespace Viewer {
     container?: string | HTMLElement;
     filter?: Function;
     fullscreen?: boolean;
+    focus?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
     inheritedAttributes?: string[];
