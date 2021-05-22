@@ -19,7 +19,7 @@
 ## 1.7.0 (Sep 26, 2020)
 
 - Add 2 new events: `play` and `stop` (#411).
-- Let the `viewed`, `zoomed` and `hidden` events can not be canceled.
+- Let the `viewed`, `zoomed`, and `hidden` events not be canceled.
 - Improve the TypeScript declarations in the `types/index.d.ts` file.
 
 ## 1.6.2 (Aug 30, 2020)
@@ -37,14 +37,14 @@
 - Add a new options: `inheritedAttributes`.
 - Ignore images without the `src` attribute (#326).
 - Improve the `hide` method for unexpected calling (#367).
-- Reset the padding right of the `body` element when resizing (#379).
+- Reset the `padding-right` of the `body` element when resizing (#379).
 - Remove unnecessary `padding-right: 0px` from the `body` element when close the viewer modal (#394).
 
 ## 1.5.0 (Nov 23, 2019)
 
-- Detect if the queried image is existing when update image list (#333).
+- Detect if the queried image is existing when updating the image list (#333).
 - Add a new option: `slideOnTouch` (#340).
-- Force reflow element in a new way to avoid side effect (#343).
+- Force reflow element in a new way to avoid side-effect (#343).
 
 ## 1.4.0 (Oct 26, 2019)
 
@@ -52,7 +52,7 @@
 
 ## 1.3.7 (Oct 2, 2019)
 
-- Do nothing if the `index` value is invalid when call the `view` method (#312).
+- Do nothing if the `index` value is invalid when calling the `view` method (#312).
 - Ignore invalid `element` parameter on the class utility functions (#317).
 - Improve event type determining for iOS 13+ (#321).
 
@@ -63,12 +63,12 @@
 
 ## 1.3.5 (Jun 29, 2019)
 
-- Improve the escaping function to avoid to escape HTML entities repeatedly.
+- Improve the escaping function to avoid escaping HTML entities repeatedly.
 
 ## 1.3.4 (Jun 1, 2019)
 
 - Escape all strings that use in HTML for better security (#269).
-- Fix the missing fade out transition when hiding the viewer (#275).
+- Fix the missing fade-out transition when hiding the viewer (#275).
 - Decode image name when it comes from URL (#282).
 
 ## 1.3.3 (Apr 6, 2019)
@@ -89,11 +89,11 @@
 ## 1.3.0 (Oct 25, 2018)
 
 - Add a new option: `className` (#209).
-- Fix wrong click action when the target image is ignored by the `filter` option (#211)
+- Fix wrong click action when target image is ignored by the `filter` option (#211)
 
 ## 1.2.1 (Oct 20, 2018)
 
-- Improve viewer instance storage to avoid side effect.
+- Improve viewer instance storage to avoid side-effect.
 - Fix parameter error of `Object.assign` in iOS devices.
 
 ## 1.2.0 (Jul 15, 2018)
@@ -104,17 +104,17 @@
 ## 1.1.0 (May 27, 2018)
 
 - Add 2 new events: `zoom` and `zoomed` (#144).
-- Make the touch zooming more smoother (#162).
+- Make the touch zooming smoother (#162).
 
 ## 1.0.1 (May 20, 2018)
 
-- Add a namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side effect.
+- Add a namespace to data attribute names (from `data-*` to `data-viewer-*`) to avoid side-effect.
 - Make sure the image data is a non-null object to avoid unexpected errors.
 - Fix broken zoom feature in iOS browsers (#167).
 
 ## 1.0.0 (Apr 1, 2018)
 
-- Add in browser checking to support to import in Node.js.
+- Add in browser checking to support import in Node.js.
 - Cancel update when there are no images when calling the `update` method.
 
 ## 1.0.0-rc.1 (Mar 13, 2018)
@@ -127,7 +127,7 @@
 
 - Add a new option: `loading`.
 - Add type definitions file for TypeScript.
-- Enhance the `show`, `hide` and `play` methods.
+- Enhance the `show`, `hide`, and `play` methods.
 - Change the default value of the `loop` option from `false` to `true`.
 
 ## 1.0.0-beta.2 (Feb 13, 2018)
@@ -170,7 +170,7 @@
 
 ## 0.7.1 (May 14, 2017)
 
-- Support to use Viewer in a modal (#39).
+- Support to use the viewer in a modal (#39).
 
 ## 0.7.0 (Apr 30, 2017)
 
@@ -204,7 +204,7 @@
 
 ## 0.4.0 (Mar 20, 2016)
 
-- Added some properties to "event.detail" of the "view" and "viewed" events.
+- Added some properties to `event.detail` of the "view" and "viewed" events.
 
 ## 0.3.3 (Mar 19, 2016)
 
@@ -212,7 +212,7 @@
 
 ## 0.3.2 (Mar 11, 2016)
 
-- Fix the error of the parameters on the "url" option when it is a function.
+- Fix the error of the parameters on the `url` option when it is a function.
 
 ## 0.3.1 (Feb 2, 2016)
 
@@ -236,7 +236,7 @@
 
 - Supports to zoom from event triggering point.
 - Optimized "toggle" method.
-- Fixed a bug of the index of viewing image.
+- Fixed a bug about the index of the viewing image.
 
 ## 0.1.0 (Dec 24, 2015)
 

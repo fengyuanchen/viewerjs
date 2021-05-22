@@ -110,7 +110,7 @@ const viewer = new Viewer(document.getElementById('image'), {
     viewer.zoomTo(1);
   },
 });
-// Then, show the image by click it, or call `viewer.show()`.
+// Then, show the image by clicking it, or call `viewer.show()`.
 
 // View a list of images.
 // Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
@@ -145,7 +145,7 @@ If you want to change the global default options, You may use `Viewer.setDefault
 - Type: `Boolean` or `String`
 - Default: `true`
 
-Enable a modal backdrop, specify `static` for a backdrop which doesn't close the modal on click.
+Enable the modal backdrop, specify `static` for the backdrop that will not close the modal on click.
 
 ### button
 
@@ -182,7 +182,7 @@ Specify the visibility of the navbar.
 
 Specify the visibility and the content of the title.
 
-> The name comes from the `alt` attribute of an image element or the image name parsed from URL.
+> The name comes from the `alt` attribute of an image element or the image name parsed from its URL.
 
 For example, `title: 4` equals to:
 
@@ -247,7 +247,7 @@ Custom class name(s) to add to the viewer's root element.
 - Default: `'body'`
 - An element or a valid selector for [Document.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
 
-The container to put the viewer in modal mode.
+Container to place the viewer in the modal mode.
 
 > Only available when the `inline` option is set to `false`.
 
@@ -277,7 +277,7 @@ new Viewer(image, {
 
 Enable to request full screen when play.
 
-> Requires the browser supports [Full Screen API](https://caniuse.com/fullscreen).
+> Requires the browser supports [Fullscreen API](https://caniuse.com/fullscreen).
 
 ### inheritedAttributes
 
@@ -293,7 +293,7 @@ Define the extra attributes to inherit from the original image.
 - Type: `Number`
 - Default: `0`
 
-Define the initial index of image for viewing.
+Define the initial index of the image for viewing.
 
 > Also used as the default parameter value of the `view` method.
 
@@ -332,14 +332,14 @@ Focus the active item in the navbar when initialized.
 - Type: `Boolean`
 - Default: `true`
 
-Indicate if show a loading spinner when load image or not.
+Indicate if showing a loading spinner when loading the image or not.
 
 ### loop
 
 - Type: `Boolean`
 - Default: `true`
 
-Indicate if enable loop viewing or not.
+Indicate if enabling loop viewing or not.
 
 > If the current image is the last one, then the next one to view is the first one, and vice versa.
 
@@ -401,7 +401,7 @@ Enable to zoom the current image by dragging on the touch screen.
 - Type: `Boolean`
 - Default: `true`
 
-Enable to zoom the image by wheeling mouse.
+Enable to zoom the image by wheeling the mouse.
 
 ### slideOnTouch
 
@@ -426,7 +426,7 @@ In other words, call the [`toggle`](#toggle) method automatically when double cl
 - Type: `Boolean`
 - Default: `true`
 
-Show the tooltip with image ratio (percentage) when zoom in or zoom out.
+Show the tooltip with image ratio (percentage) when zooming in or zooming out.
 
 ### transition
 
@@ -440,35 +440,35 @@ Enable CSS3 Transition for some special elements.
 - Type: `Number`
 - Default: `2015`
 
-Define the CSS `z-index` value of viewer in modal mode.
+Define the CSS `z-index` value of the viewer in modal mode.
 
 ### zIndexInline
 
 - Type: `Number`
 - Default: `0`
 
-Define the CSS `z-index` value of viewer in inline mode.
+Define the CSS `z-index` value of the viewer in inline mode.
 
 ### zoomRatio
 
 - Type: `Number`
 - Default: `0.1`
 
-Define the ratio when zoom the image by wheeling mouse.
+Define the ratio when zooming the image by wheeling the mouse.
 
 ### minZoomRatio
 
 - Type: `Number`
 - Default: `0.01`
 
-Define the min ratio of the image when zoom out.
+Define the min ratio of the image when zooming out.
 
 ### maxZoomRatio
 
 - Type: `Number`
 - Default: `100`
 
-Define the max ratio of the image when zoom in.
+Define the max ratio of the image when zooming in.
 
 ### url
 
@@ -499,119 +499,119 @@ new Viewer(image, {
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `ready` event.
+Shortcut of the `ready` event.
 
 ### show
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `show` event.
+Shortcut of the `show` event.
 
 ### shown
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `shown` event.
+Shortcut of the `shown` event.
 
 ### hide
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `hide` event.
+Shortcut of the `hide` event.
 
 ### hidden
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `hidden` event.
+Shortcut of the `hidden` event.
 
 ### view
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `view` event.
+Shortcut of the `view` event.
 
 ### viewed
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `viewed` event.
+Shortcut of the `viewed` event.
 
 ### move
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `move` event.
+Shortcut of the `move` event.
 
 ### moved
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `moved` event.
+Shortcut of the `moved` event.
 
 ### rotate
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `rotate` event.
+Shortcut of the `rotate` event.
 
 ### rotated
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `rotated` event.
+Shortcut of the `rotated` event.
 
 ### scale
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `scale` event.
+Shortcut of the `scale` event.
 
 ### scaled
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `scaled` event.
+Shortcut of the `scaled` event.
 
 ### zoom
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `zoom` event.
+Shortcut of the `zoom` event.
 
 ### zoomed
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `zoomed` event.
+Shortcut of the `zoomed` event.
 
 ### play
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `play` event.
+Shortcut of the `play` event.
 
 ### stop
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the `stop` event.
+Shortcut of the `stop` event.
 
 [⬆ back to top](#table-of-contents)
 
@@ -654,7 +654,7 @@ Show the viewer.
   - Default: `false`
   - Indicates if hide the viewer immediately or not.
 
-hide the viewer.
+Hide the viewer.
 
 > Only available in modal mode.
 
@@ -665,7 +665,7 @@ hide the viewer.
   - Default: `0` (inherits from the `initialViewIndex` option)
   - The index of the image for viewing
 
-View one of the images with image's index. If the viewer is not shown, will show the viewer first.
+View one of the images with the image index. If the viewer is hidden, it will be shown first.
 
 ```js
 viewer.view(1); // View the second image
@@ -850,19 +850,19 @@ Stop play.
 
 ### full()
 
-Enter modal mode.
+Enter the modal mode.
 
 > Only available in inline mode.
 
 ### exit()
 
-Exit  modal mode.
+Exit the modal mode.
 
 > Only available in inline mode.
 
 ### tooltip()
 
-Show the current ratio of the image with percentage.
+Show the current ratio of the image by percentage.
 
 > Requires the `tooltip` option set to `true`.
 
@@ -878,7 +878,7 @@ Reset the image to its initial state.
 
 ### update()
 
-Update the viewer instance when the source images changed (added, removed or sorted).
+Update the viewer instance when the source images changed (added, removed, or sorted).
 
 > If you load images dynamically (with XMLHTTPRequest), you can use this method to add the new images to the viewer instance.
 
@@ -892,7 +892,7 @@ Destroy the viewer and remove the instance.
 
 All events can access the viewer instance with `this.viewer` in its handler.
 
-> Be careful to use these events in other component which has the same event names, e.g.: [Bootstrap](https://getbootstrap.com/)'s modal.
+> Be careful to use these events with other components which have the same event names, e.g.: [Bootstrap](https://getbootstrap.com/)'s modal.
 
 ```js
 let viewer;
@@ -1105,7 +1105,7 @@ This event fires when the viewer starts to stop.
 
 ## No conflict
 
-If you have to use other viewer with the same namespace, just call the `Viewer.noConflict` static method to revert to it.
+If you have to use another viewer with the same namespace, call the `Viewer.noConflict` static method to revert to it.
 
 ```html
 <script src="other-viewer.js"></script>
