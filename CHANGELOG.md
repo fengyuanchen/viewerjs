@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.1 (May 22, 2021)
+
+- Fix the missing declaration for the `focus` option (#470).
+
 ## 1.9.0 (Dec 6, 2020)
 
 - Add 6 new events: `move`, `moved`, `rotate`, `rotated`, `scale`, and `scaled`.
