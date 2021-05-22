@@ -1,7 +1,7 @@
 declare namespace Viewer {
   export type Visibility = 0 | 1 | 2 | 3 | 4;
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
-  export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions
+  export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions | undefined;
 
   export interface ToolbarButtonOptions {
     click?: Function,
