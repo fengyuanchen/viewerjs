@@ -21,7 +21,7 @@ declare namespace Viewer {
     rotateRight?: ToolbarOption;
     zoomIn?: ToolbarOption;
     zoomOut?: ToolbarOption;
-    [x: string]: any;
+    [x: string]: ToolbarOption | undefined;
   }
 
   export interface MoveEventData {
