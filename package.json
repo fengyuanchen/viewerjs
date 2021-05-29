@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
@@ -58,7 +58,7 @@
   "homepage": "https://fengyuanchen.github.io/viewerjs",
   "devDependencies": {
     "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@rollup/plugin-babel": "^5.3.0",
@@ -68,7 +68,7 @@
     "codecov": "^3.8.2",
     "cpy-cli": "^3.1.1",
     "create-banner": "^2.0.0",
-    "cssnano": "^5.0.4",
+    "cssnano": "^5.0.5",
     "del-cli": "^3.0.1",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -91,11 +91,11 @@
     "postcss-preset-env": "^6.7.0",
     "postcss-url": "^10.1.3",
     "puppeteer": "^9.1.1",
-    "rollup": "^2.48.0",
+    "rollup": "^2.50.3",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-order": "^4.1.0",
-    "uglify-js": "^3.13.7"
+    "uglify-js": "^3.13.8"
   },
   "browserslist": [
     "last 2 versions",

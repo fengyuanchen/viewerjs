@@ -1,8 +1,9 @@
 # Changelog
 
-## next
+## 1.9.2 (May 29, 2021)
 
 - Avoid conflicts with other modals (#474).
+- Allow `ToolbarOption` to be undefined (#473).
 
 ## 1.9.1 (May 22, 2021)
 
@@ -32,9 +33,9 @@
 
 ## 1.6.2 (Aug 30, 2020)
 
-- Fix wrong usage about `this` in ES6+ (#395).
-- Improve the wheel zoom behavior (#396).
 - Improve the `hide` method for some edge cases (#407).
+- Improve the wheel zoom behavior (#396).
+- Fix wrong usage about `this` in ES6+ (#395).
 
 ## 1.6.1 (Jun 14, 2020)
 
@@ -43,16 +44,16 @@
 ## 1.6.0 (Jun 6, 2020)
 
 - Add a new options: `inheritedAttributes`.
-- Ignore images without the `src` attribute (#326).
-- Improve the `hide` method for unexpected calling (#367).
-- Reset the `padding-right` of the `body` element when resizing (#379).
 - Remove unnecessary `padding-right: 0px` from the `body` element when close the viewer modal (#394).
+- Reset the `padding-right` of the `body` element when resizing (#379).
+- Improve the `hide` method for unexpected calling (#367).
+- Ignore images without the `src` attribute (#326).
 
 ## 1.5.0 (Nov 23, 2019)
 
-- Detect if the queried image is existing when updating the image list (#333).
-- Add a new option: `slideOnTouch` (#340).
 - Force reflow element in a new way to avoid side-effect (#343).
+- Add a new option: `slideOnTouch` (#340).
+- Detect if the queried image is existing when updating the image list (#333).
 
 ## 1.4.0 (Oct 26, 2019)
 
@@ -60,14 +61,14 @@
 
 ## 1.3.7 (Oct 2, 2019)
 
-- Do nothing if the `index` value is invalid when calling the `view` method (#312).
-- Ignore invalid `element` parameter on the class utility functions (#317).
 - Improve event type determining for iOS 13+ (#321).
+- Ignore invalid `element` parameter on the class utility functions (#317).
+- Do nothing if the `index` value is invalid when calling the `view` method (#312).
 
 ## 1.3.6 (Jul 4, 2019)
 
-- Avoid using the `innerHTML` property for security (#269).
 - Avoid escaping URLs (#298, #301).
+- Avoid using the `innerHTML` property for security (#269).
 
 ## 1.3.5 (Jun 29, 2019)
 
@@ -75,9 +76,9 @@
 
 ## 1.3.4 (Jun 1, 2019)
 
-- Escape all strings that use in HTML for better security (#269).
-- Fix the missing fade-out transition when hiding the viewer (#275).
 - Decode image name when it comes from URL (#282).
+- Fix the missing fade-out transition when hiding the viewer (#275).
+- Escape all strings that use in HTML for better security (#269).
 
 ## 1.3.3 (Apr 6, 2019)
 
@@ -91,13 +92,13 @@
 
 ## 1.3.1 (Dec 9, 2018)
 
-- Emulate click (single tap) and double click (double tap) in touch devices to support backdrop and image zooming (#210).
 - Ignore pointer events when not the primary button was pressed (#221).
+- Emulate click (single tap) and double click (double tap) in touch devices to support backdrop and image zooming (#210).
 
 ## 1.3.0 (Oct 25, 2018)
 
-- Add a new option: `className` (#209).
 - Fix wrong click action when target image is ignored by the `filter` option (#211)
+- Add a new option: `className` (#209).
 
 ## 1.2.1 (Oct 20, 2018)
 
@@ -106,13 +107,13 @@
 
 ## 1.2.0 (Jul 15, 2018)
 
-- Add 2 new options: `toggleOnDblclick` (#173) and `initialViewIndex` (#183).
 - Enhance the `title` option to support to customize title content (#54, #185).
+- Add 2 new options: `toggleOnDblclick` (#173) and `initialViewIndex` (#183).
 
 ## 1.1.0 (May 27, 2018)
 
-- Add 2 new events: `zoom` and `zoomed` (#144).
 - Make the touch zooming smoother (#162).
+- Add 2 new events: `zoom` and `zoomed` (#144).
 
 ## 1.0.1 (May 20, 2018)
 
@@ -150,8 +151,8 @@
 ## 1.0.0-beta (Dec 12, 2017)
 
 - Add `style` field to `package.json`.
-- Fix the issue of NodeList deconstructing (#118).
 - Fall back to `document.documentElement` if `document.body` is not existing (#120).
+- Fix the issue of NodeList deconstructing (#118).
 
 ## 0.10.0 (Nov 5, 2017)
 
@@ -161,8 +162,8 @@
 ## 0.9.0 (Nov 4, 2017)
 
 - Add a new option: `filter`.
-- Enhance the `prev` and `next` methods (#47).
 - Support to customize the layout of the toolbar (#79).
+- Enhance the `prev` and `next` methods (#47).
 - Disallow to show again if it had shown.
 
 ## 0.8.0 (Oct 8, 2017)
@@ -173,8 +174,8 @@
 
 ## 0.7.2 (Aug 19, 2017)
 
-- Ignore the mouse down event when the viewer is hiding (#70).
 - Fixed multiple active items in the navbar (#75).
+- Ignore the mouse down event when the viewer is hiding (#70).
 
 ## 0.7.1 (May 14, 2017)
 

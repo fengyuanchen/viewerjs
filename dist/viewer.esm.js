@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.9.1
+ * Viewer.js v1.9.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-05-22T07:21:35.753Z
+ * Date: 2021-05-29T03:50:07.891Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -2972,11 +2972,12 @@ var others = {
     var _this = this;
 
     this.clearEnforceFocus();
-    addListener(document, EVENT_FOCUSIN, this.onFocusin = function (_ref) {
-      var target = _ref.target;
+    addListener(document, EVENT_FOCUSIN, this.onFocusin = function (event) {
       var viewer = _this.viewer;
+      var target = event.target;
 
-      if (target !== document && target !== viewer && !viewer.contains(target)) {
+      if (target !== document && target !== viewer && !viewer.contains(target) // Avoid conflicts with other modals (#474)
+      && (target.getAttribute('tabindex') === null || target.getAttribute('aria-modal') !== 'true')) {
         viewer.focus();
       }
     });
