@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Avoid conflicts with other modals (#474).
+
 ## 1.9.1 (May 22, 2021)
 
 - Fix the missing declaration for the `focus` option (#470).

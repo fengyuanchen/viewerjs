@@ -37,10 +37,17 @@ export default {
 
   enforceFocus() {
     this.clearEnforceFocus();
-    addListener(document, EVENT_FOCUSIN, (this.onFocusin = ({ target }) => {
+    addListener(document, EVENT_FOCUSIN, (this.onFocusin = (event) => {
       const { viewer } = this;
+      const { target } = event;
 
-      if (target !== document && target !== viewer && !viewer.contains(target)) {
+      if (target !== document
+        && target !== viewer
+        && !viewer.contains(target)
+
+        // Avoid conflicts with other modals (#474)
+        && (target.getAttribute('tabindex') === null || target.getAttribute('aria-modal') !== 'true')
+      ) {
         viewer.focus();
       }
     }));
