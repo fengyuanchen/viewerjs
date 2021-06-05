@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-05-29T03:50:07.891Z
+ * Date: 2021-06-05T14:29:53.657Z
  */
 
 'use strict';
@@ -1434,6 +1434,13 @@ var handlers = {
       }
 
       this.toggle();
+
+      if (this.imageData.ratio === 1) {
+        window.evented = event;
+      } else {
+        // 如果
+        this.moveTo(this.initialImageData.x, this.initialImageData.y);
+      }
     }
   },
   load: function load() {
