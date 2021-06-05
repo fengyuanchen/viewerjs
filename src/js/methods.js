@@ -1050,7 +1050,7 @@ export default {
 
   // Toggle the image size between its natural size and initial size
   toggle() {
-    if (this.imageData.ratio === 1) {
+    if (this.imageData.ratio === 1 || this.imageData.ratio < this.initialImageData.ratio) {
       this.zoomTo(this.initialImageData.ratio, true);
     } else {
       this.zoomTo(1, true);
