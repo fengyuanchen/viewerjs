@@ -139,6 +139,7 @@ export default {
   },
 
   requestFullscreen() {
+    const { options } = this;
     const document = this.element.ownerDocument;
 
     if (this.fulled && !(
@@ -148,10 +149,11 @@ export default {
       || document.msFullscreenElement
     )) {
       const { documentElement } = document;
-
       // Element.requestFullscreen()
       if (documentElement.requestFullscreen) {
-        documentElement.requestFullscreen();
+        // https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
+        const opts = { navigationUI: options.fullscreenNavigationUI };        
+        documentElement.requestFullscreen(opts);
       } else if (documentElement.webkitRequestFullscreen) {
         documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
       } else if (documentElement.mozRequestFullScreen) {

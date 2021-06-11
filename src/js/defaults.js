@@ -55,6 +55,14 @@ export default {
   fullscreen: true,
 
   /**
+   * Hide navigation UI controls.
+   * See https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
+   * Valid values are either 'show', 'hide', or the default value 'auto';
+   * @type {string}
+   */
+   fullscreenNavigationUI: 'auto',
+
+  /**
    * Define the extra attributes to inherit from the original image.
    * @type {Array}
    */

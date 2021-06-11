@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-05-29T03:50:07.891Z
+ * Date: 2021-06-11T21:03:35.919Z
  */
 
 (function (global, factory) {
@@ -160,6 +160,14 @@
      * @type {boolean}
      */
     fullscreen: true,
+
+    /**
+     * Hide navigation UI controls.
+     * See https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
+     * Valid values are either 'show', 'hide', or the default value 'auto';
+     * @type {string}
+     */
+    fullscreenNavigationUI: 'auto',
 
     /**
      * Define the extra attributes to inherit from the original image.
@@ -3069,13 +3077,18 @@
       }
     },
     requestFullscreen: function requestFullscreen() {
+      var options = this.options;
       var document = this.element.ownerDocument;
 
       if (this.fulled && !(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
         var documentElement = document.documentElement; // Element.requestFullscreen()
 
         if (documentElement.requestFullscreen) {
-          documentElement.requestFullscreen();
+          // https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
+          var opts = {
+            navigationUI: options.fullscreenNavigationUI
+          };
+          documentElement.requestFullscreen(opts);
         } else if (documentElement.webkitRequestFullscreen) {
           documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         } else if (documentElement.mozRequestFullScreen) {
@@ -3506,3 +3519,4 @@
   return Viewer;
 
 })));
+//# sourceMappingURL=viewer.js.map
