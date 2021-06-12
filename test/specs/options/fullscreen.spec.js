@@ -14,4 +14,15 @@ describe('fullscreen (option)', () => {
 
     expect(viewer.options.fullscreen).to.be.false;
   });
+
+  it('should support FullscreenOptions', () => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      fullscreen: {
+        navigationUI: 'hide',
+      },
+    });
+
+    expect(viewer.options.fullscreen).to.be.an('object').that.has.all.keys('navigationUI');
+  });
 });

@@ -272,7 +272,7 @@ new Viewer(image, {
 
 ### fullscreen
 
-- Type: `Boolean`
+- Type: `Boolean` or [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions)
 - Default: `true`
 
 Enable to request full screen when play.
@@ -838,7 +838,7 @@ viewer.zoomTo(1); // Zoom to natural size (100%)
 ### play([fullscreen])
 
 - **fullscreen** (optional):
-  - Type: `Boolean`
+  - Type: `Boolean` or [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions)
   - Default: `false`
   - Indicate if request fullscreen or not.
 

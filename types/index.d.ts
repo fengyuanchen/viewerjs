@@ -88,7 +88,7 @@ declare namespace Viewer {
     className?: string;
     container?: string | HTMLElement;
     filter?: Function;
-    fullscreen?: boolean;
+    fullscreen?: boolean | FullscreenOptions;
     focus?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
@@ -147,7 +147,7 @@ declare class Viewer {
   move(offsetX: number, offsetY?: number): Viewer;
   moveTo(x: number, y?: number): Viewer;
   next(loop?: boolean): Viewer;
-  play(fullscreen?: boolean): Viewer;
+  play(fullscreen?: boolean | FullscreenOptions): Viewer;
   prev(loop?: boolean): Viewer;
   reset(): Viewer;
   rotate(degree: number): Viewer;

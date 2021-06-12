@@ -50,7 +50,8 @@ export default {
 
   /**
    * Enable to request fullscreen when play.
-   * @type {boolean}
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions}
+   * @type {boolean|FullscreenOptions}
    */
   fullscreen: true,
 
