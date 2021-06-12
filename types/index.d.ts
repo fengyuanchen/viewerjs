@@ -2,6 +2,7 @@ declare namespace Viewer {
   export type Visibility = 0 | 1 | 2 | 3 | 4;
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
   export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions | undefined;
+  export type NavigationUI = 'auto' | 'hide' | 'show';
 
   export interface ToolbarButtonOptions {
     click?: Function,
@@ -89,6 +90,7 @@ declare namespace Viewer {
     container?: string | HTMLElement;
     filter?: Function;
     fullscreen?: boolean;
+    fullscreenNavigationUI?: NavigationUI,
     focus?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
