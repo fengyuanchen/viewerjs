@@ -195,7 +195,7 @@ export default {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true,
         });
-        this.zoomTo(0, false, false, true);
+        this.zoomTo(0, false, null, true);
       } else {
         onImageTransitionEnd();
       }
@@ -1049,12 +1049,16 @@ export default {
     return this;
   },
 
-  // Toggle the image size between its current size and natural size
-  toggle() {
+  /**
+   * Toggle the image size between its current size and natural size
+   * @param {Event} [_originalEvent=null] - The original event if any.
+   * @returns {Viewer} this
+   */
+  toggle(_originalEvent = null) {
     if (this.imageData.ratio === 1) {
-      this.zoomTo(this.imageData.oldRatio, true);
+      this.zoomTo(this.imageData.oldRatio, true, _originalEvent);
     } else {
-      this.zoomTo(1, true);
+      this.zoomTo(1, true, _originalEvent);
     }
 
     return this;

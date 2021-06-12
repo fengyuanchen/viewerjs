@@ -130,7 +130,7 @@ export default {
         clearTimeout(this.doubleClickImageTimeout);
       }
 
-      this.toggle();
+      this.toggle(event);
     }
   },
 
