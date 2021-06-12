@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.9.2
+ * Viewer.js v1.10.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-05-29T03:50:07.891Z
+ * Date: 2021-06-12T07:57:10.970Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -151,7 +151,8 @@ var DEFAULTS = {
 
   /**
    * Enable to request fullscreen when play.
-   * @type {boolean}
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions}
+   * @type {boolean|FullscreenOptions}
    */
   fullscreen: true,
 
@@ -1204,6 +1205,7 @@ var render = {
         y: top,
         width: width,
         height: height,
+        oldRatio: 1,
         ratio: width / naturalWidth,
         aspectRatio: aspectRatio,
         naturalWidth: naturalWidth,
@@ -1431,7 +1433,7 @@ var handlers = {
         clearTimeout(this.doubleClickImageTimeout);
       }
 
-      this.toggle();
+      this.toggle(event);
     }
   },
   load: function load() {
@@ -1941,7 +1943,7 @@ var methods = {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true
         });
-        this.zoomTo(0, false, false, true);
+        this.zoomTo(0, false, null, true);
       } else {
         onImageTransitionEnd();
       }
@@ -2450,7 +2452,7 @@ var methods = {
       var newHeight = naturalHeight * ratio;
       var offsetWidth = newWidth - width;
       var offsetHeight = newHeight - height;
-      var oldRatio = width / naturalWidth;
+      var oldRatio = imageData.ratio;
 
       if (isFunction(options.zoom)) {
         addListener(element, EVENT_ZOOM, options.zoom, {
@@ -2487,6 +2489,7 @@ var methods = {
       imageData.top = imageData.y;
       imageData.width = newWidth;
       imageData.height = newHeight;
+      imageData.oldRatio = oldRatio;
       imageData.ratio = ratio;
       this.renderImage(function () {
         _this6.zooming = false;
@@ -2516,7 +2519,7 @@ var methods = {
 
   /**
    * Play the images
-   * @param {boolean} [fullscreen=false] - Indicate if request fullscreen or not.
+   * @param {boolean|FullscreenOptions} [fullscreen=false] - Indicate if request fullscreen or not.
    * @returns {Viewer} this
    */
   play: function play() {
@@ -2550,7 +2553,7 @@ var methods = {
     this.onLoadWhenPlay = onLoad;
 
     if (fullscreen) {
-      this.requestFullscreen();
+      this.requestFullscreen(fullscreen);
     }
 
     addClass(player, CLASS_SHOW);
@@ -2795,12 +2798,19 @@ var methods = {
     }, 1000);
     return this;
   },
-  // Toggle the image size between its natural size and initial size
+
+  /**
+   * Toggle the image size between its current size and natural size
+   * @param {Event} [_originalEvent=null] - The original event if any.
+   * @returns {Viewer} this
+   */
   toggle: function toggle() {
+    var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
     if (this.imageData.ratio === 1) {
-      this.zoomTo(this.initialImageData.ratio, true);
+      this.zoomTo(this.imageData.oldRatio, true, _originalEvent);
     } else {
-      this.zoomTo(1, true);
+      this.zoomTo(1, true, _originalEvent);
     }
 
     return this;
@@ -3062,14 +3072,19 @@ var others = {
       });
     }
   },
-  requestFullscreen: function requestFullscreen() {
+  requestFullscreen: function requestFullscreen(options) {
     var document = this.element.ownerDocument;
 
     if (this.fulled && !(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
       var documentElement = document.documentElement; // Element.requestFullscreen()
 
       if (documentElement.requestFullscreen) {
-        documentElement.requestFullscreen();
+        // Avoid TypeError when convert `options` to dictionary
+        if (isPlainObject(options)) {
+          documentElement.requestFullscreen(options);
+        } else {
+          documentElement.requestFullscreen();
+        }
       } else if (documentElement.webkitRequestFullscreen) {
         documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
       } else if (documentElement.mozRequestFullScreen) {

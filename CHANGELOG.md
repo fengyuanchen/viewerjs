@@ -1,10 +1,10 @@
 # Changelog
 
-## next
+## 1.10.0 (Jun 12, 2021)
 
 - Enhance `fullscreen` option and `play` method to support [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions) (#482, #483).
 - Refactor the `toggle` method for toggling image between current/natural ratio (#477).
-- Improve the `toggle` method for zooming by dblclick (#422).
+- Improve the `toggle` method for zooming by double-click (#422).
 
 ## 1.9.2 (May 29, 2021)
 
