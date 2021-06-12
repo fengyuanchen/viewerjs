@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Refactor the `toggle` method for toggling image between current/natural ratio (#477).
+
 ## 1.9.2 (May 29, 2021)
 
 - Avoid conflicts with other modals (#474).
