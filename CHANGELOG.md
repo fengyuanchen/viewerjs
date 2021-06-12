@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Enhance `fullscreen` option and `play` method to support [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions) (#482, #483).
+
 ## 1.9.2 (May 29, 2021)
 
 - Avoid conflicts with other modals (#474).

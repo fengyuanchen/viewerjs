@@ -768,7 +768,7 @@ export default {
 
   /**
    * Play the images
-   * @param {boolean} [fullscreen=false] - Indicate if request fullscreen or not.
+   * @param {boolean|FullscreenOptions} [fullscreen=false] - Indicate if request fullscreen or not.
    * @returns {Viewer} this
    */
   play(fullscreen = false) {
@@ -798,7 +798,7 @@ export default {
     this.onLoadWhenPlay = onLoad;
 
     if (fullscreen) {
-      this.requestFullscreen();
+      this.requestFullscreen(fullscreen);
     }
 
     addClass(player, CLASS_SHOW);

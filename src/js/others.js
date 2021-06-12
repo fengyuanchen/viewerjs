@@ -15,6 +15,7 @@ import {
   forEach,
   getMaxZoomRatio,
   isFunction,
+  isPlainObject,
   isString,
   removeClass,
   removeListener,
@@ -138,8 +139,7 @@ export default {
     }
   },
 
-  requestFullscreen() {
-    const { options } = this;
+  requestFullscreen(options) {
     const document = this.element.ownerDocument;
 
     if (this.fulled && !(
@@ -149,11 +149,15 @@ export default {
       || document.msFullscreenElement
     )) {
       const { documentElement } = document;
+
       // Element.requestFullscreen()
       if (documentElement.requestFullscreen) {
-        // https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
-        const opts = { navigationUI: options.fullscreenNavigationUI };        
-        documentElement.requestFullscreen(opts);
+        // Avoid TypeError when convert `options` to dictionary
+        if (isPlainObject(options)) {
+          documentElement.requestFullscreen(options);
+        } else {
+          documentElement.requestFullscreen();
+        }
       } else if (documentElement.webkitRequestFullscreen) {
         documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
       } else if (documentElement.mozRequestFullScreen) {

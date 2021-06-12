@@ -50,17 +50,10 @@ export default {
 
   /**
    * Enable to request fullscreen when play.
-   * @type {boolean}
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions}
+   * @type {boolean|FullscreenOptions}
    */
   fullscreen: true,
-
-  /**
-   * Hide navigation UI controls.
-   * See https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions
-   * Valid values are either 'show', 'hide', or the default value 'auto';
-   * @type {string}
-   */
-   fullscreenNavigationUI: 'auto',
 
   /**
    * Define the extra attributes to inherit from the original image.

@@ -2,7 +2,6 @@ declare namespace Viewer {
   export type Visibility = 0 | 1 | 2 | 3 | 4;
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
   export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions | undefined;
-  export type NavigationUI = 'auto' | 'hide' | 'show';
 
   export interface ToolbarButtonOptions {
     click?: Function,
@@ -89,8 +88,7 @@ declare namespace Viewer {
     className?: string;
     container?: string | HTMLElement;
     filter?: Function;
-    fullscreen?: boolean;
-    fullscreenNavigationUI?: NavigationUI,
+    fullscreen?: boolean | FullscreenOptions;
     focus?: boolean;
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
@@ -149,7 +147,7 @@ declare class Viewer {
   move(offsetX: number, offsetY?: number): Viewer;
   moveTo(x: number, y?: number): Viewer;
   next(loop?: boolean): Viewer;
-  play(fullscreen?: boolean): Viewer;
+  play(fullscreen?: boolean | FullscreenOptions): Viewer;
   prev(loop?: boolean): Viewer;
   reset(): Viewer;
   rotate(degree: number): Viewer;
