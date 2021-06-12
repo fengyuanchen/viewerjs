@@ -868,7 +868,7 @@ Show the current ratio of the image by percentage.
 
 ### toggle()
 
-Toggle the image size between its natural size and initial size.
+Toggle the image size between its current size and natural size.
 
 > Used by the [`toggleOnDblclick`](#toggleOnDblclick) option.
 

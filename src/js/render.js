@@ -206,6 +206,7 @@ export default {
         y: top,
         width,
         height,
+        oldRatio: 1,
         ratio: width / naturalWidth,
         aspectRatio,
         naturalWidth,

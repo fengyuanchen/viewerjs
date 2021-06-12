@@ -701,7 +701,7 @@ export default {
       const newHeight = naturalHeight * ratio;
       const offsetWidth = newWidth - width;
       const offsetHeight = newHeight - height;
-      const oldRatio = width / naturalWidth;
+      const oldRatio = imageData.ratio;
 
       if (isFunction(options.zoom)) {
         addListener(element, EVENT_ZOOM, options.zoom, {
@@ -739,6 +739,7 @@ export default {
       imageData.top = imageData.y;
       imageData.width = newWidth;
       imageData.height = newHeight;
+      imageData.oldRatio = oldRatio;
       imageData.ratio = ratio;
       this.renderImage(() => {
         this.zooming = false;
@@ -1048,10 +1049,10 @@ export default {
     return this;
   },
 
-  // Toggle the image size between its natural size and initial size
+  // Toggle the image size between its current size and natural size
   toggle() {
     if (this.imageData.ratio === 1) {
-      this.zoomTo(this.initialImageData.ratio, true);
+      this.zoomTo(this.imageData.oldRatio, true);
     } else {
       this.zoomTo(1, true);
     }

@@ -1,5 +1,5 @@
 describe('toggle (method)', () => {
-  it('should toggle the scale of the current viewing image between its initial ratio and 1', (done) => {
+  it('should toggle the scale of the current viewing image between its current ratio and 1', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       viewed() {
