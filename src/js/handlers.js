@@ -159,7 +159,7 @@ export default {
       + `margin-left:${viewerData.width / 2}px;`
       + `margin-top:${viewerData.height / 2}px;`
       + 'max-width:none!important;'
-      + 'position:absolute;'
+      + 'position:relative;'
       + 'width:0;'
     );
 
