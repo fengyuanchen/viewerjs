@@ -143,16 +143,19 @@ export default {
     }
   },
 
-  renderList(index) {
-    const i = index || this.index;
-    const width = this.items[i].offsetWidth || 30;
-    const outerWidth = width + 1; // 1 pixel of `margin-left` width
+  renderList() {
+    const { index } = this;
+    const item = this.items[index];
+    const next = item.nextElementSibling;
+    const gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
+    const { offsetWidth } = item;
+    const outerWidth = offsetWidth + gutter;
 
     // Place the active item in the center of the screen
     setStyle(this.list, assign({
-      width: outerWidth * this.length,
+      width: outerWidth * this.length - gutter,
     }, getTransforms({
-      translateX: ((this.viewerData.width - width) / 2) - (outerWidth * i),
+      translateX: ((this.viewerData.width - offsetWidth) / 2) - outerWidth * index,
     })));
   },
 

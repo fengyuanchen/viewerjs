@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Compute nav item gutter dynamically (#487).
+
 ## 1.10.0 (Jun 12, 2021)
 
 - Enhance `fullscreen` option and `play` method to support [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions) (#482, #483).
