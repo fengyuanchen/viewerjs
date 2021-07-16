@@ -2,6 +2,7 @@
 
 ## next
 
+- Check if the active item exists to avoid TypeError (#491).
 - Compute nav item gutter dynamically (#487).
 
 ## 1.10.0 (Jun 12, 2021)

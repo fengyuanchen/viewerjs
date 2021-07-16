@@ -267,8 +267,11 @@ export default {
 
     const activeItem = this.items[this.index];
 
-    removeClass(activeItem, CLASS_ACTIVE);
-    activeItem.removeAttribute('aria-selected');
+    if (activeItem) {
+      removeClass(activeItem, CLASS_ACTIVE);
+      activeItem.removeAttribute('aria-selected');
+    }
+
     addClass(item, CLASS_ACTIVE);
     item.setAttribute('aria-selected', true);
 
