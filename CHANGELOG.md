@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.10.1 (Aug 1, 2021)
 
 - Check if the active item exists to avoid TypeError (#491).
 - Compute nav item gutter dynamically (#487).

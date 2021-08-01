@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.0
+ * Viewer.js v1.10.1
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-06-12T07:57:10.970Z
+ * Date: 2021-08-01T13:35:49.731Z
  */
 
 (function (global, factory) {
@@ -494,15 +494,15 @@
       if (Array.isArray(data) || isNumber(data.length)
       /* array-like */
       ) {
-          var length = data.length;
-          var i;
+        var length = data.length;
+        var i;
 
-          for (i = 0; i < length; i += 1) {
-            if (callback.call(data, data[i], i, data) === false) {
-              break;
-            }
+        for (i = 0; i < length; i += 1) {
+          if (callback.call(data, data[i], i, data) === false) {
+            break;
           }
-        } else if (isObject(data)) {
+        }
+      } else if (isObject(data)) {
         Object.keys(data).forEach(function (key) {
           callback.call(data, data[key], key, data);
         });
@@ -1152,16 +1152,18 @@
         });
       }
     },
-    renderList: function renderList(index) {
-      var i = index || this.index;
-      var width = this.items[i].offsetWidth || 30;
-      var outerWidth = width + 1; // 1 pixel of `margin-left` width
-      // Place the active item in the center of the screen
+    renderList: function renderList() {
+      var index = this.index;
+      var item = this.items[index];
+      var next = item.nextElementSibling;
+      var gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
+      var offsetWidth = item.offsetWidth;
+      var outerWidth = offsetWidth + gutter; // Place the active item in the center of the screen
 
       setStyle(this.list, assign({
-        width: outerWidth * this.length
+        width: outerWidth * this.length - gutter
       }, getTransforms({
-        translateX: (this.viewerData.width - width) / 2 - outerWidth * i
+        translateX: (this.viewerData.width - offsetWidth) / 2 - outerWidth * index
       })));
     },
     resetList: function resetList() {
@@ -1461,7 +1463,7 @@
         removeClass(this.canvas, CLASS_LOADING);
       }
 
-      image.style.cssText = 'height:0;' + "margin-left:".concat(viewerData.width / 2, "px;") + "margin-top:".concat(viewerData.height / 2, "px;") + 'max-width:none!important;' + 'position:absolute;' + 'width:0;';
+      image.style.cssText = 'height:0;' + "margin-left:".concat(viewerData.width / 2, "px;") + "margin-top:".concat(viewerData.height / 2, "px;") + 'max-width:none!important;' + 'position:relative;' + 'width:0;';
       this.initImage(function () {
         toggleClass(image, CLASS_MOVE, options.movable);
         toggleClass(image, CLASS_TRANSITION, options.transition);
@@ -2018,8 +2020,12 @@
       }
 
       var activeItem = this.items[this.index];
-      removeClass(activeItem, CLASS_ACTIVE);
-      activeItem.removeAttribute('aria-selected');
+
+      if (activeItem) {
+        removeClass(activeItem, CLASS_ACTIVE);
+        activeItem.removeAttribute('aria-selected');
+      }
+
       addClass(item, CLASS_ACTIVE);
       item.setAttribute('aria-selected', true);
 
