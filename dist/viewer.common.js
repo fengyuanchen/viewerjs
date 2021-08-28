@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-08-01T13:35:49.731Z
+ * Date: 2021-08-28T02:06:41.154Z
  */
 
 'use strict';
@@ -2588,18 +2588,55 @@ var methods = {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
+      /**
+      *   'onImgplaying'
+      * @param {Element} img_elem  -  current Image element
+      * @param {boolean} index  - index of current image
+      */
+      var onImgPlaying = this.options.onImgPlaying ? this.options.onImgPlaying : null; // store the function which will be called when image is playing
+
       var play = function play() {
         _this7.playing = setTimeout(function () {
           removeClass(list[index], CLASS_IN);
           index += 1;
           index = index < total ? index : 0;
-          addClass(list[index], CLASS_IN);
-          play();
+          addClass(list[index], CLASS_IN); // if 'onImgPlaying' is define then
+          // call it with'current-image-elem' and
+          // 'current-index'   of image as arguments ;
+          //
+
+          if (onImgPlaying) {
+            // if 'runAfterPlay' is set to true
+            // then call 'onImgPlaying' after calling  play
+            // else call  'onImgPlaying' first then call play
+            if (_this7.runAfterPlay) {
+              play();
+              onImgPlaying(list[index], index);
+            } else {
+              play();
+              onImgPlaying(list[index], index);
+            }
+          } else {
+            play();
+          }
         }, options.interval);
       };
 
       if (total > 1) {
-        play();
+        if (onImgPlaying) {
+          // if 'runAfterPlay' is set to true then
+          // call 'onImgPlaying' after calling  play
+          // else call  'onImgPlaying' first then call play
+          if (this.runAfterPlay) {
+            play();
+            onImgPlaying(list[index], index);
+          } else {
+            play();
+            onImgPlaying(list[index], index);
+          }
+        } else {
+          play();
+        }
       }
     }
 

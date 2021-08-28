@@ -830,18 +830,57 @@ export default {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
+      /**
+ *   'onImgplaying'
+ * @param {Element} img_elem  -  current Image element
+ * @param {boolean} index  - index of current image
+      */
+      const onImgPlaying = this.options.onImgPlaying ? this.options.onImgPlaying : null;
+      // store the function which will be called when image is playing
+
       const play = () => {
         this.playing = setTimeout(() => {
           removeClass(list[index], CLASS_IN);
           index += 1;
           index = index < total ? index : 0;
           addClass(list[index], CLASS_IN);
-          play();
+
+          // if 'onImgPlaying' is define then
+          // call it with'current-image-elem' and
+          // 'current-index'   of image as arguments ;
+          //
+          if (onImgPlaying) {
+            // if 'runAfterPlay' is set to true
+            // then call 'onImgPlaying' after calling  play
+            // else call  'onImgPlaying' first then call play
+            if (this.runAfterPlay) {
+              play();
+              onImgPlaying(list[index], index);
+            } else {
+              play();
+              onImgPlaying(list[index], index);
+            }
+          } else {
+            play();
+          }
         }, options.interval);
       };
 
       if (total > 1) {
-        play();
+        if (onImgPlaying) {
+          // if 'runAfterPlay' is set to true then
+          // call 'onImgPlaying' after calling  play
+          // else call  'onImgPlaying' first then call play
+          if (this.runAfterPlay) {
+            play();
+            onImgPlaying(list[index], index);
+          } else {
+            play();
+            onImgPlaying(list[index], index);
+          }
+        } else {
+          play();
+        }
       }
     }
 
