@@ -10,6 +10,7 @@ import {
   CLASS_SHOW,
   CLASS_TRANSITION,
   EVENT_CLICK,
+  EVENT_ERROR,
   EVENT_HIDE,
   EVENT_LOAD,
   EVENT_MOVE,
@@ -308,6 +309,7 @@ export default {
         : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
     };
     let onLoad;
+    let onError;
 
     addListener(element, EVENT_VIEWED, onViewed, {
       once: true,
@@ -338,7 +340,26 @@ export default {
     if (image.complete) {
       this.load();
     } else {
-      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
+      addListener(image, EVENT_LOAD, onLoad = () => {
+        removeListener(image, EVENT_ERROR, onError);
+        this.load();
+      }, {
+        once: true,
+      });
+      addListener(image, EVENT_ERROR, onError = () => {
+        removeListener(image, EVENT_LOAD, onLoad);
+
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+          this.timeout = false;
+        }
+
+        removeClass(image, CLASS_INVISIBLE);
+
+        if (options.loading) {
+          removeClass(this.canvas, CLASS_LOADING);
+        }
+      }, {
         once: true,
       });
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Remove loading class on image load error (#502).
+
 ## 1.10.1 (Aug 1, 2021)
 
 - Check if the active item exists to avoid TypeError (#491).

@@ -1,6 +1,7 @@
 import {
   CLASS_LOADING,
   CLASS_TRANSITION,
+  EVENT_ERROR,
   EVENT_LOAD,
   EVENT_TRANSITION_END,
   EVENT_VIEWED,
@@ -116,6 +117,8 @@ export default {
 
     forEach(items, (item) => {
       const image = item.firstElementChild;
+      let onLoad;
+      let onError;
 
       setData(image, 'filled', true);
 
@@ -123,12 +126,23 @@ export default {
         addClass(item, CLASS_LOADING);
       }
 
-      addListener(image, EVENT_LOAD, (event) => {
+      addListener(image, EVENT_LOAD, onLoad = (event) => {
+        removeListener(image, EVENT_ERROR, onError);
+
         if (options.loading) {
           removeClass(item, CLASS_LOADING);
         }
 
         this.loadImage(event);
+      }, {
+        once: true,
+      });
+      addListener(image, EVENT_ERROR, onError = () => {
+        removeListener(image, EVENT_LOAD, onLoad);
+
+        if (options.loading) {
+          removeClass(item, CLASS_LOADING);
+        }
       }, {
         once: true,
       });
