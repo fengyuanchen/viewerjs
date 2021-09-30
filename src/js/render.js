@@ -160,9 +160,11 @@ export default {
   renderList() {
     const { index } = this;
     const item = this.items[index];
+
     if (!item) {
       return;
     }
+
     const next = item.nextElementSibling;
     const gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
     const { offsetWidth } = item;
