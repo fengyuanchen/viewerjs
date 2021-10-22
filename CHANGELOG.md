@@ -2,6 +2,8 @@
 
 ## next
 
+- Increase title height for avoiding truncation (#509).
+- Fix a `TypeError` when there are not any images (#504).
 - Remove loading class on image load error (#502).
 
 ## 1.10.1 (Aug 1, 2021)
