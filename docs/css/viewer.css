@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.1
+ * Viewer.js v1.10.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-08-01T13:35:44.576Z
+ * Date: 2021-10-22T13:59:46.805Z
  */
 
 .viewer-zoom-in::before,
@@ -332,7 +332,7 @@
   color: #ccc;
   display: inline-block;
   font-size: 12px;
-  line-height: 1;
+  line-height: 1.2;
   margin: 0 5% 5px;
   max-width: 90%;
   opacity: 0.8;

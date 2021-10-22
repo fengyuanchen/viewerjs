@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.10.2 (Oct 22, 2021)
 
 - Increase title height for avoiding truncation (#509).
 - Fix a `TypeError` when there are not any images (#504).

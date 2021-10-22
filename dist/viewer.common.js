@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.1
+ * Viewer.js v1.10.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-08-01T13:35:49.731Z
+ * Date: 2021-10-22T13:59:51.046Z
  */
 
 'use strict';
@@ -374,6 +374,7 @@ var EVENT_DRAG_START = 'dragstart';
 var EVENT_FOCUSIN = 'focusin';
 var EVENT_KEY_DOWN = 'keydown';
 var EVENT_LOAD = 'load';
+var EVENT_ERROR = 'error';
 var EVENT_TOUCH_END = IS_TOUCH_DEVICE ? 'touchend touchcancel' : 'mouseup';
 var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
 var EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
@@ -1123,18 +1124,31 @@ var render = {
     this.items = items;
     forEach(items, function (item) {
       var image = item.firstElementChild;
+      var onLoad;
+      var onError;
       setData(image, 'filled', true);
 
       if (options.loading) {
         addClass(item, CLASS_LOADING);
       }
 
-      addListener(image, EVENT_LOAD, function (event) {
+      addListener(image, EVENT_LOAD, onLoad = function onLoad(event) {
+        removeListener(image, EVENT_ERROR, onError);
+
         if (options.loading) {
           removeClass(item, CLASS_LOADING);
         }
 
         _this.loadImage(event);
+      }, {
+        once: true
+      });
+      addListener(image, EVENT_ERROR, onError = function onError() {
+        removeListener(image, EVENT_LOAD, onLoad);
+
+        if (options.loading) {
+          removeClass(item, CLASS_LOADING);
+        }
       }, {
         once: true
       });
@@ -1151,6 +1165,11 @@ var render = {
   renderList: function renderList() {
     var index = this.index;
     var item = this.items[index];
+
+    if (!item) {
+      return;
+    }
+
     var next = item.nextElementSibling;
     var gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
     var offsetWidth = item.offsetWidth;
@@ -2053,6 +2072,7 @@ var methods = {
     };
 
     var onLoad;
+    var onError;
     addListener(element, EVENT_VIEWED, onViewed, {
       once: true
     });
@@ -2081,7 +2101,27 @@ var methods = {
     if (image.complete) {
       this.load();
     } else {
-      addListener(image, EVENT_LOAD, onLoad = this.load.bind(this), {
+      addListener(image, EVENT_LOAD, onLoad = function onLoad() {
+        removeListener(image, EVENT_ERROR, onError);
+
+        _this2.load();
+      }, {
+        once: true
+      });
+      addListener(image, EVENT_ERROR, onError = function onError() {
+        removeListener(image, EVENT_LOAD, onLoad);
+
+        if (_this2.timeout) {
+          clearTimeout(_this2.timeout);
+          _this2.timeout = false;
+        }
+
+        removeClass(image, CLASS_INVISIBLE);
+
+        if (options.loading) {
+          removeClass(_this2.canvas, CLASS_LOADING);
+        }
+      }, {
         once: true
       });
 
