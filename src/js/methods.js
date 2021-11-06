@@ -717,8 +717,24 @@ export default {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
-        ratio = 1;
+      if (_originalEvent) {
+        switch (_originalEvent.type) {
+          case 'wheel':
+            if (options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
+              ratio = 1;
+            }
+            break;
+
+          case 'pointermove':
+          case 'touchmove':
+          case 'mousemove':
+            if (ratio > 0.99 && ratio < 1.01) {
+              ratio = 1;
+            }
+            break;
+
+          default:
+        }
       }
 
       const newWidth = naturalWidth * ratio;

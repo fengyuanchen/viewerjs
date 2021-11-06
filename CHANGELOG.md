@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Improve the zoom experience on the touch screen (#510).
+
 ## 1.10.2 (Oct 22, 2021)
 
 - Increase title height for avoiding truncation (#509).
