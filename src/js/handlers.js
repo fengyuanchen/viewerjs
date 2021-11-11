@@ -114,6 +114,10 @@ export default {
         this.scaleY(-imageData.scaleY || -1);
         break;
 
+      case 'download':
+        this.download();
+        break;
+
       default:
         if (this.played) {
           this.stop();

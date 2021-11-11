@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-10-22T13:59:51.046Z
+ * Date: 2021-11-11T19:24:13.432Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -259,6 +259,12 @@ var DEFAULTS = {
   slideOnTouch: true,
 
   /**
+   * Enable to download the image.
+   * @type {boolean}
+   */
+  downloadable: true,
+
+  /**
    * Indicate if toggle the image size between its natural size
    * and initial size when double click on the image or not.
    * @type {boolean}
@@ -332,6 +338,8 @@ var DEFAULTS = {
   scaled: null,
   zoom: null,
   zoomed: null,
+  download: null,
+  downloaded: null,
   play: null,
   stop: null
 };
@@ -398,6 +406,8 @@ var EVENT_SCALE = 'scale';
 var EVENT_SCALED = 'scaled';
 var EVENT_ZOOM = 'zoom';
 var EVENT_ZOOMED = 'zoomed';
+var EVENT_DOWNLOAD = 'download';
+var EVENT_DOWNLOADED = 'downloaded';
 var EVENT_PLAY = 'play';
 var EVENT_STOP = 'stop'; // Data keys
 
@@ -405,7 +415,7 @@ var DATA_ACTION = "".concat(NAMESPACE, "Action"); // RegExps
 
 var REGEXP_SPACES = /\s\s*/; // Misc
 
-var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
+var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical', 'download'];
 
 /**
  * Check if the given value is a string.
@@ -1436,6 +1446,10 @@ var handlers = {
 
       case 'flip-vertical':
         this.scaleY(-imageData.scaleY || -1);
+        break;
+
+      case 'download':
+        this.download();
         break;
 
       default:
@@ -2490,8 +2504,24 @@ var methods = {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
-        ratio = 1;
+      if (_originalEvent) {
+        switch (_originalEvent.type) {
+          case 'wheel':
+            if (options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
+              ratio = 1;
+            }
+
+            break;
+
+          case 'pointermove':
+          case 'touchmove':
+          case 'mousemove':
+            if (ratio > 0.99 && ratio < 1.01) {
+              ratio = 1;
+            }
+
+            break;
+        }
       }
 
       var newWidth = naturalWidth * ratio;
@@ -2558,6 +2588,49 @@ var methods = {
       if (hasTooltip) {
         this.tooltip();
       }
+    }
+
+    return this;
+  },
+
+  /**
+   * dowload the image.
+   * @returns {Viewer} this
+   */
+  download: function download() {
+    var element = this.element,
+        options = this.options,
+        image = this.image;
+    var url = image.currentSrc;
+
+    if (this.viewed && !this.played && options.downloadable) {
+      if (isFunction(options.download)) {
+        addListener(element, EVENT_DOWNLOAD, options.download, {
+          once: true
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_DOWNLOAD, {}) === false) {
+        return this;
+      }
+
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      this.downloaded = true;
+
+      if (isFunction(options.downloaded)) {
+        addListener(element, EVENT_DOWNLOADED, options.downloaded, {
+          once: true
+        });
+      }
+
+      dispatchEvent(element, EVENT_DOWNLOADED, {}, {
+        cancelable: false
+      });
     }
 
     return this;
@@ -3239,6 +3312,7 @@ var Viewer = /*#__PURE__*/function () {
     this.element = element;
     this.options = assign({}, DEFAULTS, isPlainObject(options) && options);
     this.action = false;
+    this.downloaded = false;
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
@@ -3414,7 +3488,8 @@ var Viewer = /*#__PURE__*/function () {
         var custom = isPlainObject(options.toolbar);
         var zoomButtons = BUTTONS.slice(0, 3);
         var rotateButtons = BUTTONS.slice(7, 9);
-        var scaleButtons = BUTTONS.slice(9);
+        var scaleButtons = BUTTONS.slice(9, 11);
+        var downloadButton = BUTTONS.slice(11);
 
         if (!custom) {
           addClass(toolbar, getResponsiveClass(options.toolbar));
@@ -3425,7 +3500,7 @@ var Viewer = /*#__PURE__*/function () {
           var name = custom ? hyphenate(index) : value;
           var show = deep && !isUndefined(value.show) ? value.show : value;
 
-          if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1) {
+          if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1 || !options.downloadable && downloadButton.indexOf(name) !== -1) {
             return;
           }
 

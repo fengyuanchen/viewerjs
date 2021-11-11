@@ -167,6 +167,12 @@ export default {
   slideOnTouch: true,
 
   /**
+   * Enable to download the image.
+   * @type {boolean}
+   */
+  downloadable: true,
+
+  /**
    * Indicate if toggle the image size between its natural size
    * and initial size when double click on the image or not.
    * @type {boolean}
@@ -240,6 +246,8 @@ export default {
   scaled: null,
   zoom: null,
   zoomed: null,
+  download: null,
+  downloaded: null,
   play: null,
   stop: null,
 };

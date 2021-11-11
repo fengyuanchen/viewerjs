@@ -24,9 +24,9 @@
 
 ## Features
 
-- Supports 52 [options](#options)
-- Supports 23 [methods](#methods)
-- Supports 17 [events](#events)
+- Supports 55 [options](#options)
+- Supports 24 [methods](#methods)
+- Supports 19 [events](#events)
 - Supports modal and inline modes
 - Supports touch
 - Supports move
@@ -206,7 +206,7 @@ new Viewer(image, {
   - `{ key: String }`: customize the size of the button.
   - `{ key: Function }`: customize the click handler of the button.
   - `{ key: { show: Boolean | Number, size: String, click: Function }`: customize each property of the button.
-  - Available keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal" and "flipVertical".
+  - Available keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal", "flipVertical" and "download".
   - Available sizes: "small", "medium" (default) and "large".
 
 Specify the visibility and layout of the toolbar its buttons.
@@ -230,6 +230,7 @@ new Viewer(image, {
     rotateRight: 4,
     flipHorizontal: 4,
     flipVertical: 4,
+    download: 4,
   },
 });
 ```
@@ -409,6 +410,13 @@ Enable to zoom the image by wheeling the mouse.
 - Default: `true`
 
 Enable to slide to the next or previous image by swiping on the touch screen.
+
+### downloadable
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to download the image.
 
 ### toggleOnDblclick
 
@@ -598,6 +606,20 @@ Shortcut of the `zoom` event.
 - Default: `null`
 
 Shortcut of the `zoomed` event.
+
+### download
+
+- Type: `Function`
+- Default: `null`
+
+Shortcut of the `download` event.
+
+### downloaded
+
+- Type: `Function`
+- Default: `null`
+
+Shortcut of the `downloaded` event.
 
 ### play
 
@@ -833,6 +855,14 @@ Zoom the image to an absolute ratio.
 ```js
 viewer.zoomTo(0); // Zoom to zero size (0%)
 viewer.zoomTo(1); // Zoom to natural size (100%)
+```
+
+### download()
+
+Download the image.
+
+```js
+viewer.download();
 ```
 
 ### play([fullscreen])
@@ -1080,6 +1110,20 @@ This event fires when a viewer starts to zoom (in or out) an image.
 - **event.detail**: the same as the `zoom` event.
 
 This event fires when a viewer has zoomed (in or out) an image.
+
+### zoom
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+
+This event fires when a viewer triggers the download of an image.
+
+### zoomed
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `false`
+
+This event fires when a viewer has triggered the download of an image.
 
 ### play
 

@@ -9,13 +9,14 @@
 .viewer-rotate-right,
 .viewer-flip-horizontal,
 .viewer-flip-vertical,
+.viewer-download,
 .viewer-fullscreen,
 .viewer-fullscreen-exit,
 .viewer-close {
   &::before {
     background-image: url('../images/icons.png');
     background-repeat: no-repeat;
-    background-size: 280px;
+    background-size: 300px;
     color: transparent;
     display: block;
     font-size: 0;
@@ -80,18 +81,23 @@
   content: 'Flip Vertical';
 }
 
-.viewer-fullscreen::before {
+.viewer-download::before {
   background-position: -220px 0;
+  content: 'Flip Vertical';
+}
+
+.viewer-fullscreen::before {
+  background-position: -240px 0;
   content: 'Enter Full Screen';
 }
 
 .viewer-fullscreen-exit::before {
-  background-position: -240px 0;
+  background-position: -260px 0;
   content: 'Exit Full Screen';
 }
 
 .viewer-close::before {
-  background-position: -260px 0;
+  background-position: -280px 0;
   content: 'Close';
 }
 

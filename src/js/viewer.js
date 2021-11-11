@@ -60,6 +60,7 @@ class Viewer {
     this.element = element;
     this.options = assign({}, DEFAULTS, isPlainObject(options) && options);
     this.action = false;
+    this.downloaded = false;
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
@@ -237,7 +238,8 @@ class Viewer {
       const custom = isPlainObject(options.toolbar);
       const zoomButtons = BUTTONS.slice(0, 3);
       const rotateButtons = BUTTONS.slice(7, 9);
-      const scaleButtons = BUTTONS.slice(9);
+      const scaleButtons = BUTTONS.slice(9, 11);
+      const downloadButton = BUTTONS.slice(11);
 
       if (!custom) {
         addClass(toolbar, getResponsiveClass(options.toolbar));
@@ -253,6 +255,7 @@ class Viewer {
           || (!options.zoomable && zoomButtons.indexOf(name) !== -1)
           || (!options.rotatable && rotateButtons.indexOf(name) !== -1)
           || (!options.scalable && scaleButtons.indexOf(name) !== -1)
+          || (!options.downloadable && downloadButton.indexOf(name) !== -1)
         ) {
           return;
         }

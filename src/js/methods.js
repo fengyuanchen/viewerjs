@@ -10,6 +10,8 @@ import {
   CLASS_SHOW,
   CLASS_TRANSITION,
   EVENT_CLICK,
+  EVENT_DOWNLOAD,
+  EVENT_DOWNLOADED,
   EVENT_ERROR,
   EVENT_HIDE,
   EVENT_LOAD,
@@ -802,6 +804,49 @@ export default {
       if (hasTooltip) {
         this.tooltip();
       }
+    }
+
+    return this;
+  },
+
+  /**
+   * dowload the image.
+   * @returns {Viewer} this
+   */
+  download() {
+    const { element, options, image } = this;
+    const url = image.currentSrc;
+
+    if (this.viewed && !this.played && options.downloadable) {
+      if (isFunction(options.download)) {
+        addListener(element, EVENT_DOWNLOAD, options.download, {
+          once: true,
+        });
+      }
+
+      if (dispatchEvent(element, EVENT_DOWNLOAD, {
+      }) === false) {
+        return this;
+      }
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      this.downloaded = true;
+      if (isFunction(options.downloaded)) {
+        addListener(element, EVENT_DOWNLOADED, options.downloaded, {
+          once: true,
+        });
+      }
+
+      dispatchEvent(element, EVENT_DOWNLOADED, {
+      }, {
+        cancelable: false,
+      });
     }
 
     return this;

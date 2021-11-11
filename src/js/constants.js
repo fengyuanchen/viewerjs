@@ -62,6 +62,8 @@ export const EVENT_SCALE = 'scale';
 export const EVENT_SCALED = 'scaled';
 export const EVENT_ZOOM = 'zoom';
 export const EVENT_ZOOMED = 'zoomed';
+export const EVENT_DOWNLOAD = 'download';
+export const EVENT_DOWNLOADED = 'downloaded';
 export const EVENT_PLAY = 'play';
 export const EVENT_STOP = 'stop';
 
@@ -84,4 +86,5 @@ export const BUTTONS = [
   'rotate-right',
   'flip-horizontal',
   'flip-vertical',
+  'download',
 ];
