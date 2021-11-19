@@ -206,8 +206,8 @@ new Viewer(image, {
   - `{ key: String }`: customize the size of the button.
   - `{ key: Function }`: customize the click handler of the button.
   - `{ key: { show: Boolean | Number, size: String, click: Function }`: customize each property of the button.
-  - Available keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal" and "flipVertical".
-  - Available sizes: "small", "medium" (default) and "large".
+  - Available built-in keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal", "flipVertical".
+  - Available built-in sizes: "small", "medium" (default) and "large".
 
 Specify the visibility and layout of the toolbar its buttons.
 
@@ -233,6 +233,8 @@ new Viewer(image, {
   },
 });
 ```
+
+> see more for [custom toolbar](docs/examples/custom-toolbar.html).
 
 ### className
 
