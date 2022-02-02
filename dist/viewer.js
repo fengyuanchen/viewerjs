@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.2
+ * Viewer.js v1.10.3
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2021-10-22T13:59:51.046Z
+ * Date: 2022-02-02T05:15:01.702Z
  */
 
 (function (global, factory) {
@@ -19,14 +19,9 @@
 
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
-
-      if (enumerableOnly) {
-        symbols = symbols.filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-
-      keys.push.apply(keys, symbols);
+      enumerableOnly && (symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
     }
 
     return keys;
@@ -34,19 +29,12 @@
 
   function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
+      var source = null != arguments[i] ? arguments[i] : {};
+      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
 
     return target;
@@ -55,17 +43,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
 
   function _classCallCheck(instance, Constructor) {
@@ -87,6 +69,9 @@
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
@@ -1458,9 +1443,10 @@
         // Cancel the emulated double click when the native dblclick event was triggered.
         if (IS_TOUCH_DEVICE && event.isTrusted) {
           clearTimeout(this.doubleClickImageTimeout);
-        }
+        } // XXX: No pageX/Y properties in custom event, fallback to the original event.
 
-        this.toggle(event);
+
+        this.toggle(event.isTrusted ? event : event.detail && event.detail.originalEvent);
       }
     },
     load: function load() {
@@ -1727,7 +1713,9 @@
             this.imageClicked = false; // This timeout will be cleared later when a native dblclick event is triggering
 
             this.doubleClickImageTimeout = setTimeout(function () {
-              dispatchEvent(_this2.image, EVENT_DBLCLICK);
+              dispatchEvent(_this2.image, EVENT_DBLCLICK, {
+                originalEvent: event
+              });
             }, 50);
           } else {
             this.imageClicked = true; // The default timing of a double click in Windows is 500 ms
@@ -1742,7 +1730,9 @@
           if (options.backdrop && options.backdrop !== 'static' && event.target === this.canvas) {
             // This timeout will be cleared later when a native click event is triggering
             this.clickCanvasTimeout = setTimeout(function () {
-              dispatchEvent(_this2.canvas, EVENT_CLICK);
+              dispatchEvent(_this2.canvas, EVENT_CLICK, {
+                originalEvent: event
+              });
             }, 50);
           }
         }
@@ -2496,8 +2486,24 @@
           ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
         }
 
-        if (_originalEvent && options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
-          ratio = 1;
+        if (_originalEvent) {
+          switch (_originalEvent.type) {
+            case 'wheel':
+              if (options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
+                ratio = 1;
+              }
+
+              break;
+
+            case 'pointermove':
+            case 'touchmove':
+            case 'mousemove':
+              if (ratio > 0.99 && ratio < 1.01) {
+                ratio = 1;
+              }
+
+              break;
+          }
         }
 
         var newWidth = naturalWidth * ratio;
@@ -2524,7 +2530,7 @@
 
         if (_originalEvent) {
           var offset = getOffset(this.viewer);
-          var center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
+          var center = pointers && Object.keys(pointers).length > 0 ? getPointersCenter(pointers) : {
             pageX: _originalEvent.pageX,
             pageY: _originalEvent.pageY
           }; // Zoom from the triggering point of the event

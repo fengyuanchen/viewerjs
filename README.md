@@ -1,6 +1,6 @@
 # Viewer.js
 
-[![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/viewerjs.svg)](https://unpkg.com/viewerjs/dist/viewer.common.js) [![Dependencies](https://img.shields.io/david/fengyuanchen/viewerjs.svg)](https://www.npmjs.com/package/viewerjs)
+[![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/viewerjs.svg)](https://unpkg.com/viewerjs/dist/viewer.common.js)
 
 > JavaScript image viewer.
 
@@ -36,7 +36,7 @@
 - Supports keyboard
 - Cross-browser support
 
-## Main
+## Main files
 
 ```text
 dist/

@@ -1,7 +1,7 @@
 {
   "name": "viewerjs",
   "description": "JavaScript image viewer.",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
   "browser": "dist/viewer.js",
