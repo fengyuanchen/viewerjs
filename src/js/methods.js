@@ -761,10 +761,12 @@ export default {
 
       if (_originalEvent) {
         const offset = getOffset(this.viewer);
-        const center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
-          pageX: _originalEvent.pageX,
-          pageY: _originalEvent.pageY,
-        };
+        const center = pointers && Object.keys(pointers).length > 0
+          ? getPointersCenter(pointers)
+          : {
+            pageX: _originalEvent.pageX,
+            pageY: _originalEvent.pageY,
+          };
 
         // Zoom from the triggering point of the event
         imageData.x -= offsetWidth * (((center.pageX - offset.left) - x) / width);
