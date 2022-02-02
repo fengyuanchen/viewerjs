@@ -130,7 +130,8 @@ export default {
         clearTimeout(this.doubleClickImageTimeout);
       }
 
-      this.toggle(event);
+      // XXX: No pageX/Y properties in custom event, fallback to the original event.
+      this.toggle(event.isTrusted ? event : (event.detail && event.detail.originalEvent));
     }
   },
 
@@ -436,7 +437,9 @@ export default {
 
           // This timeout will be cleared later when a native dblclick event is triggering
           this.doubleClickImageTimeout = setTimeout(() => {
-            dispatchEvent(this.image, EVENT_DBLCLICK);
+            dispatchEvent(this.image, EVENT_DBLCLICK, {
+              originalEvent: event,
+            });
           }, 50);
         } else {
           this.imageClicked = true;
@@ -452,7 +455,9 @@ export default {
         if (options.backdrop && options.backdrop !== 'static' && event.target === this.canvas) {
           // This timeout will be cleared later when a native click event is triggering
           this.clickCanvasTimeout = setTimeout(() => {
-            dispatchEvent(this.canvas, EVENT_CLICK);
+            dispatchEvent(this.canvas, EVENT_CLICK, {
+              originalEvent: event,
+            });
           }, 50);
         }
       }

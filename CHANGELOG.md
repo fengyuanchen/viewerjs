@@ -2,6 +2,7 @@
 
 ## next
 
+- Get the pageX/Y properties from the original event when it is an emulated double click in touch devices (#527).
 - Improve the zoom experience on the touch screen (#510).
 
 ## 1.10.2 (Oct 22, 2021)
