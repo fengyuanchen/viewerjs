@@ -1,8 +1,8 @@
 # Changelog
 
-## next
+## 1.10.4 (Feb 13, 2022)
 
-- Use legacy color function notation (#529).
+- Use legacy color function notation for better compatibility (#529).
 
 ## 1.10.3 (Feb 2, 2022)
 

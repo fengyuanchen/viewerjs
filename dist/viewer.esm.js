@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.3
+ * Viewer.js v1.10.4
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-02-02T05:15:01.702Z
+ * Date: 2022-02-13T08:40:00.127Z
  */
 
 function ownKeys(object, enumerableOnly) {

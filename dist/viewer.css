@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.3
+ * Viewer.js v1.10.4
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-02-02T05:14:59.271Z
+ * Date: 2022-02-13T08:39:57.620Z
  */
 
 .viewer-zoom-in::before, .viewer-zoom-out::before, .viewer-one-to-one::before, .viewer-reset::before, .viewer-prev::before, .viewer-play::before, .viewer-next::before, .viewer-rotate-left::before, .viewer-rotate-right::before, .viewer-flip-horizontal::before, .viewer-flip-vertical::before, .viewer-fullscreen::before, .viewer-fullscreen-exit::before, .viewer-close::before {
@@ -101,7 +101,8 @@
   right: 0;
   -webkit-tap-highlight-color: transparent;
   top: 0;
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -158,7 +159,7 @@
 }
 
 .viewer-navbar {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: rgba(0, 0, 0, 50%);
   overflow: hidden;
 }
 
@@ -240,7 +241,7 @@
   }
 
 .viewer-toolbar > ul > li {
-      background-color: rgb(0 0 0 / 50%);
+      background-color: rgba(0, 0, 0, 50%);
       border-radius: 50%;
       cursor: pointer;
       float: left;
@@ -252,7 +253,7 @@
 
 .viewer-toolbar > ul > li:focus,
       .viewer-toolbar > ul > li:hover {
-        background-color: rgb(0 0 0 / 80%);
+        background-color: rgba(0, 0, 0, 80%);
       }
 
 .viewer-toolbar > ul > li:focus {
@@ -293,7 +294,7 @@
       }
 
 .viewer-tooltip {
-  background-color: rgb(0 0 0 / 80%);
+  background-color: rgba(0, 0, 0, 80%);
   border-radius: 10px;
   color: #fff;
   display: none;
@@ -328,7 +329,7 @@
   }
 
 .viewer-button {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: rgba(0, 0, 0, 50%);
   border-radius: 50%;
   cursor: pointer;
   height: 80px;
@@ -342,7 +343,7 @@
 
 .viewer-button:focus,
   .viewer-button:hover {
-    background-color: rgb(0 0 0 / 80%);
+    background-color: rgba(0, 0, 0, 80%);
   }
 
 .viewer-button:focus {
@@ -373,7 +374,7 @@
 }
 
 .viewer-backdrop {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: rgba(0, 0, 0, 50%);
 }
 
 .viewer-invisible {
@@ -421,8 +422,8 @@
 .viewer-loading::after {
     -webkit-animation: viewer-spinner 1s linear infinite;
             animation: viewer-spinner 1s linear infinite;
-    border: 4px solid rgb(255 255 255 / 10%);
-    border-left-color: rgb(255 255 255 / 50%);
+    border: 4px solid rgba(255, 255, 255, 10%);
+    border-left-color: rgba(255, 255, 255, 50%);
     border-radius: 50%;
     content: "";
     display: inline-block;
