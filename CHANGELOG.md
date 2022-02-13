@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Use legacy color function notation (#529).
+
 ## 1.10.3 (Feb 2, 2022)
 
 - Get the pageX/Y properties from the original event when it is an emulated double click in touch devices (#527).

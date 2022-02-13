@@ -4,6 +4,7 @@ module.exports = {
     'stylelint-order',
   ],
   rules: {
+    'color-function-notation': 'legacy',
     'no-descending-specificity': null,
     'order/properties-alphabetical-order': true,
   },
