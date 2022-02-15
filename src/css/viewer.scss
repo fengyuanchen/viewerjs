@@ -341,6 +341,7 @@
     top: -40px;
     transition: background-color 0.15s;
     width: 80px;
+    -webkit-app-region: no-drag;
 
     &:focus,
     &:hover {
