@@ -2,6 +2,7 @@
 
 ## next
 
+- Continue to initialize even if some images fail to load in inline mode.
 - Avoid conflicts with nested modals (#540).
 
 ## 1.10.4 (Feb 13, 2022)
