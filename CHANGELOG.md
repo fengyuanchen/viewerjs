@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.10.5 (Apr 5, 2022)
 
 - Continue to initialize even if some images fail to load in inline mode.
 - Avoid conflicts with nested modals (#540).

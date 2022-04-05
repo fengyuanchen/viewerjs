@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.4
+ * Viewer.js v1.10.5
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-02-13T08:40:00.127Z
+ * Date: 2022-04-05T08:21:02.491Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -3038,10 +3038,20 @@ var others = {
       var viewer = _this.viewer;
       var target = event.target;
 
-      if (target !== document && target !== viewer && !viewer.contains(target) // Avoid conflicts with other modals (#474)
-      && (target.getAttribute('tabindex') === null || target.getAttribute('aria-modal') !== 'true')) {
-        viewer.focus();
+      if (target === document || target === viewer || viewer.contains(target)) {
+        return;
       }
+
+      while (target) {
+        // Avoid conflicts with other modals (#474, #540)
+        if (target.getAttribute('tabindex') !== null || target.getAttribute('aria-modal') === 'true') {
+          return;
+        }
+
+        target = target.parentElement;
+      }
+
+      viewer.focus();
     });
   },
   clearEnforceFocus: function clearEnforceFocus() {
@@ -3338,6 +3348,7 @@ var Viewer = /*#__PURE__*/function () {
             forEach(images, function (image) {
               if (!image.complete) {
                 removeListener(image, EVENT_LOAD, progress);
+                removeListener(image, EVENT_ERROR, progress);
               }
             });
           }
@@ -3346,7 +3357,18 @@ var Viewer = /*#__PURE__*/function () {
           if (image.complete) {
             progress();
           } else {
-            addListener(image, EVENT_LOAD, progress, {
+            var onLoad;
+            var onError;
+            addListener(image, EVENT_LOAD, onLoad = function onLoad() {
+              removeListener(image, EVENT_ERROR, onError);
+              progress();
+            }, {
+              once: true
+            });
+            addListener(image, EVENT_ERROR, onError = function onError() {
+              removeListener(image, EVENT_LOAD, onLoad);
+              progress();
+            }, {
               once: true
             });
           }
