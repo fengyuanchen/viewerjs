@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Avoid conflicts with nested modals (#540).
+
 ## 1.10.4 (Feb 13, 2022)
 
 - Use legacy color function notation for better compatibility (#529).
