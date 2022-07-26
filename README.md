@@ -391,6 +391,13 @@ Enable to scale the image.
 
 Enable to zoom the image.
 
+### zoomAtCenter
+
+- Type: `Boolean`
+- Default: `false`
+
+Force to zoom at center.
+
 ### zoomOnTouch
 
 - Type: `Boolean`

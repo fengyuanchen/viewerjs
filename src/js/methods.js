@@ -759,7 +759,7 @@ export default {
 
       this.zooming = true;
 
-      if (_originalEvent) {
+      if (_originalEvent && options.zoomAtCenter) {
         const offset = getOffset(this.viewer);
         const center = pointers && Object.keys(pointers).length > 0
           ? getPointersCenter(pointers)

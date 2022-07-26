@@ -149,6 +149,12 @@ export default {
   zoomable: true,
 
   /**
+   * Force to zoom at center.
+   * @type {boolean}
+   */
+  zoomAtCenter: false,
+
+  /**
    * Enable to zoom the current image by dragging on the touch screen.
    * @type {boolean}
    */
