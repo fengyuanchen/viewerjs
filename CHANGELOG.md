@@ -4,6 +4,7 @@
 
 - Add a new option: `initialCoverage` (#526).
 - Add keyboard support to playing view (#90).
+- Don't override the padding right of the body when the width of the scrollbar is zero.
 
 ## 1.10.5 (Apr 5, 2022)
 

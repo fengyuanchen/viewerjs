@@ -71,14 +71,19 @@ export default {
 
     addClass(body, CLASS_OPEN);
 
-    body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyComputedPaddingRight) || 0)}px`;
+    if (this.scrollbarWidth > 0) {
+      body.style.paddingRight = `${this.scrollbarWidth + (parseFloat(this.initialBodyComputedPaddingRight) || 0)}px`;
+    }
   },
 
   close() {
     const { body } = this;
 
     removeClass(body, CLASS_OPEN);
-    body.style.paddingRight = this.initialBodyPaddingRight;
+
+    if (this.scrollbarWidth > 0) {
+      body.style.paddingRight = this.initialBodyPaddingRight;
+    }
   },
 
   shown() {
