@@ -2,7 +2,8 @@
 
 ## next
 
-- Add a new option: `initialCoverage` .
+- Add a new option: `initialCoverage` (#526).
+- Add keyboard support to playing view (#90).
 
 ## 1.10.5 (Apr 5, 2022)
 

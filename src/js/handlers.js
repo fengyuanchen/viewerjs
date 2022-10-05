@@ -273,7 +273,11 @@ export default {
 
       // ArrowLeft
       case 37:
-        this.prev(options.loop);
+        if (this.played && this.playing) {
+          this.playing.prev();
+        } else {
+          this.prev(options.loop);
+        }
         break;
 
       // ArrowUp
@@ -287,7 +291,11 @@ export default {
 
       // ArrowRight
       case 39:
-        this.next(options.loop);
+        if (this.played && this.playing) {
+          this.playing.next();
+        } else {
+          this.next(options.loop);
+        }
         break;
 
       // ArrowDown

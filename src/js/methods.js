@@ -12,6 +12,7 @@ import {
   EVENT_CLICK,
   EVENT_ERROR,
   EVENT_HIDE,
+  EVENT_KEY_DOWN,
   EVENT_LOAD,
   EVENT_MOVE,
   EVENT_MOVED,
@@ -869,18 +870,29 @@ export default {
     });
 
     if (isNumber(options.interval) && options.interval > 0) {
-      const play = () => {
-        this.playing = setTimeout(() => {
-          removeClass(list[index], CLASS_IN);
-          index += 1;
-          index = index < total ? index : 0;
-          addClass(list[index], CLASS_IN);
-          play();
-        }, options.interval);
+      const prev = () => {
+        clearTimeout(this.playing.timeout);
+        removeClass(list[index], CLASS_IN);
+        index -= 1;
+        index = index >= 0 ? index : total - 1;
+        addClass(list[index], CLASS_IN);
+        this.playing.timeout = setTimeout(prev, options.interval);
+      };
+      const next = () => {
+        clearTimeout(this.playing.timeout);
+        removeClass(list[index], CLASS_IN);
+        index += 1;
+        index = index < total ? index : 0;
+        addClass(list[index], CLASS_IN);
+        this.playing.timeout = setTimeout(next, options.interval);
       };
 
       if (total > 1) {
-        play();
+        this.playing = {
+          prev,
+          next,
+          timeout: setTimeout(next, options.interval),
+        };
       }
     }
 
@@ -907,8 +919,9 @@ export default {
 
     const { player } = this;
 
+    clearTimeout(this.playing.timeout);
+    this.playing = false;
     this.played = false;
-    clearTimeout(this.playing);
     forEach(player.getElementsByTagName('img'), (image) => {
       removeListener(image, EVENT_LOAD, this.onLoadWhenPlay);
     });
