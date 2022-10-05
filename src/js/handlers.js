@@ -543,6 +543,6 @@ export default {
       delta = event.detail > 0 ? 1 : -1;
     }
 
-    this.zoom(-delta * ratio, true, event);
+    this.zoom(-delta * ratio, true, null, event);
   },
 };

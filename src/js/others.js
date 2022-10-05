@@ -220,7 +220,7 @@ export default {
 
       // Zoom the current image
       case ACTION_ZOOM:
-        this.zoom(getMaxZoomRatio(pointers), false, event);
+        this.zoom(getMaxZoomRatio(pointers), false, null, event);
         break;
 
       case ACTION_SWITCH: {

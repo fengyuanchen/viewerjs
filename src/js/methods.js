@@ -43,6 +43,7 @@ import {
   hasClass,
   isFunction,
   isNumber,
+  isPlainObject,
   isUndefined,
   removeClass,
   removeListener,
@@ -197,7 +198,7 @@ export default {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true,
         });
-        this.zoomTo(0, false, null, true);
+        this.zoomTo(0, false, null, null, true);
       } else {
         onImageTransitionEnd();
       }
@@ -664,11 +665,12 @@ export default {
   /**
    * Zoom the image with a relative ratio.
    * @param {number} ratio - The target ratio.
-   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
+   * @param {boolean} [showTooltip=false] - Indicates whether to show the tooltip.
+   * @param {Object} [pivot] - The pivot point coordinate for zooming.
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
-  zoom(ratio, hasTooltip = false, _originalEvent = null) {
+  zoom(ratio, showTooltip = false, pivot = null, _originalEvent = null) {
     const { imageData } = this;
 
     ratio = Number(ratio);
@@ -679,7 +681,12 @@ export default {
       ratio = 1 + ratio;
     }
 
-    this.zoomTo((imageData.width * ratio) / imageData.naturalWidth, hasTooltip, _originalEvent);
+    this.zoomTo(
+      (imageData.width * ratio) / imageData.naturalWidth,
+      showTooltip,
+      pivot,
+      _originalEvent,
+    );
 
     return this;
   },
@@ -687,12 +694,13 @@ export default {
   /**
    * Zoom the image to an absolute ratio.
    * @param {number} ratio - The target ratio.
-   * @param {boolean} [hasTooltip=false] - Indicates if it has a tooltip or not.
+   * @param {boolean} [showTooltip] - Indicates whether to show the tooltip.
+   * @param {Object} [pivot] - The pivot point coordinate for zooming.
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @param {Event} [_zoomable=false] - Indicates if the current zoom is available or not.
    * @returns {Viewer} this
    */
-  zoomTo(ratio, hasTooltip = false, _originalEvent = null, _zoomable = false) {
+  zoomTo(ratio, showTooltip = false, pivot = null, _originalEvent = null, _zoomable = false) {
     const {
       element,
       options,
@@ -772,6 +780,9 @@ export default {
         // Zoom from the triggering point of the event
         imageData.x -= offsetWidth * (((center.pageX - offset.left) - x) / width);
         imageData.y -= offsetHeight * (((center.pageY - offset.top) - y) / height);
+      } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
+        imageData.x -= offsetWidth * ((pivot.x - x) / width);
+        imageData.y -= offsetHeight * ((pivot.y - y) / height);
       } else {
         // Zoom from the center of the image
         imageData.x -= offsetWidth / 2;
@@ -802,7 +813,7 @@ export default {
         });
       });
 
-      if (hasTooltip) {
+      if (showTooltip) {
         this.tooltip();
       }
     }
@@ -1111,9 +1122,9 @@ export default {
    */
   toggle(_originalEvent = null) {
     if (this.imageData.ratio === 1) {
-      this.zoomTo(this.imageData.oldRatio, true, _originalEvent);
+      this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
     } else {
-      this.zoomTo(1, true, _originalEvent);
+      this.zoomTo(1, true, null, _originalEvent);
     }
 
     return this;
