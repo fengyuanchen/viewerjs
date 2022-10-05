@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 52 [options](#options)
+- Supports 53 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 17 [events](#events)
 - Supports modal and inline modes
@@ -289,6 +289,13 @@ Enable to request full screen when play.
 Define the extra attributes to inherit from the original image.
 
 > Note that the basic attributes `src` and `alt` will always inherit from the original image.
+
+### initialCoverage
+
+- Type: `Number`
+- Default: `0.9`
+
+Define the initial coverage of the viewing image. It must a positive number between 0 (0%) and 1 (100%).
 
 ### initialViewIndex
 

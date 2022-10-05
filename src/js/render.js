@@ -15,6 +15,7 @@ import {
   getImageNaturalSizes,
   getTransforms,
   hasClass,
+  isNumber,
   removeClass,
   removeListener,
   setData,
@@ -204,6 +205,7 @@ export default {
 
     sizingImage = getImageNaturalSizes(image, options, (naturalWidth, naturalHeight) => {
       const aspectRatio = naturalWidth / naturalHeight;
+      let initialCoverage = Math.max(0, Math.min(1, options.initialCoverage));
       let width = viewerWidth;
       let height = viewerHeight;
 
@@ -215,8 +217,9 @@ export default {
         width = viewerHeight * aspectRatio;
       }
 
-      width = Math.min(width * 0.9, naturalWidth);
-      height = Math.min(height * 0.9, naturalHeight);
+      initialCoverage = isNumber(initialCoverage) ? initialCoverage : 0.9;
+      width = Math.min(width * initialCoverage, naturalWidth);
+      height = Math.min(height * initialCoverage, naturalHeight);
 
       const left = (viewerWidth - width) / 2;
       const top = (viewerHeight - height) / 2;

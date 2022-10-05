@@ -71,7 +71,13 @@ export default {
   ],
 
   /**
-   * Define the initial index of image for viewing.
+   * Define the initial coverage of the viewing image.
+   * @type {number}
+   */
+  initialCoverage: 0.9,
+
+  /**
+   * Define the initial index of the image for viewing.
    * @type {number}
    */
   initialViewIndex: 0,

@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add a new option: `initialCoverage` .
+
 ## 1.10.5 (Apr 5, 2022)
 
 - Continue to initialize even if some images fail to load in inline mode.
