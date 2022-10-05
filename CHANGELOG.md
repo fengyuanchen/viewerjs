@@ -2,7 +2,8 @@
 
 ## next
 
-- Add a new option: `initialCoverage` (#526).
+- Add a new option: `initialCoverage` (#314, #526).
+- Don't load images in the list when hide the navbar (#451).
 - Support for providing pivot pointer coordinates to `zoom` and `zoomTo` methods (#202).
 - Don't override the padding right of the body when the width of the scrollbar is zero (#197).
 - Add keyboard support to playing view (#90).

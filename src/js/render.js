@@ -97,7 +97,10 @@ export default {
           }
         });
 
-        img.src = src || url;
+        if (options.navbar) {
+          img.src = src || url;
+        }
+
         img.alt = alt;
         img.setAttribute('data-original-url', url || src);
         item.setAttribute('data-index', index);
