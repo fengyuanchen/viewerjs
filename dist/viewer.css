@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.10.5
+ * Viewer.js v1.11.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-04-05T08:21:00.150Z
+ * Date: 2022-10-16T06:41:23.145Z
  */
 
 .viewer-zoom-in::before, .viewer-zoom-out::before, .viewer-one-to-one::before, .viewer-reset::before, .viewer-prev::before, .viewer-play::before, .viewer-next::before, .viewer-rotate-left::before, .viewer-rotate-right::before, .viewer-flip-horizontal::before, .viewer-flip-vertical::before, .viewer-fullscreen::before, .viewer-fullscreen-exit::before, .viewer-close::before {
@@ -107,7 +107,7 @@
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
-          user-select: none
+          user-select: none;
 }
 
 .viewer-container::-moz-selection, .viewer-container *::-moz-selection {
@@ -139,7 +139,7 @@
   overflow: hidden;
   position: absolute;
   right: 0;
-  top: 0
+  top: 0;
 }
 
 .viewer-canvas > img {
@@ -168,7 +168,7 @@
   height: 50px;
   margin: 0;
   overflow: hidden;
-  padding: 1px 0
+  padding: 1px 0;
 }
 
 .viewer-list > li {
@@ -181,7 +181,7 @@
     opacity: 0.5;
     overflow: hidden;
     transition: opacity 0.15s;
-    width: 30px
+    width: 30px;
   }
 
 .viewer-list > li:focus,
@@ -198,7 +198,7 @@
     }
 
 .viewer-list > .viewer-loading {
-    position: relative
+    position: relative;
   }
 
 .viewer-list > .viewer-loading::after {
@@ -224,7 +224,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 1
+  z-index: 1;
 }
 
 .viewer-player > img {
@@ -237,7 +237,7 @@
     display: inline-block;
     margin: 0 auto 5px;
     overflow: hidden;
-    padding: 6px 3px
+    padding: 6px 3px;
   }
 
 .viewer-toolbar > ul > li {
@@ -248,7 +248,7 @@
       height: 24px;
       overflow: hidden;
       transition: background-color 0.15s;
-      width: 24px
+      width: 24px;
     }
 
 .viewer-toolbar > ul > li:focus,
@@ -275,7 +275,7 @@
       height: 18px;
       margin-bottom: 3px;
       margin-top: 3px;
-      width: 18px
+      width: 18px;
     }
 
 .viewer-toolbar > ul > .viewer-small::before {
@@ -286,7 +286,7 @@
       height: 30px;
       margin-bottom: -3px;
       margin-top: -3px;
-      width: 30px
+      width: 30px;
     }
 
 .viewer-toolbar > ul > .viewer-large::before {
@@ -315,13 +315,14 @@
   display: inline-block;
   font-size: 12px;
   line-height: 1.2;
-  margin: 0 5% 5px;
+  margin: 5px 5%;
   max-width: 90%;
+  min-height: 14px;
   opacity: 0.8;
   overflow: hidden;
   text-overflow: ellipsis;
   transition: opacity 0.15s;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
 .viewer-title:hover {
@@ -339,7 +340,7 @@
   right: -40px;
   top: -40px;
   transition: background-color 0.15s;
-  width: 80px
+  width: 80px;
 }
 
 .viewer-button:focus,
@@ -384,7 +385,6 @@
 
 .viewer-move {
   cursor: move;
-  cursor: -webkit-grab;
   cursor: grab;
 }
 
@@ -400,16 +400,6 @@
   transition: all 0.3s;
 }
 
-@-webkit-keyframes viewer-spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes viewer-spinner {
   0% {
     transform: rotate(0deg);
@@ -421,8 +411,7 @@
 }
 
 .viewer-loading::after {
-    -webkit-animation: viewer-spinner 1s linear infinite;
-            animation: viewer-spinner 1s linear infinite;
+    animation: viewer-spinner 1s linear infinite;
     border: 4px solid rgba(255, 255, 255, 10%);
     border-left-color: rgba(255, 255, 255, 50%);
     border-radius: 50%;
