@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Add missing type definitions for `initialCoverage` option and `zoom` and `zoomTo` methods (#571).
+
 ## 1.11.0 (Oct 16, 2022)
 
 - Add a new option: `initialCoverage` (#314, #526).

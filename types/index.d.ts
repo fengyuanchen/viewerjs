@@ -24,6 +24,11 @@ declare namespace Viewer {
     [x: string]: ToolbarOption;
   }
 
+  export interface Pivot {
+    x: Number;
+    y: Number;
+  }
+
   export interface MoveEventData {
     x: number;
     y: number;
@@ -93,6 +98,7 @@ declare namespace Viewer {
     hidden?(event: CustomEvent): void;
     hide?(event: CustomEvent): void;
     inheritedAttributes?: string[];
+    initialCoverage?: number;
     initialViewIndex?: number;
     inline?: boolean;
     interval?: number;
@@ -161,8 +167,8 @@ declare class Viewer {
   tooltip(): Viewer;
   update(): Viewer;
   view(index?: number): Viewer;
-  zoom(ratio: number, hasTooltip?: boolean): Viewer;
-  zoomTo(ratio: number, hasTooltip?: boolean): Viewer;
+  zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
+  zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
   static noConflict(): Viewer;
   static setDefaults(options: Viewer.Options): void;
 }
