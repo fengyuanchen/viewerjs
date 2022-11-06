@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.0
+ * Viewer.js v1.11.1
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-10-16T06:41:28.706Z
+ * Date: 2022-11-06T05:18:19.939Z
  */
 
 'use strict';
@@ -646,7 +646,8 @@ var onceSupported = function () {
        * This setter can fix a `TypeError` in strict mode
        * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Getter_only}
        * @param {boolean} value - The value to set
-       */set: function set(value) {
+       */
+      set: function set(value) {
         once = value;
       }
     });
@@ -1650,7 +1651,8 @@ var methods = {
   /** Show the viewer (only available in modal mode)
    * @param {boolean} [immediate=false] - Indicates if show the viewer immediately or not.
    * @returns {Viewer} this
-   */show: function show() {
+   */
+  show: function show() {
     var immediate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var element = this.element,
       options = this.options;
@@ -1709,7 +1711,8 @@ var methods = {
    * Hide the viewer (only available in modal mode)
    * @param {boolean} [immediate=false] - Indicates if hide the viewer immediately or not.
    * @returns {Viewer} this
-   */hide: function hide() {
+   */
+  hide: function hide() {
     var _this = this;
     var immediate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var element = this.element,
@@ -1786,7 +1789,8 @@ var methods = {
    * View one of the images with image's index
    * @param {number} index - The index of the image to view.
    * @returns {Viewer} this
-   */view: function view() {
+   */
+  view: function view() {
     var _this2 = this;
     var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.initialViewIndex;
     index = Number(index) || 0;
@@ -1925,7 +1929,8 @@ var methods = {
    * @param {boolean} [loop=false] - Indicate if view the last one
    * when it is the first one at present.
    * @returns {Viewer} this
-   */prev: function prev() {
+   */
+  prev: function prev() {
     var loop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var index = this.index - 1;
     if (index < 0) {
@@ -1939,7 +1944,8 @@ var methods = {
    * @param {boolean} [loop=false] - Indicate if view the first one
    * when it is the last one at present.
    * @returns {Viewer} this
-   */next: function next() {
+   */
+  next: function next() {
     var loop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var maxIndex = this.length - 1;
     var index = this.index + 1;
@@ -1954,7 +1960,8 @@ var methods = {
    * @param {number} x - The moving distance in the horizontal direction.
    * @param {number} [y=x] The moving distance in the vertical direction.
    * @returns {Viewer} this
-   */move: function move(x) {
+   */
+  move: function move(x) {
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
     var imageData = this.imageData;
     this.moveTo(isUndefined(x) ? x : imageData.x + Number(x), isUndefined(y) ? y : imageData.y + Number(y));
@@ -1966,7 +1973,8 @@ var methods = {
    * @param {number} [y=x] - The new position in the vertical direction.
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
-   */moveTo: function moveTo(x) {
+   */
+  moveTo: function moveTo(x) {
     var _this3 = this;
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
     var _originalEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -2034,7 +2042,8 @@ var methods = {
    * Rotate the image with a relative degree.
    * @param {number} degree - The rotate degree.
    * @returns {Viewer} this
-   */rotate: function rotate(degree) {
+   */
+  rotate: function rotate(degree) {
     this.rotateTo((this.imageData.rotate || 0) + Number(degree));
     return this;
   },
@@ -2042,7 +2051,8 @@ var methods = {
    * Rotate the image to an absolute degree.
    * @param {number} degree - The rotate degree.
    * @returns {Viewer} this
-   */rotateTo: function rotateTo(degree) {
+   */
+  rotateTo: function rotateTo(degree) {
     var _this4 = this;
     var element = this.element,
       options = this.options,
@@ -2084,7 +2094,8 @@ var methods = {
    * Scale the image on the x-axis.
    * @param {number} scaleX - The scale ratio on the x-axis.
    * @returns {Viewer} this
-   */scaleX: function scaleX(_scaleX) {
+   */
+  scaleX: function scaleX(_scaleX) {
     this.scale(_scaleX, this.imageData.scaleY);
     return this;
   },
@@ -2092,7 +2103,8 @@ var methods = {
    * Scale the image on the y-axis.
    * @param {number} scaleY - The scale ratio on the y-axis.
    * @returns {Viewer} this
-   */scaleY: function scaleY(_scaleY) {
+   */
+  scaleY: function scaleY(_scaleY) {
     this.scale(this.imageData.scaleX, _scaleY);
     return this;
   },
@@ -2101,7 +2113,8 @@ var methods = {
    * @param {number} scaleX - The scale ratio on the x-axis.
    * @param {number} [scaleY=scaleX] - The scale ratio on the y-axis.
    * @returns {Viewer} this
-   */scale: function scale(scaleX) {
+   */
+  scale: function scale(scaleX) {
     var _this5 = this;
     var scaleY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scaleX;
     var element = this.element,
@@ -2167,7 +2180,8 @@ var methods = {
    * @param {Object} [pivot] - The pivot point coordinate for zooming.
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
-   */zoom: function zoom(ratio) {
+   */
+  zoom: function zoom(ratio) {
     var showTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var pivot = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
     var _originalEvent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
@@ -2189,7 +2203,8 @@ var methods = {
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @param {Event} [_zoomable=false] - Indicates if the current zoom is available or not.
    * @returns {Viewer} this
-   */zoomTo: function zoomTo(ratio) {
+   */
+  zoomTo: function zoomTo(ratio) {
     var _this6 = this;
     var showTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var pivot = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -2295,7 +2310,8 @@ var methods = {
    * Play the images
    * @param {boolean|FullscreenOptions} [fullscreen=false] - Indicate if request fullscreen or not.
    * @returns {Viewer} this
-   */play: function play() {
+   */
+  play: function play() {
     var _this7 = this;
     var fullscreen = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     if (!this.isShown || this.played) {
@@ -2544,7 +2560,8 @@ var methods = {
    * Toggle the image size between its current size and natural size
    * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
-   */toggle: function toggle() {
+   */
+  toggle: function toggle() {
     var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     if (this.imageData.ratio === 1) {
       this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
