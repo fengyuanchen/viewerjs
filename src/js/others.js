@@ -224,11 +224,12 @@ export default {
         break;
 
       case ACTION_SWITCH: {
-        this.action = 'switched';
 
         const absoluteOffsetX = Math.abs(offsetX);
 
         if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
+		  this.action = 'switched';
+			
           // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
           this.pointers = {};
 
