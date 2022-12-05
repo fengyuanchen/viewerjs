@@ -63,7 +63,7 @@ export default {
         break;
 
       case 'hide':
-        if (this.imgMoving !== true) {
+        if (imgMoving !== true) {
           this.hide();
         }
         break;
@@ -406,7 +406,9 @@ export default {
   },
 
   pointerup(event) {
-    const { options, action, pointers, imgMoving } = this;
+    const {
+      options, action, pointers, imgMoving,
+    } = this;
     let pointer;
 
     if (event.changedTouches) {
@@ -421,8 +423,8 @@ export default {
 
     if (imgMoving) {
       setTimeout(() => {
-        this.imgMoving = false
-      })
+        this.imgMoving = false;
+      });
     }
 
     if (!action) {
