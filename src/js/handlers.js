@@ -32,7 +32,7 @@ import {
 
 export default {
   click(event) {
-    const { options, imageData, imgMoving } = this;
+    const { options, imageData, ignoreCloseOnceMoved } = this;
     let { target } = event;
     let action = getData(target, DATA_ACTION);
 
@@ -63,7 +63,7 @@ export default {
         break;
 
       case 'hide':
-        if (imgMoving !== true) {
+        if (ignoreCloseOnceMoved !== true) {
           this.hide();
         }
         break;
@@ -407,7 +407,7 @@ export default {
 
   pointerup(event) {
     const {
-      options, action, pointers, imgMoving,
+      options, action, pointers, ignoreCloseOnceMoved,
     } = this;
     let pointer;
 
@@ -421,9 +421,9 @@ export default {
       delete pointers[event.pointerId || 0];
     }
 
-    if (imgMoving) {
+    if (ignoreCloseOnceMoved) {
       setTimeout(() => {
-        this.imgMoving = false;
+        this.ignoreCloseOnceMoved = false;
       });
     }
 
