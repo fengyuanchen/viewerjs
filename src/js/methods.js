@@ -482,6 +482,7 @@ export default {
         imageData.left = x;
         imageData.top = y;
         this.moving = true;
+        this.ignoreCloseOnceMoved = true;
         this.renderImage(() => {
           this.moving = false;
 
