@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.1
+ * Viewer.js v1.11.2
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-11-06T05:18:19.939Z
+ * Date: 2023-01-01T10:14:49.638Z
  */
 
 (function (global, factory) {
@@ -55,7 +55,7 @@
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
     }
   }
   function _createClass(Constructor, protoProps, staticProps) {
@@ -67,6 +67,7 @@
     return Constructor;
   }
   function _defineProperty(obj, key, value) {
+    key = _toPropertyKey(key);
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -78,6 +79,20 @@
       obj[key] = value;
     }
     return obj;
+  }
+  function _toPrimitive(input, hint) {
+    if (typeof input !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (typeof res !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+  }
+  function _toPropertyKey(arg) {
+    var key = _toPrimitive(arg, "string");
+    return typeof key === "symbol" ? key : String(key);
   }
 
   var DEFAULTS = {
@@ -1263,7 +1278,9 @@
           }
           break;
         case 'hide':
-          this.hide();
+          if (!this.pointerMoved) {
+            this.hide();
+          }
           break;
         case 'view':
           this.view(getData(target, 'index'));
@@ -1484,6 +1501,7 @@
         pointers = this.pointers;
       var buttons = event.buttons,
         button = event.button;
+      this.pointerMoved = false;
       if (!this.viewed || this.showing || this.viewing || this.hiding
 
       // Handle mouse event and pointer event and ignore touch event
@@ -1523,6 +1541,7 @@
         return;
       }
       event.preventDefault();
+      this.pointerMoved = true;
       if (event.changedTouches) {
         forEach(event.changedTouches, function (touch) {
           assign(pointers[touch.identifier] || {}, getPointer(touch, true));
@@ -2947,6 +2966,7 @@
       this.viewing = false;
       this.wheeling = false;
       this.zooming = false;
+      this.pointerMoved = false;
       this.id = getUniqueID();
       this.init();
     }

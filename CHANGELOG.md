@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.11.2 (Jan 1, 2023)
 
 - Do not close the viewer when dragging the image on the backdrop (#577).
 
