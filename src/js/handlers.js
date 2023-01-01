@@ -32,7 +32,7 @@ import {
 
 export default {
   click(event) {
-    const { options, imageData, ignoreCloseOnceMoved } = this;
+    const { options, imageData } = this;
     let { target } = event;
     let action = getData(target, DATA_ACTION);
 
@@ -63,7 +63,7 @@ export default {
         break;
 
       case 'hide':
-        if (ignoreCloseOnceMoved !== true) {
+        if (!this.pointerMoved) {
           this.hide();
         }
         break;
@@ -337,6 +337,8 @@ export default {
     const { options, pointers } = this;
     const { buttons, button } = event;
 
+    this.pointerMoved = false;
+
     if (
       !this.viewed
       || this.showing
@@ -393,6 +395,7 @@ export default {
     }
 
     event.preventDefault();
+    this.pointerMoved = true;
 
     if (event.changedTouches) {
       forEach(event.changedTouches, (touch) => {
@@ -406,9 +409,7 @@ export default {
   },
 
   pointerup(event) {
-    const {
-      options, action, pointers, ignoreCloseOnceMoved,
-    } = this;
+    const { options, action, pointers } = this;
     let pointer;
 
     if (event.changedTouches) {
@@ -419,12 +420,6 @@ export default {
     } else {
       pointer = pointers[event.pointerId || 0];
       delete pointers[event.pointerId || 0];
-    }
-
-    if (ignoreCloseOnceMoved) {
-      setTimeout(() => {
-        this.ignoreCloseOnceMoved = false;
-      });
     }
 
     if (!action) {

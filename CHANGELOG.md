@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Do not close the viewer when dragging the image on the backdrop (#577).
+
 ## 1.11.1 (Nov 6, 2022)
 
 - Add missing type definitions for `initialCoverage` option and `zoom` and `zoomTo` methods (#571).
