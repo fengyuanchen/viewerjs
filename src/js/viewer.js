@@ -85,6 +85,16 @@ class Viewer {
     this.wheeling = false;
     this.zooming = false;
     this.pointerMoved = false;
+    /**
+     * 记录按下时的位置, 在HarmonyOS 2.0自带webview发现会存在点击时就出发pointermove事件的bug, 其他系统未出现此bug;
+     * 此bug会导致点击图片外的遮罩层有很大概率无法关闭图片;
+     * 为解决bug所以增加这个属性, 判断pointerdown触发时的位置与pointerup触发的位置是否发生变化, 如果未发生变化就视为未移动, 此时如果click事件被触发就可以正常关闭图片预览
+     * @author Qiucl - 2023.02.14
+     */
+    this.pointerDownPosition = {
+        clientX: 0,
+        clientY: 0
+    }
     this.id = getUniqueID();
     this.init();
   }

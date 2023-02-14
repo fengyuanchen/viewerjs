@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-01-01T10:14:49.638Z
+ * Date: 2023-02-14T13:02:47.915Z
  */
 
 'use strict';
@@ -1497,6 +1497,11 @@ var handlers = {
       pointers = this.pointers;
     var buttons = event.buttons,
       button = event.button;
+    /** 记录位置 - @author Qiucl - 2023.02.14 */
+    this.pointerDownPosition = {
+      clientX: event.clientX,
+      clientY: event.clientY
+    };
     this.pointerMoved = false;
     if (!this.viewed || this.showing || this.viewing || this.hiding
 
@@ -1553,6 +1558,14 @@ var handlers = {
       action = this.action,
       pointers = this.pointers;
     var pointer;
+
+    /** 判断元素位置是否有变化 - @author Qiucl - 2023.02.14 */
+    var _this$pointerDownPosi = this.pointerDownPosition,
+      clientX = _this$pointerDownPosi.clientX,
+      clientY = _this$pointerDownPosi.clientY;
+    if (event.clientX === clientX && event.clientY === clientY) {
+      this.pointerMoved = false;
+    }
     if (event.changedTouches) {
       forEach(event.changedTouches, function (touch) {
         pointer = pointers[touch.identifier];
@@ -2963,6 +2976,16 @@ var Viewer = /*#__PURE__*/function () {
     this.wheeling = false;
     this.zooming = false;
     this.pointerMoved = false;
+    /**
+     * 记录按下时的位置, 在HarmonyOS 2.0自带webview发现会存在点击时就出发pointermove事件的bug, 其他系统未出现此bug;
+     * 此bug会导致点击图片外的遮罩层有很大概率无法关闭图片;
+     * 为解决bug所以增加这个属性, 判断pointerdown触发时的位置与pointerup触发的位置是否发生变化, 如果未发生变化就视为未移动, 此时如果click事件被触发就可以正常关闭图片预览
+     * @author Qiucl - 2023.02.14
+     */
+    this.pointerDownPosition = {
+      clientX: 0,
+      clientY: 0
+    };
     this.id = getUniqueID();
     this.init();
   }

@@ -336,6 +336,11 @@ export default {
   pointerdown(event) {
     const { options, pointers } = this;
     const { buttons, button } = event;
+    /** 记录位置 - @author Qiucl - 2023.02.14 */
+    this.pointerDownPosition = {
+        clientX: event.clientX,
+        clientY: event.clientY,
+    }
 
     this.pointerMoved = false;
 
@@ -411,6 +416,12 @@ export default {
   pointerup(event) {
     const { options, action, pointers } = this;
     let pointer;
+
+    /** 判断元素位置是否有变化 - @author Qiucl - 2023.02.14 */
+    const { clientX, clientY } = this.pointerDownPosition;
+    if(event.clientX === clientX && event.clientY === clientY){
+        this.pointerMoved = false;
+    }
 
     if (event.changedTouches) {
       forEach(event.changedTouches, (touch) => {
