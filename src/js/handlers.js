@@ -395,7 +395,6 @@ export default {
     }
 
     event.preventDefault();
-    this.pointerMoved = true;
 
     if (event.changedTouches) {
       forEach(event.changedTouches, (touch) => {
