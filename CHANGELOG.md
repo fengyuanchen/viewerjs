@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.11.3 (Mar 5, 2023)
+
+- Not actually moving when the `offsetX/Y` is `0` (#585, #588).
+
 ## 1.11.2 (Jan 1, 2023)
 
 - Do not close the viewer when dragging the image on the backdrop (#577).

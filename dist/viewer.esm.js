@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.2
+ * Viewer.js v1.11.3
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-01-01T10:14:49.638Z
+ * Date: 2023-03-05T07:01:17.741Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -1535,7 +1535,6 @@ var handlers = {
       return;
     }
     event.preventDefault();
-    this.pointerMoved = true;
     if (event.changedTouches) {
       forEach(event.changedTouches, function (touch) {
         assign(pointers[touch.identifier] || {}, getPointer(touch, true));
@@ -2878,7 +2877,10 @@ var others = {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        this.move(offsetX, offsetY, event);
+        if (offsetX !== 0 || offsetY !== 0) {
+          this.pointerMoved = true;
+          this.move(offsetX, offsetY, event);
+        }
         break;
 
       // Zoom the current image
