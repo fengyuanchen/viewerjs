@@ -84,6 +84,7 @@ class Viewer {
     this.viewing = false;
     this.wheeling = false;
     this.zooming = false;
+    this.pointerMoved = false;
     this.id = getUniqueID();
     this.init();
   }

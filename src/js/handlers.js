@@ -63,7 +63,9 @@ export default {
         break;
 
       case 'hide':
-        this.hide();
+        if (!this.pointerMoved) {
+          this.hide();
+        }
         break;
 
       case 'view':
@@ -334,6 +336,8 @@ export default {
   pointerdown(event) {
     const { options, pointers } = this;
     const { buttons, button } = event;
+
+    this.pointerMoved = false;
 
     if (
       !this.viewed

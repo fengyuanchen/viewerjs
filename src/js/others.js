@@ -215,7 +215,10 @@ export default {
     switch (this.action) {
       // Move the current image
       case ACTION_MOVE:
-        this.move(offsetX, offsetY, event);
+        if (offsetX !== 0 || offsetY !== 0) {
+          this.pointerMoved = true;
+          this.move(offsetX, offsetY, event);
+        }
         break;
 
       // Zoom the current image
