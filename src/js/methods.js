@@ -1120,8 +1120,16 @@ export default {
    * @returns {Viewer} this
    */
   toggle(_originalEvent = null) {
-    if (this.imageData.ratio === 1) {
-      this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
+    const minZoom = this.options.minZoomRatio > 0
+      ? this.options.minZoomRatio
+      : this.imageData.oldRatio;
+    if (this.imageData.ratio >= 1) {
+      this.zoomTo(
+        minZoom,
+        true,
+        null,
+        _originalEvent,
+      );
     } else {
       this.zoomTo(1, true, null, _originalEvent);
     }

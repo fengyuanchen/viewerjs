@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-03-05T07:01:17.741Z
+ * Date: 2023-04-13T12:01:47.384Z
  */
 
 (function (global, factory) {
@@ -2585,8 +2585,9 @@
      */
     toggle: function toggle() {
       var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (this.imageData.ratio === 1) {
-        this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
+      var minZoom = this.options.minZoomRatio > 0 ? this.options.minZoomRatio : this.imageData.oldRatio;
+      if (this.imageData.ratio >= 1) {
+        this.zoomTo(minZoom, true, null, _originalEvent);
       } else {
         this.zoomTo(1, true, null, _originalEvent);
       }
@@ -2895,9 +2896,10 @@
           break;
         case ACTION_SWITCH:
           {
-            this.action = 'switched';
             var absoluteOffsetX = Math.abs(offsetX);
             if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
+              this.action = 'switched';
+
               // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
               this.pointers = {};
               if (offsetX > 1) {
