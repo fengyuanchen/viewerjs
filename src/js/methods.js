@@ -1176,7 +1176,7 @@ export default {
 
         if (image && img) {
           if (
-            image.src !== img.src
+            image.src !== (img.src || img.dataset.originalUrl)
 
             // Title changed (#408)
             || image.alt !== img.alt
