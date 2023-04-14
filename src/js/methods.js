@@ -420,7 +420,24 @@ export default {
    * @returns {Viewer} this
    */
   move(x, y = x) {
-    const { imageData } = this;
+    const { imageData, options } = this;
+
+    if (options.moveLimit === true) {
+      const dimX = window.innerWidth - imageData.width;
+      const dimY = window.innerHeight - imageData.height;
+      const limitMinX = dimX > 0 ? 0 : dimX;
+      const limitMaxX = dimX > 0 ? dimX : 0;
+      const limitMinY = dimY > 0 ? 0 : dimY;
+      const limitMaxY = dimY > 0 ? dimY : 0;
+
+      if (imageData.left + x < limitMinX || imageData.left + x > limitMaxX) {
+        x = 0;
+      }
+
+      if (imageData.top + y < limitMinY || imageData.top + y > limitMaxY) {
+        y = 0;
+      }
+    }
 
     this.moveTo(
       isUndefined(x) ? x : imageData.x + Number(x),
@@ -1120,7 +1137,7 @@ export default {
    * @returns {Viewer} this
    */
   toggle(_originalEvent = null) {
-    const minZoom = this.options.minZoomRatio > 0
+    const minZoom = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0
       ? this.options.minZoomRatio
       : this.imageData.oldRatio;
     if (this.imageData.ratio >= 1) {
@@ -1128,7 +1145,7 @@ export default {
         minZoom,
         true,
         null,
-        _originalEvent,
+        null,
       );
     } else {
       this.zoomTo(1, true, null, _originalEvent);

@@ -226,7 +226,16 @@ export default {
    * @type {string | Function}
    */
   url: 'src',
-
+  /**
+   * Restricts the movement of the image off the screen of the device.
+   * @type {boolean}
+   */
+  moveLimit: false,
+  /**
+   * Toggle the image size between its natural size and initial size.
+   * @type {boolean}
+   */
+  toggleSizeToInitial: false,
   /**
    * Event shortcuts.
    * @type {Function}

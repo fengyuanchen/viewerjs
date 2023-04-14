@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-04-13T12:01:47.384Z
+ * Date: 2023-04-14T11:43:52.736Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -273,6 +273,16 @@ var DEFAULTS = {
    * @type {string | Function}
    */
   url: 'src',
+  /**
+   * Restricts the movement of the image off the screen of the device.
+   * @type {boolean}
+   */
+  moveLimit: false,
+  /**
+   * Toggle the image size between its natural size and initial size.
+   * @type {boolean}
+   */
+  toggleSizeToInitial: false,
   /**
    * Event shortcuts.
    * @type {Function}
@@ -1979,7 +1989,22 @@ var methods = {
    */
   move: function move(x) {
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
-    var imageData = this.imageData;
+    var imageData = this.imageData,
+      options = this.options;
+    if (options.moveLimit === true) {
+      var dimX = window.innerWidth - imageData.width;
+      var dimY = window.innerHeight - imageData.height;
+      var limitMinX = dimX > 0 ? 0 : dimX;
+      var limitMaxX = dimX > 0 ? dimX : 0;
+      var limitMinY = dimY > 0 ? 0 : dimY;
+      var limitMaxY = dimY > 0 ? dimY : 0;
+      if (imageData.left + x < limitMinX || imageData.left + x > limitMaxX) {
+        x = 0;
+      }
+      if (imageData.top + y < limitMinY || imageData.top + y > limitMaxY) {
+        y = 0;
+      }
+    }
     this.moveTo(isUndefined(x) ? x : imageData.x + Number(x), isUndefined(y) ? y : imageData.y + Number(y));
     return this;
   },
@@ -2579,9 +2604,9 @@ var methods = {
    */
   toggle: function toggle() {
     var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    var minZoom = this.options.minZoomRatio > 0 ? this.options.minZoomRatio : this.imageData.oldRatio;
+    var minZoom = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0 ? this.options.minZoomRatio : this.imageData.oldRatio;
     if (this.imageData.ratio >= 1) {
-      this.zoomTo(minZoom, true, null, _originalEvent);
+      this.zoomTo(minZoom, true, null, null);
     } else {
       this.zoomTo(1, true, null, _originalEvent);
     }
