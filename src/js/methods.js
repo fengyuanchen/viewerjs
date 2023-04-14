@@ -799,6 +799,10 @@ export default {
       } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
         imageData.x -= offsetWidth * ((pivot.x - x) / width);
         imageData.y -= offsetHeight * ((pivot.y - y) / height);
+      } else if (options.toggleSizeToInitial) {
+        // Zoom from the center of the image
+        imageData.x = (window.innerWidth - newWidth) / 2;
+        imageData.y = (window.innerHeight - newHeight) / 2;
       } else {
         // Zoom from the center of the image
         imageData.x -= offsetWidth / 2;
@@ -1137,15 +1141,17 @@ export default {
    * @returns {Viewer} this
    */
   toggle(_originalEvent = null) {
-    const minZoom = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0
-      ? this.options.minZoomRatio
-      : this.imageData.oldRatio;
     if (this.imageData.ratio >= 1) {
+      const toggleSizeToInitial = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0;
+      const minZoom = toggleSizeToInitial
+        ? this.options.minZoomRatio
+        : this.imageData.oldRatio;
+
       this.zoomTo(
         minZoom,
         true,
         null,
-        null,
+        toggleSizeToInitial ? null : _originalEvent,
       );
     } else {
       this.zoomTo(1, true, null, _originalEvent);

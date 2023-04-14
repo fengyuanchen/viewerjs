@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-04-14T11:43:52.736Z
+ * Date: 2023-04-14T11:50:02.486Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -2315,6 +2315,10 @@ var methods = {
       } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
         imageData.x -= offsetWidth * ((pivot.x - x) / width);
         imageData.y -= offsetHeight * ((pivot.y - y) / height);
+      } else if (options.toggleSizeToInitial) {
+        // Zoom from the center of the image
+        imageData.x = (window.innerWidth - newWidth) / 2;
+        imageData.y = (window.innerHeight - newHeight) / 2;
       } else {
         // Zoom from the center of the image
         imageData.x -= offsetWidth / 2;
@@ -2604,9 +2608,10 @@ var methods = {
    */
   toggle: function toggle() {
     var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    var minZoom = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0 ? this.options.minZoomRatio : this.imageData.oldRatio;
     if (this.imageData.ratio >= 1) {
-      this.zoomTo(minZoom, true, null, null);
+      var toggleSizeToInitial = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0;
+      var minZoom = toggleSizeToInitial ? this.options.minZoomRatio : this.imageData.oldRatio;
+      this.zoomTo(minZoom, true, null, toggleSizeToInitial ? null : _originalEvent);
     } else {
       this.zoomTo(1, true, null, _originalEvent);
     }
@@ -3260,3 +3265,4 @@ var Viewer = /*#__PURE__*/function () {
 assign(Viewer.prototype, render, events, handlers, methods, others);
 
 export { Viewer as default };
+//# sourceMappingURL=viewer.esm.js.map
