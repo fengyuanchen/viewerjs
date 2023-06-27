@@ -15,6 +15,7 @@ import {
   getImageNaturalSizes,
   getTransforms,
   hasClass,
+  isFunction,
   isNumber,
   removeClass,
   removeListener,
@@ -275,13 +276,20 @@ export default {
       marginTop: imageData.y,
     }, getTransforms(imageData)));
 
-    if (done) {
+    if (done || isFunction(this.options.rendered)) {
+      const callback = () => {
+        done();
+        if (isFunction(this.options.rendered)) {
+          this.options.rendered();
+        }
+      };
+
       if ((this.viewing || this.moving || this.rotating || this.scaling || this.zooming)
         && this.options.transition
         && hasClass(image, CLASS_TRANSITION)) {
         const onTransitionEnd = () => {
           this.imageRendering = false;
-          done();
+          callback();
         };
 
         this.imageRendering = {
@@ -294,7 +302,7 @@ export default {
           once: true,
         });
       } else {
-        done();
+        callback();
       }
     }
   },
