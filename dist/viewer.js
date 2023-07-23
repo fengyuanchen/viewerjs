@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.3
+ * Viewer.js v1.11.4
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-03-05T07:01:17.741Z
+ * Date: 2023-07-23T07:45:53.159Z
  */
 
 (function (global, factory) {
@@ -825,7 +825,7 @@
   function getImageNameFromURL(url) {
     return isString(url) ? decodeURIComponent(url.replace(/^.*\//, '').replace(/[?&#].*$/, '')) : '';
   }
-  var IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(WINDOW.navigator.userAgent);
+  var IS_SAFARI = WINDOW.navigator && /Version\/\d+(\.\d+)+?\s+Safari/i.test(WINDOW.navigator.userAgent);
 
   /**
    * Get an image's natural sizes.
