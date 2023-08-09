@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.3
+ * Viewer.js v1.11.4
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-04-14T11:50:02.486Z
+ * Date: 2023-07-23T07:45:53.159Z
  */
 
 function ownKeys(object, enumerableOnly) {
@@ -273,16 +273,6 @@ var DEFAULTS = {
    * @type {string | Function}
    */
   url: 'src',
-  /**
-   * Restricts the movement of the image off the screen of the device.
-   * @type {boolean}
-   */
-  moveLimit: false,
-  /**
-   * Toggle the image size between its natural size and initial size.
-   * @type {boolean}
-   */
-  toggleSizeToInitial: false,
   /**
    * Event shortcuts.
    * @type {Function}
@@ -829,7 +819,7 @@ function getTransforms(_ref) {
 function getImageNameFromURL(url) {
   return isString(url) ? decodeURIComponent(url.replace(/^.*\//, '').replace(/[?&#].*$/, '')) : '';
 }
-var IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(WINDOW.navigator.userAgent);
+var IS_SAFARI = WINDOW.navigator && /Version\/\d+(\.\d+)+?\s+Safari/i.test(WINDOW.navigator.userAgent);
 
 /**
  * Get an image's natural sizes.
@@ -1989,22 +1979,7 @@ var methods = {
    */
   move: function move(x) {
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
-    var imageData = this.imageData,
-      options = this.options;
-    if (options.moveLimit === true) {
-      var dimX = window.innerWidth - imageData.width;
-      var dimY = window.innerHeight - imageData.height;
-      var limitMinX = dimX > 0 ? 0 : dimX;
-      var limitMaxX = dimX > 0 ? dimX : 0;
-      var limitMinY = dimY > 0 ? 0 : dimY;
-      var limitMaxY = dimY > 0 ? dimY : 0;
-      if (imageData.left + x < limitMinX || imageData.left + x > limitMaxX) {
-        x = 0;
-      }
-      if (imageData.top + y < limitMinY || imageData.top + y > limitMaxY) {
-        y = 0;
-      }
-    }
+    var imageData = this.imageData;
     this.moveTo(isUndefined(x) ? x : imageData.x + Number(x), isUndefined(y) ? y : imageData.y + Number(y));
     return this;
   },
@@ -2315,10 +2290,6 @@ var methods = {
       } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
         imageData.x -= offsetWidth * ((pivot.x - x) / width);
         imageData.y -= offsetHeight * ((pivot.y - y) / height);
-      } else if (options.toggleSizeToInitial) {
-        // Zoom from the center of the image
-        imageData.x = (window.innerWidth - newWidth) / 2;
-        imageData.y = (window.innerHeight - newHeight) / 2;
       } else {
         // Zoom from the center of the image
         imageData.x -= offsetWidth / 2;
@@ -2608,10 +2579,8 @@ var methods = {
    */
   toggle: function toggle() {
     var _originalEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    if (this.imageData.ratio >= 1) {
-      var toggleSizeToInitial = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0;
-      var minZoom = toggleSizeToInitial ? this.options.minZoomRatio : this.imageData.oldRatio;
-      this.zoomTo(minZoom, true, null, toggleSizeToInitial ? null : _originalEvent);
+    if (this.imageData.ratio === 1) {
+      this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
     } else {
       this.zoomTo(1, true, null, _originalEvent);
     }
@@ -2920,10 +2889,9 @@ var others = {
         break;
       case ACTION_SWITCH:
         {
+          this.action = 'switched';
           var absoluteOffsetX = Math.abs(offsetX);
           if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
-            this.action = 'switched';
-
             // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
             this.pointers = {};
             if (offsetX > 1) {
@@ -3265,4 +3233,3 @@ var Viewer = /*#__PURE__*/function () {
 assign(Viewer.prototype, render, events, handlers, methods, others);
 
 export { Viewer as default };
-//# sourceMappingURL=viewer.esm.js.map

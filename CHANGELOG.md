@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.11.4 (Jul 23, 2023)
+
+- Fix the incorrect RegExp for Safari browser detection (#606).
+
 ## 1.11.3 (Mar 5, 2023)
 
 - Not actually moving when the `offsetX/Y` is `0` (#585, #588).
