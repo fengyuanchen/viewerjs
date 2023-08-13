@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Fix the issue of title blinking when opening the same image again (#609).
+
 ## 1.11.4 (Jul 23, 2023)
 
 - Fix the incorrect RegExp for Safari browser detection (#606).
