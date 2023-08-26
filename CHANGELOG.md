@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.11.5 (Aug 26, 2023)
 
 - Fix the issue of title blinking when opening the same image again (#609).
 
