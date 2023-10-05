@@ -1,10 +1,9 @@
 module.exports = {
-  extends: 'stylelint-config-standard-scss',
+  extends: 'stylelint-config-standard',
   plugins: [
     'stylelint-order',
   ],
   rules: {
-    'color-function-notation': 'legacy',
     'no-descending-specificity': null,
     'order/properties-alphabetical-order': true,
   },

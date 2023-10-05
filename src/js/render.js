@@ -300,16 +300,16 @@ export default {
   },
 
   resetImage() {
-    // this.image only defined after viewed
-    if (this.viewing || this.viewed) {
-      const { image } = this;
+    const { image } = this;
 
+    if (image) {
       if (this.viewing) {
         this.viewing.abort();
       }
 
       image.parentNode.removeChild(image);
       this.image = null;
+      this.title.innerHTML = '';
     }
   },
 };

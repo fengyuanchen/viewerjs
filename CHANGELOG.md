@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.6 (Sep 17, 2023)
+
+- Fix an issue where some CSS styles were incompatible with old browsers (#611).
+
+## 1.11.5 (Aug 26, 2023)
+
+- Fix the issue of title blinking when opening the same image again (#609).
+
 ## 1.11.4 (Jul 23, 2023)
 
 - Fix the incorrect RegExp for Safari browser detection (#606).

@@ -122,9 +122,6 @@ export default {
       this.clearEnforceFocus();
     }
 
-    this.fulled = false;
-    this.viewed = false;
-    this.isShown = false;
     this.close();
     this.unbind();
     addClass(viewer, CLASS_HIDE);
@@ -134,6 +131,9 @@ export default {
     viewer.setAttribute('aria-hidden', true);
     this.resetList();
     this.resetImage();
+    this.fulled = false;
+    this.viewed = false;
+    this.isShown = false;
     this.hiding = false;
 
     if (!this.destroyed) {
