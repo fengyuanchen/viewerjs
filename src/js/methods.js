@@ -420,7 +420,24 @@ export default {
    * @returns {Viewer} this
    */
   move(x, y = x) {
-    const { imageData } = this;
+    const { imageData, options } = this;
+
+    if (options.moveLimit === true) {
+      const dimX = window.innerWidth - imageData.width;
+      const dimY = window.innerHeight - imageData.height;
+      const limitMinX = dimX > 0 ? 0 : dimX;
+      const limitMaxX = dimX > 0 ? dimX : 0;
+      const limitMinY = dimY > 0 ? 0 : dimY;
+      const limitMaxY = dimY > 0 ? dimY : 0;
+
+      if (imageData.left + x < limitMinX || imageData.left + x > limitMaxX) {
+        x = 0;
+      }
+
+      if (imageData.top + y < limitMinY || imageData.top + y > limitMaxY) {
+        y = 0;
+      }
+    }
 
     this.moveTo(
       isUndefined(x) ? x : imageData.x + Number(x),
@@ -782,6 +799,10 @@ export default {
       } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
         imageData.x -= offsetWidth * ((pivot.x - x) / width);
         imageData.y -= offsetHeight * ((pivot.y - y) / height);
+      } else if (options.toggleSizeToInitial) {
+        // Zoom from the center of the image
+        imageData.x = (window.innerWidth - newWidth) / 2;
+        imageData.y = (window.innerHeight - newHeight) / 2;
       } else {
         // Zoom from the center of the image
         imageData.x -= offsetWidth / 2;
@@ -1120,8 +1141,18 @@ export default {
    * @returns {Viewer} this
    */
   toggle(_originalEvent = null) {
-    if (this.imageData.ratio === 1) {
-      this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
+    if (this.imageData.ratio >= 1) {
+      const toggleSizeToInitial = this.options.toggleSizeToInitial && this.options.minZoomRatio > 0;
+      const minZoom = toggleSizeToInitial
+        ? this.options.minZoomRatio
+        : this.imageData.oldRatio;
+
+      this.zoomTo(
+        minZoom,
+        true,
+        null,
+        toggleSizeToInitial ? null : _originalEvent,
+      );
     } else {
       this.zoomTo(1, true, null, _originalEvent);
     }

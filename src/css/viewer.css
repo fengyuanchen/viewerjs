@@ -13,7 +13,7 @@
 .viewer-fullscreen-exit,
 .viewer-close {
   &::before {
-    background-image: url('../images/icons.png');
+    background-image: url("../images/icons.png");
     background-repeat: no-repeat;
     background-size: 280px;
     color: transparent;
@@ -27,72 +27,72 @@
 
 .viewer-zoom-in::before {
   background-position: 0 0;
-  content: 'Zoom In';
+  content: "Zoom In";
 }
 
 .viewer-zoom-out::before {
   background-position: -20px 0;
-  content: 'Zoom Out';
+  content: "Zoom Out";
 }
 
 .viewer-one-to-one::before {
   background-position: -40px 0;
-  content: 'One to One';
+  content: "One to One";
 }
 
 .viewer-reset::before {
   background-position: -60px 0;
-  content: 'Reset';
+  content: "Reset";
 }
 
 .viewer-prev::before {
   background-position: -80px 0;
-  content: 'Previous';
+  content: "Previous";
 }
 
 .viewer-play::before {
   background-position: -100px 0;
-  content: 'Play';
+  content: "Play";
 }
 
 .viewer-next::before {
   background-position: -120px 0;
-  content: 'Next';
+  content: "Next";
 }
 
 .viewer-rotate-left::before {
   background-position: -140px 0;
-  content: 'Rotate Left';
+  content: "Rotate Left";
 }
 
 .viewer-rotate-right::before {
   background-position: -160px 0;
-  content: 'Rotate Right';
+  content: "Rotate Right";
 }
 
 .viewer-flip-horizontal::before {
   background-position: -180px 0;
-  content: 'Flip Horizontal';
+  content: "Flip Horizontal";
 }
 
 .viewer-flip-vertical::before {
   background-position: -200px 0;
-  content: 'Flip Vertical';
+  content: "Flip Vertical";
 }
 
 .viewer-fullscreen::before {
   background-position: -220px 0;
-  content: 'Enter Full Screen';
+  content: "Enter Full Screen";
 }
 
 .viewer-fullscreen-exit::before {
   background-position: -240px 0;
-  content: 'Exit Full Screen';
+  content: "Exit Full Screen";
 }
 
 .viewer-close::before {
   background-position: -260px 0;
-  content: 'Close';
+  content: "Close";
 }
 
 .viewer-container {
@@ -156,7 +156,7 @@
 }
 
 .viewer-navbar {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 50%);
   overflow: hidden;
 }
 
@@ -238,7 +238,7 @@
     padding: 6px 3px;
 
     & > li {
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 50%);
       border-radius: 50%;
       cursor: pointer;
       float: left;
@@ -249,7 +249,7 @@
 
       &:focus,
       &:hover {
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 80%);
       }
 
       &:focus {
@@ -293,7 +293,7 @@
 }
 
 .viewer-tooltip {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 80%);
   border-radius: 10px;
   color: #fff;
   display: none;
@@ -329,7 +329,8 @@
 }
 
 .viewer-button {
-  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-app-region: no-drag;
+  background-color: rgba(0, 0, 0, 50%);
   border-radius: 50%;
   cursor: pointer;
   height: 80px;
@@ -339,11 +340,10 @@
   top: -40px;
   transition: background-color 0.15s;
   width: 80px;
-  -webkit-app-region: no-drag;
 
   &:focus,
   &:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 80%);
   }
 
   &:focus {
@@ -375,7 +375,7 @@
 }
 
 .viewer-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 50%);
 }
 
 .viewer-invisible {
@@ -412,10 +412,10 @@
 .viewer-loading {
   &::after {
     animation: viewer-spinner 1s linear infinite;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-left-color: rgba(255, 255, 255, 0.5);
+    border: 4px solid rgba(255, 255, 255, 10%);
+    border-left-color: rgba(255, 255, 255, 50%);
     border-radius: 50%;
-    content: '';
+    content: "";
     display: inline-block;
     height: 40px;
     left: 50%;
