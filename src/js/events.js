@@ -21,14 +21,13 @@ export default {
 
     addListener(viewer, EVENT_CLICK, (this.onClick = this.click.bind(this)));
     addListener(viewer, EVENT_DRAG_START, (this.onDragStart = this.dragstart.bind(this)));
-    // addListener(canvas, EVENT_POINTER_DOWN, (this.onPointerDown = this.pointerdown.bind(this)));
-    // 使用新的事件绑定替代原有的绑定
+    // Use the new event binding to replace the original binding.
     addListener(canvas, EVENT_POINTER_DOWN, (event) => {
       this.lastPointerPosition = {
         x: event.pageX,
         y: event.pageY
       };
-      // 然后调用原有的事件处理函数
+      // Then call the original event handler function.
       if (this.pointerdown) {
         this.pointerdown(event);
       }

@@ -717,7 +717,8 @@ export default {
 
     ratio = Math.max(0, ratio);
 
-    // 在确定了缩放比率后，我们检查是否已经提供了一个pivot。如果没有，并且我们有最后一个pointerdown的位置，我们使用它来设置pivot。
+    // After determining the zoom ratio, check if a pivot has already been provided. 
+    // If not, and we have the last pointerdown position, use it to set the pivot.
     if (!pivot && this.lastPointerPosition) {
       const offset = getOffset(this.viewer);
       pivot = {
