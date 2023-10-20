@@ -86,6 +86,7 @@ class Viewer {
     this.zooming = false;
     this.pointerMoved = false;
     this.id = getUniqueID();
+    this.lastPointerPosition = null;  // 初始化 lastPointerPosition 属性
     this.init();
   }
 

@@ -717,6 +717,15 @@ export default {
 
     ratio = Math.max(0, ratio);
 
+    // 在确定了缩放比率后，我们检查是否已经提供了一个pivot。如果没有，并且我们有最后一个pointerdown的位置，我们使用它来设置pivot。
+    if (!pivot && this.lastPointerPosition) {
+      const offset = getOffset(this.viewer);
+      pivot = {
+        x: this.lastPointerPosition.x - offset.left,
+        y: this.lastPointerPosition.y - offset.top
+      };
+    }  
+
     if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
       if (!_zoomable) {
         const minZoomRatio = Math.max(0.01, options.minZoomRatio);
