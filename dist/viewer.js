@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-09-17T03:16:38.052Z
+ * Date: 2023-10-29T10:26:56.385Z
  */
 
 (function (global, factory) {
@@ -1058,6 +1058,8 @@
           if (options.loading) {
             removeClass(item, CLASS_LOADING);
           }
+          // Replace the unavailable image to the fallback once get loading error
+          image.src = 'fallback.png';
         }, {
           once: true
         });
@@ -1842,6 +1844,12 @@
         }
       });
       image.src = url;
+
+      // Add an event listener to listen for the error event on the image
+      image.addEventListener(EVENT_ERROR, function () {
+        // Set the fallback image when the image fails to load
+        image.src = 'fallback.png';
+      });
       image.alt = alt;
       if (isFunction(options.view)) {
         addListener(element, EVENT_VIEW, options.view, {

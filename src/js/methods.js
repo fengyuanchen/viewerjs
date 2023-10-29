@@ -251,6 +251,13 @@ export default {
     });
 
     image.src = url;
+
+    // Add an event listener to listen for the error event on the image
+    image.addEventListener(EVENT_ERROR, () => {
+      // Set the fallback image when the image fails to load
+      image.src = 'fallback.png';
+    });
+
     image.alt = alt;
 
     if (isFunction(options.view)) {

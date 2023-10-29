@@ -147,6 +147,8 @@ export default {
         if (options.loading) {
           removeClass(item, CLASS_LOADING);
         }
+        // Replace the unavailable image to the fallback once get loading error
+        image.src = 'fallback.png';
       }, {
         once: true,
       });
