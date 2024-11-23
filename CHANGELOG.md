@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- Use SVG icons for better visual effects (#637).
+
 ## 1.11.6 (Sep 17, 2023)
 
 - Fix an issue where some CSS styles were incompatible with old browsers (#611).
