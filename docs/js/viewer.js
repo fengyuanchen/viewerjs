@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-09-17T03:16:38.052Z
+ * Date: 2023-10-20T01:08:38.355Z
  */
 
 (function (global, factory) {
@@ -1203,13 +1203,24 @@
 
   var events = {
     bind: function bind() {
+      var _this = this;
       var options = this.options,
         viewer = this.viewer,
         canvas = this.canvas;
       var document = this.element.ownerDocument;
       addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
       addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
-      addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
+      // Use the new event binding to replace the original binding.
+      addListener(canvas, EVENT_POINTER_DOWN, function (event) {
+        _this.lastPointerPosition = {
+          x: event.pageX,
+          y: event.pageY
+        };
+        // Then call the original event handler function.
+        if (_this.pointerdown) {
+          _this.pointerdown(event);
+        }
+      });
       addListener(document, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
       addListener(document, EVENT_POINTER_UP, this.onPointerUp = this.pointerup.bind(this));
       addListener(document, EVENT_KEY_DOWN, this.onKeyDown = this.keydown.bind(this));
@@ -2243,6 +2254,16 @@
         naturalWidth = imageData.naturalWidth,
         naturalHeight = imageData.naturalHeight;
       ratio = Math.max(0, ratio);
+
+      // After determining the zoom ratio, check if a pivot has already been provided. 
+      // If not, and we have the last pointerdown position, use it to set the pivot.
+      if (!pivot && this.lastPointerPosition) {
+        var offset = getOffset(this.viewer);
+        pivot = {
+          x: this.lastPointerPosition.x - offset.left,
+          y: this.lastPointerPosition.y - offset.top
+        };
+      }
       if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
         if (!_zoomable) {
           var minZoomRatio = Math.max(0.01, options.minZoomRatio);
@@ -2284,15 +2305,15 @@
         }
         this.zooming = true;
         if (_originalEvent) {
-          var offset = getOffset(this.viewer);
+          var _offset = getOffset(this.viewer);
           var center = pointers && Object.keys(pointers).length > 0 ? getPointersCenter(pointers) : {
             pageX: _originalEvent.pageX,
             pageY: _originalEvent.pageY
           };
 
           // Zoom from the triggering point of the event
-          imageData.x -= offsetWidth * ((center.pageX - offset.left - x) / width);
-          imageData.y -= offsetHeight * ((center.pageY - offset.top - y) / height);
+          imageData.x -= offsetWidth * ((center.pageX - _offset.left - x) / width);
+          imageData.y -= offsetHeight * ((center.pageY - _offset.top - y) / height);
         } else if (isPlainObject(pivot) && isNumber(pivot.x) && isNumber(pivot.y)) {
           imageData.x -= offsetWidth * ((pivot.x - x) / width);
           imageData.y -= offsetHeight * ((pivot.y - y) / height);
@@ -2970,6 +2991,7 @@
       this.zooming = false;
       this.pointerMoved = false;
       this.id = getUniqueID();
+      this.lastPointerPosition = null; // Initialize the lastPointerPosition attribute
       this.init();
     }
     _createClass(Viewer, [{
