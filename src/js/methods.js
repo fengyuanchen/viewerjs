@@ -11,6 +11,8 @@ import {
   CLASS_TRANSITION,
   EVENT_CLICK,
   EVENT_ERROR,
+  EVENT_EXIT,
+  EVENT_FULL,
   EVENT_HIDE,
   EVENT_LOAD,
   EVENT_MOVE,
@@ -945,6 +947,7 @@ export default {
   // Enter modal mode (only available in inline mode)
   full() {
     const {
+      element,
       options,
       viewer,
       image,
@@ -952,6 +955,16 @@ export default {
     } = this;
 
     if (!this.isShown || this.played || this.fulled || !options.inline) {
+      return this;
+    }
+
+    if (isFunction(options.full)) {
+      addListener(element, EVENT_FULL, options.full, {
+        once: true,
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_FULL) === false) {
       return this;
     }
 
@@ -1003,6 +1016,7 @@ export default {
   // Exit modal mode (only available in inline mode)
   exit() {
     const {
+      element,
       options,
       viewer,
       image,
@@ -1010,6 +1024,16 @@ export default {
     } = this;
 
     if (!this.isShown || this.played || !this.fulled || !options.inline) {
+      return this;
+    }
+
+    if (isFunction(options.exit)) {
+      addListener(element, EVENT_EXIT, options.exit, {
+        once: true,
+      });
+    }
+
+    if (dispatchEvent(element, EVENT_EXIT) === false) {
       return this;
     }
 
