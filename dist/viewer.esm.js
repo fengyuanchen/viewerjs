@@ -1,13 +1,35 @@
 /*!
- * Viewer.js v1.11.6
+ * Viewer.js v1.11.7
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-09-17T03:16:38.052Z
+ * Date: 2024-11-24T04:32:19.116Z
  */
 
+function _classCallCheck(a, n) {
+  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+}
+function _defineProperties(e, r) {
+  for (var t = 0; t < r.length; t++) {
+    var o = r[t];
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
+  }
+}
+function _createClass(e, r, t) {
+  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+    writable: !1
+  }), e;
+}
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function ownKeys(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -29,6 +51,20 @@ function _objectSpread2(e) {
   }
   return e;
 }
+function _toPrimitive(t, r) {
+  if ("object" != typeof t || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != typeof i) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == typeof i ? i : i + "";
+}
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -37,56 +73,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
-  }
-}
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  Object.defineProperty(Constructor, "prototype", {
-    writable: false
-  });
-  return Constructor;
-}
-function _defineProperty(obj, key, value) {
-  key = _toPropertyKey(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-function _toPrimitive(input, hint) {
-  if (typeof input !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (typeof res !== "object") return res;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return (hint === "string" ? String : Number)(input);
-}
-function _toPropertyKey(arg) {
-  var key = _toPrimitive(arg, "string");
-  return typeof key === "symbol" ? key : String(key);
 }
 
 var DEFAULTS = {
@@ -1760,17 +1746,17 @@ var methods = {
       _this.hidden();
     };
     if (options.transition && !immediate) {
-      var onViewerTransitionEnd = function onViewerTransitionEnd(event) {
+      var _onViewerTransitionEnd = function onViewerTransitionEnd(event) {
         // Ignore all propagating `transitionend` events (#275).
         if (event && event.target === viewer) {
-          removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
+          removeListener(viewer, EVENT_TRANSITION_END, _onViewerTransitionEnd);
           _this.hidden();
         }
       };
       var onImageTransitionEnd = function onImageTransitionEnd() {
         // In case of show the viewer by `viewer.show(true)` previously (#407).
         if (hasClass(viewer, CLASS_TRANSITION)) {
-          addListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
+          addListener(viewer, EVENT_TRANSITION_END, _onViewerTransitionEnd);
           removeClass(viewer, CLASS_IN);
         } else {
           hideImmediately();
@@ -1781,7 +1767,7 @@ var methods = {
           if (_this.viewed && hasClass(image, CLASS_TRANSITION)) {
             removeListener(image, EVENT_TRANSITION_END, onImageTransitionEnd);
           } else if (hasClass(viewer, CLASS_TRANSITION)) {
-            removeListener(viewer, EVENT_TRANSITION_END, onViewerTransitionEnd);
+            removeListener(viewer, EVENT_TRANSITION_END, _onViewerTransitionEnd);
           }
         }
       };
@@ -2374,27 +2360,27 @@ var methods = {
       player.appendChild(image);
     });
     if (isNumber(options.interval) && options.interval > 0) {
-      var prev = function prev() {
+      var _prev = function prev() {
         clearTimeout(_this7.playing.timeout);
         removeClass(list[index], CLASS_IN);
         index -= 1;
         index = index >= 0 ? index : total - 1;
         addClass(list[index], CLASS_IN);
-        _this7.playing.timeout = setTimeout(prev, options.interval);
+        _this7.playing.timeout = setTimeout(_prev, options.interval);
       };
-      var next = function next() {
+      var _next = function next() {
         clearTimeout(_this7.playing.timeout);
         removeClass(list[index], CLASS_IN);
         index += 1;
         index = index < total ? index : 0;
         addClass(list[index], CLASS_IN);
-        _this7.playing.timeout = setTimeout(next, options.interval);
+        _this7.playing.timeout = setTimeout(_next, options.interval);
       };
       if (total > 1) {
         this.playing = {
-          prev: prev,
-          next: next,
-          timeout: setTimeout(next, options.interval)
+          prev: _prev,
+          next: _next,
+          timeout: setTimeout(_next, options.interval)
         };
       }
     }
@@ -2966,7 +2952,7 @@ var Viewer = /*#__PURE__*/function () {
     this.id = getUniqueID();
     this.init();
   }
-  _createClass(Viewer, [{
+  return _createClass(Viewer, [{
     key: "init",
     value: function init() {
       var _this = this;
@@ -3228,7 +3214,6 @@ var Viewer = /*#__PURE__*/function () {
       assign(DEFAULTS, isPlainObject(options) && options);
     }
   }]);
-  return Viewer;
 }();
 assign(Viewer.prototype, render, events, handlers, methods, others);
 
