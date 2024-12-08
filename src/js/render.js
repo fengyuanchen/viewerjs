@@ -187,9 +187,11 @@ export default {
 
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
-    setStyle(list, getTransforms({
+    setStyle(list, assign({
+      width: 0,
+    }, getTransforms({
       translateX: 0,
-    }));
+    })));
   },
 
   initImage(done) {
