@@ -1132,7 +1132,9 @@ export default {
   // Reset the image to its initial state
   reset() {
     if (this.viewed && !this.played) {
-      this.imageData = assign({}, this.initialImageData);
+      var _initialImageData = assign({}, this.initialImageData);
+      _initialImageData.rotate = 360 * (Math.round((this.imageData.rotate || 0) / 360));
+      this.imageData = _initialImageData;
       this.renderImage();
     }
 
