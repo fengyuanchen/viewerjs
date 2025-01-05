@@ -10,7 +10,7 @@
 ## Table of contents
 
 - [Features](#features)
-- [Main](#main)
+- [Main Files](#main-files)
 - [Getting started](#getting-started)
 - [Keyboard support](#keyboard-support)
 - [Options](#options)
