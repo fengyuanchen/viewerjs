@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.7
+ * Viewer.js v1.11.8
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2024-11-24T04:32:19.116Z
+ * Date: 2026-07-18T13:13:32.195Z
  */
 
 function _classCallCheck(a, n) {
@@ -412,9 +412,9 @@ function isPlainObject(value) {
     return false;
   }
   try {
-    var _constructor = value.constructor;
-    var prototype = _constructor.prototype;
-    return _constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf');
+    var constructor = value.constructor;
+    var prototype = constructor.prototype;
+    return constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf');
   } catch (error) {
     return false;
   }
@@ -1072,9 +1072,11 @@ var render = {
     var list = this.list;
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
-    setStyle(list, getTransforms({
+    setStyle(list, assign({
+      width: 0
+    }, getTransforms({
       translateX: 0
-    }));
+    })));
   },
   initImage: function initImage(done) {
     var _this2 = this;
@@ -2463,7 +2465,7 @@ var methods = {
   },
   // Exit modal mode (only available in inline mode)
   exit: function exit() {
-    var _this10 = this;
+    var _this0 = this;
     var options = this.options,
       viewer = this.viewer,
       image = this.image,
@@ -2495,7 +2497,7 @@ var methods = {
     this.renderList();
     if (this.viewed) {
       this.initImage(function () {
-        _this10.renderImage(function () {
+        _this0.renderImage(function () {
           if (options.transition) {
             setTimeout(function () {
               addClass(image, CLASS_TRANSITION);
@@ -2509,7 +2511,7 @@ var methods = {
   },
   // Show the current ratio of the image with percentage
   tooltip: function tooltip() {
-    var _this11 = this;
+    var _this1 = this;
     var options = this.options,
       tooltipBox = this.tooltipBox,
       imageData = this.imageData;
@@ -2544,17 +2546,17 @@ var methods = {
           removeClass(tooltipBox, CLASS_FADE);
           removeClass(tooltipBox, CLASS_TRANSITION);
           tooltipBox.setAttribute('aria-hidden', true);
-          _this11.fading = false;
+          _this1.fading = false;
         }, {
           once: true
         });
         removeClass(tooltipBox, CLASS_IN);
-        _this11.fading = true;
+        _this1.fading = true;
       } else {
         removeClass(tooltipBox, CLASS_SHOW);
         tooltipBox.setAttribute('aria-hidden', true);
       }
-      _this11.tooltipping = false;
+      _this1.tooltipping = false;
     }, 1000);
     return this;
   },
@@ -2582,7 +2584,7 @@ var methods = {
   },
   // Update viewer when images changed
   update: function update() {
-    var _this12 = this;
+    var _this10 = this;
     var element = this.element,
       options = this.options,
       isImg = this.isImg;
@@ -2594,10 +2596,10 @@ var methods = {
     var images = [];
     forEach(isImg ? [element] : element.querySelectorAll('img'), function (image) {
       if (isFunction(options.filter)) {
-        if (options.filter.call(_this12, image)) {
+        if (options.filter.call(_this10, image)) {
           images.push(image);
         }
-      } else if (_this12.getImageURL(image)) {
+      } else if (_this10.getImageURL(image)) {
         images.push(image);
       }
     });
@@ -2785,7 +2787,7 @@ var others = {
     var element = this.element,
       options = this.options,
       viewer = this.viewer;
-    if (options.fucus) {
+    if (options.focus) {
       this.clearEnforceFocus();
     }
     this.close();

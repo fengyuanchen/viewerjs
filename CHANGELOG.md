@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 1.11.8 (Jul 18, 2026)
 
 - Fix wrong `focus` option reference (#667).
 
