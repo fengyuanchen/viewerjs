@@ -3,6 +3,16 @@ declare namespace Viewer {
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
   export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | Function | ToolbarButtonOptions | undefined;
 
+  export type HTMLElementWithViewer<T extends HTMLElement = HTMLElement> = T & { viewer: Viewer<T> };
+
+  export type ViewerEventWithHTMLElement<T extends HTMLElement = HTMLElement, K extends Event = Event> = Omit<K, "currentTarget" | "target" | "srcElement"> & {
+    currentTarget: HTMLElementWithViewer<T>;
+    target: HTMLElementWithViewer<T>;
+    srcElement: HTMLElementWithViewer<T>;
+  }
+
+  export type ViewerEventListener<T extends HTMLElement = HTMLElement, K extends Event = Event> = (this: HTMLElementWithViewer<T>, event: ViewerEventWithHTMLElement<T, K>) => void;
+
   export interface ToolbarButtonOptions {
     click?: Function,
     show?: boolean | Visibility;
@@ -87,7 +97,7 @@ declare namespace Viewer {
     detail: ZoomEventData;
   }
 
-  export interface Options {
+  export interface Options<T extends HTMLElement = HTMLElement> {
     backdrop?: boolean | string;
     button?: boolean;
     className?: string;
@@ -95,8 +105,8 @@ declare namespace Viewer {
     filter?: Function;
     fullscreen?: boolean | FullscreenOptions;
     focus?: boolean;
-    hidden?(event: CustomEvent): void;
-    hide?(event: CustomEvent): void;
+    hidden?: ViewerEventListener<T, CustomEvent>;
+    hide?: ViewerEventListener<T, CustomEvent>;
     inheritedAttributes?: string[];
     initialCoverage?: number;
     initialViewIndex?: number;
@@ -110,65 +120,65 @@ declare namespace Viewer {
     minWidth?: number;
     minZoomRatio?: number;
     movable?: boolean;
-    move?(event: MoveEvent): void;
-    moved?(event: MovedEvent): void;
+    move?: ViewerEventListener<T, MoveEvent>;
+    moved?: ViewerEventListener<T, MovedEvent>;
     navbar?: boolean | Visibility;
-    play?(event: CustomEvent): void;
-    ready?(event: CustomEvent): void;
+    play?: ViewerEventListener<T, CustomEvent>;
+    ready?: ViewerEventListener<T, CustomEvent>;
     rotatable?: boolean;
-    rotate?(event: RotateEvent): void;
-    rotated?(event: RotatedEvent): void;
+    rotate?: ViewerEventListener<T, RotateEvent>;
+    rotated?: ViewerEventListener<T, RotatedEvent>;
     scalable?: boolean;
-    scale?(event: ScaleEvent): void;
-    scaled?(event: ScaledEvent): void;
-    show?(event: CustomEvent): void;
-    shown?(event: CustomEvent): void;
+    scale?: ViewerEventListener<T, ScaleEvent>;
+    scaled?: ViewerEventListener<T, ScaledEvent>;
+    show?: ViewerEventListener<T, CustomEvent>;
+    shown?: ViewerEventListener<T, CustomEvent>;
     slideOnTouch?: boolean;
-    stop?(event: CustomEvent): void;
+    stop?: ViewerEventListener<T, CustomEvent>;
     title?: boolean | Visibility | Function | [Visibility, Function];
     toggleOnDblclick?: boolean;
     toolbar?: boolean | Visibility | ToolbarOptions;
     tooltip?: boolean;
     transition?: boolean;
     url?: string | Function;
-    view?(event: CustomEvent): void;
-    viewed?(event: CustomEvent): void;
+    view?: ViewerEventListener<T, CustomEvent>;
+    viewed?: ViewerEventListener<T, CustomEvent>;
     zIndex?: number;
     zIndexInline?: number;
-    zoom?(event: ZoomEvent): void;
+    zoom?: ViewerEventListener<T, ZoomEvent>;
     zoomOnTouch?: boolean;
     zoomOnWheel?: boolean;
     zoomRatio?: number;
     zoomable?: boolean;
-    zoomed?(event: ZoomedEvent): void;
+    zoomed?: ViewerEventListener<T, ZoomedEvent>;
   }
 }
 
-declare class Viewer {
-  constructor(element: HTMLElement, options?: Viewer.Options);
-  destroy(): Viewer;
-  exit(): Viewer;
-  full(): Viewer;
-  hide(immediate?: boolean): Viewer;
-  move(offsetX: number, offsetY?: number): Viewer;
-  moveTo(x: number, y?: number): Viewer;
-  next(loop?: boolean): Viewer;
-  play(fullscreen?: boolean | FullscreenOptions): Viewer;
-  prev(loop?: boolean): Viewer;
-  reset(): Viewer;
-  rotate(degree: number): Viewer;
-  rotateTo(degree: number): Viewer;
-  scale(scaleX: number, scaleY?: number): Viewer;
-  scaleX(scaleX: number): Viewer;
-  scaleY(scaleY: number): Viewer;
-  show(immediate?: boolean): Viewer;
-  stop(): Viewer;
-  toggle(): Viewer;
-  tooltip(): Viewer;
-  update(): Viewer;
-  view(index?: number): Viewer;
-  zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
-  zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
+declare class Viewer<T extends HTMLElement = HTMLElement> {
+  constructor(element: T, options?: Viewer.Options<T>);
+  destroy(): this;
+  exit(): this;
+  full(): this;
+  hide(immediate?: boolean): this;
+  move(offsetX: number, offsetY?: number): this;
+  moveTo(x: number, y?: number): this;
+  next(loop?: boolean): this;
+  play(fullscreen?: boolean | FullscreenOptions): this;
+  prev(loop?: boolean): this;
+  reset(): this;
+  rotate(degree: number): this;
+  rotateTo(degree: number): this;
+  scale(scaleX: number, scaleY?: number): this;
+  scaleX(scaleX: number): this;
+  scaleY(scaleY: number): this;
+  show(immediate?: boolean): this;
+  stop(): this;
+  toggle(): this;
+  tooltip(): this;
+  update(): this;
+  view(index?: number): this;
+  zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): this;
+  zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): this;
   static noConflict(): Viewer;
   static setDefaults(options: Viewer.Options): void;
 }
