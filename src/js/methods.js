@@ -369,10 +369,13 @@ export default {
       }
 
       // Make the image visible if it fails to load within 1s
-      this.timeout = setTimeout(() => {
-        removeClass(image, CLASS_INVISIBLE);
-        this.timeout = false;
-      }, 1000);
+      const { timeout, hideImageBeforeLoaded } = this.options;
+      if (!hideImageBeforeLoaded) {
+        this.timeout = setTimeout(() => {
+          removeClass(image, CLASS_INVISIBLE);
+          this.timeout = false;
+        }, timeout);
+      }
     }
 
     return this;

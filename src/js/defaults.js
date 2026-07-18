@@ -232,6 +232,16 @@ export default {
    * @type {Function}
    */
   ready: null,
+  /**
+   * Hide images until they are successfully loaded
+   * @type {boolean}
+   */
+  hideImageBeforeLoaded: false,
+  /**
+   * Display images that have not been fully loaded after the time has passed
+   * @type {number}
+   */
+  timeout: 1000,
   show: null,
   shown: null,
   hide: null,
