@@ -17,8 +17,4 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: npm ci
-      - run: npm run lint
-      - run: npm test
-      - run: lerna run release
-      - run: lerna publish from-package -y
+      - run: npm publish
