@@ -228,8 +228,10 @@ export function removeClass(element, value) {
     return;
   }
 
-  if (element.className.indexOf(value) >= 0) {
-    element.className = element.className.replace(value, '');
+  const { className } = element;
+
+  if (className && className.indexOf(value) >= 0) {
+    element.className = className.split(REGEXP_SPACES).filter((item) => item && item !== value).join(' ');
   }
 }
 

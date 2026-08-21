@@ -69,7 +69,7 @@ export const EVENT_STOP = 'stop';
 export const DATA_ACTION = `${NAMESPACE}Action`;
 
 // RegExps
-export const REGEXP_SPACES = /\s\s*/;
+export const REGEXP_SPACES = /\s+/;
 
 // Misc
 export const BUTTONS = [
