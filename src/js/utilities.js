@@ -319,7 +319,7 @@ export function removeData(element, name) {
       element[name] = undefined;
     }
   } else if (element.dataset) {
-    // #128 Safari not allows to delete dataset property
+    // Safari doesn't allow deleting dataset properties
     try {
       delete element.dataset[name];
     } catch (error) {
