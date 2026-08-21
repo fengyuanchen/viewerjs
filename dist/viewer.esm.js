@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.8
+ * Viewer.js v1.11.9
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2026-07-18T13:41:00.752Z
+ * Date: 2026-08-21T13:29:40.787Z
  */
 
 function _classCallCheck(a, n) {
@@ -355,7 +355,7 @@ var EVENT_STOP = 'stop';
 var DATA_ACTION = "".concat(NAMESPACE, "Action");
 
 // RegExps
-var REGEXP_SPACES = /\s\s*/;
+var REGEXP_SPACES = /\s+/;
 
 // Misc
 var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
@@ -560,8 +560,11 @@ function removeClass(element, value) {
     element.classList.remove(value);
     return;
   }
-  if (element.className.indexOf(value) >= 0) {
-    element.className = element.className.replace(value, '');
+  var className = element.className;
+  if (className && className.indexOf(value) >= 0) {
+    element.className = className.split(REGEXP_SPACES).filter(function (item) {
+      return item && item !== value;
+    }).join(' ');
   }
 }
 
