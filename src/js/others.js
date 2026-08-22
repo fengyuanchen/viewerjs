@@ -117,6 +117,12 @@ export default {
 
   hidden() {
     const { element, options, viewer } = this;
+    const { activeElement } = viewer.ownerDocument;
+
+    // Avoid keeping focus inside the dialog before setting `aria-hidden`.
+    if (activeElement && viewer.contains(activeElement) && isFunction(activeElement.blur)) {
+      activeElement.blur();
+    }
 
     if (options.focus) {
       this.clearEnforceFocus();
