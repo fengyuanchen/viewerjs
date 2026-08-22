@@ -1,5 +1,14 @@
 # Changelog
 
+## next
+
+- Improve class name check in `hasClass` function.
+
+## 1.11.9 (Aug 21, 2026)
+
+- Add missing compressed files (#669).
+- Improve class name check in `removeClass` function.
+
 ## 1.11.8 (Jul 18, 2026)
 
 - Fix wrong `focus` option reference (#667).
