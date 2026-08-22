@@ -56,14 +56,14 @@ dist/
 npm install viewerjs
 ```
 
-In browser:
+In the browser:
 
 ```html
-<link  href="/path/to/viewer.css" rel="stylesheet">
+<link href="/path/to/viewer.css" rel="stylesheet">
 <script src="/path/to/viewer.js"></script>
 ```
 
-The [cdnjs](https://github.com/cdnjs/cdnjs) provides CDN support for Viewer.js's CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/viewerjs).
+The [cdnjs](https://github.com/cdnjs/cdnjs) project provides CDN support for Viewer.js CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/viewerjs).
 
 ### Usage
 
@@ -75,11 +75,11 @@ new Viewer(element[, options])
 
 - **element**
   - Type: `HTMLElement`
-  - The target image or container of images for viewing.
+  - The target image, or a container of images, for viewing.
 
 - **options** (optional)
   - Type: `Object`
-  - The options for viewing. Check out the available [options](#options).
+  - The options for viewing. See the available [options](#options).
 
 #### Example
 
@@ -110,12 +110,12 @@ const viewer = new Viewer(document.getElementById('image'), {
     viewer.zoomTo(1);
   },
 });
-// Then, show the image by clicking it, or call `viewer.show()`.
+// Then show the image by clicking it, or call `viewer.show()`.
 
 // View a list of images.
-// Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
+// Note: all images within the container will be found by calling `element.querySelectorAll('img')`.
 const gallery = new Viewer(document.getElementById('images'));
-// Then, show one image by click it, or call `gallery.show()`.
+// Then show one image by clicking it, or call `gallery.show()`.
 ```
 
 ## Keyboard support
@@ -138,7 +138,7 @@ const gallery = new Viewer(document.getElementById('images'));
 ## Options
 
 You may set viewer options with `new Viewer(image, options)`.
-If you want to change the global default options, You may use `Viewer.setDefaults(options)`.
+If you want to change the global default options, you may use `Viewer.setDefaults(options)`.
 
 ### backdrop
 
@@ -178,9 +178,9 @@ Specify the visibility of the navbar.
   - `3`: show the title only when the screen width is greater than 992 pixels
   - `4`: show the title only when the screen width is greater than 1200 pixels
   - `Function`: customize the title content
-  - `[Number, Function]`: the first element indicate the visibility, the second element customize the title content
+  - `[Number, Function]`: the first element indicates the visibility; the second element customizes the title content
 
-Specify the visibility and the content of the title.
+Specify the visibility and content of the title.
 
 > The name comes from the `alt` attribute of an image element or the image name parsed from its URL.
 
@@ -209,7 +209,7 @@ new Viewer(image, {
   - Available built-in keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal", "flipVertical".
   - Available built-in sizes: "small", "medium" (default) and "large".
 
-Specify the visibility and layout of the toolbar its buttons.
+Specify the visibility and layout of the toolbar and its buttons.
 
 For example, `toolbar: 4` equals to:
 
@@ -295,7 +295,7 @@ Define the extra attributes to inherit from the original image.
 - Type: `Number`
 - Default: `0.9`
 
-Define the initial coverage of the viewing image. It must a positive number between 0 (0%) and 1 (100%).
+Define the initial coverage of the viewing image. It must be a positive number between 0 (0%) and 1 (100%).
 
 ### initialViewIndex
 
@@ -424,9 +424,9 @@ Enable to slide to the next or previous image by swiping on the touch screen.
 - Type: `Boolean`
 - Default: `true`
 
-Indicate if toggle the image size between its natural size and initial size when double click on the image or not.
+Indicate whether to toggle the image size between its natural size and initial size when double-clicking the image.
 
-In other words, call the [`toggle`](#toggle) method automatically when double click on the image.
+In other words, call the [`toggle`](#toggle) method automatically when the image is double-clicked.
 
 > Requires [`dblclick`](https://developer.mozilla.org/en-US/docs/Web/Events/dblclick) event support.
 
@@ -442,7 +442,7 @@ Show the tooltip with image ratio (percentage) when zooming in or zooming out.
 - Type: `Boolean`
 - Default: `true`
 
-Enable CSS3 Transition for some special elements.
+Enable CSS3 transitions for some special elements.
 
 ### zIndex
 
@@ -626,9 +626,9 @@ Shortcut of the `stop` event.
 
 ## Methods
 
-All methods allow chain composition.
+All methods support chain composition.
 
-As there are some **asynchronous** processes when start the viewer, you should call a method only when it is available, see the following **lifecycle**:
+As there are some **asynchronous** processes when starting the viewer, you should call a method only when it is available. See the following **lifecycle**:
 
 ```js
 new Viewer(image, {
@@ -856,9 +856,9 @@ viewer.zoomTo(0); // Zoom to zero size (0%)
 viewer.zoomTo(1); // Zoom to natural size (100%)
 
 // Zoom to 50% from the center of the window.
-viewer.zoomTo(.5, {
+viewer.zoomTo(0.5, false, {
   x: window.innerWidth / 2,
-  y: viewer.innerHeight / 2,
+  y: window.innerHeight / 2,
 });
 ```
 
@@ -867,7 +867,7 @@ viewer.zoomTo(.5, {
 - **fullscreen** (optional):
   - Type: `Boolean` or [`FullscreenOptions`](https://developer.mozilla.org/en-US/docs/Web/API/FullscreenOptions)
   - Default: `false`
-  - Indicate if request fullscreen or not.
+  - Indicates whether to request fullscreen.
 
 Play the images.
 
