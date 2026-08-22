@@ -11,6 +11,9 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'no-param-reassign': 'off',
     'no-restricted-properties': 'off',
+    'sort-imports': ['error', {
+      ignoreDeclarationSort: true,
+    }],
     'valid-jsdoc': ['error', {
       requireReturn: false,
     }],
