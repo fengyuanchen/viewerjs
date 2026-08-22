@@ -12,6 +12,7 @@ import {
   EVENT_CLICK,
   EVENT_ERROR,
   EVENT_HIDE,
+  EVENT_KEY_DOWN,
   EVENT_LOAD,
   EVENT_MOVE,
   EVENT_MOVED,
@@ -1277,7 +1278,8 @@ export default {
     }
 
     if (!options.inline) {
-      removeListener(element, EVENT_CLICK, this.onStart);
+      removeListener(element, EVENT_CLICK, this.onElementClick);
+      removeListener(element, EVENT_KEY_DOWN, this.onElementKeyDown);
     }
 
     element[NAMESPACE] = undefined;

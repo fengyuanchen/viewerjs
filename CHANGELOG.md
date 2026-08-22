@@ -2,6 +2,7 @@
 
 ## next
 
+- Add keyboard support for opening gallery images and clean up the related event listeners.
 - Improve class name check in `hasClass` function.
 
 ## 1.11.9 (Aug 21, 2026)

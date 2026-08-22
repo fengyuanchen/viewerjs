@@ -16,6 +16,7 @@ import {
   DATA_ACTION,
   EVENT_CLICK,
   EVENT_ERROR,
+  EVENT_KEY_DOWN,
   EVENT_LOAD,
   EVENT_READY,
   NAMESPACE,
@@ -182,9 +183,20 @@ class Viewer {
         }
       });
     } else {
-      addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
+      addListener(element, EVENT_CLICK, (this.onElementClick = ({ target }) => {
         if (target.localName === 'img' && (!isFunction(options.filter) || options.filter.call(this, target))) {
           this.view(this.images.indexOf(target));
+        }
+      }));
+      addListener(element, EVENT_KEY_DOWN, (this.onElementKeyDown = (event) => {
+        const { target, key } = event;
+
+        if (target.localName === 'img' && (key === 'Enter' || key === ' ')) {
+          event.preventDefault();
+
+          if (!isFunction(options.filter) || options.filter.call(this, target)) {
+            this.view(this.images.indexOf(target));
+          }
         }
       }));
     }
