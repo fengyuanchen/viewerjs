@@ -118,19 +118,16 @@ window.onload = function () {
       if (target) {
         viewer[method](document.querySelector(target).value);
       } else {
+        if (method === 'scaleX' || method === 'scaleY') {
+          args[0] = -(viewer.imageData[method] || 1);
+        }
+
         viewer[method](args[0], args[1]);
       }
 
-      switch (method) {
-        case 'scaleX':
-        case 'scaleY':
-          args[0] = -args[0];
-          break;
-
-        case 'destroy':
-          viewer = null;
-          toggleButtons('none');
-          break;
+      if (method === 'destroy') {
+        viewer = null;
+        toggleButtons('none');
       }
     }
   };
