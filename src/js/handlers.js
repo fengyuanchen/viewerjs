@@ -444,7 +444,9 @@ export default {
       clearTimeout(this.doubleClickImageTimeout);
 
       if (options.toggleOnDblclick && this.viewed && event.target === this.image) {
-        if (this.imageClicked) {
+        if (this.pointerMoved) {
+          this.imageClicked = false;
+        } else if (this.imageClicked) {
           this.imageClicked = false;
 
           // This timeout will be cleared later when a native dblclick event is triggering

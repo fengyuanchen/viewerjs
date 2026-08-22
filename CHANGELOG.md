@@ -5,6 +5,7 @@
 - Add keyboard support for opening gallery images and clean up the related event listeners.
 - Improve class name check in `hasClass` function.
 - Avoid `aria-hidden` focus conflict when closing the viewer via the close button (#648).
+- Prevent image dragging from being recognized as a double click (#646).
 
 ## 1.11.9 (Aug 21, 2026)
 
