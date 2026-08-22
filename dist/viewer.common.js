@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.11.9
+ * Viewer.js v1.12.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2026-08-21T13:29:40.787Z
+ * Date: 2026-08-22T13:00:39.652Z
  */
 
 'use strict';
@@ -513,7 +513,7 @@ function hasClass(element, value) {
   if (!element || !value) {
     return false;
   }
-  return element.classList ? element.classList.contains(value) : element.className.indexOf(value) > -1;
+  return element.classList ? element.classList.contains(value) : element.className.split(REGEXP_SPACES).indexOf(value) > -1;
 }
 
 /**
@@ -1566,7 +1566,9 @@ var handlers = {
       clearTimeout(this.clickCanvasTimeout);
       clearTimeout(this.doubleClickImageTimeout);
       if (options.toggleOnDblclick && this.viewed && event.target === this.image) {
-        if (this.imageClicked) {
+        if (this.pointerMoved) {
+          this.imageClicked = false;
+        } else if (this.imageClicked) {
           this.imageClicked = false;
 
           // This timeout will be cleared later when a native dblclick event is triggering
@@ -2705,7 +2707,8 @@ var methods = {
       }
     }
     if (!options.inline) {
-      removeListener(element, EVENT_CLICK, this.onStart);
+      removeListener(element, EVENT_CLICK, this.onElementClick);
+      removeListener(element, EVENT_KEY_DOWN, this.onElementKeyDown);
     }
     element[NAMESPACE] = undefined;
     return this;
@@ -2792,6 +2795,12 @@ var others = {
     var element = this.element,
       options = this.options,
       viewer = this.viewer;
+    var activeElement = viewer.ownerDocument.activeElement;
+
+    // Avoid keeping focus inside the dialog before setting `aria-hidden`.
+    if (activeElement && viewer.contains(activeElement) && isFunction(activeElement.blur)) {
+      activeElement.blur();
+    }
     if (options.focus) {
       this.clearEnforceFocus();
     }
@@ -3045,10 +3054,20 @@ var Viewer = /*#__PURE__*/function () {
           }
         });
       } else {
-        addListener(element, EVENT_CLICK, this.onStart = function (_ref) {
+        addListener(element, EVENT_CLICK, this.onElementClick = function (_ref) {
           var target = _ref.target;
           if (target.localName === 'img' && (!isFunction(options.filter) || options.filter.call(_this, target))) {
             _this.view(_this.images.indexOf(target));
+          }
+        });
+        addListener(element, EVENT_KEY_DOWN, this.onElementKeyDown = function (event) {
+          var target = event.target,
+            key = event.key;
+          if (target.localName === 'img' && (key === 'Enter' || key === ' ')) {
+            event.preventDefault();
+            if (!isFunction(options.filter) || options.filter.call(_this, target)) {
+              _this.view(_this.images.indexOf(target));
+            }
           }
         });
       }
