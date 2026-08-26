@@ -58,6 +58,8 @@ export default {
       };
 
       this.parentData = viewerData;
+
+      this.initParentResizeObserver();
     }
 
     if (this.fulled || !viewerData) {
@@ -71,6 +73,44 @@ export default {
     if (this.options.inline && !this.fulled) {
       setStyle(this.viewer, this.viewerData);
     }
+  },
+
+  initParentResizeObserver() {
+    const { parent, options } = this;
+
+    if (this.parentResizeObserver) {
+      this.parentResizeObserver.disconnect();
+      this.parentResizeObserver = null;
+    }
+
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    this.parentResizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+
+      const { width, height } = entry.contentRect;
+      const newViewerData = {
+        width: Math.max(width, options.minWidth),
+        height: Math.max(height, options.minHeight),
+      };
+
+      if (newViewerData.width !== this.viewerData.width
+          || newViewerData.height !== this.viewerData.height) {
+        this.viewerData = assign({}, newViewerData);
+        this.renderViewer();
+
+        if (this.viewed) {
+          this.initImage(() => {
+            this.renderImage();
+          });
+        }
+      }
+    });
+
+    this.parentResizeObserver.observe(parent);
   },
 
   initList() {

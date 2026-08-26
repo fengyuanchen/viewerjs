@@ -1235,6 +1235,11 @@ export default {
       return this;
     }
 
+    if (this.parentResizeObserver) {
+      this.parentResizeObserver.disconnect();
+      this.parentResizeObserver = null;
+    }
+
     this.destroyed = true;
 
     if (this.ready) {
