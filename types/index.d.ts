@@ -158,8 +158,9 @@ declare class Viewer {
   view(index?: number): Viewer;
   zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
   zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
-  static noConflict(): Viewer;
+  static create(element: HTMLElement, options?: Viewer.Options): Viewer;
   static setDefaults(options: Viewer.Options): void;
+  static noConflict(): Viewer;
 }
 
 declare module 'viewerjs' {

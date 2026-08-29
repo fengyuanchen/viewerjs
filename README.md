@@ -7,17 +7,17 @@
 - [Website](https://fengyuanchen.github.io/viewerjs)
 - [jquery-viewer](https://github.com/fengyuanchen/jquery-viewer) - A jQuery plugin wrapper for Viewer.js.
 
-## Table of contents
+## Table of Contents
 
 - [Features](#features)
 - [Main Files](#main-files)
-- [Getting started](#getting-started)
-- [Keyboard support](#keyboard-support)
+- [Getting Started](#getting-started)
+- [Keyboard Support](#keyboard-support)
 - [Options](#options)
 - [Methods](#methods)
+- [Static Methods](#static-methods)
 - [Events](#events)
-- [No conflict](#no-conflict)
-- [Browser support](#browser-support)
+- [Browser Support](#browser-support)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
 - [License](#license)
@@ -36,7 +36,7 @@
 - Supports keyboard
 - Cross-browser support
 
-## Main files
+## Main Files
 
 ```text
 dist/
@@ -48,7 +48,7 @@ dist/
 └── viewer.esm.js    (ES Module)
 ```
 
-## Getting started
+## Getting Started
 
 ### Installation
 
@@ -75,11 +75,13 @@ new Viewer(element[, options])
 
 - **element**
   - Type: `HTMLElement`
-  - The target image, or a container of images, for viewing.
+  - The target image, or a container of images, to view.
 
 - **options** (optional)
   - Type: `Object`
-  - The options for viewing. See the available [options](#options).
+  - The configuration options. Check out the available [options](#options).
+
+Alternatively, you may use `Viewer.create(element[, options])`.
 
 #### Example
 
@@ -118,7 +120,7 @@ const gallery = new Viewer(document.getElementById('images'));
 // Then show one image by clicking it, or call `gallery.show()`.
 ```
 
-## Keyboard support
+## Keyboard Support
 
 > Only available in modal mode.
 
@@ -915,6 +917,43 @@ Destroy the viewer and remove the instance.
 
 [⬆ back to top](#table-of-contents)
 
+## Static Methods
+
+### create(element[, options])
+
+Create a new `Viewer` instance without using the `new` operator.
+
+```js
+const viewer = Viewer.create(image, {
+  inline: true,
+});
+```
+
+### setDefaults(options)
+
+Change the global default options for subsequently created `Viewer` instances. Instance options override these defaults.
+
+```js
+Viewer.setDefaults({
+  inline: true,
+});
+```
+
+### noConflict
+
+If you have to use another viewer with the same namespace, call the `Viewer.noConflict` static method to revert to it.
+
+```html
+<script src="other-viewer.js"></script>
+<script src="viewer.js"></script>
+<script>
+  Viewer.noConflict();
+  // Code that uses other `Viewer` can follow here.
+</script>
+```
+
+[⬆ back to top](#table-of-contents)
+
 ## Events
 
 All events can access the viewer instance with `this.viewer` in its handler.
@@ -1130,20 +1169,7 @@ This event fires when the viewer starts to stop.
 
 [⬆ back to top](#table-of-contents)
 
-## No conflict
-
-If you have to use another viewer with the same namespace, call the `Viewer.noConflict` static method to revert to it.
-
-```html
-<script src="other-viewer.js"></script>
-<script src="viewer.js"></script>
-<script>
-  Viewer.noConflict();
-  // Code that uses other `Viewer` can follow here.
-</script>
-```
-
-## Browser support
+## Browser Support
 
 - Chrome (latest)
 - Firefox (latest)

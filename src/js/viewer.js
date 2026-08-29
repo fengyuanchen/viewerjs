@@ -51,7 +51,7 @@ const getUniqueID = ((id) => (() => {
 class Viewer {
   /**
    * Create a new Viewer.
-   * @param {Element} element - The target element for viewing.
+   * @param {Element} element - The target image, or a container of images, to view.
    * @param {Object} [options={}] - The configuration options.
    */
   constructor(element, options = {}) {
@@ -391,12 +391,13 @@ class Viewer {
   }
 
   /**
-   * Get the no conflict viewer class.
-   * @returns {Viewer} The viewer class.
+   * Create a new Viewer instance.
+   * @param {Element} element - The target image, or a container of images, to view.
+   * @param {Object} [options={}] - The configuration options.
+   * @returns {Viewer} A new Viewer instance.
    */
-  static noConflict() {
-    window.Viewer = AnotherViewer;
-    return Viewer;
+  static create(element, options) {
+    return new Viewer(element, options);
   }
 
   /**
@@ -405,6 +406,15 @@ class Viewer {
    */
   static setDefaults(options) {
     assign(DEFAULTS, isPlainObject(options) && options);
+  }
+
+  /**
+   * Get the no conflict viewer class.
+   * @returns {Viewer} The viewer class.
+   */
+  static noConflict() {
+    window.Viewer = AnotherViewer;
+    return Viewer;
   }
 }
 

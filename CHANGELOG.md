@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
+
 ## 1.12.0 (Aug 22, 2026)
 
 - Add keyboard support for opening images in the gallery and clean up the related event listeners.
