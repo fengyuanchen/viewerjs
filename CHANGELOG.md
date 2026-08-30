@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
+- Add a new `autoplay` option to disable automatic image cycling when playing (#608).
 
 ## 1.12.0 (Aug 22, 2026)
 

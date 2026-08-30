@@ -31,4 +31,22 @@ describe('play (method)', () => {
       },
     });
   });
+
+  it('should not automatically cycle images when autoplay is disabled', (done) => {
+    const imageList = window.createImageList();
+    const viewer = new Viewer(imageList, {
+      autoplay: false,
+
+      viewed() {
+        viewer.play();
+        expect(viewer.played).to.be.true;
+        expect(viewer.playing).to.be.an('object');
+        expect(viewer.playing.timeout).to.be.null;
+        viewer.hide(true);
+        done();
+      },
+    });
+
+    viewer.show();
+  });
 });

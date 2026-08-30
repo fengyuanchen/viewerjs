@@ -89,6 +89,12 @@ export default {
   inline: false,
 
   /**
+  * Enable to automatically play the images when playing.
+  * @type {boolean}
+  */
+  autoplay: true,
+
+  /**
    * The amount of time to delay between automatically cycling an image when playing.
    * @type {number}
    */

@@ -315,6 +315,13 @@ Define the initial index of the image for viewing.
 
 Enable inline mode.
 
+### autoplay
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to automatically cycle the images when playing.
+
 ### interval
 
 - Type: `Number`

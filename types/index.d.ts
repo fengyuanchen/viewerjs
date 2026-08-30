@@ -90,6 +90,7 @@ declare namespace Viewer {
     initialCoverage?: number;
     initialViewIndex?: number;
     inline?: boolean;
+    autoplay?: boolean;
     interval?: number;
     keyboard?: boolean;
     loading?: boolean;

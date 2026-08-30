@@ -887,7 +887,7 @@ export default {
         index -= 1;
         index = index >= 0 ? index : total - 1;
         addClass(list[index], CLASS_IN);
-        this.playing.timeout = setTimeout(prev, options.interval);
+        this.playing.timeout = options.autoplay ? setTimeout(prev, options.interval) : null;
       };
       const next = () => {
         clearTimeout(this.playing.timeout);
@@ -895,14 +895,14 @@ export default {
         index += 1;
         index = index < total ? index : 0;
         addClass(list[index], CLASS_IN);
-        this.playing.timeout = setTimeout(next, options.interval);
+        this.playing.timeout = options.autoplay ? setTimeout(next, options.interval) : null;
       };
 
       if (total > 1) {
         this.playing = {
           prev,
           next,
-          timeout: setTimeout(next, options.interval),
+          timeout: options.autoplay ? setTimeout(next, options.interval) : null,
         };
       }
     }
