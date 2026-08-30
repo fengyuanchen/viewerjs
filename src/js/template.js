@@ -1,6 +1,10 @@
 export default (
   '<div class="viewer-container" tabindex="-1" touch-action="none">'
     + '<div class="viewer-canvas"></div>'
+    + '<div class="viewer-navigation">'
+      + '<div class="viewer-prev" data-viewer-action="prev" role="button" aria-label="Previous"></div>'
+      + '<div class="viewer-next" data-viewer-action="next" role="button" aria-label="Next"></div>'
+    + '</div>'
     + '<div class="viewer-footer">'
       + '<div class="viewer-title"></div>'
       + '<div class="viewer-toolbar"></div>'

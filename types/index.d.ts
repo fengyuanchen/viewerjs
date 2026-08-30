@@ -29,6 +29,18 @@ declare namespace Viewer {
     [x: string]: ToolbarOption;
   }
 
+  export interface NavigationButtonOptions {
+    show?: boolean | Visibility;
+    size?: ToolbarButtonSize;
+  }
+
+  export type NavigationOption = boolean | Visibility | NavigationButtonOptions | undefined;
+
+  export interface NavigationOptions {
+    next?: NavigationOption;
+    prev?: NavigationOption;
+  }
+
   export interface TransitionOptions {
     hide?: boolean;
     move?: boolean;
@@ -115,6 +127,7 @@ declare namespace Viewer {
     move?: EventHandler<MoveEvent>;
     moved?: EventHandler<MovedEvent>;
     navbar?: boolean | Visibility;
+    navigation?: boolean | Visibility | NavigationOptions;
     play?: EventHandler;
     preload?: boolean;
     ready?: EventHandler;

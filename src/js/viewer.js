@@ -29,6 +29,7 @@ import {
   assign,
   dispatchEvent,
   forEach,
+  getData,
   getResponsiveClass,
   hyphenate,
   isFunction,
@@ -217,6 +218,7 @@ class Viewer {
     const title = viewer.querySelector(`.${NAMESPACE}-title`);
     const toolbar = viewer.querySelector(`.${NAMESPACE}-toolbar`);
     const navbar = viewer.querySelector(`.${NAMESPACE}-navbar`);
+    const navigation = viewer.querySelector(`.${NAMESPACE}-navigation`);
     const button = viewer.querySelector(`.${NAMESPACE}-button`);
     const canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
 
@@ -225,6 +227,7 @@ class Viewer {
     this.title = title;
     this.toolbar = toolbar;
     this.navbar = navbar;
+    this.navigation = navigation;
     this.button = button;
     this.canvas = canvas;
     this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
@@ -238,10 +241,41 @@ class Viewer {
       ? options.title[0]
       : options.title));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
+
+    if (isPlainObject(options.navigation)) {
+      forEach(navigation.querySelectorAll('[role="button"]'), (item) => {
+        const name = getData(item, DATA_ACTION);
+        const value = options.navigation[name];
+        const deep = isPlainObject(value);
+        const show = deep && !isUndefined(value.show) ? value.show : value;
+        const size = deep && !isUndefined(value.size)
+          ? value.size
+          : value;
+
+        toggleClass(item, CLASS_HIDE, !show);
+
+        if (isNumber(show)) {
+          addClass(item, getResponsiveClass(show));
+        }
+
+        if (['small', 'large'].indexOf(size) !== -1) {
+          addClass(item, `${NAMESPACE}-${size}`);
+        }
+      });
+    } else {
+      addClass(
+        navigation,
+        !options.navigation ? CLASS_HIDE : getResponsiveClass(options.navigation),
+      );
+    }
+
     toggleClass(button, CLASS_HIDE, !options.button);
 
     if (options.keyboard) {
       button.setAttribute('tabindex', 0);
+      forEach(navigation.querySelectorAll('[role="button"]'), (item) => {
+        item.setAttribute('tabindex', 0);
+      });
     }
 
     if (options.backdrop) {

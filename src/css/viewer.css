@@ -146,6 +146,66 @@
   }
 }
 
+.viewer-navigation {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+
+  & > .viewer-prev,
+  & > .viewer-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 40px;
+    margin-top: -20px;
+    position: absolute;
+    width: 40px;
+
+    &:focus,
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    &:focus {
+      box-shadow: 0 0 3px #fff;
+      outline: 0;
+    }
+
+    &::before {
+      margin: 10px;
+    }
+  }
+
+  & > .viewer-prev {
+    left: 15px;
+  }
+
+  & > .viewer-next {
+    right: 15px;
+  }
+
+  & > .viewer-large {
+    height: 48px;
+    margin-top: -24px;
+    width: 48px;
+
+    &::before {
+      margin: 14px;
+    }
+  }
+
+  & > .viewer-small {
+    height: 32px;
+    margin-top: -16px;
+    width: 32px;
+
+    &::before {
+      margin: 6px;
+    }
+  }
+}
+
 .viewer-footer {
   bottom: 0;
   left: 0;
@@ -329,6 +389,7 @@
 }
 
 .viewer-button {
+  -webkit-app-region: no-drag;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
@@ -339,7 +400,6 @@
   top: -40px;
   transition: background-color 0.15s;
   width: 80px;
-  -webkit-app-region: no-drag;
 
   &:focus,
   &:hover {

@@ -19,6 +19,12 @@ export default {
   navbar: true,
 
   /**
+   * Show the navigation buttons.
+    * @type {boolean | number | Object}
+   */
+  navigation: false,
+
+  /**
    * Specify the visibility and the content of the title.
    * @type {boolean | number | Function | Array}
    */

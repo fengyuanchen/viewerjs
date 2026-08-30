@@ -169,6 +169,39 @@ Show the button on the top-right of the viewer.
 
 Specify the visibility of the navbar.
 
+### navigation
+
+- Type: `Boolean` or `Number` or `Object`
+- Default: `false`
+
+- Options:
+  - `0` or `false`: hide the navigation buttons.
+  - `1` or `true`: show the navigation buttons.
+  - `2`: show the navigation buttons only when the screen width is greater than 768 pixels.
+  - `3`: show the navigation buttons only when the screen width is greater than 992 pixels.
+  - `4`: show the navigation buttons only when the screen width is greater than 1200 pixels.
+  - `{ prev: Boolean | Number | Object, next: Boolean | Number | Object }`: show or hide each navigation button.
+  - `{ prev: { show: Boolean | Number, size: String }, next: { show: Boolean | Number, size: String } }`: customize each navigation button.
+  - Available sizes: `small` (32px), `medium` (40px, default), and `large` (48px).
+
+Show the previous and next buttons on the left and right sides of the viewer.
+
+For example:
+
+```js
+new Viewer(image, {
+  navigation: {
+    prev: {
+      size: 'large',
+    },
+    next: {
+      show: 2,
+      size: 'small',
+    },
+  },
+});
+```
+
 ### title
 
 - Type: `Boolean` or `Number` or `Function` or `Array`
