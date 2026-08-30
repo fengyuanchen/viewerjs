@@ -14,7 +14,6 @@ import {
   IS_TOUCH_DEVICE,
 } from './constants';
 import {
-  addClass,
   addListener,
   assign,
   dispatchEvent,
@@ -25,6 +24,7 @@ import {
   getTransforms,
   isFunction,
   isNumber,
+  isTransitionEnabled,
   removeClass,
   setStyle,
   toggleClass,
@@ -171,7 +171,7 @@ export default {
       toggleClass(
         image,
         CLASS_TRANSITION,
-        options.transition && options.transition.view !== false,
+        isTransitionEnabled(options, 'view'),
       );
 
       this.renderImage(() => {
@@ -387,7 +387,7 @@ export default {
       action = ACTION_SWITCH;
     }
 
-    if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
+    if (action === ACTION_MOVE || action === ACTION_ZOOM) {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
@@ -434,8 +434,8 @@ export default {
 
     event.preventDefault();
 
-    if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
-      addClass(this.image, CLASS_TRANSITION);
+    if (action === ACTION_MOVE || action === ACTION_ZOOM) {
+      toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, action));
     }
 
     this.action = false;

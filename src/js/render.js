@@ -17,6 +17,7 @@ import {
   hasClass,
   inheritAttributes,
   isNumber,
+  isTransitionEnabled,
   removeClass,
   removeListener,
   setData,
@@ -147,7 +148,7 @@ export default {
       });
     });
 
-    if (options.transition) {
+    if (isTransitionEnabled(options, 'view')) {
       addListener(element, EVENT_VIEWED, () => {
         addClass(list, CLASS_TRANSITION);
       }, {
@@ -273,8 +274,22 @@ export default {
     }, getTransforms(imageData)));
 
     if (done) {
-      if ((this.viewing || this.moving || this.rotating || this.scaling || this.zooming)
-        && this.options.transition
+      let action = false;
+
+      if (this.viewing) {
+        action = 'view';
+      } else if (this.moving) {
+        action = 'move';
+      } else if (this.rotating) {
+        action = 'rotate';
+      } else if (this.scaling) {
+        action = 'scale';
+      } else if (this.zooming) {
+        action = 'zoom';
+      }
+
+      if (action
+        && isTransitionEnabled(this.options, action)
         && hasClass(image, CLASS_TRANSITION)) {
         const onTransitionEnd = () => {
           this.imageRendering = false;

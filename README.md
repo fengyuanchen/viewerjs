@@ -460,12 +460,14 @@ Show the tooltip with image ratio (percentage) when zooming in or zooming out.
 
 Enable CSS3 transitions for some special elements.
 
-Set `transition.view` to `false` to disable the transition when viewing an image while keeping transitions for subsequent transformations:
+When passing an object, set a supported action to `false` to disable only its transition. The supported actions are `show`, `hide`, `view`, `move`, `zoom`, `rotate`, `scale`, `play`, and `tooltip`.
 
 ```js
 new Viewer(image, {
   transition: {
+    hide: false,
     view: false,
+    zoom: false,
   },
 });
 ```

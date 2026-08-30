@@ -45,6 +45,7 @@ import {
   isFunction,
   isNumber,
   isPlainObject,
+  isTransitionEnabled,
   isUndefined,
   removeClass,
   removeListener,
@@ -99,7 +100,7 @@ export default {
     viewer.setAttribute('aria-modal', true);
     viewer.removeAttribute('aria-hidden');
 
-    if (options.transition && !immediate) {
+    if (isTransitionEnabled(options, 'show') && !immediate) {
       const shown = this.shown.bind(this);
 
       this.transitioning = {
@@ -165,7 +166,7 @@ export default {
       this.hidden();
     };
 
-    if (options.transition && !immediate) {
+    if (isTransitionEnabled(options, 'hide') && !immediate) {
       const onViewerTransitionEnd = (event) => {
         // Ignore all propagating `transitionend` events (#275).
         if (event && event.target === viewer) {
@@ -500,6 +501,7 @@ export default {
         imageData.y = y;
         imageData.left = x;
         imageData.top = y;
+        toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'move'));
         this.moving = true;
         this.renderImage(() => {
           this.moving = false;
@@ -564,6 +566,7 @@ export default {
       }
 
       imageData.rotate = degree;
+      toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'rotate'));
       this.rotating = true;
       this.renderImage(() => {
         this.rotating = false;
@@ -655,6 +658,7 @@ export default {
 
         imageData.scaleX = scaleX;
         imageData.scaleY = scaleY;
+        toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'scale'));
         this.scaling = true;
         this.renderImage(() => {
           this.scaling = false;
@@ -813,6 +817,7 @@ export default {
       imageData.height = newHeight;
       imageData.oldRatio = oldRatio;
       imageData.ratio = ratio;
+      toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'zoom'));
       this.renderImage(() => {
         this.zooming = false;
 
@@ -884,7 +889,7 @@ export default {
       image.referrerPolicy = img.referrerPolicy;
       total += 1;
       addClass(image, CLASS_FADE);
-      toggleClass(image, CLASS_TRANSITION, options.transition);
+      toggleClass(image, CLASS_TRANSITION, isTransitionEnabled(options, 'play'));
 
       if (hasClass(item, CLASS_ACTIVE)) {
         addClass(image, CLASS_IN);
@@ -978,12 +983,10 @@ export default {
     this.open();
     addClass(this.button, CLASS_FULLSCREEN_EXIT);
 
-    if (options.transition) {
-      removeClass(list, CLASS_TRANSITION);
+    removeClass(list, CLASS_TRANSITION);
 
-      if (this.viewed) {
-        removeClass(image, CLASS_TRANSITION);
-      }
+    if (this.viewed) {
+      removeClass(image, CLASS_TRANSITION);
     }
 
     addClass(viewer, CLASS_FIXED);
@@ -1005,14 +1008,7 @@ export default {
 
     if (this.viewed) {
       this.initImage(() => {
-        this.renderImage(() => {
-          if (options.transition) {
-            setTimeout(() => {
-              addClass(image, CLASS_TRANSITION);
-              addClass(list, CLASS_TRANSITION);
-            }, 0);
-          }
-        });
+        this.renderImage();
       });
     }
 
@@ -1036,12 +1032,10 @@ export default {
     this.close();
     removeClass(this.button, CLASS_FULLSCREEN_EXIT);
 
-    if (options.transition) {
-      removeClass(list, CLASS_TRANSITION);
+    removeClass(list, CLASS_TRANSITION);
 
-      if (this.viewed) {
-        removeClass(image, CLASS_TRANSITION);
-      }
+    if (this.viewed) {
+      removeClass(image, CLASS_TRANSITION);
     }
 
     if (options.focus) {
@@ -1062,14 +1056,7 @@ export default {
 
     if (this.viewed) {
       this.initImage(() => {
-        this.renderImage(() => {
-          if (options.transition) {
-            setTimeout(() => {
-              addClass(image, CLASS_TRANSITION);
-              addClass(list, CLASS_TRANSITION);
-            }, 0);
-          }
-        });
+        this.renderImage();
       });
     }
 
@@ -1087,7 +1074,7 @@ export default {
     tooltipBox.textContent = `${Math.round(imageData.ratio * 100)}%`;
 
     if (!this.tooltipping) {
-      if (options.transition) {
+      if (isTransitionEnabled(options, 'tooltip')) {
         if (this.fading) {
           dispatchEvent(tooltipBox, EVENT_TRANSITION_END);
         }
@@ -1109,7 +1096,7 @@ export default {
     }
 
     this.tooltipping = setTimeout(() => {
-      if (options.transition) {
+      if (isTransitionEnabled(options, 'tooltip')) {
         addListener(tooltipBox, EVENT_TRANSITION_END, () => {
           removeClass(tooltipBox, CLASS_SHOW);
           removeClass(tooltipBox, CLASS_FADE);

@@ -30,7 +30,15 @@ declare namespace Viewer {
   }
 
   export interface TransitionOptions {
+    hide?: boolean;
+    move?: boolean;
+    play?: boolean;
+    rotate?: boolean;
+    scale?: boolean;
+    show?: boolean;
+    tooltip?: boolean;
     view?: boolean;
+    zoom?: boolean;
   }
 
   export interface Pivot {

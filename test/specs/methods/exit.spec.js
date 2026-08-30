@@ -37,4 +37,24 @@ describe('exit (method)', () => {
 
     viewer.show();
   });
+
+  it('should not transition when exiting modal mode', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      inline: true,
+
+      viewed() {
+        const { renderImage } = viewer;
+
+        viewer.full();
+        viewer.renderImage = () => {
+          expect(viewer.image.className).to.not.include('viewer-transition');
+          expect(viewer.list.className).to.not.include('viewer-transition');
+          viewer.renderImage = renderImage;
+          done();
+        };
+        viewer.exit();
+      },
+    });
+  });
 });

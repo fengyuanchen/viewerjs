@@ -123,6 +123,18 @@ export function inheritAttributes(image, originalImage, inheritedAttributes) {
 }
 
 /**
+ * Check if transition is enabled for the given action.
+ * @param {Object} options - The viewer options.
+ * @param {string} action - The transition action.
+ * @returns {boolean} Returns `true` if transition is enabled.
+ */
+export function isTransitionEnabled(options, action) {
+  const { transition } = options;
+
+  return transition && transition[action] !== false;
+}
+
+/**
  * Extend the given object.
  * @param {*} obj - The object to be extended.
  * @param {*} args - The rest objects which will be merged to the first object.
