@@ -215,10 +215,12 @@ export default {
    * @returns {Viewer} this
    */
   view(index = this.options.initialViewIndex) {
+    const previousIndex = this.index;
+
     index = Number(index) || 0;
 
     if (this.hiding || this.played || index < 0 || index >= this.length
-      || (this.viewed && index === this.index)) {
+      || (this.viewed && index === previousIndex)) {
       return this;
     }
 
@@ -268,7 +270,7 @@ export default {
       return this;
     }
 
-    const activeItem = this.items[this.index];
+    const activeItem = this.items[previousIndex];
 
     if (activeItem) {
       removeClass(activeItem, CLASS_ACTIVE);
@@ -309,6 +311,35 @@ export default {
       title.innerHTML = escapeHTMLEntities(isFunction(render)
         ? render.call(this, image, imageData)
         : `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`);
+
+      // Preload the image in the direction of navigation
+      if (options.preload) {
+        const direction = index < previousIndex ? -1 : 1;
+        let nextIndex = index + direction;
+
+        if (nextIndex < 0 || nextIndex >= this.length) {
+          if (options.loop) {
+            nextIndex = direction > 0 ? 0 : this.length - 1;
+          } else {
+            nextIndex = -1;
+          }
+        }
+
+        if (nextIndex !== index) {
+          const nextImage = this.items[nextIndex].querySelector('img');
+          const preloadedImage = document.createElement('img');
+
+          forEach(options.inheritedAttributes, (name) => {
+            const value = nextImage.getAttribute(name);
+
+            if (value !== null) {
+              preloadedImage.setAttribute(name, value);
+            }
+          });
+
+          preloadedImage.src = getData(nextImage, 'originalUrl');
+        }
+      }
     };
     let onLoad;
     let onError;

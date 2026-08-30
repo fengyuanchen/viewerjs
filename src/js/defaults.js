@@ -125,6 +125,12 @@ export default {
   loop: true,
 
   /**
+  * Enable to preload the next or previous image before viewing it.
+   * @type {boolean}
+   */
+  preload: true,
+
+  /**
    * Min width of the viewer in inline mode.
    * @type {number}
    */

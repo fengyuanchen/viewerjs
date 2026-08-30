@@ -104,6 +104,7 @@ declare namespace Viewer {
     moved?: EventHandler<MovedEvent>;
     navbar?: boolean | Visibility;
     play?: EventHandler;
+    preload?: boolean;
     ready?: EventHandler;
     rotatable?: boolean;
     rotate?: EventHandler<RotateEvent>;

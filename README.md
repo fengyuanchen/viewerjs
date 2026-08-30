@@ -361,6 +361,13 @@ Indicate if enabling loop viewing or not.
 
 > If the current image is the last one, then the next one to view is the first one, and vice versa.
 
+### preload
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to preload the next or previous image before viewing it.
+
 ### minWidth
 
 - Type: `Number`
