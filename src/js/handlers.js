@@ -168,11 +168,18 @@ export default {
 
     this.initImage(() => {
       toggleClass(image, CLASS_MOVE, options.movable);
-      toggleClass(image, CLASS_TRANSITION, options.transition);
+      toggleClass(
+        image,
+        CLASS_TRANSITION,
+        options.transition && options.transition.view !== false,
+      );
 
       this.renderImage(() => {
         this.viewed = true;
         this.viewing = false;
+        setTimeout(() => {
+          toggleClass(image, CLASS_TRANSITION, options.transition);
+        }, 300);
 
         if (isFunction(options.viewed)) {
           addListener(element, EVENT_VIEWED, options.viewed, {

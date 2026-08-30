@@ -4,6 +4,7 @@
 
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
 - Add a new `autoplay` option to disable automatic image cycling when playing (#608).
+- Allow disabling the transition when viewing an image with `transition.view` (#337).
 - Add a new `preload` option to preload the next or previous image before viewing it (#313).
 
 ## 1.12.0 (Aug 22, 2026)

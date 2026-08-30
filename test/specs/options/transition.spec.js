@@ -32,4 +32,25 @@ describe('transition (option)', () => {
     expect(viewer.options.transition).to.be.false;
     viewer.show();
   });
+
+  it('should disable the transition when viewing an image', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      transition: {
+        view: false,
+      },
+
+      viewed() {
+        expect(viewer.image.className).to.not.include('viewer-transition');
+
+        setTimeout(() => {
+          expect(viewer.image.className).to.include('viewer-transition');
+          viewer.hide(true);
+          done();
+        }, 350);
+      },
+    });
+
+    viewer.show();
+  });
 });

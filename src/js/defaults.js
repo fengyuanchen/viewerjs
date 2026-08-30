@@ -199,7 +199,7 @@ export default {
 
   /**
    * Enable CSS3 Transition for some special elements.
-   * @type {boolean}
+    * @type {boolean | Object}
    */
   transition: true,
 

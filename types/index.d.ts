@@ -29,6 +29,10 @@ declare namespace Viewer {
     [x: string]: ToolbarOption;
   }
 
+  export interface TransitionOptions {
+    view?: boolean;
+  }
+
   export interface Pivot {
     x: number;
     y: number;
@@ -120,7 +124,7 @@ declare namespace Viewer {
     toggleOnDblclick?: boolean;
     toolbar?: boolean | Visibility | ToolbarOptions;
     tooltip?: boolean;
-    transition?: boolean;
+    transition?: boolean | TransitionOptions;
     url?: string | ImageURLResolver;
     view?: EventHandler;
     viewed?: EventHandler;

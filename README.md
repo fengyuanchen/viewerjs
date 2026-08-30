@@ -455,10 +455,20 @@ Show the tooltip with image ratio (percentage) when zooming in or zooming out.
 
 ### transition
 
-- Type: `Boolean`
+- Type: `Boolean` or `Object`
 - Default: `true`
 
 Enable CSS3 transitions for some special elements.
+
+Set `transition.view` to `false` to disable the transition when viewing an image while keeping transitions for subsequent transformations:
+
+```js
+new Viewer(image, {
+  transition: {
+    view: false,
+  },
+});
+```
 
 ### zIndex
 
