@@ -41,6 +41,7 @@ import {
   getOffset,
   getPointersCenter,
   hasClass,
+  inheritAttributes,
   isFunction,
   isNumber,
   isPlainObject,
@@ -245,14 +246,7 @@ export default {
     const alt = img.getAttribute('alt');
     const image = document.createElement('img');
 
-    forEach(options.inheritedAttributes, (name) => {
-      const value = img.getAttribute(name);
-
-      if (value !== null) {
-        image.setAttribute(name, value);
-      }
-    });
-
+    inheritAttributes(image, img, options.inheritedAttributes);
     image.src = url;
     image.alt = alt;
 
@@ -329,14 +323,7 @@ export default {
           const nextImage = this.items[nextIndex].querySelector('img');
           const preloadedImage = document.createElement('img');
 
-          forEach(options.inheritedAttributes, (name) => {
-            const value = nextImage.getAttribute(name);
-
-            if (value !== null) {
-              preloadedImage.setAttribute(name, value);
-            }
-          });
-
+          inheritAttributes(preloadedImage, nextImage, options.inheritedAttributes);
           preloadedImage.src = getData(nextImage, 'originalUrl');
         }
       }

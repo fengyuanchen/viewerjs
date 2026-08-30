@@ -15,6 +15,7 @@ import {
   getImageNaturalSizes,
   getTransforms,
   hasClass,
+  inheritAttributes,
   isNumber,
   removeClass,
   removeListener,
@@ -89,13 +90,7 @@ export default {
         const item = document.createElement('li');
         const img = document.createElement('img');
 
-        forEach(options.inheritedAttributes, (name) => {
-          const value = image.getAttribute(name);
-
-          if (value !== null) {
-            img.setAttribute(name, value);
-          }
-        });
+        inheritAttributes(img, image, options.inheritedAttributes);
 
         if (options.navbar) {
           img.src = src || url;

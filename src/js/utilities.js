@@ -107,6 +107,22 @@ export function forEach(data, callback) {
 }
 
 /**
+ * Inherit attributes from the original image.
+ * @param {Element} image - The target image.
+ * @param {Element} originalImage - The original image.
+ * @param {Array} inheritedAttributes - The attributes to inherit.
+ */
+export function inheritAttributes(image, originalImage, inheritedAttributes) {
+  forEach(inheritedAttributes, (name) => {
+    const value = originalImage.getAttribute(name);
+
+    if (value !== null) {
+      image.setAttribute(name, value);
+    }
+  });
+}
+
+/**
  * Extend the given object.
  * @param {*} obj - The object to be extended.
  * @param {*} args - The rest objects which will be merged to the first object.
@@ -552,14 +568,7 @@ export function getImageNaturalSizes(image, options, callback) {
     }
   };
 
-  forEach(options.inheritedAttributes, (name) => {
-    const value = image.getAttribute(name);
-
-    if (value !== null) {
-      newImage.setAttribute(name, value);
-    }
-  });
-
+  inheritAttributes(newImage, image, options.inheritedAttributes);
   newImage.src = image.src;
 
   // iOS Safari will convert the image automatically
