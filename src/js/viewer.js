@@ -240,7 +240,19 @@ class Viewer {
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
       ? options.title[0]
       : options.title));
-    addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
+    const navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
+    let navbarShow = options.navbar;
+    const navbarSize = !isUndefined(navbarOptions.size) ? navbarOptions.size : options.navbar;
+
+    if (isPlainObject(options.navbar)) {
+      navbarShow = !isUndefined(navbarOptions.show) ? navbarOptions.show : true;
+    }
+
+    addClass(navbar, !navbarShow ? CLASS_HIDE : getResponsiveClass(navbarShow));
+
+    if (['small', 'medium', 'large'].indexOf(navbarSize) !== -1) {
+      addClass(navbar, `${NAMESPACE}-${navbarSize}`);
+    }
 
     if (isPlainObject(options.navigation)) {
       forEach(navigation.querySelectorAll('[role="button"]'), (item) => {

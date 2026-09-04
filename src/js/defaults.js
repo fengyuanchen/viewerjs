@@ -14,7 +14,7 @@ export default {
 
   /**
    * Show the navbar.
-   * @type {boolean | number}
+    * @type {boolean | number | string | Object}
    */
   navbar: true,
 

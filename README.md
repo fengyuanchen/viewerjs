@@ -158,7 +158,7 @@ Show the button on the top-right of the viewer.
 
 ### navbar
 
-- Type: `Boolean` or `Number`
+- Type: `Boolean` or `Number` or `String` or `Object`
 - Default: `true`
 - Options:
   - `0` or `false`: hide the navbar
@@ -166,8 +166,23 @@ Show the button on the top-right of the viewer.
   - `2`: show the navbar only when the screen width is greater than 768 pixels
   - `3`: show the navbar only when the screen width is greater than 992 pixels
   - `4`: show the navbar only when the screen width is greater than 1200 pixels
+  - `small`: show thumbnails at 24px tall.
+  - `medium`: show thumbnails at 32px tall.
+  - `large`: show thumbnails at 40px tall.
+  - `Object`: configure the navbar with the following properties:
+    - `show` (`Boolean` or `Number`): specify the visibility of the navbar.
+    - `size` (`String`): specify the thumbnail size: `small`, `medium`, or `large`.
 
 Specify the visibility of the navbar.
+
+When setting a size, thumbnails use a $9 / 16$ width-to-height ratio.
+
+```js
+navbar: {
+  show: true,
+  size: 'large',
+}
+```
 
 ### navigation
 

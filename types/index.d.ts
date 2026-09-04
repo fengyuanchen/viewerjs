@@ -36,6 +36,13 @@ declare namespace Viewer {
 
   export type NavigationOption = boolean | Visibility | NavigationButtonOptions | undefined;
 
+  export interface NavbarOptions {
+    show?: boolean | Visibility;
+    size?: ToolbarButtonSize;
+  }
+
+  export type NavbarOption = boolean | Visibility | ToolbarButtonSize | NavbarOptions | undefined;
+
   export interface NavigationOptions {
     next?: NavigationOption;
     prev?: NavigationOption;
@@ -126,7 +133,7 @@ declare namespace Viewer {
     movable?: boolean;
     move?: EventHandler<MoveEvent>;
     moved?: EventHandler<MovedEvent>;
-    navbar?: boolean | Visibility;
+    navbar?: NavbarOption;
     navigation?: boolean | Visibility | NavigationOptions;
     play?: EventHandler;
     preload?: boolean;

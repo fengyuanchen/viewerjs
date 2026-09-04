@@ -218,6 +218,24 @@
 .viewer-navbar {
   background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
+
+  &.viewer-small > .viewer-list {
+    height: 40px;
+
+    > li {
+      height: 40px;
+      width: 24px;
+    }
+  }
+
+  &.viewer-large > .viewer-list {
+    height: 60px;
+
+    > li {
+      height: 60px;
+      width: 36px;
+    }
+  }
 }
 
 .viewer-list {
