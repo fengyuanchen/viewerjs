@@ -27,4 +27,43 @@ describe('toolbar (option)', () => {
 
     expect(viewer.options.toolbar).to.be.false;
   });
+
+  it('should customize toolbar buttons', (done) => {
+    const image = window.createImage();
+    let clicked = false;
+    const viewer = new Viewer(image, {
+      inline: true,
+      toolbar: {
+        next: {
+          click() {
+            clicked = true;
+          },
+          size: 'large',
+        },
+        reset: {
+          show: false,
+        },
+        zoomIn: {
+          show: 3,
+          size: 'small',
+        },
+      },
+
+      ready() {
+        const next = viewer.toolbar.querySelector('.viewer-next');
+        const reset = viewer.toolbar.querySelector('.viewer-reset');
+        const zoomIn = viewer.toolbar.querySelector('.viewer-zoom-in');
+
+        expect(next.className).to.include('viewer-large');
+        expect(reset).to.equal(null);
+        expect(zoomIn.className).to.include('viewer-hide-sm-down');
+        expect(zoomIn.className).to.include('viewer-small');
+        next.click();
+        expect(clicked).to.be.true;
+        done();
+      },
+    });
+
+    expect(viewer.options.toolbar).to.be.an('object');
+  });
 });

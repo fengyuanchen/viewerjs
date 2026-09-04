@@ -68,4 +68,59 @@ describe('navbar (option)', () => {
       size: 'large',
     });
   });
+
+  it('should hide navbar with object options', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      inline: true,
+      navbar: {
+        show: false,
+      },
+
+      ready() {
+        expect(window.getComputedStyle(viewer.navbar).display).to.equal('none');
+        done();
+      },
+    });
+
+    expect(viewer.options.navbar).to.deep.equal({
+      show: false,
+    });
+  });
+
+  it('should support responsive visibility with object options', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      inline: true,
+      navbar: {
+        show: 3,
+      },
+
+      ready() {
+        expect(viewer.navbar.className).to.include('viewer-hide-sm-down');
+        done();
+      },
+    });
+
+    expect(viewer.options.navbar).to.deep.equal({
+      show: 3,
+    });
+  });
+
+  ['small', 'medium', 'large'].forEach((size) => {
+    it(`should support ${size} size in object options`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        navbar: {
+          size,
+        },
+
+        ready() {
+          expect(viewer.navbar.className).to.include(`viewer-${size}`);
+          done();
+        },
+      });
+    });
+  });
 });
