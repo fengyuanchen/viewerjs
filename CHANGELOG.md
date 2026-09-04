@@ -5,8 +5,8 @@
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
 - Add a new `navigation` option to show previous and next buttons (#624).
 - Add a new `autoplay` option to disable automatic image cycling when playing (#608).
-- Allow controlling transitions by action with the `transition` option (#337).
 - Enhance `navbar` option to support object values for visibility and thumbnail size (#353).
+- Allow controlling transitions by action with the `transition` option (#337).
 - Add a new `preload` option to preload the next or previous image before viewing it (#313).
 
 ## 1.12.0 (Aug 22, 2026)
