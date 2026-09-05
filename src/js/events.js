@@ -18,7 +18,7 @@ import {
 export default {
   bind() {
     const { options, viewer, canvas } = this;
-    const document = this.element.ownerDocument;
+    const { ownerDocument: document } = this;
 
     addListener(viewer, EVENT_CLICK, (this.onClick = this.click.bind(this)));
     addListener(viewer, EVENT_DRAG_START, (this.onDragStart = this.dragstart.bind(this)));
@@ -49,7 +49,7 @@ export default {
 
   unbind() {
     const { options, viewer, canvas } = this;
-    const document = this.element.ownerDocument;
+    const { ownerDocument: document } = this;
 
     removeListener(viewer, EVENT_CLICK, this.onClick);
     removeListener(viewer, EVENT_DRAG_START, this.onDragStart);

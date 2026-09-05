@@ -171,7 +171,7 @@ declare namespace Viewer {
 }
 
 declare class Viewer {
-  constructor(element: HTMLElement, options?: Viewer.Options);
+  constructor(element: HTMLElement | ShadowRoot, options?: Viewer.Options);
   destroy(): Viewer;
   exit(): Viewer;
   full(): Viewer;
@@ -195,7 +195,7 @@ declare class Viewer {
   view(index?: number): Viewer;
   zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
   zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
-  static create(element: HTMLElement, options?: Viewer.Options): Viewer;
+  static create(element: HTMLElement | ShadowRoot, options?: Viewer.Options): Viewer;
   static setDefaults(options: Viewer.Options): void;
   static noConflict(): Viewer;
 }

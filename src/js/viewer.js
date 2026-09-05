@@ -56,11 +56,12 @@ class Viewer {
    * @param {Object} [options={}] - The configuration options.
    */
   constructor(element, options = {}) {
-    if (!element || element.nodeType !== 1) {
+    if (!element || (element.nodeType !== 1 && element.nodeType !== 11)) {
       throw new Error('The first argument is required and must be an element.');
     }
 
     this.element = element;
+    this.ownerDocument = element.ownerDocument || element.host.ownerDocument;
     this.options = assign({}, DEFAULTS, isPlainObject(options) && options);
     this.action = false;
     this.fading = false;
@@ -124,7 +125,7 @@ class Viewer {
     this.initBody();
 
     // Override `transition` option if it is not supported
-    if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
+    if (isUndefined(this.ownerDocument.createElement(NAMESPACE).style.transition)) {
       options.transition = false;
     }
 
@@ -402,7 +403,7 @@ class Viewer {
       let { container } = options;
 
       if (isString(container)) {
-        container = element.ownerDocument.querySelector(container);
+        container = this.ownerDocument.querySelector(container);
       }
 
       if (!container) {

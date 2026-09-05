@@ -159,7 +159,7 @@ export default {
   },
 
   requestFullscreen(options) {
-    const document = this.element.ownerDocument;
+    const { ownerDocument: document } = this;
 
     if (this.fulled && !(
       document.fullscreenElement
@@ -188,7 +188,7 @@ export default {
   },
 
   exitFullscreen() {
-    const document = this.element.ownerDocument;
+    const { ownerDocument: document } = this;
 
     if (this.fulled && (
       document.fullscreenElement

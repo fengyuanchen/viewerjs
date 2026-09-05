@@ -5,6 +5,7 @@
 - Support rotating images with two-finger touch gestures using the `rotateOnTouch` option.
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
 - Add a new `navigation` option to show previous and next buttons (#624).
+- Support viewing images inside a `ShadowRoot` (#622).
 - Add a new `autoplay` option to disable automatic image cycling when playing (#608).
 - Support Mac Safari trackpad gestures for zooming and rotation with the `zoomOnGesture` and `rotateOnGesture` options (#492).
 - Allow updating viewer options with the `update` method (#355).

@@ -33,7 +33,7 @@ export default {
   },
 
   initBody() {
-    const { ownerDocument } = this.element;
+    const { ownerDocument } = this;
     const body = ownerDocument.body || ownerDocument.documentElement;
 
     this.body = body;
