@@ -1,4 +1,16 @@
 describe('update (method)', () => {
+  it('should update the options', () => {
+    const image = window.createImage();
+    const viewer = new Viewer(image);
+
+    viewer.update({
+      slideOnTouch: false,
+    });
+
+    expect(viewer.options.slideOnTouch).to.be.false;
+    viewer.destroy();
+  });
+
   it('should update the image list', (done) => {
     const imageList = window.createImageList();
     let viewed;

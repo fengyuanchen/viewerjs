@@ -1145,9 +1145,17 @@ export default {
     return this;
   },
 
-  // Update viewer when images changed
-  update() {
+  /**
+   * Update the viewer when images or options changed.
+   * @param {Object} [updateOptions] - The options to update.
+   * @returns {Viewer} this
+   */
+  update(updateOptions) {
     const { element, options, isImg } = this;
+
+    if (isPlainObject(updateOptions)) {
+      assign(options, updateOptions);
+    }
 
     // Destroy viewer if the target image was deleted
     if (isImg && !element.parentNode) {

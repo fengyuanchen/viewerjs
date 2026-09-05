@@ -188,7 +188,7 @@ declare class Viewer {
   stop(): Viewer;
   toggle(): Viewer;
   tooltip(): Viewer;
-  update(): Viewer;
+  update(options?: Viewer.Options): Viewer;
   view(index?: number): Viewer;
   zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
   zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;

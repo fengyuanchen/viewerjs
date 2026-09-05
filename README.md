@@ -979,11 +979,17 @@ Toggle the image size between its current size and natural size.
 
 Reset the image to its initial state.
 
-### update()
+### update([options])
 
-Update the viewer instance when the source images changed (added, removed, or sorted).
+Update the viewer instance when the source images changed (added, removed, or sorted), or update the options while the viewer is open.
 
 > If you load images dynamically (with XMLHTTPRequest), you can use this method to add the new images to the viewer instance.
+
+```js
+viewer.update({
+  slideOnTouch: false,
+});
+```
 
 ### destroy()
 
