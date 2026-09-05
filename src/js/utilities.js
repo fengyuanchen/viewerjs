@@ -523,11 +523,8 @@ export function getTransforms({
     values.push(`rotate(${rotate}deg)`);
   }
 
-  if (isNumber(scaleX) && scaleX !== 1) {
+  if (isNumber(scaleX) && isNumber(scaleY) && (scaleX !== 1 || scaleY !== 1)) {
     values.push(`scaleX(${scaleX})`);
-  }
-
-  if (isNumber(scaleY) && scaleY !== 1) {
     values.push(`scaleY(${scaleY})`);
   }
 

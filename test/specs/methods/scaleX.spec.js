@@ -17,6 +17,21 @@ describe('scaleX (method)', () => {
     });
   });
 
+  it('should preserve the transition direction after scaling on the y-axis', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      inline: true,
+
+      viewed() {
+        viewer.scaleY(-1);
+        viewer.scaleX(-1);
+
+        expect(viewer.image.style.transform).to.equal('scaleX(-1) scaleY(-1)');
+        done();
+      },
+    });
+  });
+
   it('should not work when it is not scalable', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
