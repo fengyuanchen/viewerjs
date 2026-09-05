@@ -16,6 +16,26 @@ describe('hide (event)', () => {
     viewer.show();
   });
 
+  it('should stop hiding when destroyed in the `hide` callback', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      hide() {
+        viewer.destroy();
+      },
+
+      shown() {
+        viewer.hide();
+
+        expect(viewer.destroyed).to.be.true;
+        expect(viewer.hiding).to.be.false;
+        expect(viewer.viewer.parentNode).to.be.null;
+        done();
+      },
+    });
+
+    viewer.show();
+  });
+
   it('should not trigger the `hidden` event when default prevented', (done) => {
     const image = window.createImage();
     let count = 0;

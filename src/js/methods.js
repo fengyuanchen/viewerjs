@@ -144,7 +144,7 @@ export default {
       });
     }
 
-    if (dispatchEvent(element, EVENT_HIDE) === false) {
+    if (dispatchEvent(element, EVENT_HIDE) === false || this.destroyed) {
       return this;
     }
 
