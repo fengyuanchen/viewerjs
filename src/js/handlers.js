@@ -534,6 +534,10 @@ export default {
 
     event.preventDefault();
 
+    if (this.gesturing) {
+      return;
+    }
+
     // Limit wheel speed to prevent zoom too fast
     if (this.wheeling) {
       return;
@@ -557,5 +561,54 @@ export default {
     }
 
     this.zoom(-delta * ratio, true, null, event);
+  },
+
+  gesture(event) {
+    const { options } = this;
+
+    if (!this.viewed || (!options.zoomOnGesture && !options.rotateOnGesture)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    switch (event.type) {
+      case 'gesturestart':
+        this.gesturing = true;
+        this.gestureScale = event.scale || 1;
+        this.gestureRotation = event.rotation || 0;
+        break;
+
+      case 'gesturechange': {
+        const scale = event.scale || 1;
+        const ratio = scale / (this.gestureScale || 1);
+        const rotation = Number(event.rotation);
+        const degree = rotation - (this.gestureRotation || 0);
+
+        this.gestureScale = scale;
+
+        if (options.zoomable && options.zoomOnGesture && ratio !== 1) {
+          this.zoom(ratio >= 1 ? ratio - 1 : 1 - (1 / ratio), false, null, event);
+        }
+
+        if (options.rotatable && options.rotateOnGesture && isNumber(rotation)) {
+          this.gestureRotation = rotation;
+
+          if (degree !== 0) {
+            this.rotate(degree);
+          }
+        }
+
+        break;
+      }
+
+      case 'gestureend':
+        this.gesturing = false;
+        this.gestureScale = 1;
+        this.gestureRotation = 0;
+        break;
+
+      default:
+    }
   },
 };

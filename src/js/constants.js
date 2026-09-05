@@ -45,6 +45,7 @@ export const EVENT_POINTER_UP = HAS_POINTER_EVENT ? 'pointerup pointercancel' : 
 export const EVENT_RESIZE = 'resize';
 export const EVENT_TRANSITION_END = 'transitionend';
 export const EVENT_WHEEL = 'wheel';
+export const EVENT_GESTURE = 'gesturestart gesturechange gestureend';
 
 // Custom events
 export const EVENT_READY = 'ready';

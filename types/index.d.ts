@@ -139,6 +139,7 @@ declare namespace Viewer {
     preload?: boolean;
     ready?: EventHandler;
     rotatable?: boolean;
+    rotateOnGesture?: boolean;
     rotate?: EventHandler<RotateEvent>;
     rotated?: EventHandler<RotatedEvent>;
     scalable?: boolean;
@@ -159,6 +160,7 @@ declare namespace Viewer {
     zIndex?: number;
     zIndexInline?: number;
     zoom?: EventHandler<ZoomEvent>;
+    zoomOnGesture?: boolean;
     zoomOnTouch?: boolean;
     zoomOnWheel?: boolean;
     zoomRatio?: number;

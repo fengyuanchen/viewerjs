@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 53 [options](#options)
+- Supports 55 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 17 [events](#events)
 - Supports modal and inline modes
@@ -448,6 +448,13 @@ Enable to move the image.
 
 Enable to rotate the image.
 
+### rotateOnGesture
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to rotate the current image with gesture events, such as a two-finger gesture on Mac Safari.
+
 ### scalable
 
 - Type: `Boolean`
@@ -461,6 +468,13 @@ Enable to scale the image.
 - Default: `true`
 
 Enable to zoom the image.
+
+### zoomOnGesture
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to zoom the current image with gesture events, such as a pinch gesture on Mac Safari.
 
 ### zoomOnTouch
 

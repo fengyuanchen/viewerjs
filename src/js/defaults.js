@@ -161,6 +161,12 @@ export default {
   rotatable: true,
 
   /**
+  * Enable to rotate the current image by gesture.
+   * @type {boolean}
+   */
+  rotateOnGesture: true,
+
+  /**
    * Enable to scale the image.
    * @type {boolean}
    */
@@ -177,6 +183,12 @@ export default {
    * @type {boolean}
    */
   zoomOnTouch: true,
+
+  /**
+   * Enable to zoom the current image by gesture.
+   * @type {boolean}
+   */
+  zoomOnGesture: true,
 
   /**
    * Enable to zoom the image by wheeling mouse.

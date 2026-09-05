@@ -2,6 +2,7 @@ import {
   EVENT_CLICK,
   EVENT_DBLCLICK,
   EVENT_DRAG_START,
+  EVENT_GESTURE,
   EVENT_KEY_DOWN,
   EVENT_POINTER_DOWN,
   EVENT_POINTER_MOVE,
@@ -34,6 +35,13 @@ export default {
       });
     }
 
+    if ((options.zoomable && options.zoomOnGesture)
+      || (options.rotatable && options.rotateOnGesture)) {
+      addListener(viewer, EVENT_GESTURE, (this.onGesture = this.gesture.bind(this)), {
+        passive: false,
+      });
+    }
+
     if (options.toggleOnDblclick) {
       addListener(canvas, EVENT_DBLCLICK, (this.onDblclick = this.dblclick.bind(this)));
     }
@@ -55,6 +63,13 @@ export default {
       removeListener(viewer, EVENT_WHEEL, this.onWheel, {
         passive: false,
         capture: true,
+      });
+    }
+
+    if ((options.zoomable && options.zoomOnGesture)
+      || (options.rotatable && options.rotateOnGesture)) {
+      removeListener(viewer, EVENT_GESTURE, this.onGesture, {
+        passive: false,
       });
     }
 
