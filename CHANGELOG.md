@@ -5,6 +5,7 @@
 - Support rotating images with two-finger touch gestures using the `rotateOnTouch` option.
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
 - Fix the incorrect transition direction when combining horizontal and vertical flips (#668).
+- Support dynamic `minZoomRatio` and `maxZoomRatio` values with image-specific callbacks (#635).
 - Prevent continuing to hide the viewer after it is destroyed in the `hide` event callback (#628).
 - Add a new `navigation` option to show previous and next buttons (#624).
 - Support viewing images inside a `ShadowRoot` (#622).

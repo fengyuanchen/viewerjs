@@ -5,6 +5,7 @@ declare namespace Viewer {
   export type Filter = (this: Viewer, image: HTMLImageElement) => boolean;
   export type TitleRenderer = (this: Viewer, image: HTMLImageElement, imageData: Record<string, any>) => string;
   export type ImageURLResolver = (this: Viewer, image: HTMLImageElement) => string;
+  export type ZoomRatio = number | ((this: Viewer, image: HTMLImageElement, imageData: Record<string, any>) => number);
   export type ToolbarButtonClick = (this: Viewer, event: Event) => void;
   export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | ToolbarButtonOptions | undefined;
 
@@ -126,10 +127,10 @@ declare namespace Viewer {
     keyboard?: boolean;
     loading?: boolean;
     loop?: boolean;
-    maxZoomRatio?: number;
+    maxZoomRatio?: ZoomRatio;
     minHeight?: number;
     minWidth?: number;
-    minZoomRatio?: number;
+    minZoomRatio?: ZoomRatio;
     movable?: boolean;
     move?: EventHandler<MoveEvent>;
     moved?: EventHandler<MovedEvent>;

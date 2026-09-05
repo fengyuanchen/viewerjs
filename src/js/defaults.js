@@ -247,13 +247,13 @@ export default {
 
   /**
    * Define the min ratio of the image when zoom out.
-   * @type {number}
+    * @type {number | Function}
    */
   minZoomRatio: 0.01,
 
   /**
    * Define the max ratio of the image when zoom in.
-   * @type {number}
+    * @type {number | Function}
    */
   maxZoomRatio: 100,
 

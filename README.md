@@ -564,17 +564,37 @@ Define the ratio when zooming the image by wheeling the mouse.
 
 ### minZoomRatio
 
-- Type: `Number`
+- Type: `Number` or `Function`
 - Default: `0.01`
 
 Define the min ratio of the image when zooming out.
 
+If it is a function, it receives the current image and image data, and should return the minimum ratio:
+
+```js
+new Viewer(image, {
+  minZoomRatio(image, imageData) {
+    return imageData.naturalWidth > 2000 ? 0.1 : 0.01;
+  },
+});
+```
+
 ### maxZoomRatio
 
-- Type: `Number`
+- Type: `Number` or `Function`
 - Default: `100`
 
 Define the max ratio of the image when zooming in.
+
+If it is a function, it receives the current image and image data, and should return the maximum ratio:
+
+```js
+new Viewer(image, {
+  maxZoomRatio(image, imageData) {
+    return imageData.naturalWidth > 2000 ? 2 : 10;
+  },
+});
+```
 
 ### url
 

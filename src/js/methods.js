@@ -742,8 +742,12 @@ export default {
 
     if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
       if (!_zoomable) {
-        const minZoomRatio = Math.max(0.01, options.minZoomRatio);
-        const maxZoomRatio = Math.min(100, options.maxZoomRatio);
+        const minZoomRatio = Math.max(0.01, isFunction(options.minZoomRatio)
+          ? options.minZoomRatio.call(this, this.image, imageData)
+          : options.minZoomRatio);
+        const maxZoomRatio = Math.min(100, isFunction(options.maxZoomRatio)
+          ? options.maxZoomRatio.call(this, this.image, imageData)
+          : options.maxZoomRatio);
 
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
