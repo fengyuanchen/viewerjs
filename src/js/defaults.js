@@ -167,6 +167,12 @@ export default {
   rotateOnGesture: true,
 
   /**
+   * Enable to rotate the current image by dragging on the touch screen.
+   * @type {boolean}
+   */
+  rotateOnTouch: true,
+
+  /**
    * Enable to scale the image.
    * @type {boolean}
    */

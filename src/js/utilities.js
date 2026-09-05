@@ -655,6 +655,44 @@ export function getMaxZoomRatio(pointers) {
 }
 
 /**
+ * Get the max rotation degree of a group of pointers.
+ * @param {Object} pointers - The target pointers.
+ * @returns {number} The result degree.
+ */
+export function getMaxRotateDegree(pointers) {
+  const pointers2 = { ...pointers };
+  const degrees = [];
+
+  forEach(pointers, (pointer, pointerId) => {
+    delete pointers2[pointerId];
+
+    forEach(pointers2, (pointer2) => {
+      const start = Math.atan2(
+        pointer2.startY - pointer.startY,
+        pointer2.startX - pointer.startX,
+      );
+      const end = Math.atan2(
+        pointer2.endY - pointer.endY,
+        pointer2.endX - pointer.endX,
+      );
+      let radians = end - start;
+
+      if (radians > Math.PI) {
+        radians -= Math.PI * 2;
+      } else if (radians < -Math.PI) {
+        radians += Math.PI * 2;
+      }
+
+      degrees.push((radians * 180) / Math.PI);
+    });
+  });
+
+  degrees.sort((a, b) => Math.abs(b) - Math.abs(a));
+
+  return degrees[0] || 0;
+}
+
+/**
  * Get a pointer from an event object.
  * @param {Object} event - The target event object.
  * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.

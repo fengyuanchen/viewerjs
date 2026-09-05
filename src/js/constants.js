@@ -6,7 +6,9 @@ export const NAMESPACE = 'viewer';
 
 // Actions
 export const ACTION_MOVE = 'move';
+export const ACTION_ROTATE = 'rotate';
 export const ACTION_SWITCH = 'switch';
+export const ACTION_TRANSFORM = 'transform';
 export const ACTION_ZOOM = 'zoom';
 
 // Classes

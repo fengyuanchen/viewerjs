@@ -140,6 +140,7 @@ declare namespace Viewer {
     ready?: EventHandler;
     rotatable?: boolean;
     rotateOnGesture?: boolean;
+    rotateOnTouch?: boolean;
     rotate?: EventHandler<RotateEvent>;
     rotated?: EventHandler<RotatedEvent>;
     scalable?: boolean;

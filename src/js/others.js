@@ -1,6 +1,8 @@
 import {
   ACTION_MOVE,
+  ACTION_ROTATE,
   ACTION_SWITCH,
+  ACTION_TRANSFORM,
   ACTION_ZOOM,
   CLASS_HIDE,
   CLASS_OPEN,
@@ -13,6 +15,7 @@ import {
   addListener,
   dispatchEvent,
   forEach,
+  getMaxRotateDegree,
   getMaxZoomRatio,
   isFunction,
   isPlainObject,
@@ -229,7 +232,43 @@ export default {
 
       // Zoom the current image
       case ACTION_ZOOM:
-        this.zoom(getMaxZoomRatio(pointers), false, null, event);
+        if (options.zoomable && options.zoomOnTouch) {
+          const zoomRatio = getMaxZoomRatio(pointers);
+
+          if (zoomRatio !== 0) {
+            this.zoom(zoomRatio, false, null, event);
+          }
+        }
+        break;
+
+      // Rotate the current image
+      case ACTION_ROTATE:
+        if (options.rotatable && options.rotateOnTouch) {
+          const rotateDegree = getMaxRotateDegree(pointers);
+
+          if (rotateDegree !== 0) {
+            this.rotate(rotateDegree, event);
+          }
+        }
+        break;
+
+      // Transform the current image
+      case ACTION_TRANSFORM:
+        if (options.zoomable && options.zoomOnTouch) {
+          const zoomRatio = getMaxZoomRatio(pointers);
+
+          if (zoomRatio !== 0) {
+            this.zoom(zoomRatio, false, null, event);
+          }
+        }
+
+        if (options.rotatable && options.rotateOnTouch) {
+          const rotateDegree = getMaxRotateDegree(pointers);
+
+          if (rotateDegree !== 0) {
+            this.rotate(rotateDegree, event);
+          }
+        }
         break;
 
       case ACTION_SWITCH: {

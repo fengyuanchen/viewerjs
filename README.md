@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 55 [options](#options)
+- Supports 56 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 17 [events](#events)
 - Supports modal and inline modes
@@ -454,6 +454,13 @@ Enable to rotate the image.
 - Default: `true`
 
 Enable to rotate the current image with gesture events, such as a two-finger gesture on Mac Safari.
+
+### rotateOnTouch
+
+- Type: `Boolean`
+- Default: `true`
+
+Enable to rotate the current image with a two-finger gesture on a touch screen.
 
 ### scalable
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Support rotating images with two-finger touch gestures using the `rotateOnTouch` option.
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
 - Add a new `navigation` option to show previous and next buttons (#624).
 - Add a new `autoplay` option to disable automatic image cycling when playing (#608).

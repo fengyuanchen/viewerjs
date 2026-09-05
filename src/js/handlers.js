@@ -1,6 +1,8 @@
 import {
   ACTION_MOVE,
+  ACTION_ROTATE,
   ACTION_SWITCH,
+  ACTION_TRANSFORM,
   ACTION_ZOOM,
   CLASS_INVISIBLE,
   CLASS_LOADING,
@@ -381,13 +383,21 @@ export default {
 
     let action = options.movable ? ACTION_MOVE : false;
 
-    if (options.zoomOnTouch && options.zoomable && Object.keys(pointers).length > 1) {
-      action = ACTION_ZOOM;
+    if ((
+      (options.zoomable && options.zoomOnTouch)
+      || (options.rotatable && options.rotateOnTouch)
+    ) && Object.keys(pointers).length > 1) {
+      // action = ACTION_ZOOM;
+      // action = ACTION_ROTATE;
+      action = ACTION_TRANSFORM;
     } else if (options.slideOnTouch && (event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;
     }
 
-    if (action === ACTION_MOVE || action === ACTION_ZOOM) {
+    if (action === ACTION_MOVE
+      || action === ACTION_ZOOM
+      || action === ACTION_ROTATE
+      || action === ACTION_TRANSFORM) {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
@@ -434,8 +444,16 @@ export default {
 
     event.preventDefault();
 
-    if (action === ACTION_MOVE || action === ACTION_ZOOM) {
-      toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, action));
+    if (action === ACTION_MOVE
+      || action === ACTION_ZOOM
+      || action === ACTION_ROTATE
+      || action === ACTION_TRANSFORM) {
+      const transition = action === ACTION_TRANSFORM
+        ? isTransitionEnabled(options, ACTION_ZOOM)
+          || isTransitionEnabled(options, ACTION_ROTATE)
+        : isTransitionEnabled(options, action);
+
+      toggleClass(this.image, CLASS_TRANSITION, transition);
     }
 
     this.action = false;
@@ -444,6 +462,7 @@ export default {
     if (
       IS_TOUCH_DEVICE
       && action !== ACTION_ZOOM
+      && action !== ACTION_TRANSFORM
       && pointer
       && (Date.now() - pointer.timeStamp < 500)
     ) {
