@@ -1,6 +1,9 @@
 export default (
   '<div class="viewer-container" tabindex="-1" touch-action="none">'
     + '<div class="viewer-canvas"></div>'
+    + '<div class="viewer-magnifier" aria-hidden="true">'
+      + '<img class="viewer-magnifier-image" alt="">'
+    + '</div>'
     + '<div class="viewer-navigation">'
       + '<div class="viewer-prev" data-viewer-action="prev" role="button" aria-label="Previous"></div>'
       + '<div class="viewer-next" data-viewer-action="next" role="button" aria-label="Next"></div>'

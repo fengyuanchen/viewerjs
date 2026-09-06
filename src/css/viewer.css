@@ -146,6 +146,34 @@
   }
 }
 
+.viewer-magnifier {
+  background-color: #fff;
+  background-repeat: no-repeat;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  display: none;
+  left: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 16px;
+  z-index: 2;
+
+  &.viewer-show {
+    display: block;
+  }
+}
+
+.viewer-magnifier-image {
+  left: 0;
+  max-width: none !important;
+  position: absolute;
+  top: 0;
+  transform-origin: center;
+}
+
 .viewer-navigation {
   left: 0;
   position: absolute;

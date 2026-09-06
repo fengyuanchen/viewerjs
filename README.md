@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 56 [options](#options)
+- Supports 57 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 17 [events](#events)
 - Supports modal and inline modes
@@ -34,6 +34,7 @@
 - Supports rotation
 - Supports scale (flip)
 - Supports keyboard
+- Supports image magnification
 - Cross-browser support
 
 ## Main Files
@@ -441,6 +442,29 @@ Define the minimum height of the viewer.
 - Default: `true`
 
 Enable to move the image.
+
+### magnifier
+
+- Type: `Boolean` or `Object`
+- Default: `false`
+- Options:
+  - `size` (`Number`): the size of the magnifier in pixels. Defaults to `100`.
+  - `zoomRatio` (`Number`): the magnification ratio. Defaults to `2`.
+  - `opacity` (`Number`): the opacity of the magnifier, from `0` to `1`. Defaults to `1`.
+
+Show a magnifier over the image when hovering in fullscreen mode. The magnifier is disabled on touch screens.
+
+For example:
+
+```js
+new Viewer(image, {
+  magnifier: {
+    size: 120,
+    zoomRatio: 3,
+    opacity: 0.8,
+  },
+});
+```
 
 ### rotatable
 

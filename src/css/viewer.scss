@@ -147,6 +147,34 @@
     }
   }
 
+  &-magnifier {
+    background-color: #fff;
+    background-repeat: no-repeat;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    display: none;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    z-index: 2;
+
+    &-image {
+      left: 0;
+      max-width: none !important;
+      position: absolute;
+      top: 0;
+      transform-origin: center;
+    }
+
+    &.viewer-show {
+      display: block;
+    }
+  }
+
   &-footer {
     bottom: 0;
     left: 0;
@@ -332,6 +360,7 @@
   }
 
   &-button {
+    -webkit-app-region: no-drag;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     cursor: pointer;
@@ -342,7 +371,6 @@
     top: -40px;
     transition: background-color 0.15s;
     width: 80px;
-    -webkit-app-region: no-drag;
 
     &:focus,
     &:hover {

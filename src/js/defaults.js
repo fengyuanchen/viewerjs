@@ -155,6 +155,12 @@ export default {
   movable: true,
 
   /**
+   * Show a magnifier when hovering over the image in fullscreen mode.
+   * @type {boolean | Object}
+   */
+  magnifier: false,
+
+  /**
    * Enable to rotate the image.
    * @type {boolean}
    */

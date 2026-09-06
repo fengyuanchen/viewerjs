@@ -271,6 +271,8 @@ export default {
       return this;
     }
 
+    this.hideMagnifier();
+
     const activeItem = this.getItem(previousIndex);
 
     if (activeItem) {

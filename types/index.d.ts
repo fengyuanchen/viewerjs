@@ -62,6 +62,12 @@ declare namespace Viewer {
     zoom?: boolean;
   }
 
+  export interface MagnifierOptions {
+    size?: number;
+    zoomRatio?: number;
+    opacity?: number;
+  }
+
   export interface Pivot {
     x: number;
     y: number;
@@ -128,6 +134,7 @@ declare namespace Viewer {
     keyboard?: boolean;
     loading?: boolean;
     loop?: boolean;
+    magnifier?: boolean | MagnifierOptions;
     maxZoomRatio?: ZoomRatio;
     minHeight?: number;
     minWidth?: number;

@@ -5,6 +5,8 @@ import {
   EVENT_GESTURE,
   EVENT_KEY_DOWN,
   EVENT_POINTER_DOWN,
+  EVENT_POINTER_ENTER,
+  EVENT_POINTER_LEAVE,
   EVENT_POINTER_MOVE,
   EVENT_POINTER_UP,
   EVENT_RESIZE,
@@ -22,6 +24,13 @@ export default {
 
     addListener(viewer, EVENT_CLICK, (this.onClick = this.click.bind(this)));
     addListener(viewer, EVENT_DRAG_START, (this.onDragStart = this.dragstart.bind(this)));
+    addListener(viewer, EVENT_POINTER_ENTER, (this.onMagnifyEnter = this.magnify.bind(this)));
+    addListener(viewer, EVENT_POINTER_MOVE, (this.onMagnify = this.magnify.bind(this)));
+    addListener(
+      viewer,
+      EVENT_POINTER_LEAVE,
+      (this.onMagnifierLeave = this.hideMagnifier.bind(this)),
+    );
     addListener(canvas, EVENT_POINTER_DOWN, (this.onPointerDown = this.pointerdown.bind(this)));
     addListener(document, EVENT_POINTER_MOVE, (this.onPointerMove = this.pointermove.bind(this)));
     addListener(document, EVENT_POINTER_UP, (this.onPointerUp = this.pointerup.bind(this)));
@@ -53,6 +62,9 @@ export default {
 
     removeListener(viewer, EVENT_CLICK, this.onClick);
     removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
+    removeListener(viewer, EVENT_POINTER_ENTER, this.onMagnifyEnter);
+    removeListener(viewer, EVENT_POINTER_MOVE, this.onMagnify);
+    removeListener(viewer, EVENT_POINTER_LEAVE, this.onMagnifierLeave);
     removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
     removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
     removeListener(document, EVENT_POINTER_UP, this.onPointerUp);

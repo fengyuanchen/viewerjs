@@ -327,6 +327,10 @@ export default {
       marginTop: imageData.y,
     }, getTransforms(imageData)));
 
+    if (this.magnifierPoint) {
+      this.renderMagnifier();
+    }
+
     if (done) {
       let action = false;
 

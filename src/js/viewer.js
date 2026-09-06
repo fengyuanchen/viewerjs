@@ -232,6 +232,8 @@ class Viewer {
     this.button = button;
     this.canvas = canvas;
     this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
+    this.magnifier = viewer.querySelector(`.${NAMESPACE}-magnifier`);
+    this.magnifierImage = viewer.querySelector(`.${NAMESPACE}-magnifier-image`);
     this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
     this.player = viewer.querySelector(`.${NAMESPACE}-player`);
     this.list = viewer.querySelector(`.${NAMESPACE}-list`);

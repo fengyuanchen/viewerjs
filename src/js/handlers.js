@@ -16,6 +16,7 @@ import {
   IS_TOUCH_DEVICE,
 } from './constants';
 import {
+  addClass,
   addListener,
   assign,
   dispatchEvent,
@@ -341,6 +342,105 @@ export default {
   dragstart(event) {
     if (event.target.localName === 'img') {
       event.preventDefault();
+    }
+  },
+
+  magnify(event) {
+    if (event.changedTouches || (event.pointerType && event.pointerType !== 'mouse')) {
+      this.hideMagnifier();
+      return;
+    }
+
+    this.magnifierPoint = {
+      clientX: event.clientX,
+      clientY: event.clientY,
+    };
+    this.renderMagnifier();
+  },
+
+  renderMagnifier() {
+    const {
+      options,
+      imageData,
+      magnifier,
+      magnifierImage,
+      viewer,
+    } = this;
+    const config = isPlainObject(options.magnifier) ? options.magnifier : {};
+    const point = this.magnifierPoint;
+
+    if (!options.magnifier || !this.fulled || !this.viewed || !magnifier
+      || !magnifierImage || !point) {
+      this.hideMagnifier();
+      return;
+    }
+
+    const size = Math.max(1, Number(config.size) || 100);
+    const zoomRatio = Math.max(1, Number(config.zoomRatio) || 2);
+    const opacity = Number(config.opacity);
+    const rect = viewer.getBoundingClientRect();
+    const x = point.clientX - rect.left;
+    const y = point.clientY - rect.top;
+    const imageURL = this.image.currentSrc || this.image.src;
+    const imageRect = this.image.getBoundingClientRect();
+
+    if (point.clientX < imageRect.left || point.clientX > imageRect.right
+      || point.clientY < imageRect.top || point.clientY > imageRect.bottom) {
+      this.hideMagnifier();
+      return;
+    }
+
+    const scaleX = isNumber(imageData.scaleX) ? imageData.scaleX : 1;
+    const scaleY = isNumber(imageData.scaleY) ? imageData.scaleY : 1;
+    const rotate = ((imageData.rotate || 0) * Math.PI) / 180;
+    const cos = Math.cos(rotate);
+    const sin = Math.sin(rotate);
+    const matrixA = cos * scaleX;
+    const matrixB = sin * scaleX;
+    const matrixC = -sin * scaleY;
+    const matrixD = cos * scaleY;
+    const determinant = scaleX * scaleY;
+
+    if (determinant === 0) {
+      this.hideMagnifier();
+      return;
+    }
+
+    const centerX = imageData.x + (imageData.width / 2);
+    const centerY = imageData.y + (imageData.height / 2);
+    const localX = (matrixD * (x - centerX) - matrixC * (y - centerY)) / determinant;
+    const localY = (-matrixB * (x - centerX) + matrixA * (y - centerY)) / determinant;
+    const sourceX = localX + imageData.width / 2;
+    const sourceY = localY + imageData.height / 2;
+    const magnifiedWidth = imageData.width * zoomRatio;
+    const magnifiedHeight = imageData.height * zoomRatio;
+    const transformedX = matrixA * (sourceX * zoomRatio - magnifiedWidth / 2)
+      + matrixC * (sourceY * zoomRatio - magnifiedHeight / 2);
+    const transformedY = matrixB * (sourceX * zoomRatio - magnifiedWidth / 2)
+      + matrixD * (sourceY * zoomRatio - magnifiedHeight / 2);
+
+    this.magnifierSourcePoint = {
+      x: sourceX,
+      y: sourceY,
+    };
+    magnifier.style.width = `${size}px`;
+    magnifier.style.height = `${size}px`;
+    magnifier.style.opacity = `${Math.max(0, Math.min(1, isNumber(opacity) ? opacity : 1))}`;
+    magnifierImage.src = imageURL;
+    magnifierImage.style.width = `${magnifiedWidth}px`;
+    magnifierImage.style.height = `${magnifiedHeight}px`;
+    magnifierImage.style.left = `${size / 2 - magnifiedWidth / 2 - transformedX}px`;
+    magnifierImage.style.top = `${size / 2 - magnifiedHeight / 2 - transformedY}px`;
+    magnifierImage.style.transform = `rotate(${imageData.rotate || 0}deg) scaleX(${scaleX}) scaleY(${scaleY})`;
+    magnifier.removeAttribute('aria-hidden');
+    addClass(magnifier, 'viewer-show');
+  },
+
+  hideMagnifier() {
+    if (this.magnifier) {
+      removeClass(this.magnifier, 'viewer-show');
+      this.magnifier.setAttribute('aria-hidden', true);
+      this.magnifierPoint = null;
     }
   },
 
