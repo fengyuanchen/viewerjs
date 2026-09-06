@@ -155,10 +155,10 @@
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     display: none;
+    left: 16px;
     overflow: hidden;
     pointer-events: none;
     position: absolute;
-    right: 16px;
     top: 16px;
     z-index: 2;
 
@@ -175,6 +175,66 @@
     }
   }
 
+  &-navigation {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    & > .viewer-prev,
+    & > .viewer-next {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      height: 40px;
+      margin-top: -20px;
+      position: absolute;
+      width: 40px;
+
+      &:focus,
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+
+      &:focus {
+        box-shadow: 0 0 3px #fff;
+        outline: 0;
+      }
+
+      &::before {
+        margin: 10px;
+      }
+    }
+
+    & > .viewer-prev {
+      left: 15px;
+    }
+
+    & > .viewer-next {
+      right: 15px;
+    }
+
+    & > .viewer-large {
+      height: 48px;
+      margin-top: -24px;
+      width: 48px;
+
+      &::before {
+        margin: 14px;
+      }
+    }
+
+    & > .viewer-small {
+      height: 32px;
+      margin-top: -16px;
+      width: 32px;
+
+      &::before {
+        margin: 6px;
+      }
+    }
+  }
+
   &-footer {
     bottom: 0;
     left: 0;
@@ -187,6 +247,24 @@
   &-navbar {
     background-color: rgba(0, 0, 0, 0.5);
     overflow: hidden;
+
+    &.viewer-small > .viewer-list {
+      height: 40px;
+
+      > li {
+        height: 40px;
+        width: 24px;
+      }
+    }
+
+    &.viewer-large > .viewer-list {
+      height: 60px;
+
+      > li {
+        height: 60px;
+        width: 36px;
+      }
+    }
   }
 
   &-list {
