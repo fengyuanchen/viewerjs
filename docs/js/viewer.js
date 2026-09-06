@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.12.0
+ * Viewer.js v1.13.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2026-08-22T13:00:39.652Z
+ * Date: 2026-09-06T10:39:44.170Z
  */
 
 (function (global, factory) {
@@ -95,9 +95,14 @@
     button: true,
     /**
      * Show the navbar.
-     * @type {boolean | number}
+      * @type {boolean | number | string | Object}
      */
     navbar: true,
+    /**
+     * Show the navigation buttons.
+      * @type {boolean | number | Object}
+     */
+    navigation: false,
     /**
      * Specify the visibility and the content of the title.
      * @type {boolean | number | Function | Array}
@@ -150,6 +155,11 @@
      */
     inline: false,
     /**
+    * Enable to automatically play the images when playing.
+    * @type {boolean}
+    */
+    autoplay: true,
+    /**
      * The amount of time to delay between automatically cycling an image when playing.
      * @type {number}
      */
@@ -175,6 +185,11 @@
      */
     loop: true,
     /**
+    * Enable to preload the next or previous image before viewing it.
+     * @type {boolean}
+     */
+    preload: true,
+    /**
      * Min width of the viewer in inline mode.
      * @type {number}
      */
@@ -190,10 +205,25 @@
      */
     movable: true,
     /**
+     * Show a magnifier when hovering over the image in fullscreen mode.
+     * @type {boolean | Object}
+     */
+    magnifier: false,
+    /**
      * Enable to rotate the image.
      * @type {boolean}
      */
     rotatable: true,
+    /**
+    * Enable to rotate the current image by gesture.
+     * @type {boolean}
+     */
+    rotateOnGesture: true,
+    /**
+     * Enable to rotate the current image by dragging on the touch screen.
+     * @type {boolean}
+     */
+    rotateOnTouch: true,
     /**
      * Enable to scale the image.
      * @type {boolean}
@@ -209,6 +239,11 @@
      * @type {boolean}
      */
     zoomOnTouch: true,
+    /**
+     * Enable to zoom the current image by gesture.
+     * @type {boolean}
+     */
+    zoomOnGesture: true,
     /**
      * Enable to zoom the image by wheeling mouse.
      * @type {boolean}
@@ -232,7 +267,7 @@
     tooltip: true,
     /**
      * Enable CSS3 Transition for some special elements.
-     * @type {boolean}
+      * @type {boolean | Object}
      */
     transition: true,
     /**
@@ -252,12 +287,12 @@
     zoomRatio: 0.1,
     /**
      * Define the min ratio of the image when zoom out.
-     * @type {number}
+      * @type {number | Function}
      */
     minZoomRatio: 0.01,
     /**
      * Define the max ratio of the image when zoom in.
-     * @type {number}
+      * @type {number | Function}
      */
     maxZoomRatio: 100,
     /**
@@ -288,7 +323,7 @@
     stop: null
   };
 
-  var TEMPLATE = '<div class="viewer-container" tabindex="-1" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list" role="navigation"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip" role="alert" aria-hidden="true"></div>' + '<div class="viewer-button" data-viewer-action="mix" role="button"></div>' + '<div class="viewer-player"></div>' + '</div>';
+  var TEMPLATE = '<div class="viewer-container" tabindex="-1" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-magnifier" aria-hidden="true">' + '<img class="viewer-magnifier-image" alt="">' + '</div>' + '<div class="viewer-navigation">' + '<div class="viewer-prev" data-viewer-action="prev" role="button" aria-label="Previous"></div>' + '<div class="viewer-next" data-viewer-action="next" role="button" aria-label="Next"></div>' + '</div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list" role="navigation"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip" role="alert" aria-hidden="true"></div>' + '<div class="viewer-button" data-viewer-action="mix" role="button"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
   var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
   var WINDOW = IS_BROWSER ? window : {};
@@ -298,7 +333,9 @@
 
   // Actions
   var ACTION_MOVE = 'move';
+  var ACTION_ROTATE = 'rotate';
   var ACTION_SWITCH = 'switch';
+  var ACTION_TRANSFORM = 'transform';
   var ACTION_ZOOM = 'zoom';
 
   // Classes
@@ -332,11 +369,14 @@
   var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
   var EVENT_TOUCH_START = IS_TOUCH_DEVICE ? 'touchstart' : 'mousedown';
   var EVENT_POINTER_DOWN = HAS_POINTER_EVENT ? 'pointerdown' : EVENT_TOUCH_START;
+  var EVENT_POINTER_ENTER = HAS_POINTER_EVENT ? 'pointerenter' : 'mouseenter';
+  var EVENT_POINTER_LEAVE = HAS_POINTER_EVENT ? 'pointerleave' : 'mouseleave';
   var EVENT_POINTER_MOVE = HAS_POINTER_EVENT ? 'pointermove' : EVENT_TOUCH_MOVE;
   var EVENT_POINTER_UP = HAS_POINTER_EVENT ? 'pointerup pointercancel' : EVENT_TOUCH_END;
   var EVENT_RESIZE = 'resize';
   var EVENT_TRANSITION_END = 'transitionend';
   var EVENT_WHEEL = 'wheel';
+  var EVENT_GESTURE = 'gesturestart gesturechange gestureend';
 
   // Custom events
   var EVENT_READY = 'ready';
@@ -458,6 +498,32 @@
       }
     }
     return data;
+  }
+
+  /**
+   * Inherit attributes from the original image.
+   * @param {Element} image - The target image.
+   * @param {Element} originalImage - The original image.
+   * @param {Array} inheritedAttributes - The attributes to inherit.
+   */
+  function inheritAttributes(image, originalImage, inheritedAttributes) {
+    forEach(inheritedAttributes, function (name) {
+      var value = originalImage.getAttribute(name);
+      if (value !== null) {
+        image.setAttribute(name, value);
+      }
+    });
+  }
+
+  /**
+   * Check if transition is enabled for the given action.
+   * @param {Object} options - The viewer options.
+   * @param {string} action - The transition action.
+   * @returns {boolean} Returns `true` if transition is enabled.
+   */
+  function isTransitionEnabled(options, action) {
+    var transition = options.transition;
+    return transition && transition[action] !== false;
   }
 
   /**
@@ -789,10 +855,8 @@
     if (isNumber(rotate) && rotate !== 0) {
       values.push("rotate(".concat(rotate, "deg)"));
     }
-    if (isNumber(scaleX) && scaleX !== 1) {
+    if (isNumber(scaleX) && isNumber(scaleY) && (scaleX !== 1 || scaleY !== 1)) {
       values.push("scaleX(".concat(scaleX, ")"));
-    }
-    if (isNumber(scaleY) && scaleY !== 1) {
       values.push("scaleY(".concat(scaleY, ")"));
     }
     var transform = values.length ? values.join(' ') : 'none';
@@ -838,12 +902,7 @@
         body.removeChild(newImage);
       }
     };
-    forEach(options.inheritedAttributes, function (name) {
-      var value = image.getAttribute(name);
-      if (value !== null) {
-        newImage.setAttribute(name, value);
-      }
-    });
+    inheritAttributes(newImage, image, options.inheritedAttributes);
     newImage.src = image.src;
 
     // iOS Safari will convert the image automatically
@@ -901,6 +960,34 @@
   }
 
   /**
+   * Get the max rotation degree of a group of pointers.
+   * @param {Object} pointers - The target pointers.
+   * @returns {number} The result degree.
+   */
+  function getMaxRotateDegree(pointers) {
+    var pointers2 = _objectSpread2({}, pointers);
+    var degrees = [];
+    forEach(pointers, function (pointer, pointerId) {
+      delete pointers2[pointerId];
+      forEach(pointers2, function (pointer2) {
+        var start = Math.atan2(pointer2.startY - pointer.startY, pointer2.startX - pointer.startX);
+        var end = Math.atan2(pointer2.endY - pointer.endY, pointer2.endX - pointer.endX);
+        var radians = end - start;
+        if (radians > Math.PI) {
+          radians -= Math.PI * 2;
+        } else if (radians < -Math.PI) {
+          radians += Math.PI * 2;
+        }
+        degrees.push(radians * 180 / Math.PI);
+      });
+    });
+    degrees.sort(function (a, b) {
+      return Math.abs(b) - Math.abs(a);
+    });
+    return degrees[0] || 0;
+  }
+
+  /**
    * Get a pointer from an event object.
    * @param {Object} event - The target event object.
    * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.
@@ -952,7 +1039,7 @@
       this.renderViewer();
     },
     initBody: function initBody() {
-      var ownerDocument = this.element.ownerDocument;
+      var ownerDocument = this.ownerDocument;
       var body = ownerDocument.body || ownerDocument.documentElement;
       this.body = body;
       this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
@@ -988,26 +1075,34 @@
     },
     initList: function initList() {
       var _this = this;
+      var viewIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.index;
       var element = this.element,
         options = this.options,
         list = this.list;
       var items = [];
+      var navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
+      var probe = document.createElement('li');
+      list.appendChild(probe);
+      var itemWidth = probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
+      list.removeChild(probe);
+      var visibleItemCount = isNumber(navbarOptions.visibleItemCount) ? Math.floor(navbarOptions.visibleItemCount) : Math.floor(this.containerData.width / itemWidth);
+      visibleItemCount = Math.min(visibleItemCount, this.length);
+      var start = visibleItemCount > 0 ? Math.min(Math.max(0, viewIndex - Math.floor(visibleItemCount / 2)), Math.max(0, this.length - visibleItemCount)) : 0;
+      var end = visibleItemCount > 0 ? Math.min(this.length, start + visibleItemCount) : this.length;
 
       // initList may be called in this.update, so should keep idempotent
       list.innerHTML = '';
       forEach(this.images, function (image, index) {
+        if (visibleItemCount > 0 && (index < start || index >= end)) {
+          return;
+        }
         var src = image.src;
         var alt = image.alt || getImageNameFromURL(src);
         var url = _this.getImageURL(image);
         if (src || url) {
           var item = document.createElement('li');
           var img = document.createElement('img');
-          forEach(options.inheritedAttributes, function (name) {
-            var value = image.getAttribute(name);
-            if (value !== null) {
-              img.setAttribute(name, value);
-            }
-          });
+          inheritAttributes(img, image, options.inheritedAttributes);
           if (options.navbar) {
             img.src = src || url;
           }
@@ -1025,6 +1120,13 @@
         }
       });
       this.items = items;
+      if (this.viewed) {
+        var activeItem = this.getItem(this.index);
+        if (activeItem) {
+          addClass(activeItem, CLASS_ACTIVE);
+          activeItem.setAttribute('aria-selected', true);
+        }
+      }
       forEach(items, function (item) {
         var image = item.firstElementChild;
         var onLoad;
@@ -1051,7 +1153,7 @@
           once: true
         });
       });
-      if (options.transition) {
+      if (isTransitionEnabled(options, 'view')) {
         addListener(element, EVENT_VIEWED, function () {
           addClass(list, CLASS_TRANSITION);
         }, {
@@ -1059,9 +1161,20 @@
         });
       }
     },
+    getItem: function getItem(index) {
+      var item;
+      forEach(this.items, function (candidate) {
+        if (Number(getData(candidate, 'index')) === index) {
+          item = candidate;
+          return false;
+        }
+        return true;
+      });
+      return item;
+    },
     renderList: function renderList() {
       var index = this.index;
-      var item = this.items[index];
+      var item = this.getItem(index);
       if (!item) {
         return;
       }
@@ -1072,9 +1185,9 @@
 
       // Place the active item in the center of the screen
       setStyle(this.list, assign({
-        width: outerWidth * this.length - gutter
+        width: outerWidth * this.items.length - gutter
       }, getTransforms({
-        translateX: (this.viewerData.width - offsetWidth) / 2 - outerWidth * index
+        translateX: (this.viewerData.width - offsetWidth) / 2 - item.offsetLeft
       })));
     },
     resetList: function resetList() {
@@ -1160,8 +1273,23 @@
         marginLeft: imageData.x,
         marginTop: imageData.y
       }, getTransforms(imageData)));
+      if (this.magnifierPoint) {
+        this.renderMagnifier();
+      }
       if (done) {
-        if ((this.viewing || this.moving || this.rotating || this.scaling || this.zooming) && this.options.transition && hasClass(image, CLASS_TRANSITION)) {
+        var action = false;
+        if (this.viewing) {
+          action = 'view';
+        } else if (this.moving) {
+          action = 'move';
+        } else if (this.rotating) {
+          action = 'rotate';
+        } else if (this.scaling) {
+          action = 'scale';
+        } else if (this.zooming) {
+          action = 'zoom';
+        }
+        if (action && isTransitionEnabled(this.options, action) && hasClass(image, CLASS_TRANSITION)) {
           var onTransitionEnd = function onTransitionEnd() {
             _this3.imageRendering = false;
             done();
@@ -1197,9 +1325,12 @@
       var options = this.options,
         viewer = this.viewer,
         canvas = this.canvas;
-      var document = this.element.ownerDocument;
+      var document = this.ownerDocument;
       addListener(viewer, EVENT_CLICK, this.onClick = this.click.bind(this));
       addListener(viewer, EVENT_DRAG_START, this.onDragStart = this.dragstart.bind(this));
+      addListener(viewer, EVENT_POINTER_ENTER, this.onMagnifyEnter = this.magnify.bind(this));
+      addListener(viewer, EVENT_POINTER_MOVE, this.onMagnify = this.magnify.bind(this));
+      addListener(viewer, EVENT_POINTER_LEAVE, this.onMagnifierLeave = this.hideMagnifier.bind(this));
       addListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown = this.pointerdown.bind(this));
       addListener(document, EVENT_POINTER_MOVE, this.onPointerMove = this.pointermove.bind(this));
       addListener(document, EVENT_POINTER_UP, this.onPointerUp = this.pointerup.bind(this));
@@ -1211,6 +1342,11 @@
           capture: true
         });
       }
+      if (options.zoomable && options.zoomOnGesture || options.rotatable && options.rotateOnGesture) {
+        addListener(viewer, EVENT_GESTURE, this.onGesture = this.gesture.bind(this), {
+          passive: false
+        });
+      }
       if (options.toggleOnDblclick) {
         addListener(canvas, EVENT_DBLCLICK, this.onDblclick = this.dblclick.bind(this));
       }
@@ -1219,9 +1355,12 @@
       var options = this.options,
         viewer = this.viewer,
         canvas = this.canvas;
-      var document = this.element.ownerDocument;
+      var document = this.ownerDocument;
       removeListener(viewer, EVENT_CLICK, this.onClick);
       removeListener(viewer, EVENT_DRAG_START, this.onDragStart);
+      removeListener(viewer, EVENT_POINTER_ENTER, this.onMagnifyEnter);
+      removeListener(viewer, EVENT_POINTER_MOVE, this.onMagnify);
+      removeListener(viewer, EVENT_POINTER_LEAVE, this.onMagnifierLeave);
       removeListener(canvas, EVENT_POINTER_DOWN, this.onPointerDown);
       removeListener(document, EVENT_POINTER_MOVE, this.onPointerMove);
       removeListener(document, EVENT_POINTER_UP, this.onPointerUp);
@@ -1231,6 +1370,11 @@
         removeListener(viewer, EVENT_WHEEL, this.onWheel, {
           passive: false,
           capture: true
+        });
+      }
+      if (options.zoomable && options.zoomOnGesture || options.rotatable && options.rotateOnGesture) {
+        removeListener(viewer, EVENT_GESTURE, this.onGesture, {
+          passive: false
         });
       }
       if (options.toggleOnDblclick) {
@@ -1345,10 +1489,13 @@
       image.style.cssText = 'height:0;' + "margin-left:".concat(viewerData.width / 2, "px;") + "margin-top:".concat(viewerData.height / 2, "px;") + 'max-width:none!important;' + 'position:relative;' + 'width:0;';
       this.initImage(function () {
         toggleClass(image, CLASS_MOVE, options.movable);
-        toggleClass(image, CLASS_TRANSITION, options.transition);
+        toggleClass(image, CLASS_TRANSITION, isTransitionEnabled(options, 'view'));
         _this.renderImage(function () {
           _this.viewed = true;
           _this.viewing = false;
+          setTimeout(function () {
+            toggleClass(image, CLASS_TRANSITION, options.transition);
+          }, 300);
           if (isFunction(options.viewed)) {
             addListener(element, EVENT_VIEWED, options.viewed, {
               once: true
@@ -1487,6 +1634,88 @@
         event.preventDefault();
       }
     },
+    magnify: function magnify(event) {
+      if (event.changedTouches || event.pointerType && event.pointerType !== 'mouse') {
+        this.hideMagnifier();
+        return;
+      }
+      this.magnifierPoint = {
+        clientX: event.clientX,
+        clientY: event.clientY
+      };
+      this.renderMagnifier();
+    },
+    renderMagnifier: function renderMagnifier() {
+      var options = this.options,
+        imageData = this.imageData,
+        magnifier = this.magnifier,
+        magnifierImage = this.magnifierImage,
+        viewer = this.viewer;
+      var config = isPlainObject(options.magnifier) ? options.magnifier : {};
+      var point = this.magnifierPoint;
+      if (!options.magnifier || !this.fulled || !this.viewed || !magnifier || !magnifierImage || !point) {
+        this.hideMagnifier();
+        return;
+      }
+      var size = Math.max(1, Number(config.size) || 100);
+      var zoomRatio = Math.max(1, Number(config.zoomRatio) || 2);
+      var opacity = Number(config.opacity);
+      var rect = viewer.getBoundingClientRect();
+      var x = point.clientX - rect.left;
+      var y = point.clientY - rect.top;
+      var imageURL = this.image.currentSrc || this.image.src;
+      var imageRect = this.image.getBoundingClientRect();
+      if (point.clientX < imageRect.left || point.clientX > imageRect.right || point.clientY < imageRect.top || point.clientY > imageRect.bottom) {
+        this.hideMagnifier();
+        return;
+      }
+      var scaleX = isNumber(imageData.scaleX) ? imageData.scaleX : 1;
+      var scaleY = isNumber(imageData.scaleY) ? imageData.scaleY : 1;
+      var rotate = (imageData.rotate || 0) * Math.PI / 180;
+      var cos = Math.cos(rotate);
+      var sin = Math.sin(rotate);
+      var matrixA = cos * scaleX;
+      var matrixB = sin * scaleX;
+      var matrixC = -sin * scaleY;
+      var matrixD = cos * scaleY;
+      var determinant = scaleX * scaleY;
+      if (determinant === 0) {
+        this.hideMagnifier();
+        return;
+      }
+      var centerX = imageData.x + imageData.width / 2;
+      var centerY = imageData.y + imageData.height / 2;
+      var localX = (matrixD * (x - centerX) - matrixC * (y - centerY)) / determinant;
+      var localY = (-matrixB * (x - centerX) + matrixA * (y - centerY)) / determinant;
+      var sourceX = localX + imageData.width / 2;
+      var sourceY = localY + imageData.height / 2;
+      var magnifiedWidth = imageData.width * zoomRatio;
+      var magnifiedHeight = imageData.height * zoomRatio;
+      var transformedX = matrixA * (sourceX * zoomRatio - magnifiedWidth / 2) + matrixC * (sourceY * zoomRatio - magnifiedHeight / 2);
+      var transformedY = matrixB * (sourceX * zoomRatio - magnifiedWidth / 2) + matrixD * (sourceY * zoomRatio - magnifiedHeight / 2);
+      this.magnifierSourcePoint = {
+        x: sourceX,
+        y: sourceY
+      };
+      magnifier.style.width = "".concat(size, "px");
+      magnifier.style.height = "".concat(size, "px");
+      magnifier.style.opacity = "".concat(Math.max(0, Math.min(1, isNumber(opacity) ? opacity : 1)));
+      magnifierImage.src = imageURL;
+      magnifierImage.style.width = "".concat(magnifiedWidth, "px");
+      magnifierImage.style.height = "".concat(magnifiedHeight, "px");
+      magnifierImage.style.left = "".concat(size / 2 - magnifiedWidth / 2 - transformedX, "px");
+      magnifierImage.style.top = "".concat(size / 2 - magnifiedHeight / 2 - transformedY, "px");
+      magnifierImage.style.transform = "rotate(".concat(imageData.rotate || 0, "deg) scaleX(").concat(scaleX, ") scaleY(").concat(scaleY, ")");
+      magnifier.removeAttribute('aria-hidden');
+      addClass(magnifier, 'viewer-show');
+    },
+    hideMagnifier: function hideMagnifier() {
+      if (this.magnifier) {
+        removeClass(this.magnifier, 'viewer-show');
+        this.magnifier.setAttribute('aria-hidden', true);
+        this.magnifierPoint = null;
+      }
+    },
     pointerdown: function pointerdown(event) {
       var options = this.options,
         pointers = this.pointers;
@@ -1515,12 +1744,14 @@
         pointers[event.pointerId || 0] = getPointer(event);
       }
       var action = options.movable ? ACTION_MOVE : false;
-      if (options.zoomOnTouch && options.zoomable && Object.keys(pointers).length > 1) {
-        action = ACTION_ZOOM;
+      if ((options.zoomable && options.zoomOnTouch || options.rotatable && options.rotateOnTouch) && Object.keys(pointers).length > 1) {
+        // action = ACTION_ZOOM;
+        // action = ACTION_ROTATE;
+        action = ACTION_TRANSFORM;
       } else if (options.slideOnTouch && (event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
         action = ACTION_SWITCH;
       }
-      if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
+      if (action === ACTION_MOVE || action === ACTION_ZOOM || action === ACTION_ROTATE || action === ACTION_TRANSFORM) {
         removeClass(this.image, CLASS_TRANSITION);
       }
       this.action = action;
@@ -1560,13 +1791,14 @@
         return;
       }
       event.preventDefault();
-      if (options.transition && (action === ACTION_MOVE || action === ACTION_ZOOM)) {
-        addClass(this.image, CLASS_TRANSITION);
+      if (action === ACTION_MOVE || action === ACTION_ZOOM || action === ACTION_ROTATE || action === ACTION_TRANSFORM) {
+        var transition = action === ACTION_TRANSFORM ? isTransitionEnabled(options, ACTION_ZOOM) || isTransitionEnabled(options, ACTION_ROTATE) : isTransitionEnabled(options, action);
+        toggleClass(this.image, CLASS_TRANSITION, transition);
       }
       this.action = false;
 
       // Emulate click and double click in touch devices to support backdrop and image zooming (#210).
-      if (IS_TOUCH_DEVICE && action !== ACTION_ZOOM && pointer && Date.now() - pointer.timeStamp < 500) {
+      if (IS_TOUCH_DEVICE && action !== ACTION_ZOOM && action !== ACTION_TRANSFORM && pointer && Date.now() - pointer.timeStamp < 500) {
         clearTimeout(this.clickCanvasTimeout);
         clearTimeout(this.doubleClickImageTimeout);
         if (options.toggleOnDblclick && this.viewed && event.target === this.image) {
@@ -1615,6 +1847,10 @@
       this.initContainer();
       this.initViewer();
       this.renderViewer();
+      var navbarOptions = isPlainObject(this.options.navbar) ? this.options.navbar : {};
+      if (isUndefined(navbarOptions.visibleItemCount)) {
+        this.initList(this.index);
+      }
       this.renderList();
       if (this.viewed) {
         this.initImage(function () {
@@ -1640,6 +1876,9 @@
         return;
       }
       event.preventDefault();
+      if (this.gesturing) {
+        return;
+      }
 
       // Limit wheel speed to prevent zoom too fast
       if (this.wheeling) {
@@ -1659,6 +1898,43 @@
         delta = event.detail > 0 ? 1 : -1;
       }
       this.zoom(-delta * ratio, true, null, event);
+    },
+    gesture: function gesture(event) {
+      var options = this.options;
+      if (!this.viewed || !options.zoomOnGesture && !options.rotateOnGesture) {
+        return;
+      }
+      event.preventDefault();
+      switch (event.type) {
+        case 'gesturestart':
+          this.gesturing = true;
+          this.gestureScale = event.scale || 1;
+          this.gestureRotation = event.rotation || 0;
+          break;
+        case 'gesturechange':
+          {
+            var scale = event.scale || 1;
+            var ratio = scale / (this.gestureScale || 1);
+            var rotation = Number(event.rotation);
+            var degree = rotation - (this.gestureRotation || 0);
+            this.gestureScale = scale;
+            if (options.zoomable && options.zoomOnGesture && ratio !== 1) {
+              this.zoom(ratio >= 1 ? ratio - 1 : 1 - 1 / ratio, false, null, event);
+            }
+            if (options.rotatable && options.rotateOnGesture && isNumber(rotation)) {
+              this.gestureRotation = rotation;
+              if (degree !== 0) {
+                this.rotate(degree);
+              }
+            }
+            break;
+          }
+        case 'gestureend':
+          this.gesturing = false;
+          this.gestureScale = 1;
+          this.gestureRotation = 0;
+          break;
+      }
     }
   };
 
@@ -1700,7 +1976,7 @@
       viewer.setAttribute('aria-labelledby', this.title.id);
       viewer.setAttribute('aria-modal', true);
       viewer.removeAttribute('aria-hidden');
-      if (options.transition && !immediate) {
+      if (isTransitionEnabled(options, 'show') && !immediate) {
         var shown = this.shown.bind(this);
         this.transitioning = {
           abort: function abort() {
@@ -1740,7 +2016,7 @@
           once: true
         });
       }
-      if (dispatchEvent(element, EVENT_HIDE) === false) {
+      if (dispatchEvent(element, EVENT_HIDE) === false || this.destroyed) {
         return this;
       }
       if (this.showing) {
@@ -1758,7 +2034,7 @@
         removeClass(viewer, CLASS_IN);
         _this.hidden();
       };
-      if (options.transition && !immediate) {
+      if (isTransitionEnabled(options, 'hide') && !immediate) {
         var _onViewerTransitionEnd = function onViewerTransitionEnd(event) {
           // Ignore all propagating `transitionend` events (#275).
           if (event && event.target === viewer) {
@@ -1808,8 +2084,9 @@
     view: function view() {
       var _this2 = this;
       var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.initialViewIndex;
+      var previousIndex = this.index;
       index = Number(index) || 0;
-      if (this.hiding || this.played || index < 0 || index >= this.length || this.viewed && index === this.index) {
+      if (this.hiding || this.played || index < 0 || index >= this.length || this.viewed && index === previousIndex) {
         return this;
       }
       if (!this.isShown) {
@@ -1823,17 +2100,16 @@
         options = this.options,
         title = this.title,
         canvas = this.canvas;
-      var item = this.items[index];
+      var item = this.getItem(index);
+      if (!item) {
+        this.initList(index);
+        item = this.getItem(index);
+      }
       var img = item.querySelector('img');
       var url = getData(img, 'originalUrl');
       var alt = img.getAttribute('alt');
       var image = document.createElement('img');
-      forEach(options.inheritedAttributes, function (name) {
-        var value = img.getAttribute(name);
-        if (value !== null) {
-          image.setAttribute(name, value);
-        }
-      });
+      inheritAttributes(image, img, options.inheritedAttributes);
       image.src = url;
       image.alt = alt;
       if (isFunction(options.view)) {
@@ -1848,7 +2124,8 @@
       }) === false || !this.isShown || this.hiding || this.played) {
         return this;
       }
-      var activeItem = this.items[this.index];
+      this.hideMagnifier();
+      var activeItem = this.getItem(previousIndex);
       if (activeItem) {
         removeClass(activeItem, CLASS_ACTIVE);
         activeItem.removeAttribute('aria-selected');
@@ -1880,6 +2157,25 @@
         var imageData = _this2.imageData;
         var render = Array.isArray(options.title) ? options.title[1] : options.title;
         title.innerHTML = escapeHTMLEntities(isFunction(render) ? render.call(_this2, image, imageData) : "".concat(alt, " (").concat(imageData.naturalWidth, " \xD7 ").concat(imageData.naturalHeight, ")"));
+
+        // Preload the image in the direction of navigation
+        if (options.preload) {
+          var direction = index < previousIndex ? -1 : 1;
+          var nextIndex = index + direction;
+          if (nextIndex < 0 || nextIndex >= _this2.length) {
+            if (options.loop) {
+              nextIndex = direction > 0 ? 0 : _this2.length - 1;
+            } else {
+              nextIndex = -1;
+            }
+          }
+          if (nextIndex !== index) {
+            var nextImage = _this2.images[nextIndex];
+            var preloadedImage = document.createElement('img');
+            inheritAttributes(preloadedImage, nextImage, options.inheritedAttributes);
+            preloadedImage.src = _this2.getImageURL(nextImage) || nextImage.src;
+          }
+        }
       };
       var onLoad;
       var onError;
@@ -2031,6 +2327,7 @@
           imageData.y = y;
           imageData.left = x;
           imageData.top = y;
+          toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'move'));
           this.moving = true;
           this.renderImage(function () {
             _this3.moving = false;
@@ -2087,6 +2384,7 @@
           return this;
         }
         imageData.rotate = degree;
+        toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'rotate'));
         this.rotating = true;
         this.renderImage(function () {
           _this4.rotating = false;
@@ -2167,6 +2465,7 @@
           }
           imageData.scaleX = scaleX;
           imageData.scaleY = scaleY;
+          toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'scale'));
           this.scaling = true;
           this.renderImage(function () {
             _this5.scaling = false;
@@ -2238,8 +2537,8 @@
       ratio = Math.max(0, ratio);
       if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
         if (!_zoomable) {
-          var minZoomRatio = Math.max(0.01, options.minZoomRatio);
-          var maxZoomRatio = Math.min(100, options.maxZoomRatio);
+          var minZoomRatio = Math.max(0.01, isFunction(options.minZoomRatio) ? options.minZoomRatio.call(this, this.image, imageData) : options.minZoomRatio);
+          var maxZoomRatio = Math.min(100, isFunction(options.maxZoomRatio) ? options.maxZoomRatio.call(this, this.image, imageData) : options.maxZoomRatio);
           ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
         }
         if (_originalEvent) {
@@ -2300,6 +2599,7 @@
         imageData.height = newHeight;
         imageData.oldRatio = oldRatio;
         imageData.ratio = ratio;
+        toggleClass(this.image, CLASS_TRANSITION, isTransitionEnabled(options, 'zoom'));
         this.renderImage(function () {
           _this6.zooming = false;
           if (isFunction(options.zoomed)) {
@@ -2353,16 +2653,15 @@
         this.requestFullscreen(fullscreen);
       }
       addClass(player, CLASS_SHOW);
-      forEach(this.items, function (item, i) {
-        var img = item.querySelector('img');
+      forEach(this.images, function (originalImage, i) {
         var image = document.createElement('img');
-        image.src = getData(img, 'originalUrl');
-        image.alt = img.getAttribute('alt');
-        image.referrerPolicy = img.referrerPolicy;
+        image.src = _this7.getImageURL(originalImage) || originalImage.src;
+        image.alt = originalImage.alt || '';
+        image.referrerPolicy = originalImage.referrerPolicy;
         total += 1;
         addClass(image, CLASS_FADE);
-        toggleClass(image, CLASS_TRANSITION, options.transition);
-        if (hasClass(item, CLASS_ACTIVE)) {
+        toggleClass(image, CLASS_TRANSITION, isTransitionEnabled(options, 'play'));
+        if (i === _this7.index) {
           addClass(image, CLASS_IN);
           index = i;
         }
@@ -2379,7 +2678,7 @@
           index -= 1;
           index = index >= 0 ? index : total - 1;
           addClass(list[index], CLASS_IN);
-          _this7.playing.timeout = setTimeout(_prev, options.interval);
+          _this7.playing.timeout = options.autoplay ? setTimeout(_prev, options.interval) : null;
         };
         var _next = function next() {
           clearTimeout(_this7.playing.timeout);
@@ -2387,13 +2686,13 @@
           index += 1;
           index = index < total ? index : 0;
           addClass(list[index], CLASS_IN);
-          _this7.playing.timeout = setTimeout(_next, options.interval);
+          _this7.playing.timeout = options.autoplay ? setTimeout(_next, options.interval) : null;
         };
         if (total > 1) {
           this.playing = {
             prev: _prev,
             next: _next,
-            timeout: setTimeout(_next, options.interval)
+            timeout: options.autoplay ? setTimeout(_next, options.interval) : null
           };
         }
       }
@@ -2440,11 +2739,9 @@
       this.fulled = true;
       this.open();
       addClass(this.button, CLASS_FULLSCREEN_EXIT);
-      if (options.transition) {
-        removeClass(list, CLASS_TRANSITION);
-        if (this.viewed) {
-          removeClass(image, CLASS_TRANSITION);
-        }
+      removeClass(list, CLASS_TRANSITION);
+      if (this.viewed) {
+        removeClass(image, CLASS_TRANSITION);
       }
       addClass(viewer, CLASS_FIXED);
       viewer.setAttribute('role', 'dialog');
@@ -2462,14 +2759,7 @@
       this.renderList();
       if (this.viewed) {
         this.initImage(function () {
-          _this9.renderImage(function () {
-            if (options.transition) {
-              setTimeout(function () {
-                addClass(image, CLASS_TRANSITION);
-                addClass(list, CLASS_TRANSITION);
-              }, 0);
-            }
-          });
+          _this9.renderImage();
         });
       }
       return this;
@@ -2487,11 +2777,9 @@
       this.fulled = false;
       this.close();
       removeClass(this.button, CLASS_FULLSCREEN_EXIT);
-      if (options.transition) {
-        removeClass(list, CLASS_TRANSITION);
-        if (this.viewed) {
-          removeClass(image, CLASS_TRANSITION);
-        }
+      removeClass(list, CLASS_TRANSITION);
+      if (this.viewed) {
+        removeClass(image, CLASS_TRANSITION);
       }
       if (options.focus) {
         this.clearEnforceFocus();
@@ -2508,14 +2796,7 @@
       this.renderList();
       if (this.viewed) {
         this.initImage(function () {
-          _this0.renderImage(function () {
-            if (options.transition) {
-              setTimeout(function () {
-                addClass(image, CLASS_TRANSITION);
-                addClass(list, CLASS_TRANSITION);
-              }, 0);
-            }
-          });
+          _this0.renderImage();
         });
       }
       return this;
@@ -2531,7 +2812,7 @@
       }
       tooltipBox.textContent = "".concat(Math.round(imageData.ratio * 100), "%");
       if (!this.tooltipping) {
-        if (options.transition) {
+        if (isTransitionEnabled(options, 'tooltip')) {
           if (this.fading) {
             dispatchEvent(tooltipBox, EVENT_TRANSITION_END);
           }
@@ -2551,7 +2832,7 @@
         clearTimeout(this.tooltipping);
       }
       this.tooltipping = setTimeout(function () {
-        if (options.transition) {
+        if (isTransitionEnabled(options, 'tooltip')) {
           addListener(tooltipBox, EVENT_TRANSITION_END, function () {
             removeClass(tooltipBox, CLASS_SHOW);
             removeClass(tooltipBox, CLASS_FADE);
@@ -2593,12 +2874,19 @@
       }
       return this;
     },
-    // Update viewer when images changed
-    update: function update() {
+    /**
+     * Update the viewer when images or options changed.
+     * @param {Object} [updateOptions] - The options to update.
+     * @returns {Viewer} this
+     */
+    update: function update(updateOptions) {
       var _this10 = this;
       var element = this.element,
         options = this.options,
         isImg = this.isImg;
+      if (isPlainObject(updateOptions)) {
+        assign(options, updateOptions);
+      }
 
       // Destroy viewer if the target image was deleted
       if (isImg && !element.parentNode) {
@@ -2621,18 +2909,19 @@
       this.length = images.length;
       if (this.ready) {
         var changedIndexes = [];
-        forEach(this.items, function (item, i) {
+        forEach(this.items, function (item) {
           var img = item.querySelector('img');
-          var image = images[i];
+          var index = Number(getData(item, 'index'));
+          var image = images[index];
           if (image && img) {
             if (image.src !== img.src
 
             // Title changed (#408)
             || image.alt !== img.alt) {
-              changedIndexes.push(i);
+              changedIndexes.push(index);
             }
           } else {
-            changedIndexes.push(i);
+            changedIndexes.push(index);
           }
         });
         setStyle(this.list, {
@@ -2647,7 +2936,7 @@
                 this.viewed = false;
                 this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
               } else {
-                var activeItem = this.items[this.index];
+                var activeItem = this.getItem(this.index);
 
                 // Reactivate the current viewing item after reset the list.
                 addClass(activeItem, CLASS_ACTIVE);
@@ -2833,7 +3122,7 @@
       }
     },
     requestFullscreen: function requestFullscreen(options) {
-      var document = this.element.ownerDocument;
+      var document = this.ownerDocument;
       if (this.fulled && !(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
         var documentElement = document.documentElement;
 
@@ -2855,7 +3144,7 @@
       }
     },
     exitFullscreen: function exitFullscreen() {
-      var document = this.element.ownerDocument;
+      var document = this.ownerDocument;
       if (this.fulled && (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)) {
         // Document.exitFullscreen()
         if (document.exitFullscreen) {
@@ -2891,7 +3180,38 @@
 
         // Zoom the current image
         case ACTION_ZOOM:
-          this.zoom(getMaxZoomRatio(pointers), false, null, event);
+          if (options.zoomable && options.zoomOnTouch) {
+            var zoomRatio = getMaxZoomRatio(pointers);
+            if (zoomRatio !== 0) {
+              this.zoom(zoomRatio, false, null, event);
+            }
+          }
+          break;
+
+        // Rotate the current image
+        case ACTION_ROTATE:
+          if (options.rotatable && options.rotateOnTouch) {
+            var rotateDegree = getMaxRotateDegree(pointers);
+            if (rotateDegree !== 0) {
+              this.rotate(rotateDegree, event);
+            }
+          }
+          break;
+
+        // Transform the current image
+        case ACTION_TRANSFORM:
+          if (options.zoomable && options.zoomOnTouch) {
+            var _zoomRatio = getMaxZoomRatio(pointers);
+            if (_zoomRatio !== 0) {
+              this.zoom(_zoomRatio, false, null, event);
+            }
+          }
+          if (options.rotatable && options.rotateOnTouch) {
+            var _rotateDegree = getMaxRotateDegree(pointers);
+            if (_rotateDegree !== 0) {
+              this.rotate(_rotateDegree, event);
+            }
+          }
           break;
         case ACTION_SWITCH:
           {
@@ -2933,16 +3253,17 @@
   var Viewer = /*#__PURE__*/function () {
     /**
      * Create a new Viewer.
-     * @param {Element} element - The target element for viewing.
+     * @param {Element} element - The target image, or a container of images, to view.
      * @param {Object} [options={}] - The configuration options.
      */
     function Viewer(element) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       _classCallCheck(this, Viewer);
-      if (!element || element.nodeType !== 1) {
+      if (!element || element.nodeType !== 1 && element.nodeType !== 11) {
         throw new Error('The first argument is required and must be an element.');
       }
       this.element = element;
+      this.ownerDocument = element.ownerDocument || element.host.ownerDocument;
       this.options = assign({}, DEFAULTS, isPlainObject(options) && options);
       this.action = false;
       this.fading = false;
@@ -3004,7 +3325,7 @@
         this.initBody();
 
         // Override `transition` option if it is not supported
-        if (isUndefined(document.createElement(NAMESPACE).style.transition)) {
+        if (isUndefined(this.ownerDocument.createElement(NAMESPACE).style.transition)) {
           options.transition = false;
         }
         if (options.inline) {
@@ -3091,6 +3412,7 @@
         var title = viewer.querySelector(".".concat(NAMESPACE, "-title"));
         var toolbar = viewer.querySelector(".".concat(NAMESPACE, "-toolbar"));
         var navbar = viewer.querySelector(".".concat(NAMESPACE, "-navbar"));
+        var navigation = viewer.querySelector(".".concat(NAMESPACE, "-navigation"));
         var button = viewer.querySelector(".".concat(NAMESPACE, "-button"));
         var canvas = viewer.querySelector(".".concat(NAMESPACE, "-canvas"));
         this.parent = parent;
@@ -3098,19 +3420,52 @@
         this.title = title;
         this.toolbar = toolbar;
         this.navbar = navbar;
+        this.navigation = navigation;
         this.button = button;
         this.canvas = canvas;
         this.footer = viewer.querySelector(".".concat(NAMESPACE, "-footer"));
+        this.magnifier = viewer.querySelector(".".concat(NAMESPACE, "-magnifier"));
+        this.magnifierImage = viewer.querySelector(".".concat(NAMESPACE, "-magnifier-image"));
         this.tooltipBox = viewer.querySelector(".".concat(NAMESPACE, "-tooltip"));
         this.player = viewer.querySelector(".".concat(NAMESPACE, "-player"));
         this.list = viewer.querySelector(".".concat(NAMESPACE, "-list"));
         viewer.id = "".concat(NAMESPACE).concat(this.id);
         title.id = "".concat(NAMESPACE, "Title").concat(this.id);
         addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title) ? options.title[0] : options.title));
-        addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
+        var navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
+        var navbarShow = options.navbar;
+        var navbarSize = !isUndefined(navbarOptions.size) ? navbarOptions.size : options.navbar;
+        if (isPlainObject(options.navbar)) {
+          navbarShow = !isUndefined(navbarOptions.show) ? navbarOptions.show : true;
+        }
+        addClass(navbar, !navbarShow ? CLASS_HIDE : getResponsiveClass(navbarShow));
+        if (['small', 'medium', 'large'].indexOf(navbarSize) !== -1) {
+          addClass(navbar, "".concat(NAMESPACE, "-").concat(navbarSize));
+        }
+        if (isPlainObject(options.navigation)) {
+          forEach(navigation.querySelectorAll('[role="button"]'), function (item) {
+            var name = getData(item, DATA_ACTION);
+            var value = options.navigation[name];
+            var deep = isPlainObject(value);
+            var show = deep && !isUndefined(value.show) ? value.show : value;
+            var size = deep && !isUndefined(value.size) ? value.size : value;
+            toggleClass(item, CLASS_HIDE, !show);
+            if (isNumber(show)) {
+              addClass(item, getResponsiveClass(show));
+            }
+            if (['small', 'large'].indexOf(size) !== -1) {
+              addClass(item, "".concat(NAMESPACE, "-").concat(size));
+            }
+          });
+        } else {
+          addClass(navigation, !options.navigation ? CLASS_HIDE : getResponsiveClass(options.navigation));
+        }
         toggleClass(button, CLASS_HIDE, !options.button);
         if (options.keyboard) {
           button.setAttribute('tabindex', 0);
+          forEach(navigation.querySelectorAll('[role="button"]'), function (item) {
+            item.setAttribute('tabindex', 0);
+          });
         }
         if (options.backdrop) {
           addClass(viewer, "".concat(NAMESPACE, "-backdrop"));
@@ -3196,7 +3551,7 @@
           });
           var container = options.container;
           if (isString(container)) {
-            container = element.ownerDocument.querySelector(container);
+            container = this.ownerDocument.querySelector(container);
           }
           if (!container) {
             container = this.body;
@@ -3224,14 +3579,15 @@
       }
 
       /**
-       * Get the no conflict viewer class.
-       * @returns {Viewer} The viewer class.
+       * Create a new Viewer instance.
+       * @param {Element} element - The target image, or a container of images, to view.
+       * @param {Object} [options={}] - The configuration options.
+       * @returns {Viewer} A new Viewer instance.
        */
     }], [{
-      key: "noConflict",
-      value: function noConflict() {
-        window.Viewer = AnotherViewer;
-        return Viewer;
+      key: "create",
+      value: function create(element, options) {
+        return new Viewer(element, options);
       }
 
       /**
@@ -3242,6 +3598,17 @@
       key: "setDefaults",
       value: function setDefaults(options) {
         assign(DEFAULTS, isPlainObject(options) && options);
+      }
+
+      /**
+       * Get the no conflict viewer class.
+       * @returns {Viewer} The viewer class.
+       */
+    }, {
+      key: "noConflict",
+      value: function noConflict() {
+        window.Viewer = AnotherViewer;
+        return Viewer;
       }
     }]);
   }();

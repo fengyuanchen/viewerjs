@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.12.0
+ * Viewer.js v1.13.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2026-08-22T13:00:37.884Z
+ * Date: 2026-09-06T10:39:42.533Z
  */
 
 .viewer-zoom-in::before, .viewer-zoom-out::before, .viewer-one-to-one::before, .viewer-reset::before, .viewer-prev::before, .viewer-play::before, .viewer-next::before, .viewer-rotate-left::before, .viewer-rotate-right::before, .viewer-flip-horizontal::before, .viewer-flip-vertical::before, .viewer-fullscreen::before, .viewer-fullscreen-exit::before, .viewer-close::before {
@@ -149,6 +149,97 @@
     width: auto;
   }
 
+.viewer-magnifier {
+  background-color: #fff;
+  background-repeat: no-repeat;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  display: none;
+  left: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 16px;
+  z-index: 2;
+}
+
+.viewer-magnifier.viewer-show {
+    display: block;
+  }
+
+.viewer-magnifier-image {
+  left: 0;
+  max-width: none !important;
+  position: absolute;
+  top: 0;
+  -ms-transform-origin: center;
+      transform-origin: center;
+}
+
+.viewer-navigation {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+
+.viewer-navigation > .viewer-prev,
+  .viewer-navigation > .viewer-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 40px;
+    margin-top: -20px;
+    position: absolute;
+    width: 40px;
+  }
+
+.viewer-navigation > .viewer-prev:focus,
+    .viewer-navigation > .viewer-next:focus,
+    .viewer-navigation > .viewer-prev:hover,
+    .viewer-navigation > .viewer-next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+.viewer-navigation > .viewer-prev:focus, .viewer-navigation > .viewer-next:focus {
+      box-shadow: 0 0 3px #fff;
+      outline: 0;
+    }
+
+.viewer-navigation > .viewer-prev::before, .viewer-navigation > .viewer-next::before {
+      margin: 10px;
+    }
+
+.viewer-navigation > .viewer-prev {
+    left: 15px;
+  }
+
+.viewer-navigation > .viewer-next {
+    right: 15px;
+  }
+
+.viewer-navigation > .viewer-large {
+    height: 48px;
+    margin-top: -24px;
+    width: 48px;
+  }
+
+.viewer-navigation > .viewer-large::before {
+      margin: 14px;
+    }
+
+.viewer-navigation > .viewer-small {
+    height: 32px;
+    margin-top: -16px;
+    width: 32px;
+  }
+
+.viewer-navigation > .viewer-small::before {
+      margin: 6px;
+    }
+
 .viewer-footer {
   bottom: 0;
   left: 0;
@@ -162,6 +253,24 @@
   background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
+
+.viewer-navbar.viewer-small > .viewer-list {
+    height: 40px;
+
+    > li {
+      height: 40px;
+      width: 24px;
+    }
+  }
+
+.viewer-navbar.viewer-large > .viewer-list {
+    height: 60px;
+
+    > li {
+      height: 60px;
+      width: 36px;
+    }
+  }
 
 .viewer-list {
   box-sizing: content-box;

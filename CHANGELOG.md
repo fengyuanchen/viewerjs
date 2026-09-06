@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.13.0 (Sep 6, 2026)
 
 - Support rotating images with two-finger touch gestures using the `rotateOnTouch` option.
 - Add the `Viewer.create` static method for creating a new `Viewer` instance without the `new` operator.
