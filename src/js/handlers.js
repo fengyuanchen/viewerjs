@@ -26,7 +26,9 @@ import {
   getTransforms,
   isFunction,
   isNumber,
+  isPlainObject,
   isTransitionEnabled,
+  isUndefined,
   removeClass,
   setStyle,
   toggleClass,
@@ -518,6 +520,13 @@ export default {
     this.initContainer();
     this.initViewer();
     this.renderViewer();
+
+    const navbarOptions = isPlainObject(this.options.navbar) ? this.options.navbar : {};
+
+    if (isUndefined(navbarOptions.visibleItemCount)) {
+      this.initList(this.index);
+    }
+
     this.renderList();
 
     if (this.viewed) {

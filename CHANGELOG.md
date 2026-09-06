@@ -11,6 +11,7 @@
 - Support viewing images inside a `ShadowRoot` (#622).
 - Add a new `autoplay` option to disable automatic image cycling when playing (#608).
 - Support Mac Safari trackpad gestures for zooming and rotation with the `zoomOnGesture` and `rotateOnGesture` options (#492).
+- Add the `visibleItemCount` option to `navbar` to improve performance when viewing large galleries (#426).
 - Allow updating viewer options with the `update` method (#355).
 - Enhance `navbar` option to support object values for visibility and thumbnail size (#353).
 - Allow controlling transitions by action with the `transition` option (#337).

@@ -241,7 +241,13 @@ export default {
       title,
       canvas,
     } = this;
-    const item = this.items[index];
+    let item = this.getItem(index);
+
+    if (!item) {
+      this.initList(index);
+      item = this.getItem(index);
+    }
+
     const img = item.querySelector('img');
     const url = getData(img, 'originalUrl');
     const alt = img.getAttribute('alt');
@@ -265,7 +271,7 @@ export default {
       return this;
     }
 
-    const activeItem = this.items[previousIndex];
+    const activeItem = this.getItem(previousIndex);
 
     if (activeItem) {
       removeClass(activeItem, CLASS_ACTIVE);
@@ -321,11 +327,11 @@ export default {
         }
 
         if (nextIndex !== index) {
-          const nextImage = this.items[nextIndex].querySelector('img');
+          const nextImage = this.images[nextIndex];
           const preloadedImage = document.createElement('img');
 
           inheritAttributes(preloadedImage, nextImage, options.inheritedAttributes);
-          preloadedImage.src = getData(nextImage, 'originalUrl');
+          preloadedImage.src = this.getImageURL(nextImage) || nextImage.src;
         }
       }
     };
@@ -884,18 +890,17 @@ export default {
     }
 
     addClass(player, CLASS_SHOW);
-    forEach(this.items, (item, i) => {
-      const img = item.querySelector('img');
+    forEach(this.images, (originalImage, i) => {
       const image = document.createElement('img');
 
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
-      image.referrerPolicy = img.referrerPolicy;
+      image.src = this.getImageURL(originalImage) || originalImage.src;
+      image.alt = originalImage.alt || '';
+      image.referrerPolicy = originalImage.referrerPolicy;
       total += 1;
       addClass(image, CLASS_FADE);
       toggleClass(image, CLASS_TRANSITION, isTransitionEnabled(options, 'play'));
 
-      if (hasClass(item, CLASS_ACTIVE)) {
+      if (i === this.index) {
         addClass(image, CLASS_IN);
         index = i;
       }
@@ -1188,9 +1193,10 @@ export default {
     if (this.ready) {
       const changedIndexes = [];
 
-      forEach(this.items, (item, i) => {
+      forEach(this.items, (item) => {
         const img = item.querySelector('img');
-        const image = images[i];
+        const index = Number(getData(item, 'index'));
+        const image = images[index];
 
         if (image && img) {
           if (
@@ -1199,10 +1205,10 @@ export default {
             // Title changed (#408)
             || image.alt !== img.alt
           ) {
-            changedIndexes.push(i);
+            changedIndexes.push(index);
           }
         } else {
-          changedIndexes.push(i);
+          changedIndexes.push(index);
         }
       });
 
@@ -1221,7 +1227,7 @@ export default {
               this.viewed = false;
               this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
             } else {
-              const activeItem = this.items[this.index];
+              const activeItem = this.getItem(this.index);
 
               // Reactivate the current viewing item after reset the list.
               addClass(activeItem, CLASS_ACTIVE);

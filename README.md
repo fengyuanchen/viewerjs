@@ -172,6 +172,7 @@ Show the button on the top-right of the viewer.
   - `Object`: configure the navbar with the following properties:
     - `show` (`Boolean` or `Number`): specify the visibility of the navbar.
     - `size` (`String`): specify the thumbnail size: `small`, `medium`, or `large`.
+    - `visibleItemCount` (`Number`): specify the number of thumbnail items to render around the active item. The default is calculated from the container width and the width of one thumbnail item.
 
 Specify the visibility of the navbar.
 

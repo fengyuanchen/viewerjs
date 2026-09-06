@@ -1,4 +1,5 @@
 import {
+  CLASS_ACTIVE,
   CLASS_LOADING,
   CLASS_TRANSITION,
   EVENT_ERROR,
@@ -11,12 +12,14 @@ import {
   addListener,
   assign,
   forEach,
+  getData,
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
   hasClass,
   inheritAttributes,
   isNumber,
+  isPlainObject,
   isTransitionEnabled,
   removeClass,
   removeListener,
@@ -75,14 +78,41 @@ export default {
     }
   },
 
-  initList() {
+  initList(viewIndex = this.index) {
     const { element, options, list } = this;
     const items = [];
+    const navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
+    const probe = document.createElement('li');
+
+    list.appendChild(probe);
+    const itemWidth = probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
+
+    list.removeChild(probe);
+
+    let visibleItemCount = isNumber(navbarOptions.visibleItemCount)
+      ? Math.floor(navbarOptions.visibleItemCount)
+      : Math.floor(this.containerData.width / itemWidth);
+
+    visibleItemCount = Math.min(visibleItemCount, this.length);
+
+    const start = visibleItemCount > 0
+      ? Math.min(
+        Math.max(0, viewIndex - Math.floor(visibleItemCount / 2)),
+        Math.max(0, this.length - visibleItemCount),
+      )
+      : 0;
+    const end = visibleItemCount > 0
+      ? Math.min(this.length, start + visibleItemCount)
+      : this.length;
 
     // initList may be called in this.update, so should keep idempotent
     list.innerHTML = '';
 
     forEach(this.images, (image, index) => {
+      if (visibleItemCount > 0 && (index < start || index >= end)) {
+        return;
+      }
+
       const { src } = image;
       const alt = image.alt || getImageNameFromURL(src);
       const url = this.getImageURL(image);
@@ -114,6 +144,15 @@ export default {
     });
 
     this.items = items;
+
+    if (this.viewed) {
+      const activeItem = this.getItem(this.index);
+
+      if (activeItem) {
+        addClass(activeItem, CLASS_ACTIVE);
+        activeItem.setAttribute('aria-selected', true);
+      }
+    }
 
     forEach(items, (item) => {
       const image = item.firstElementChild;
@@ -157,9 +196,24 @@ export default {
     }
   },
 
+  getItem(index) {
+    let item;
+
+    forEach(this.items, (candidate) => {
+      if (Number(getData(candidate, 'index')) === index) {
+        item = candidate;
+        return false;
+      }
+
+      return true;
+    });
+
+    return item;
+  },
+
   renderList() {
     const { index } = this;
-    const item = this.items[index];
+    const item = this.getItem(index);
 
     if (!item) {
       return;
@@ -172,9 +226,9 @@ export default {
 
     // Place the active item in the center of the screen
     setStyle(this.list, assign({
-      width: outerWidth * this.length - gutter,
+      width: outerWidth * this.items.length - gutter,
     }, getTransforms({
-      translateX: ((this.viewerData.width - offsetWidth) / 2) - outerWidth * index,
+      translateX: ((this.viewerData.width - offsetWidth) / 2) - item.offsetLeft,
     })));
   },
 

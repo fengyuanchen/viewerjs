@@ -38,6 +38,7 @@ declare namespace Viewer {
   export type NavigationOption = boolean | Visibility | NavigationButtonOptions | undefined;
 
   export interface NavbarOptions {
+    visibleItemCount?: number;
     show?: boolean | Visibility;
     size?: ToolbarButtonSize;
   }
