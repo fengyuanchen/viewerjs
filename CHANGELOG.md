@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.14.0 (Sep 12, 2026)
 
 - Fix a `TypeError` when updating a modal viewer before it is shown (#670).
 - Add a new `playing` event that fires each time the image switches during playback (#500).
