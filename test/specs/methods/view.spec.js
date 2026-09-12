@@ -138,4 +138,21 @@ describe('view (method)', () => {
 
     viewer.show();
   });
+
+  it('should fallback to thumbnail when the original image fails to load', (done) => {
+    const imageList = window.createImageList();
+    const viewer = new Viewer(imageList, {
+      url() {
+        return 'https://invalid-domain.example/invalid-image.jpg';
+      },
+      viewed(event) {
+        expect(viewer.image.src).to.include('/base/docs/images/tibet-1.jpg');
+        expect(event.detail.image.src).to.include('/base/docs/images/tibet-1.jpg');
+        viewer.hide(true);
+        done();
+      },
+    });
+
+    viewer.show();
+  });
 });

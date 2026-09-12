@@ -337,71 +337,87 @@ export default {
         }
       }
     };
-    let onLoad;
-    let onError;
 
     addListener(element, EVENT_VIEWED, onViewed, {
       once: true,
     });
 
-    this.viewing = {
-      abort: () => {
-        removeListener(element, EVENT_VIEWED, onViewed);
+    const loadImage = (isFallback = false) => {
+      let onLoad;
+      let onError;
 
-        if (image.complete) {
-          if (this.imageRendering) {
-            this.imageRendering.abort();
-          } else if (this.imageInitializing) {
-            this.imageInitializing.abort();
-          }
-        } else {
-          // Cancel download to save bandwidth.
-          image.src = '';
-          removeListener(image, EVENT_LOAD, onLoad);
-
-          if (this.timeout) {
-            clearTimeout(this.timeout);
-          }
-        }
-      },
-    };
-
-    if (image.complete) {
-      this.load();
-    } else {
-      addListener(image, EVENT_LOAD, onLoad = () => {
-        removeListener(image, EVENT_ERROR, onError);
-        this.load();
-      }, {
-        once: true,
-      });
-      addListener(image, EVENT_ERROR, onError = () => {
+      const clean = () => {
         removeListener(image, EVENT_LOAD, onLoad);
+        removeListener(image, EVENT_ERROR, onError);
 
         if (this.timeout) {
           clearTimeout(this.timeout);
           this.timeout = false;
         }
+      };
 
-        removeClass(image, CLASS_INVISIBLE);
+      this.viewing = {
+        abort: () => {
+          removeListener(element, EVENT_VIEWED, onViewed);
 
-        if (options.loading) {
-          removeClass(this.canvas, CLASS_LOADING);
+          if (image.complete) {
+            if (this.imageRendering) {
+              this.imageRendering.abort();
+            } else if (this.imageInitializing) {
+              this.imageInitializing.abort();
+            }
+          } else {
+            // Cancel download to save bandwidth.
+            image.src = '';
+            clean();
+          }
+        },
+      };
+
+      if (image.complete) {
+        this.load();
+      } else {
+        addListener(image, EVENT_LOAD, onLoad = () => {
+          clean();
+          this.load();
+        }, {
+          once: true,
+        });
+        addListener(image, EVENT_ERROR, onError = () => {
+          clean();
+
+          if (!isFallback) {
+            const fallbackSrc = img.src;
+
+            if (fallbackSrc && fallbackSrc !== image.src) {
+              image.src = fallbackSrc;
+              loadImage(true);
+              return;
+            }
+          }
+
+          removeClass(image, CLASS_INVISIBLE);
+
+          if (options.loading) {
+            removeClass(this.canvas, CLASS_LOADING);
+          }
+        }, {
+          once: true,
+        });
+
+        if (this.timeout) {
+          clearTimeout(this.timeout);
         }
-      }, {
-        once: true,
-      });
 
-      if (this.timeout) {
-        clearTimeout(this.timeout);
+        // Make the image visible if it fails to load within 1s
+        this.timeout = setTimeout(() => {
+          removeClass(image, CLASS_INVISIBLE);
+          this.timeout = false;
+        }, 1000);
       }
+    };
 
-      // Make the image visible if it fails to load within 1s
-      this.timeout = setTimeout(() => {
-        removeClass(image, CLASS_INVISIBLE);
-        this.timeout = false;
-      }, 1000);
-    }
+    loadImage();
 
     return this;
   },

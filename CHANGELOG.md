@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add fallback to thumbnail when original image fails to load (#539).
 - Add a new `slideOnWheel` option to slide to the next or previous image by wheeling the mouse, with optional modifier key support (e.g. `ctrl`) (#528).
 - Enhance the `zoomOnWheel` option to support requiring a modifier key (e.g. `ctrl`) while wheeling to zoom (#528).
 
