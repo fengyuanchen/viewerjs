@@ -4,6 +4,7 @@ describe('navigation (option)', () => {
     const viewer = new Viewer(image, {
       viewed() {
         expect(window.getComputedStyle(viewer.navigation).display).to.equal('none');
+        expect(viewer.navigation.getAttribute('aria-hidden')).to.equal('true');
         viewer.hide(true);
         done();
       },
@@ -24,6 +25,7 @@ describe('navigation (option)', () => {
 
         if (viewed === 1) {
           expect(window.getComputedStyle(viewer.navigation).display).to.not.equal('none');
+          expect(viewer.navigation.hasAttribute('aria-hidden')).to.false;
           viewer.navigation.querySelector('.viewer-next').click();
         } else {
           expect(event.detail.index).to.equal(1);

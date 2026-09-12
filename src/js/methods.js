@@ -892,6 +892,7 @@ export default {
     }
 
     addClass(player, CLASS_SHOW);
+    player.removeAttribute('aria-hidden');
     forEach(this.images, (originalImage, i) => {
       const image = document.createElement('img');
 
@@ -971,6 +972,7 @@ export default {
       removeListener(image, EVENT_LOAD, this.onLoadWhenPlay);
     });
     removeClass(player, CLASS_SHOW);
+    player.setAttribute('aria-hidden', true);
     player.innerHTML = '';
     this.exitFullscreen();
 

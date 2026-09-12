@@ -6,6 +6,7 @@ describe('title (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.title).display).to.not.equal('none');
+        expect(viewer.title.hasAttribute('aria-hidden')).to.false;
         done();
       },
     });
@@ -21,6 +22,7 @@ describe('title (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.title).display).to.equal('none');
+        expect(viewer.title.getAttribute('aria-hidden')).to.equal('true');
         done();
       },
     });

@@ -9,6 +9,7 @@ describe('stop (method)', () => {
         viewer.stop();
         expect(viewer.played).to.be.false;
         expect(window.getComputedStyle(viewer.player).display).to.equal('none');
+        expect(viewer.player.getAttribute('aria-hidden')).to.equal('true');
         viewer.hide(true);
         done();
       },
@@ -29,6 +30,7 @@ describe('stop (method)', () => {
         viewer.stop();
         expect(viewer.played).to.be.false;
         expect(window.getComputedStyle(viewer.player).display).to.equal('none');
+        expect(viewer.player.getAttribute('aria-hidden')).to.equal('true');
         done();
       },
     });

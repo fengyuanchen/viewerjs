@@ -6,6 +6,7 @@ describe('toolbar (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.toolbar).display).to.not.equal('none');
+        expect(viewer.toolbar.hasAttribute('aria-hidden')).to.false;
         done();
       },
     });
@@ -21,11 +22,28 @@ describe('toolbar (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.toolbar).display).to.equal('none');
+        expect(viewer.toolbar.getAttribute('aria-hidden')).to.equal('true');
         done();
       },
     });
 
     expect(viewer.options.toolbar).to.be.false;
+  });
+
+  it('should not show footer when title, toolbar, and navbar are disabled', (done) => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      inline: true,
+      title: false,
+      toolbar: false,
+      navbar: false,
+
+      ready() {
+        expect(window.getComputedStyle(viewer.footer).display).to.equal('none');
+        expect(viewer.footer.getAttribute('aria-hidden')).to.equal('true');
+        done();
+      },
+    });
   });
 
   it('should customize toolbar buttons', (done) => {

@@ -243,6 +243,10 @@ class Viewer {
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
       ? options.title[0]
       : options.title));
+
+    if (options.title) {
+      title.removeAttribute('aria-hidden');
+    }
     const navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
     let navbarShow = options.navbar;
     const navbarSize = !isUndefined(navbarOptions.size) ? navbarOptions.size : options.navbar;
@@ -252,6 +256,10 @@ class Viewer {
     }
 
     addClass(navbar, !navbarShow ? CLASS_HIDE : getResponsiveClass(navbarShow));
+
+    if (navbarShow) {
+      navbar.removeAttribute('aria-hidden');
+    }
 
     if (['small', 'medium', 'large'].indexOf(navbarSize) !== -1) {
       addClass(navbar, `${NAMESPACE}-${navbarSize}`);
@@ -284,7 +292,15 @@ class Viewer {
       );
     }
 
+    if (options.navigation) {
+      navigation.removeAttribute('aria-hidden');
+    }
+
     toggleClass(button, CLASS_HIDE, !options.button);
+
+    if (options.button) {
+      button.removeAttribute('aria-hidden');
+    }
 
     if (options.keyboard) {
       button.setAttribute('tabindex', 0);
@@ -318,6 +334,8 @@ class Viewer {
       if (!custom) {
         addClass(toolbar, getResponsiveClass(options.toolbar));
       }
+
+      toolbar.removeAttribute('aria-hidden');
 
       forEach(custom ? options.toolbar : BUTTONS, (value, index) => {
         const deep = custom && isPlainObject(value);
@@ -368,6 +386,12 @@ class Viewer {
       toolbar.appendChild(list);
     } else {
       addClass(toolbar, CLASS_HIDE);
+    }
+
+    if (options.title || navbarShow || options.toolbar) {
+      this.footer.removeAttribute('aria-hidden');
+    } else {
+      addClass(this.footer, CLASS_HIDE);
     }
 
     if (!options.rotatable) {

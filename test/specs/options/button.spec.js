@@ -6,6 +6,7 @@ describe('button (option)', () => {
         const { button } = viewer;
 
         expect(window.getComputedStyle(button).display).to.not.equal('none');
+        expect(button.hasAttribute('aria-hidden')).to.false;
         expect(button.className).to.include('viewer-close');
         button.click();
       },
@@ -26,6 +27,7 @@ describe('button (option)', () => {
 
       shown() {
         expect(window.getComputedStyle(viewer.button).display).to.equal('none');
+        expect(viewer.button.getAttribute('aria-hidden')).to.equal('true');
         viewer.hide(true);
         done();
       },

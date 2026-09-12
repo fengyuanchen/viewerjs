@@ -6,6 +6,7 @@ describe('navbar (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.navbar).display).to.not.equal('none');
+        expect(viewer.navbar.hasAttribute('aria-hidden')).to.false;
         done();
       },
     });
@@ -21,6 +22,7 @@ describe('navbar (option)', () => {
 
       ready() {
         expect(window.getComputedStyle(viewer.navbar).display).to.equal('none');
+        expect(viewer.navbar.getAttribute('aria-hidden')).to.equal('true');
         done();
       },
     });
