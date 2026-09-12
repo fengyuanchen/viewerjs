@@ -1144,7 +1144,8 @@ This event fires when a viewer instance is ready for viewing.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail**: `null`
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when the viewer modal starts to show.
 
@@ -1154,7 +1155,7 @@ This event fires when the viewer modal starts to show.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail**: `null`
+- **event.detail**: the same as the `show` event.
 
 This event fires when the viewer modal has shown.
 
@@ -1164,7 +1165,8 @@ This event fires when the viewer modal has shown.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail**: `null`
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when the viewer modal starts to hide.
 
@@ -1174,7 +1176,7 @@ This event fires when the viewer modal starts to hide.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `false`
-- **event.detail**: `null`
+- **event.detail**: the same as the `hide` event.
 
 This event fires when the viewer modal has hidden.
 
@@ -1193,6 +1195,8 @@ This event fires when the viewer modal has hidden.
 - **event.detail.originalImage**:
   - Type: `HTMLImageElement`
   - The original image.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when a viewer starts to show (view) an image.
 
@@ -1244,6 +1248,8 @@ This event fires when a viewer has moved an image.
 - **event.detail.oldDegree**:
   - Type: `Number`
   - The old rotation degrees.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when a viewer starts to rotate an image.
 
@@ -1271,6 +1277,8 @@ This event fires when a viewer has rotated an image.
 - **event.detail.oldScaleY**:
   - Type: `Number`
   - The old scaling factor in the vertical direction.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when a viewer starts to scale an image.
 
@@ -1310,7 +1318,8 @@ This event fires when a viewer has zoomed (in or out) an image.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail**: `null`
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when the viewer starts to play.
 
@@ -1320,7 +1329,8 @@ This event fires when the viewer starts to play.
 
 - **event.bubbles**: `true`
 - **event.cancelable**: `true`
-- **event.detail**: `null`
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
 
 This event fires when the viewer starts to stop.
 

@@ -28,9 +28,10 @@ describe('rotated (event)', () => {
     image.addEventListener('rotated', (event) => {
       const { detail } = event;
 
-      expect(detail).to.be.an('object').that.has.all.keys('degree', 'oldDegree');
+      expect(detail).to.be.an('object').that.has.all.keys('degree', 'oldDegree', 'originalEvent');
       expect(detail.degree).to.be.a('number');
       expect(detail.oldDegree).to.be.a('number');
+      expect(detail.originalEvent).to.be.null;
       viewer.hide(true);
       done();
     });

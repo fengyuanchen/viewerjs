@@ -64,6 +64,7 @@ class Viewer {
     this.ownerDocument = element.ownerDocument || element.host.ownerDocument;
     this.options = assign({}, DEFAULTS, isPlainObject(options) && options);
     this.action = false;
+    this.actionEvent = null;
     this.fading = false;
     this.fulled = false;
     this.hiding = false;
@@ -185,8 +186,11 @@ class Viewer {
         }
       });
     } else {
-      addListener(element, EVENT_CLICK, (this.onElementClick = ({ target }) => {
+      addListener(element, EVENT_CLICK, (this.onElementClick = (event) => {
+        const { target } = event;
+
         if (target.localName === 'img' && (!isFunction(options.filter) || options.filter.call(this, target))) {
+          this.actionEvent = event;
           this.view(this.images.indexOf(target));
         }
       }));
@@ -197,6 +201,7 @@ class Viewer {
           event.preventDefault();
 
           if (!isFunction(options.filter) || options.filter.call(this, target)) {
+            this.actionEvent = event;
             this.view(this.images.indexOf(target));
           }
         }

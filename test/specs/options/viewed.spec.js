@@ -23,10 +23,11 @@ describe('viewed (option)', () => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       viewed(event) {
-        expect(event.detail).to.be.an('object').that.has.all.keys('image', 'index', 'originalImage');
+        expect(event.detail).to.be.an('object').that.has.all.keys('image', 'index', 'originalImage', 'originalEvent');
         expect(event.detail.image.src).to.equal(image.src);
         expect(event.detail.index).to.equal(0);
         expect(event.detail.originalImage).to.equal(image);
+        expect(event.detail.originalEvent).to.be.null;
         viewer.hide(true);
         done();
       },

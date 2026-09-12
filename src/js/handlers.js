@@ -52,6 +52,8 @@ export default {
       clearTimeout(this.clickCanvasTimeout);
     }
 
+    this.actionEvent = event;
+
     switch (action) {
       case 'mix':
         if (this.played) {
@@ -139,7 +141,8 @@ export default {
       }
 
       // XXX: No pageX/Y properties in custom event, fallback to the original event.
-      this.toggle(event.isTrusted ? event : (event.detail && event.detail.originalEvent));
+      this.actionEvent = event.isTrusted ? event : (event.detail && event.detail.originalEvent);
+      this.toggle();
     }
   },
 
@@ -197,9 +200,12 @@ export default {
           originalImage: this.images[index],
           index,
           image,
+          originalEvent: this.viewOriginalEvent || null,
         }, {
           cancelable: false,
         });
+
+        this.viewOriginalEvent = null;
       });
     });
   },
@@ -246,6 +252,8 @@ export default {
     }
 
     const keyCode = event.keyCode || event.which || event.charCode;
+
+    this.actionEvent = event;
 
     switch (keyCode) {
       // Enter
@@ -699,11 +707,14 @@ export default {
     if (zoomable) {
       const ratio = Number(options.zoomRatio) || 0.1;
 
-      this.zoom(-delta * ratio, true, null, event);
+      this.actionEvent = event;
+      this.zoom(-delta * ratio, true);
       return;
     }
 
     if (isWheelActionEnabled(options.slideOnWheel, event)) {
+      this.actionEvent = event;
+
       if (delta > 0) {
         this.next(options.loop);
       } else if (delta < 0) {
@@ -737,13 +748,15 @@ export default {
         this.gestureScale = scale;
 
         if (options.zoomable && options.zoomOnGesture && ratio !== 1) {
-          this.zoom(ratio >= 1 ? ratio - 1 : 1 - (1 / ratio), false, null, event);
+          this.actionEvent = event;
+          this.zoom(ratio >= 1 ? ratio - 1 : 1 - (1 / ratio));
         }
 
         if (options.rotatable && options.rotateOnGesture && isNumber(rotation)) {
           this.gestureRotation = rotation;
 
           if (degree !== 0) {
+            this.actionEvent = event;
             this.rotate(degree);
           }
         }

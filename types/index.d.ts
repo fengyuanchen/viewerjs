@@ -89,6 +89,7 @@ declare namespace Viewer {
   export interface RotateEventData {
     degree: number;
     oldDegree: number;
+    originalEvent: Event | null;
   }
 
   export interface RotateEvent extends CustomEvent<RotateEventData> {}
@@ -100,11 +101,51 @@ declare namespace Viewer {
     scaleY: number;
     oldScaleX: number;
     oldScaleY: number;
+    originalEvent: Event | null;
   }
 
   export interface ScaleEvent extends CustomEvent<ScaleEventData> {}
 
   export interface ScaledEvent extends CustomEvent<ScaleEventData> {}
+
+  export interface ViewEventData {
+    image: HTMLImageElement;
+    index: number;
+    originalImage: HTMLImageElement;
+    originalEvent: Event | null;
+  }
+
+  export interface ViewEvent extends CustomEvent<ViewEventData> {}
+
+  export interface ViewedEvent extends CustomEvent<ViewEventData> {}
+
+  export interface ShowEventData {
+    originalEvent: Event | null;
+  }
+
+  export interface ShowEvent extends CustomEvent<ShowEventData> {}
+
+  export interface ShownEvent extends CustomEvent<ShowEventData> {}
+
+  export interface HideEventData {
+    originalEvent: Event | null;
+  }
+
+  export interface HideEvent extends CustomEvent<HideEventData> {}
+
+  export interface HiddenEvent extends CustomEvent<HideEventData> {}
+
+  export interface PlayEventData {
+    originalEvent: Event | null;
+  }
+
+  export interface PlayEvent extends CustomEvent<PlayEventData> {}
+
+  export interface StopEventData {
+    originalEvent: Event | null;
+  }
+
+  export interface StopEvent extends CustomEvent<StopEventData> {}
 
   export interface ZoomEventData {
     ratio: number;
@@ -124,8 +165,8 @@ declare namespace Viewer {
     filter?: Filter | null;
     fullscreen?: boolean | FullscreenOptions;
     focus?: boolean;
-    hidden?: EventHandler;
-    hide?: EventHandler;
+    hidden?: EventHandler<HiddenEvent>;
+    hide?: EventHandler<HideEvent>;
     inheritedAttributes?: string[];
     initialCoverage?: number;
     initialViewIndex?: number;
@@ -145,7 +186,7 @@ declare namespace Viewer {
     moved?: EventHandler<MovedEvent>;
     navbar?: NavbarOption;
     navigation?: boolean | Visibility | NavigationOptions;
-    play?: EventHandler;
+    play?: EventHandler<PlayEvent>;
     preload?: boolean;
     ready?: EventHandler;
     rotatable?: boolean;
@@ -156,19 +197,19 @@ declare namespace Viewer {
     scalable?: boolean;
     scale?: EventHandler<ScaleEvent>;
     scaled?: EventHandler<ScaledEvent>;
-    show?: EventHandler;
-    shown?: EventHandler;
+    show?: EventHandler<ShowEvent>;
+    shown?: EventHandler<ShownEvent>;
     slideOnTouch?: boolean;
     slideOnWheel?: boolean | WheelModifierKey;
-    stop?: EventHandler;
+    stop?: EventHandler<StopEvent>;
     title?: boolean | Visibility | TitleRenderer | [Visibility, TitleRenderer] | null;
     toggleOnDblclick?: boolean;
     toolbar?: boolean | Visibility | ToolbarOptions;
     tooltip?: boolean;
     transition?: boolean | TransitionOptions;
     url?: string | ImageURLResolver;
-    view?: EventHandler;
-    viewed?: EventHandler;
+    view?: EventHandler<ViewEvent>;
+    viewed?: EventHandler<ViewedEvent>;
     zIndex?: number;
     zIndexInline?: number;
     zoom?: EventHandler<ZoomEvent>;

@@ -21,10 +21,11 @@ describe('view (event)', () => {
     image.addEventListener('view', (event) => {
       const { detail } = event;
 
-      expect(detail).to.be.an('object').that.has.all.keys('image', 'index', 'originalImage');
+      expect(detail).to.be.an('object').that.has.all.keys('image', 'index', 'originalImage', 'originalEvent');
       expect(detail.image.src).to.equal(image.src);
       expect(detail.index).to.equal(0);
       expect(detail.originalImage).to.equal(image);
+      expect(detail.originalEvent).to.be.null;
       event.preventDefault();
       viewer.hide(true);
       done();
@@ -63,5 +64,20 @@ describe('view (event)', () => {
     new Viewer(image, {
       inline: true,
     });
+  });
+
+  it('should pass the original event to `event.detail.originalEvent` when triggered by a click', (done) => {
+    const image = window.createImage();
+    let viewer;
+
+    image.addEventListener('view', (event) => {
+      expect(event.detail.originalEvent).to.be.an.instanceOf(window.MouseEvent);
+      event.preventDefault();
+      viewer.hide(true);
+      done();
+    });
+
+    viewer = new Viewer(image);
+    image.click();
   });
 });

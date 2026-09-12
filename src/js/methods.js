@@ -75,13 +75,23 @@ export default {
       return this;
     }
 
+    const originalEvent = this.actionEvent
+      || this.showOriginalEvent
+      || this.viewOriginalEvent
+      || null;
+
+    this.actionEvent = null;
+    this.showOriginalEvent = originalEvent;
+
     if (isFunction(options.show)) {
       addListener(element, EVENT_SHOW, options.show, {
         once: true,
       });
     }
 
-    if (dispatchEvent(element, EVENT_SHOW) === false || !this.ready) {
+    if (dispatchEvent(element, EVENT_SHOW, {
+      originalEvent,
+    }) === false || !this.ready) {
       return this;
     }
 
@@ -138,13 +148,20 @@ export default {
       return this;
     }
 
+    const originalEvent = this.actionEvent || this.hideOriginalEvent || null;
+
+    this.actionEvent = null;
+    this.hideOriginalEvent = originalEvent;
+
     if (isFunction(options.hide)) {
       addListener(element, EVENT_HIDE, options.hide, {
         once: true,
       });
     }
 
-    if (dispatchEvent(element, EVENT_HIDE) === false || this.destroyed) {
+    if (dispatchEvent(element, EVENT_HIDE, {
+      originalEvent,
+    }) === false || this.destroyed) {
       return this;
     }
 
@@ -200,7 +217,7 @@ export default {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true,
         });
-        this.zoomTo(0, false, null, null, true);
+        this.zoomTo(0, false, null, true);
       } else {
         onImageTransitionEnd();
       }
@@ -225,6 +242,11 @@ export default {
       || (this.viewed && index === previousIndex)) {
       return this;
     }
+
+    const originalEvent = this.actionEvent || this.viewOriginalEvent || null;
+
+    this.actionEvent = null;
+    this.viewOriginalEvent = originalEvent;
 
     if (!this.isShown) {
       this.index = index;
@@ -267,6 +289,7 @@ export default {
       originalImage: this.images[index],
       index,
       image,
+      originalEvent,
     }) === false || !this.isShown || this.hiding || this.played) {
       return this;
     }
@@ -478,10 +501,9 @@ export default {
    * Move the image to an absolute point.
    * @param {number} x - The new position in the horizontal direction.
    * @param {number} [y=x] - The new position in the vertical direction.
-   * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
-  moveTo(x, y = x, _originalEvent = null) {
+  moveTo(x, y = x) {
     const { element, options, imageData } = this;
 
     x = Number(x);
@@ -505,6 +527,10 @@ export default {
       }
 
       if (changed) {
+        const originalEvent = this.actionEvent || null;
+
+        this.actionEvent = null;
+
         if (isFunction(options.move)) {
           addListener(element, EVENT_MOVE, options.move, {
             once: true,
@@ -516,7 +542,7 @@ export default {
           y,
           oldX,
           oldY,
-          originalEvent: _originalEvent,
+          originalEvent,
         }) === false) {
           return this;
         }
@@ -541,7 +567,7 @@ export default {
             y,
             oldX,
             oldY,
-            originalEvent: _originalEvent,
+            originalEvent,
           }, {
             cancelable: false,
           });
@@ -575,6 +601,9 @@ export default {
 
     if (isNumber(degree) && this.viewed && !this.played && options.rotatable) {
       const oldDegree = imageData.rotate;
+      const originalEvent = this.actionEvent || null;
+
+      this.actionEvent = null;
 
       if (isFunction(options.rotate)) {
         addListener(element, EVENT_ROTATE, options.rotate, {
@@ -585,6 +614,7 @@ export default {
       if (dispatchEvent(element, EVENT_ROTATE, {
         degree,
         oldDegree,
+        originalEvent,
       }) === false) {
         return this;
       }
@@ -604,6 +634,7 @@ export default {
         dispatchEvent(element, EVENT_ROTATED, {
           degree,
           oldDegree,
+          originalEvent,
         }, {
           cancelable: false,
         });
@@ -665,6 +696,10 @@ export default {
       }
 
       if (changed) {
+        const originalEvent = this.actionEvent || null;
+
+        this.actionEvent = null;
+
         if (isFunction(options.scale)) {
           addListener(element, EVENT_SCALE, options.scale, {
             once: true,
@@ -676,6 +711,7 @@ export default {
           scaleY,
           oldScaleX,
           oldScaleY,
+          originalEvent,
         }) === false) {
           return this;
         }
@@ -698,6 +734,7 @@ export default {
             scaleY,
             oldScaleX,
             oldScaleY,
+            originalEvent,
           }, {
             cancelable: false,
           });
@@ -713,10 +750,9 @@ export default {
    * @param {number} ratio - The target ratio.
    * @param {boolean} [showTooltip=false] - Indicates whether to show the tooltip.
    * @param {Object} [pivot] - The pivot point coordinate for zooming.
-   * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
-  zoom(ratio, showTooltip = false, pivot = null, _originalEvent = null) {
+  zoom(ratio, showTooltip = false, pivot = null) {
     const { imageData } = this;
 
     ratio = Number(ratio);
@@ -731,7 +767,6 @@ export default {
       (imageData.width * ratio) / imageData.naturalWidth,
       showTooltip,
       pivot,
-      _originalEvent,
     );
 
     return this;
@@ -742,11 +777,10 @@ export default {
    * @param {number} ratio - The target ratio.
    * @param {boolean} [showTooltip] - Indicates whether to show the tooltip.
    * @param {Object} [pivot] - The pivot point coordinate for zooming.
-   * @param {Event} [_originalEvent=null] - The original event if any.
-   * @param {Event} [_zoomable=false] - Indicates if the current zoom is available or not.
+   * @param {boolean} [_zoomable=false] - Indicates if the current zoom is available or not.
    * @returns {Viewer} this
    */
-  zoomTo(ratio, showTooltip = false, pivot = null, _originalEvent = null, _zoomable = false) {
+  zoomTo(ratio, showTooltip = false, pivot = null, _zoomable = false) {
     const {
       element,
       options,
@@ -776,8 +810,12 @@ export default {
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
       }
 
-      if (_originalEvent) {
-        switch (_originalEvent.type) {
+      const originalEvent = this.actionEvent || null;
+
+      this.actionEvent = null;
+
+      if (originalEvent && originalEvent.type !== EVENT_CLICK) {
+        switch (originalEvent.type) {
           case 'wheel':
             if (options.zoomRatio >= 0.055 && ratio > 0.95 && ratio < 1.05) {
               ratio = 1;
@@ -811,20 +849,20 @@ export default {
       if (dispatchEvent(element, EVENT_ZOOM, {
         ratio,
         oldRatio,
-        originalEvent: _originalEvent,
+        originalEvent,
       }) === false) {
         return this;
       }
 
       this.zooming = true;
 
-      if (_originalEvent) {
+      if (originalEvent && originalEvent.type !== EVENT_CLICK) {
         const offset = getOffset(this.viewer);
         const center = pointers && Object.keys(pointers).length > 0
           ? getPointersCenter(pointers)
           : {
-            pageX: _originalEvent.pageX,
-            pageY: _originalEvent.pageY,
+            pageX: originalEvent.pageX,
+            pageY: originalEvent.pageY,
           };
 
         // Zoom from the triggering point of the event
@@ -858,7 +896,7 @@ export default {
         dispatchEvent(element, EVENT_ZOOMED, {
           ratio,
           oldRatio,
-          originalEvent: _originalEvent,
+          originalEvent,
         }, {
           cancelable: false,
         });
@@ -883,6 +921,9 @@ export default {
     }
 
     const { element, options } = this;
+    const originalEvent = this.actionEvent || null;
+
+    this.actionEvent = null;
 
     if (isFunction(options.play)) {
       addListener(element, EVENT_PLAY, options.play, {
@@ -890,7 +931,9 @@ export default {
       });
     }
 
-    if (dispatchEvent(element, EVENT_PLAY) === false) {
+    if (dispatchEvent(element, EVENT_PLAY, {
+      originalEvent,
+    }) === false) {
       return this;
     }
 
@@ -961,13 +1004,19 @@ export default {
     return this;
   },
 
-  // Stop play
+  /**
+   * Stop play
+   * @returns {Viewer} this
+   */
   stop() {
     if (!this.played) {
       return this;
     }
 
     const { element, options } = this;
+    const originalEvent = this.actionEvent || null;
+
+    this.actionEvent = null;
 
     if (isFunction(options.stop)) {
       addListener(element, EVENT_STOP, options.stop, {
@@ -975,7 +1024,9 @@ export default {
       });
     }
 
-    if (dispatchEvent(element, EVENT_STOP) === false) {
+    if (dispatchEvent(element, EVENT_STOP, {
+      originalEvent,
+    }) === false) {
       return this;
     }
 
@@ -1151,14 +1202,13 @@ export default {
 
   /**
    * Toggle the image size between its current size and natural size
-   * @param {Event} [_originalEvent=null] - The original event if any.
    * @returns {Viewer} this
    */
-  toggle(_originalEvent = null) {
+  toggle() {
     if (this.imageData.ratio === 1) {
-      this.zoomTo(this.imageData.oldRatio, true, null, _originalEvent);
+      this.zoomTo(this.imageData.oldRatio, true);
     } else {
-      this.zoomTo(1, true, null, _originalEvent);
+      this.zoomTo(1, true);
     }
 
     return this;

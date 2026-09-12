@@ -109,9 +109,13 @@ export default {
       });
     }
 
-    if (dispatchEvent(element, EVENT_SHOWN) === false) {
+    if (dispatchEvent(element, EVENT_SHOWN, {
+      originalEvent: this.showOriginalEvent || null,
+    }) === false) {
       return;
     }
+
+    this.showOriginalEvent = null;
 
     if (this.ready && this.isShown && !this.hiding) {
       this.view(this.index);
@@ -152,9 +156,13 @@ export default {
         });
       }
 
-      dispatchEvent(element, EVENT_HIDDEN, null, {
+      dispatchEvent(element, EVENT_HIDDEN, {
+        originalEvent: this.hideOriginalEvent || null,
+      }, {
         cancelable: false,
       });
+
+      this.hideOriginalEvent = null;
     }
   },
 
@@ -226,7 +234,8 @@ export default {
       case ACTION_MOVE:
         if (offsetX !== 0 || offsetY !== 0) {
           this.pointerMoved = true;
-          this.move(offsetX, offsetY, event);
+          this.actionEvent = event;
+          this.move(offsetX, offsetY);
         }
         break;
 
@@ -236,7 +245,8 @@ export default {
           const zoomRatio = getMaxZoomRatio(pointers);
 
           if (zoomRatio !== 0) {
-            this.zoom(zoomRatio, false, null, event);
+            this.actionEvent = event;
+            this.zoom(zoomRatio);
           }
         }
         break;
@@ -247,7 +257,8 @@ export default {
           const rotateDegree = getMaxRotateDegree(pointers);
 
           if (rotateDegree !== 0) {
-            this.rotate(rotateDegree, event);
+            this.actionEvent = event;
+            this.rotate(rotateDegree);
           }
         }
         break;
@@ -258,7 +269,8 @@ export default {
           const zoomRatio = getMaxZoomRatio(pointers);
 
           if (zoomRatio !== 0) {
-            this.zoom(zoomRatio, false, null, event);
+            this.actionEvent = event;
+            this.zoom(zoomRatio);
           }
         }
 
@@ -266,7 +278,8 @@ export default {
           const rotateDegree = getMaxRotateDegree(pointers);
 
           if (rotateDegree !== 0) {
-            this.rotate(rotateDegree, event);
+            this.actionEvent = event;
+            this.rotate(rotateDegree);
           }
         }
         break;
@@ -279,6 +292,8 @@ export default {
         if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
           // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
           this.pointers = {};
+
+          this.actionEvent = event;
 
           if (offsetX > 1) {
             this.prev(options.loop);
