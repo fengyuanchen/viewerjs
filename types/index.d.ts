@@ -141,6 +141,15 @@ declare namespace Viewer {
 
   export interface PlayEvent extends CustomEvent<PlayEventData> {}
 
+  export interface PlayingEventData {
+    image: HTMLImageElement;
+    index: number;
+    originalImage: HTMLImageElement;
+    originalEvent: Event | null;
+  }
+
+  export interface PlayingEvent extends CustomEvent<PlayingEventData> {}
+
   export interface StopEventData {
     originalEvent: Event | null;
   }
@@ -187,6 +196,7 @@ declare namespace Viewer {
     navbar?: NavbarOption;
     navigation?: boolean | Visibility | NavigationOptions;
     play?: EventHandler<PlayEvent>;
+    playing?: EventHandler<PlayingEvent>;
     preload?: boolean;
     ready?: EventHandler;
     rotatable?: boolean;

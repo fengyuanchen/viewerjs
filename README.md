@@ -770,6 +770,13 @@ Shortcut of the `zoomed` event.
 
 Shortcut of the `play` event.
 
+### playing
+
+- Type: `Function`
+- Default: `null`
+
+Shortcut of the `playing` event.
+
 ### stop
 
 - Type: `Function`
@@ -1324,6 +1331,26 @@ This event fires when a viewer has zoomed (in or out) an image.
 This event fires when the viewer starts to play.
 
 > You can abort the playing process by calling `event.preventDefault()`.
+
+### playing
+
+- **event.bubbles**: `true`
+- **event.cancelable**: `true`
+- **event.detail.index**:
+  - Type: `Number`
+  - The index of the original image.
+- **event.detail.image**:
+  - Type: `HTMLImageElement`
+  - The current image (a clone of the original image).
+- **event.detail.originalImage**:
+  - Type: `HTMLImageElement`
+  - The original image.
+- **event.detail.originalEvent**:
+  - Type: `Event` or `null`
+
+This event fires when a viewer starts to play (cycle) an image.
+
+> You can abort the cycling process by calling `event.preventDefault()`.
 
 ### stop
 

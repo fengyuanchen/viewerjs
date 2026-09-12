@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add a new `playing` event that fires each time the image switches during playback (#500).
 - Enhance custom events (`show`, `shown`, `hide`, `hidden`, `view`, `viewed`, `rotate`, `rotated`, `scale`, `scaled`, `play`, `stop`) to include the original triggering event in `event.detail.originalEvent` (#593).
 - Add fallback to thumbnail when original image fails to load (#539).
 - Add a new `slideOnWheel` option to slide to the next or previous image by wheeling the mouse, with optional modifier key support (e.g. `ctrl`) (#528).

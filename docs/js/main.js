@@ -57,6 +57,9 @@ window.onload = function () {
     play: function (e) {
       console.log(e.type);
     },
+    playing: function (e) {
+      console.log(e.type);
+    },
     stop: function (e) {
       console.log(e.type);
     }

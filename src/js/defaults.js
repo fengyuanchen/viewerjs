@@ -303,5 +303,6 @@ export default {
   zoom: null,
   zoomed: null,
   play: null,
+  playing: null,
   stop: null,
 };

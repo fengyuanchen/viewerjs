@@ -17,6 +17,7 @@ import {
   EVENT_MOVE,
   EVENT_MOVED,
   EVENT_PLAY,
+  EVENT_PLAYING,
   EVENT_ROTATE,
   EVENT_ROTATED,
   EVENT_SCALE,
@@ -977,17 +978,65 @@ export default {
     if (isNumber(options.interval) && options.interval > 0) {
       const prev = () => {
         clearTimeout(this.playing.timeout);
+
+        const currentOriginalEvent = this.actionEvent || null;
+
+        this.actionEvent = null;
+
+        let prevIndex = index - 1;
+
+        prevIndex = prevIndex >= 0 ? prevIndex : total - 1;
+
+        if (isFunction(options.playing)) {
+          addListener(element, EVENT_PLAYING, options.playing, {
+            once: true,
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_PLAYING, {
+          originalImage: this.images[prevIndex],
+          index: prevIndex,
+          image: list[prevIndex],
+          originalEvent: currentOriginalEvent,
+        }) === false) {
+          this.playing.timeout = options.autoplay ? setTimeout(prev, options.interval) : null;
+          return;
+        }
+
         removeClass(list[index], CLASS_IN);
-        index -= 1;
-        index = index >= 0 ? index : total - 1;
+        index = prevIndex;
         addClass(list[index], CLASS_IN);
         this.playing.timeout = options.autoplay ? setTimeout(prev, options.interval) : null;
       };
       const next = () => {
         clearTimeout(this.playing.timeout);
+
+        const currentOriginalEvent = this.actionEvent || null;
+
+        this.actionEvent = null;
+
+        let nextIndex = index + 1;
+
+        nextIndex = nextIndex < total ? nextIndex : 0;
+
+        if (isFunction(options.playing)) {
+          addListener(element, EVENT_PLAYING, options.playing, {
+            once: true,
+          });
+        }
+
+        if (dispatchEvent(element, EVENT_PLAYING, {
+          originalImage: this.images[nextIndex],
+          index: nextIndex,
+          image: list[nextIndex],
+          originalEvent: currentOriginalEvent,
+        }) === false) {
+          this.playing.timeout = options.autoplay ? setTimeout(next, options.interval) : null;
+          return;
+        }
+
         removeClass(list[index], CLASS_IN);
-        index += 1;
-        index = index < total ? index : 0;
+        index = nextIndex;
         addClass(list[index], CLASS_IN);
         this.playing.timeout = options.autoplay ? setTimeout(next, options.interval) : null;
       };
