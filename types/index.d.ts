@@ -1,6 +1,7 @@
 declare namespace Viewer {
   export type Visibility = 0 | 1 | 2 | 3 | 4;
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
+  export type WheelModifierKey = 'ctrl' | 'shift' | 'alt' | 'meta' | (string & {});
   export type EventHandler<T extends Event = CustomEvent> = (event: T) => void;
   export type Filter = (this: Viewer, image: HTMLImageElement) => boolean;
   export type TitleRenderer = (this: Viewer, image: HTMLImageElement, imageData: Record<string, any>) => string;
@@ -158,6 +159,7 @@ declare namespace Viewer {
     show?: EventHandler;
     shown?: EventHandler;
     slideOnTouch?: boolean;
+    slideOnWheel?: boolean | WheelModifierKey;
     stop?: EventHandler;
     title?: boolean | Visibility | TitleRenderer | [Visibility, TitleRenderer] | null;
     toggleOnDblclick?: boolean;
@@ -172,7 +174,7 @@ declare namespace Viewer {
     zoom?: EventHandler<ZoomEvent>;
     zoomOnGesture?: boolean;
     zoomOnTouch?: boolean;
-    zoomOnWheel?: boolean;
+    zoomOnWheel?: boolean | WheelModifierKey;
     zoomRatio?: number;
     zoomable?: boolean;
     zoomed?: EventHandler<ZoomedEvent>;

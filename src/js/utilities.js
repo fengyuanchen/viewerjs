@@ -16,6 +16,33 @@ export function isString(value) {
   return typeof value === 'string';
 }
 
+const MODIFIER_KEY_PROPERTIES = {
+  ctrl: 'ctrlKey',
+  shift: 'shiftKey',
+  alt: 'altKey',
+  meta: 'metaKey',
+};
+
+/**
+ * Check if a wheel option (`zoomOnWheel` or `slideOnWheel`) takes effect for the given wheel event.
+ * @param {boolean | string} option - The option value.
+ * @param {WheelEvent} event - The wheel event.
+ * @returns {boolean} Returns `true` if the option takes effect for the event, else `false`.
+ */
+export function isWheelActionEnabled(option, event) {
+  if (!option) {
+    return false;
+  }
+
+  if (option === true) {
+    return true;
+  }
+
+  return isString(option) && option
+    .split('+')
+    .every((key) => event[MODIFIER_KEY_PROPERTIES[key.trim().toLowerCase()]]);
+}
+
 /**
  * Check if the given value is not a number.
  */

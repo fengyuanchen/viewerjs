@@ -30,6 +30,7 @@ import {
   isPlainObject,
   isTransitionEnabled,
   isUndefined,
+  isWheelActionEnabled,
   removeClass,
   setStyle,
   toggleClass,
@@ -656,6 +657,8 @@ export default {
   },
 
   wheel(event) {
+    const { options, navbar } = this;
+
     if (!this.viewed) {
       return;
     }
@@ -666,7 +669,7 @@ export default {
       return;
     }
 
-    // Limit wheel speed to prevent zoom too fast
+    // Limit wheel speed to prevent zoom or slide too fast
     if (this.wheeling) {
       return;
     }
@@ -677,7 +680,6 @@ export default {
       this.wheeling = false;
     }, 50);
 
-    const ratio = Number(this.options.zoomRatio) || 0.1;
     let delta = 1;
 
     if (event.deltaY) {
@@ -688,7 +690,26 @@ export default {
       delta = event.detail > 0 ? 1 : -1;
     }
 
-    this.zoom(-delta * ratio, true, null, event);
+    // Wheeling over the navbar never zooms, only slides
+    const overNavbar = navbar && navbar.contains(event.target);
+    const zoomable = !overNavbar
+      && options.zoomable
+      && isWheelActionEnabled(options.zoomOnWheel, event);
+
+    if (zoomable) {
+      const ratio = Number(options.zoomRatio) || 0.1;
+
+      this.zoom(-delta * ratio, true, null, event);
+      return;
+    }
+
+    if (isWheelActionEnabled(options.slideOnWheel, event)) {
+      if (delta > 0) {
+        this.next(options.loop);
+      } else if (delta < 0) {
+        this.prev(options.loop);
+      }
+    }
   },
 
   gesture(event) {

@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 57 [options](#options)
+- Supports 61 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 17 [events](#events)
 - Supports modal and inline modes
@@ -517,10 +517,12 @@ Enable to zoom the current image by dragging on the touch screen.
 
 ### zoomOnWheel
 
-- Type: `Boolean`
+- Type: `Boolean | String`
 - Default: `true`
 
 Enable to zoom the image by wheeling the mouse.
+
+Set to a modifier key name (`ctrl`, `shift`, `alt`, `meta`), or a combination joined with `+` (e.g. `ctrl+shift`), to only zoom when the given modifier key(s) are held down while wheeling. Otherwise, wheeling falls back to sliding when [`slideOnWheel`](#slideonwheel) is enabled.
 
 ### slideOnTouch
 
@@ -528,6 +530,17 @@ Enable to zoom the image by wheeling the mouse.
 - Default: `true`
 
 Enable to slide to the next or previous image by swiping on the touch screen.
+
+### slideOnWheel
+
+- Type: `Boolean | String`
+- Default: `true`
+
+Enable to slide to the next or previous image by wheeling the mouse.
+
+Set to a modifier key name (`ctrl`, `shift`, `alt`, `meta`), or a combination joined with `+` (e.g. `ctrl+shift`), to only slide when the given modifier key(s) are held down while wheeling.
+
+Takes effect over the navbar, and also over the rest of the viewer when [`zoomOnWheel`](#zoomonwheel) doesn't take effect for that wheel event.
 
 ### toggleOnDblclick
 

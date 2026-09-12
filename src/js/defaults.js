@@ -204,7 +204,10 @@ export default {
 
   /**
    * Enable to zoom the image by wheeling mouse.
-   * @type {boolean}
+   * Set to a modifier key name (`ctrl`, `shift`, `alt`, `meta`), or a
+   * combination joined with `+` (e.g. `ctrl+shift`), to only zoom when
+   * the given modifier key(s) are held down while wheeling.
+   * @type {boolean | string}
    */
   zoomOnWheel: true,
 
@@ -213,6 +216,17 @@ export default {
    * @type {boolean}
    */
   slideOnTouch: true,
+
+  /**
+   * Enable to slide to the next or previous image by wheeling mouse.
+   * Set to a modifier key name (`ctrl`, `shift`, `alt`, `meta`), or a
+   * combination joined with `+` (e.g. `ctrl+shift`), to only slide when
+   * the given modifier key(s) are held down while wheeling.
+   * Takes effect over the navbar, and also over the rest of the viewer
+   * when `zoomOnWheel` doesn't take effect for the wheel event.
+   * @type {boolean | string}
+   */
+  slideOnWheel: true,
 
   /**
    * Indicate if toggle the image size between its natural size

@@ -48,4 +48,32 @@ describe('zoomOnWheel (option)', () => {
     });
     viewer.show();
   });
+
+  it('should zoom from a wheel event only when the required modifier key is pressed', (done) => {
+    const image = window.createImage();
+    let viewer;
+
+    image.addEventListener('viewed', () => {
+      viewer.canvas.dispatchEvent(window.createEvent('wheel', {
+        deltaY: -1,
+      }));
+      expect(viewer.imageData.ratio).to.equal(viewer.initialImageData.ratio);
+
+      viewer.canvas.dispatchEvent(window.createEvent('wheel', {
+        deltaY: -1,
+        ctrlKey: true,
+      }));
+    });
+
+    image.addEventListener('zoom', (event) => {
+      expect(event.detail.originalEvent.ctrlKey).to.be.true;
+      viewer.hide(true);
+      done();
+    });
+
+    viewer = new Viewer(image, {
+      zoomOnWheel: 'ctrl',
+    });
+    viewer.show();
+  });
 });

@@ -37,7 +37,7 @@ export default {
     addListener(document, EVENT_KEY_DOWN, (this.onKeyDown = this.keydown.bind(this)));
     addListener(window, EVENT_RESIZE, (this.onResize = this.resize.bind(this)));
 
-    if (options.zoomable && options.zoomOnWheel) {
+    if ((options.zoomable && options.zoomOnWheel) || options.slideOnWheel) {
       addListener(viewer, EVENT_WHEEL, (this.onWheel = this.wheel.bind(this)), {
         passive: false,
         capture: true,
@@ -71,7 +71,7 @@ export default {
     removeListener(document, EVENT_KEY_DOWN, this.onKeyDown);
     removeListener(window, EVENT_RESIZE, this.onResize);
 
-    if (options.zoomable && options.zoomOnWheel) {
+    if ((options.zoomable && options.zoomOnWheel) || options.slideOnWheel) {
       removeListener(viewer, EVENT_WHEEL, this.onWheel, {
         passive: false,
         capture: true,
