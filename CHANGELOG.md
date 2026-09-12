@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix a `TypeError` when updating a modal viewer before it is shown (#670).
 - Add a new `playing` event that fires each time the image switches during playback (#500).
 - Enhance custom events (`show`, `shown`, `hide`, `hidden`, `view`, `viewed`, `rotate`, `rotated`, `scale`, `scaled`, `play`, `stop`) to include the original triggering event in `event.detail.originalEvent` (#593).
 - Add fallback to thumbnail when original image fails to load (#539).

@@ -84,6 +84,10 @@ export default {
     const navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
     const probe = document.createElement('li');
 
+    if (!this.containerData) {
+      this.initContainer();
+    }
+
     list.appendChild(probe);
     const itemWidth = probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
 

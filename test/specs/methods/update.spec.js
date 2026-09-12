@@ -11,6 +11,19 @@ describe('update (method)', () => {
     viewer.destroy();
   });
 
+  it('should update before the modal viewer is shown', () => {
+    const image = window.createImage();
+    const viewer = new Viewer(image, {
+      ready() {
+        viewer.update();
+      },
+    });
+
+    viewer.show(true);
+    viewer.hide(true);
+    viewer.destroy();
+  });
+
   it('should update the image list', (done) => {
     const imageList = window.createImageList();
     let viewed;
