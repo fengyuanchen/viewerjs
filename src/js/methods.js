@@ -218,7 +218,8 @@ export default {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true,
         });
-        this.zoomTo(0, false, null, true);
+        this.zoomable = true;
+        this.zoomTo(0, false);
       } else {
         onImageTransitionEnd();
       }
@@ -778,15 +779,15 @@ export default {
    * @param {number} ratio - The target ratio.
    * @param {boolean} [showTooltip] - Indicates whether to show the tooltip.
    * @param {Object} [pivot] - The pivot point coordinate for zooming.
-   * @param {boolean} [_zoomable=false] - Indicates if the current zoom is available or not.
    * @returns {Viewer} this
    */
-  zoomTo(ratio, showTooltip = false, pivot = null, _zoomable = false) {
+  zoomTo(ratio, showTooltip = false, pivot = null) {
     const {
       element,
       options,
       pointers,
       imageData,
+      zoomable,
     } = this;
     const {
       x,
@@ -797,10 +798,11 @@ export default {
       naturalHeight,
     } = imageData;
 
+    this.zoomable = false;
     ratio = Math.max(0, ratio);
 
-    if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
-      if (!_zoomable) {
+    if (isNumber(ratio) && this.viewed && !this.played && (zoomable || options.zoomable)) {
+      if (!zoomable) {
         const minZoomRatio = Math.max(0.01, isFunction(options.minZoomRatio)
           ? options.minZoomRatio.call(this, this.image, imageData)
           : options.minZoomRatio);
