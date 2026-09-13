@@ -11,9 +11,9 @@ declare namespace Viewer {
   export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | ToolbarButtonOptions | undefined;
 
   export interface ToolbarButtonOptions {
-    click?: ToolbarButtonClick,
+    click?: ToolbarButtonClick;
     show?: boolean | Visibility;
-    size?: ToolbarButtonSize,
+    size?: ToolbarButtonSize;
   }
 
   export interface ToolbarOptions {
@@ -234,32 +234,32 @@ declare namespace Viewer {
 
 declare class Viewer {
   constructor(element: HTMLElement | ShadowRoot, options?: Viewer.Options);
-  destroy(): Viewer;
-  exit(): Viewer;
-  full(): Viewer;
-  hide(immediate?: boolean): Viewer;
-  move(offsetX: number, offsetY?: number): Viewer;
-  moveTo(x: number, y?: number): Viewer;
-  next(loop?: boolean): Viewer;
-  play(fullscreen?: boolean | FullscreenOptions): Viewer;
-  prev(loop?: boolean): Viewer;
-  reset(): Viewer;
-  rotate(degree: number): Viewer;
-  rotateTo(degree: number): Viewer;
-  scale(scaleX: number, scaleY?: number): Viewer;
-  scaleX(scaleX: number): Viewer;
-  scaleY(scaleY: number): Viewer;
-  show(immediate?: boolean): Viewer;
-  stop(): Viewer;
-  toggle(): Viewer;
-  tooltip(): Viewer;
-  update(options?: Viewer.Options): Viewer;
-  view(index?: number): Viewer;
-  zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
-  zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): Viewer;
+  destroy(): this;
+  exit(): this;
+  full(): this;
+  hide(immediate?: boolean): this;
+  move(offsetX: number, offsetY?: number): this;
+  moveTo(x: number, y?: number): this;
+  next(loop?: boolean): this;
+  play(fullscreen?: boolean | FullscreenOptions): this;
+  prev(loop?: boolean): this;
+  reset(): this;
+  rotate(degree: number): this;
+  rotateTo(degree: number): this;
+  scale(scaleX: number, scaleY?: number): this;
+  scaleX(scaleX: number): this;
+  scaleY(scaleY: number): this;
+  show(immediate?: boolean): this;
+  stop(): this;
+  toggle(): this;
+  tooltip(): this;
+  update(options?: Viewer.Options): this;
+  view(index?: number): this;
+  zoom(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): this;
+  zoomTo(ratio: number, hasTooltip?: boolean, pivot?: Viewer.Pivot): this;
   static create(element: HTMLElement | ShadowRoot, options?: Viewer.Options): Viewer;
   static setDefaults(options: Viewer.Options): void;
-  static noConflict(): Viewer;
+  static noConflict(): typeof Viewer;
 }
 
 declare module 'viewerjs' {

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Improve TypeScript declarations.
+
 ## 1.14.0 (Sep 12, 2026)
 
 - Fix a `TypeError` when updating a modal viewer before it is shown (#670).
