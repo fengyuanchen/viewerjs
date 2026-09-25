@@ -14,6 +14,7 @@ import {
   EVENT_LOAD,
   EVENT_VIEWED,
   IS_TOUCH_DEVICE,
+  ROTATE_THRESHOLD,
 } from './constants';
 import {
   addClass,
@@ -513,6 +514,7 @@ export default {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
+    this.rotateThreshold = imageData.rotate === 0;
     this.switching = action === ACTION_SWITCH ? {
       x: imageData.x,
       y: imageData.y,
@@ -557,6 +559,16 @@ export default {
     } else {
       pointer = pointers[event.pointerId || 0];
       delete pointers[event.pointerId || 0];
+    }
+
+    if (Object.keys(pointers).length === 0) {
+      if (this.rotateThreshold && this.imageData.rotate > -ROTATE_THRESHOLD
+        && this.imageData.rotate < ROTATE_THRESHOLD && this.imageData.rotate !== 0) {
+        this.actionEvent = event;
+        this.rotateTo(0);
+      }
+
+      this.rotateThreshold = false;
     }
 
     if (!action) {

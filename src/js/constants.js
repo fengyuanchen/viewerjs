@@ -77,6 +77,9 @@ export const DATA_ACTION = `${NAMESPACE}Action`;
 // RegExps
 export const REGEXP_SPACES = /\s+/;
 
+// Rotate threshold in degrees
+export const ROTATE_THRESHOLD = 45;
+
 // Misc
 export const BUTTONS = [
   'zoom-in',
