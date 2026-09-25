@@ -454,7 +454,7 @@ export default {
   },
 
   pointerdown(event) {
-    const { options, pointers } = this;
+    const { options, pointers, imageData } = this;
     const { buttons, button } = event;
 
     this.pointerMoved = false;
@@ -506,12 +506,17 @@ export default {
     }
 
     if (action === ACTION_MOVE
+      || action === ACTION_SWITCH
       || action === ACTION_ZOOM
       || action === ACTION_ROTATE
       || action === ACTION_TRANSFORM) {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
+    this.switching = action === ACTION_SWITCH ? {
+      x: imageData.x,
+      y: imageData.y,
+    } : false;
     this.action = action;
   },
 
@@ -536,7 +541,12 @@ export default {
   },
 
   pointerup(event) {
-    const { options, action, pointers } = this;
+    const {
+      options,
+      action,
+      pointers,
+      viewerData,
+    } = this;
     let pointer;
 
     if (event.changedTouches) {
@@ -565,6 +575,27 @@ export default {
         : isTransitionEnabled(options, action);
 
       toggleClass(this.image, CLASS_TRANSITION, transition);
+    }
+
+    if (action === ACTION_SWITCH && this.switching) {
+      const {
+        imageData,
+        switching,
+      } = this;
+      const offsetX = imageData.x - switching.x;
+
+      this.switching = false;
+      this.actionEvent = event;
+
+      if (Math.abs(offsetX) > viewerData.width / 2) {
+        if (offsetX > 0) {
+          this.prev(options.loop);
+        } else {
+          this.next(options.loop);
+        }
+      } else if (imageData.x !== switching.x || imageData.y !== switching.y) {
+        this.moveTo(switching.x, switching.y);
+      }
     }
 
     this.action = false;

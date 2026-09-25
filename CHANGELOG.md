@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Improve TypeScript declarations.
+- Require touch swipes to exceed half the viewer width before switching images, and restore shorter swipes to the centered position (#455).
 
 ## 1.14.0 (Sep 12, 2026)
 
