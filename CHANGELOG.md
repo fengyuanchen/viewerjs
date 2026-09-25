@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.15.0 (Sep 25, 2026)
 
 - Require touch swipes to exceed half the viewer width before switching images, and restore shorter swipes to the centered position (#455).
 - Enhance the `toolbar` and `navbar` options to support positioning them at the top, right, bottom, or left of the viewer. The navbar displays thumbnails vertically when positioned on the left or right (#11).

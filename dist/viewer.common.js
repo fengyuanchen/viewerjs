@@ -1,11 +1,11 @@
 /*!
- * Viewer.js v1.14.0
+ * Viewer.js v1.15.0
  * https://fengyuanchen.github.io/viewerjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2026-09-12T12:12:29.730Z
+ * Date: 2026-09-25T13:19:14.309Z
  */
 
 'use strict';
@@ -92,6 +92,7 @@ var DEFAULTS = {
   /**
    * Show the navbar.
     * @type {boolean | number | string | Object}
+    * @property {string} position - The position of the navbar: top, right, bottom, or left.
    */
   navbar: true,
   /**
@@ -107,6 +108,7 @@ var DEFAULTS = {
   /**
    * Show the toolbar.
    * @type {boolean | number | Object}
+    * @property {string} position - The position of the toolbar: top, right, bottom, or left.
    */
   toolbar: true,
   /**
@@ -333,7 +335,7 @@ var DEFAULTS = {
   stop: null
 };
 
-var TEMPLATE = '<div class="viewer-container" tabindex="-1" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-magnifier" aria-hidden="true">' + '<img class="viewer-magnifier-image" alt="">' + '</div>' + '<div class="viewer-navigation" aria-hidden="true">' + '<div class="viewer-prev" data-viewer-action="prev" role="button" aria-label="Previous"></div>' + '<div class="viewer-next" data-viewer-action="next" role="button" aria-label="Next"></div>' + '</div>' + '<div class="viewer-footer" aria-hidden="true">' + '<div class="viewer-title" aria-hidden="true"></div>' + '<div class="viewer-toolbar" aria-hidden="true"></div>' + '<div class="viewer-navbar" aria-hidden="true">' + '<ul class="viewer-list" role="navigation"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip" role="alert" aria-hidden="true"></div>' + '<div class="viewer-button" data-viewer-action="mix" role="button" aria-hidden="true"></div>' + '<div class="viewer-player" aria-hidden="true"></div>' + '</div>';
+var TEMPLATE = '<div class="viewer-container" tabindex="-1" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-magnifier" aria-hidden="true">' + '<img class="viewer-magnifier-image" alt="">' + '</div>' + '<div class="viewer-navigation" aria-hidden="true">' + '<div class="viewer-prev" data-viewer-action="prev" role="button" aria-label="Previous"></div>' + '<div class="viewer-next" data-viewer-action="next" role="button" aria-label="Next"></div>' + '</div>' + '<div class="viewer-title" aria-hidden="true"></div>' + '<div class="viewer-toolbar" aria-hidden="true"></div>' + '<div class="viewer-navbar" aria-hidden="true">' + '<ul class="viewer-list" role="navigation"></ul>' + '</div>' + '<div class="viewer-tooltip" role="alert" aria-hidden="true"></div>' + '<div class="viewer-button" data-viewer-action="mix" role="button" aria-hidden="true"></div>' + '<div class="viewer-player" aria-hidden="true"></div>' + '</div>';
 
 var IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var WINDOW = IS_BROWSER ? window : {};
@@ -1121,9 +1123,9 @@ var render = {
       this.initContainer();
     }
     list.appendChild(probe);
-    var itemWidth = probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
+    var itemSize = this.isNavbarVertical ? probe.offsetHeight + parseInt(window.getComputedStyle(probe).marginTop, 10) : probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
     list.removeChild(probe);
-    var visibleItemCount = isNumber(navbarOptions.visibleItemCount) ? Math.floor(navbarOptions.visibleItemCount) : Math.floor(this.containerData.width / itemWidth);
+    var visibleItemCount = isNumber(navbarOptions.visibleItemCount) ? Math.floor(navbarOptions.visibleItemCount) : Math.floor((this.isNavbarVertical ? this.containerData.height : this.containerData.width) / itemSize);
     visibleItemCount = Math.min(visibleItemCount, this.length);
     var start = visibleItemCount > 0 ? Math.min(Math.max(0, viewIndex - Math.floor(visibleItemCount / 2)), Math.max(0, this.length - visibleItemCount)) : 0;
     var end = visibleItemCount > 0 ? Math.min(this.length, start + visibleItemCount) : this.length;
@@ -1217,37 +1219,63 @@ var render = {
       return;
     }
     var next = item.nextElementSibling;
-    var gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
-    var offsetWidth = item.offsetWidth;
-    var outerWidth = offsetWidth + gutter;
+    var gutter = parseInt(window.getComputedStyle(next || item)[this.isNavbarVertical ? 'marginTop' : 'marginLeft'], 10);
+    var itemSize = this.isNavbarVertical ? item.offsetHeight : item.offsetWidth;
+    var outerSize = itemSize + gutter;
 
     // Place the active item in the center of the screen
-    setStyle(this.list, assign({
-      width: outerWidth * this.items.length - gutter
-    }, getTransforms({
-      translateX: (this.viewerData.width - offsetWidth) / 2 - item.offsetLeft
-    })));
+    setStyle(this.list, assign(_defineProperty({}, this.isNavbarVertical ? 'height' : 'width', outerSize * this.items.length - gutter), getTransforms(_defineProperty({}, this.isNavbarVertical ? 'translateY' : 'translateX', ((this.isNavbarVertical ? this.viewerData.height : this.viewerData.width) - itemSize) / 2 - (this.isNavbarVertical ? item.offsetTop : item.offsetLeft)))));
   },
   resetList: function resetList() {
     var list = this.list;
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
-    setStyle(list, assign({
-      width: 0
-    }, getTransforms({
-      translateX: 0
-    })));
+    setStyle(list, assign(_defineProperty({}, this.isNavbarVertical ? 'height' : 'width', 0), getTransforms(_defineProperty({}, this.isNavbarVertical ? 'translateY' : 'translateX', 0))));
   },
   initImage: function initImage(done) {
     var _this2 = this;
     var options = this.options,
       image = this.image,
-      viewerData = this.viewerData;
-    var footerHeight = this.footer.offsetHeight;
-    var viewerWidth = viewerData.width;
-    var viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
+      viewerData = this.viewerData,
+      title = this.title,
+      toolbar = this.toolbar,
+      navbar = this.navbar;
+    var viewerInsets = {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    };
     var oldImageData = this.imageData || {};
+    var titleHeight = title.offsetHeight;
     var sizingImage;
+    if (titleHeight) {
+      viewerInsets.bottom = viewerData.height - title.offsetTop;
+    }
+    forEach([toolbar, navbar], function (control) {
+      var offsetWidth = control.offsetWidth,
+        offsetHeight = control.offsetHeight;
+      if (!offsetWidth && !offsetHeight) {
+        return;
+      }
+      ['top', 'right', 'bottom', 'left'].some(function (position) {
+        if (hasClass(control, "".concat(NAMESPACE, "-").concat(control === toolbar ? 'toolbar' : 'navbar', "-").concat(position))) {
+          var inset = control.offsetLeft + offsetWidth;
+          if (position === 'top') {
+            inset = control.offsetTop + offsetHeight;
+          } else if (position === 'right') {
+            inset = viewerData.width - control.offsetLeft;
+          } else if (position === 'bottom') {
+            inset = viewerData.height - control.offsetTop;
+          }
+          viewerInsets[position] = Math.max(viewerInsets[position], inset);
+          return true;
+        }
+        return false;
+      });
+    });
+    var viewerWidth = Math.max(viewerData.width - viewerInsets.left - viewerInsets.right, viewerInsets.left, viewerInsets.right);
+    var viewerHeight = Math.max(viewerData.height - viewerInsets.top - viewerInsets.bottom, viewerInsets.top, viewerInsets.bottom);
     this.imageInitializing = {
       abort: function abort() {
         sizingImage.onload = null;
@@ -1267,8 +1295,8 @@ var render = {
       initialCoverage = isNumber(initialCoverage) ? initialCoverage : 0.9;
       width = Math.min(width * initialCoverage, naturalWidth);
       height = Math.min(height * initialCoverage, naturalHeight);
-      var left = (viewerWidth - width) / 2;
-      var top = (viewerHeight - height) / 2;
+      var left = viewerInsets.left + (viewerWidth - width) / 2;
+      var top = viewerInsets.top + (viewerHeight - height) / 2;
       var imageData = {
         left: left,
         top: top,
@@ -1761,9 +1789,11 @@ var handlers = {
   },
   pointerdown: function pointerdown(event) {
     var options = this.options,
-      pointers = this.pointers;
+      pointers = this.pointers,
+      imageData = this.imageData;
     var buttons = event.buttons,
       button = event.button;
+    var isFirstPointer = Object.keys(pointers).length === 0;
     this.pointerMoved = false;
     if (!this.viewed || this.showing || this.viewing || this.hiding
 
@@ -1794,9 +1824,16 @@ var handlers = {
     } else if (options.slideOnTouch && (event.pointerType === 'touch' || event.type === 'touchstart') && this.isSwitchable()) {
       action = ACTION_SWITCH;
     }
-    if (action === ACTION_MOVE || action === ACTION_ZOOM || action === ACTION_ROTATE || action === ACTION_TRANSFORM) {
+    if (action) {
       removeClass(this.image, CLASS_TRANSITION);
     }
+    if (isFirstPointer) {
+      this.rotateThreshold = imageData.rotate === 0;
+    }
+    this.switching = action === ACTION_SWITCH ? {
+      x: imageData.x,
+      y: imageData.y
+    } : false;
     this.action = action;
   },
   pointermove: function pointermove(event) {
@@ -1814,12 +1851,14 @@ var handlers = {
       assign(pointers[event.pointerId || 0] || {}, getPointer(event, true));
     }
     this.change(event);
+    removeClass(this.image, CLASS_TRANSITION);
   },
   pointerup: function pointerup(event) {
     var _this2 = this;
     var options = this.options,
       action = this.action,
-      pointers = this.pointers;
+      pointers = this.pointers,
+      viewerData = this.viewerData;
     var pointer;
     if (event.changedTouches) {
       forEach(event.changedTouches, function (touch) {
@@ -1830,13 +1869,37 @@ var handlers = {
       pointer = pointers[event.pointerId || 0];
       delete pointers[event.pointerId || 0];
     }
+    if (Object.keys(pointers).length === 0) {
+      if (this.rotateThreshold) {
+        var rotate = Math.round(this.imageData.rotate / 90) * 90;
+        if (rotate !== this.imageData.rotate) {
+          this.actionEvent = event;
+          this.rotateTo(rotate);
+        }
+      }
+      this.rotateThreshold = false;
+    }
     if (!action) {
       return;
     }
     event.preventDefault();
-    if (action === ACTION_MOVE || action === ACTION_ZOOM || action === ACTION_ROTATE || action === ACTION_TRANSFORM) {
-      var transition = action === ACTION_TRANSFORM ? isTransitionEnabled(options, ACTION_ZOOM) || isTransitionEnabled(options, ACTION_ROTATE) : isTransitionEnabled(options, action);
-      toggleClass(this.image, CLASS_TRANSITION, transition);
+    var transition = action === ACTION_TRANSFORM ? isTransitionEnabled(options, ACTION_ZOOM) || isTransitionEnabled(options, ACTION_ROTATE) : isTransitionEnabled(options, action);
+    toggleClass(this.image, CLASS_TRANSITION, transition);
+    if (action === ACTION_SWITCH && this.switching) {
+      var imageData = this.imageData,
+        switching = this.switching;
+      var offsetX = imageData.x - switching.x;
+      this.switching = false;
+      this.actionEvent = event;
+      if (Math.abs(offsetX) > viewerData.width / 2) {
+        if (offsetX > 0) {
+          this.prev(options.loop);
+        } else {
+          this.next(options.loop);
+        }
+      } else if (imageData.x !== switching.x || imageData.y !== switching.y) {
+        this.moveTo(switching.x, switching.y);
+      }
     }
     this.action = false;
 
@@ -1993,6 +2056,13 @@ var handlers = {
           break;
         }
       case 'gestureend':
+        if (options.rotatable && options.rotateOnGesture) {
+          var rotate = Math.round(this.imageData.rotate / 90) * 90;
+          if (rotate !== this.imageData.rotate) {
+            this.actionEvent = event;
+            this.rotateTo(rotate);
+          }
+        }
         this.gesturing = false;
         this.gestureScale = 1;
         this.gestureRotation = 0;
@@ -2140,7 +2210,8 @@ var methods = {
         addListener(image, EVENT_TRANSITION_END, onImageTransitionEnd, {
           once: true
         });
-        this.zoomTo(0, false, null, true);
+        this.zoomable = true;
+        this.zoomTo(0, false);
       } else {
         onImageTransitionEnd();
       }
@@ -2610,27 +2681,27 @@ var methods = {
    * @param {number} ratio - The target ratio.
    * @param {boolean} [showTooltip] - Indicates whether to show the tooltip.
    * @param {Object} [pivot] - The pivot point coordinate for zooming.
-   * @param {boolean} [_zoomable=false] - Indicates if the current zoom is available or not.
    * @returns {Viewer} this
    */
   zoomTo: function zoomTo(ratio) {
     var _this6 = this;
     var showTooltip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var pivot = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    var _zoomable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     var element = this.element,
       options = this.options,
       pointers = this.pointers,
-      imageData = this.imageData;
+      imageData = this.imageData,
+      zoomable = this.zoomable;
     var x = imageData.x,
       y = imageData.y,
       width = imageData.width,
       height = imageData.height,
       naturalWidth = imageData.naturalWidth,
       naturalHeight = imageData.naturalHeight;
+    this.zoomable = false;
     ratio = Math.max(0, ratio);
-    if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
-      if (!_zoomable) {
+    if (isNumber(ratio) && this.viewed && !this.played && (zoomable || options.zoomable)) {
+      if (!zoomable) {
         var minZoomRatio = Math.max(0.01, isFunction(options.minZoomRatio) ? options.minZoomRatio.call(this, this.image, imageData) : options.minZoomRatio);
         var maxZoomRatio = Math.min(100, isFunction(options.maxZoomRatio) ? options.maxZoomRatio.call(this, this.image, imageData) : options.maxZoomRatio);
         ratio = Math.min(Math.max(ratio, minZoomRatio), maxZoomRatio);
@@ -3367,17 +3438,11 @@ var others = {
         break;
       case ACTION_SWITCH:
         {
-          this.action = 'switched';
           var absoluteOffsetX = Math.abs(offsetX);
           if (absoluteOffsetX > 1 && absoluteOffsetX > Math.abs(offsetY)) {
-            // Empty `pointers` as `touchend` event will not be fired after swiped in iOS browsers.
-            this.pointers = {};
+            this.pointerMoved = true;
             this.actionEvent = event;
-            if (offsetX > 1) {
-              this.prev(options.loop);
-            } else if (offsetX < -1) {
-              this.next(options.loop);
-            }
+            this.move(offsetX, 0);
           }
           break;
         }
@@ -3442,6 +3507,7 @@ var Viewer = /*#__PURE__*/function () {
     this.viewed = false;
     this.viewing = false;
     this.wheeling = false;
+    this.zoomable = false;
     this.zooming = false;
     this.pointerMoved = false;
     this.id = getUniqueID();
@@ -3579,7 +3645,6 @@ var Viewer = /*#__PURE__*/function () {
       this.navigation = navigation;
       this.button = button;
       this.canvas = canvas;
-      this.footer = viewer.querySelector(".".concat(NAMESPACE, "-footer"));
       this.magnifier = viewer.querySelector(".".concat(NAMESPACE, "-magnifier"));
       this.magnifierImage = viewer.querySelector(".".concat(NAMESPACE, "-magnifier-image"));
       this.tooltipBox = viewer.querySelector(".".concat(NAMESPACE, "-tooltip"));
@@ -3594,6 +3659,7 @@ var Viewer = /*#__PURE__*/function () {
       var navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
       var navbarShow = options.navbar;
       var navbarSize = !isUndefined(navbarOptions.size) ? navbarOptions.size : options.navbar;
+      var navbarPosition = ['top', 'right', 'bottom', 'left'].indexOf(navbarOptions.position) !== -1 ? navbarOptions.position : 'bottom';
       if (isPlainObject(options.navbar)) {
         navbarShow = !isUndefined(navbarOptions.show) ? navbarOptions.show : true;
       }
@@ -3603,6 +3669,23 @@ var Viewer = /*#__PURE__*/function () {
       }
       if (['small', 'medium', 'large'].indexOf(navbarSize) !== -1) {
         addClass(navbar, "".concat(NAMESPACE, "-").concat(navbarSize));
+      }
+      var navbarIsVertical = navbarPosition === 'left' || navbarPosition === 'right';
+      this.isNavbarVertical = navbarIsVertical;
+      addClass(navbar, "".concat(NAMESPACE, "-navbar-").concat(navbarPosition));
+      if (navbarShow) {
+        var target = navbarIsVertical ? navigation : title;
+        var targetName = navbarIsVertical ? 'navigation' : 'title';
+        addClass(target, "".concat(NAMESPACE, "-").concat(targetName, "-navbar-").concat(navbarPosition));
+        if (navbarIsVertical) {
+          addClass(title, "".concat(NAMESPACE, "-title-navbar-").concat(navbarPosition));
+        }
+        if (['small', 'large'].indexOf(navbarSize) !== -1) {
+          addClass(target, "".concat(NAMESPACE, "-").concat(targetName, "-navbar-").concat(navbarIsVertical ? "".concat(navbarPosition, "-") : '').concat(navbarSize));
+          if (navbarIsVertical) {
+            addClass(title, "".concat(NAMESPACE, "-title-navbar-").concat(navbarPosition, "-").concat(navbarSize));
+          }
+        }
       }
       if (isPlainObject(options.navigation)) {
         forEach(navigation.querySelectorAll('[role="button"]'), function (item) {
@@ -3650,6 +3733,7 @@ var Viewer = /*#__PURE__*/function () {
       if (options.toolbar) {
         var list = document.createElement('ul');
         var custom = isPlainObject(options.toolbar);
+        var toolbarPosition = custom && ['top', 'right', 'bottom', 'left'].indexOf(options.toolbar.position) !== -1 ? options.toolbar.position : 'bottom';
         var zoomButtons = BUTTONS.slice(0, 3);
         var rotateButtons = BUTTONS.slice(7, 9);
         var scaleButtons = BUTTONS.slice(9);
@@ -3657,7 +3741,18 @@ var Viewer = /*#__PURE__*/function () {
           addClass(toolbar, getResponsiveClass(options.toolbar));
         }
         toolbar.removeAttribute('aria-hidden');
+        addClass(toolbar, "".concat(NAMESPACE, "-toolbar-").concat(toolbarPosition));
+        addClass(title, "".concat(NAMESPACE, "-title-toolbar-").concat(toolbarPosition));
+        if (navbarShow && toolbarPosition === navbarPosition) {
+          addClass(toolbar, "".concat(NAMESPACE, "-toolbar-navbar-").concat(navbarPosition));
+          if (['small', 'large'].indexOf(navbarSize) !== -1) {
+            addClass(toolbar, "".concat(NAMESPACE, "-toolbar-navbar-").concat(navbarSize));
+          }
+        }
         forEach(custom ? options.toolbar : BUTTONS, function (value, index) {
+          if (index === 'position') {
+            return;
+          }
           var deep = custom && isPlainObject(value);
           var name = custom ? hyphenate(index) : value;
           var show = deep && !isUndefined(value.show) ? value.show : value;
@@ -3689,13 +3784,11 @@ var Viewer = /*#__PURE__*/function () {
           list.appendChild(item);
         });
         toolbar.appendChild(list);
+        if (toolbarPosition === 'left' || toolbarPosition === 'right') {
+          addClass(navigation, "".concat(NAMESPACE, "-navigation-toolbar-").concat(toolbarPosition));
+        }
       } else {
         addClass(toolbar, CLASS_HIDE);
-      }
-      if (options.title || navbarShow || options.toolbar) {
-        this.footer.removeAttribute('aria-hidden');
-      } else {
-        addClass(this.footer, CLASS_HIDE);
       }
       if (!options.rotatable) {
         var rotates = toolbar.querySelectorAll('li[class*="rotate"]');
