@@ -6,6 +6,7 @@ import {
   EVENT_LOAD,
   EVENT_TRANSITION_END,
   EVENT_VIEWED,
+  NAMESPACE,
 } from './constants';
 import {
   addClass,
@@ -89,13 +90,17 @@ export default {
     }
 
     list.appendChild(probe);
-    const itemWidth = probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
+    const itemSize = this.isNavbarVertical
+      ? probe.offsetHeight + parseInt(window.getComputedStyle(probe).marginTop, 10)
+      : probe.offsetWidth + parseInt(window.getComputedStyle(probe).marginLeft, 10);
 
     list.removeChild(probe);
 
     let visibleItemCount = isNumber(navbarOptions.visibleItemCount)
       ? Math.floor(navbarOptions.visibleItemCount)
-      : Math.floor(this.containerData.width / itemWidth);
+      : Math.floor((this.isNavbarVertical
+        ? this.containerData.height
+        : this.containerData.width) / itemSize);
 
     visibleItemCount = Math.min(visibleItemCount, this.length);
 
@@ -224,15 +229,17 @@ export default {
     }
 
     const next = item.nextElementSibling;
-    const gutter = parseInt(window.getComputedStyle(next || item).marginLeft, 10);
-    const { offsetWidth } = item;
-    const outerWidth = offsetWidth + gutter;
+    const gutter = parseInt(window.getComputedStyle(next || item)[this.isNavbarVertical ? 'marginTop' : 'marginLeft'], 10);
+    const itemSize = this.isNavbarVertical ? item.offsetHeight : item.offsetWidth;
+    const outerSize = itemSize + gutter;
 
     // Place the active item in the center of the screen
     setStyle(this.list, assign({
-      width: outerWidth * this.items.length - gutter,
+      [this.isNavbarVertical ? 'height' : 'width']: outerSize * this.items.length - gutter,
     }, getTransforms({
-      translateX: ((this.viewerData.width - offsetWidth) / 2) - item.offsetLeft,
+      [this.isNavbarVertical ? 'translateY' : 'translateX']: (
+        ((this.isNavbarVertical ? this.viewerData.height : this.viewerData.width) - itemSize) / 2
+      ) - (this.isNavbarVertical ? item.offsetTop : item.offsetLeft),
     })));
   },
 
@@ -242,19 +249,67 @@ export default {
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
     setStyle(list, assign({
-      width: 0,
+      [this.isNavbarVertical ? 'height' : 'width']: 0,
     }, getTransforms({
-      translateX: 0,
+      [this.isNavbarVertical ? 'translateY' : 'translateX']: 0,
     })));
   },
 
   initImage(done) {
-    const { options, image, viewerData } = this;
-    const footerHeight = this.footer.offsetHeight;
-    const viewerWidth = viewerData.width;
-    const viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
+    const {
+      options, image, viewerData, title, toolbar, navbar,
+    } = this;
+    const viewerInsets = {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    };
     const oldImageData = this.imageData || {};
+    const titleHeight = title.offsetHeight;
     let sizingImage;
+
+    if (titleHeight) {
+      viewerInsets.bottom = viewerData.height - title.offsetTop;
+    }
+
+    forEach([toolbar, navbar], (control) => {
+      const { offsetWidth, offsetHeight } = control;
+
+      if (!offsetWidth && !offsetHeight) {
+        return;
+      }
+
+      ['top', 'right', 'bottom', 'left'].some((position) => {
+        if (hasClass(control, `${NAMESPACE}-${control === toolbar ? 'toolbar' : 'navbar'}-${position}`)) {
+          let inset = control.offsetLeft + offsetWidth;
+
+          if (position === 'top') {
+            inset = control.offsetTop + offsetHeight;
+          } else if (position === 'right') {
+            inset = viewerData.width - control.offsetLeft;
+          } else if (position === 'bottom') {
+            inset = viewerData.height - control.offsetTop;
+          }
+
+          viewerInsets[position] = Math.max(viewerInsets[position], inset);
+          return true;
+        }
+
+        return false;
+      });
+    });
+
+    const viewerWidth = Math.max(
+      viewerData.width - viewerInsets.left - viewerInsets.right,
+      viewerInsets.left,
+      viewerInsets.right,
+    );
+    const viewerHeight = Math.max(
+      viewerData.height - viewerInsets.top - viewerInsets.bottom,
+      viewerInsets.top,
+      viewerInsets.bottom,
+    );
 
     this.imageInitializing = {
       abort: () => {
@@ -280,8 +335,8 @@ export default {
       width = Math.min(width * initialCoverage, naturalWidth);
       height = Math.min(height * initialCoverage, naturalHeight);
 
-      const left = (viewerWidth - width) / 2;
-      const top = (viewerHeight - height) / 2;
+      const left = viewerInsets.left + ((viewerWidth - width) / 2);
+      const top = viewerInsets.top + ((viewerHeight - height) / 2);
 
       const imageData = {
         left,

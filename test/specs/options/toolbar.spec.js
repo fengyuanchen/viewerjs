@@ -30,7 +30,7 @@ describe('toolbar (option)', () => {
     expect(viewer.options.toolbar).to.be.false;
   });
 
-  it('should not show footer when title, toolbar, and navbar are disabled', (done) => {
+  it('should not render a footer container', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
       inline: true,
@@ -39,8 +39,7 @@ describe('toolbar (option)', () => {
       navbar: false,
 
       ready() {
-        expect(window.getComputedStyle(viewer.footer).display).to.equal('none');
-        expect(viewer.footer.getAttribute('aria-hidden')).to.equal('true');
+        expect(viewer.viewer.querySelector('.viewer-footer')).to.equal(null);
         done();
       },
     });
@@ -83,5 +82,88 @@ describe('toolbar (option)', () => {
     });
 
     expect(viewer.options.toolbar).to.be.an('object');
+  });
+
+  ['top', 'right', 'bottom', 'left'].forEach((position) => {
+    it(`should support the ${position} position`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        toolbar: {
+          position,
+          zoomIn: true,
+        },
+
+        ready() {
+          expect(viewer.toolbar.className).to.include(`viewer-toolbar-${position}`);
+          done();
+        },
+      });
+    });
+  });
+
+  ['small', 'medium', 'large'].forEach((size) => {
+    it(`should avoid a ${size} top navbar`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        navbar: {
+          position: 'top',
+          size,
+        },
+        toolbar: {
+          position: 'top',
+          zoomIn: true,
+        },
+
+        ready() {
+          expect(viewer.toolbar.className).to.include('viewer-toolbar-navbar-top');
+          expect(viewer.toolbar.getBoundingClientRect().top)
+            .to.equal(viewer.navbar.getBoundingClientRect().bottom);
+          done();
+        },
+      });
+    });
+  });
+
+  [
+    {
+      toolbarPosition: 'top',
+      navbarPosition: 'bottom',
+    },
+    {
+      toolbarPosition: 'bottom',
+      navbarPosition: 'top',
+    },
+  ].forEach((configuration) => {
+    it(`should not offset a ${configuration.toolbarPosition} toolbar for a ${configuration.navbarPosition} navbar`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        navbar: { position: configuration.navbarPosition },
+        toolbar: {
+          position: configuration.toolbarPosition,
+          zoomIn: true,
+        },
+
+        ready() {
+          const toolbarRect = viewer.toolbar.getBoundingClientRect();
+          const navbarRect = viewer.navbar.getBoundingClientRect();
+          const viewerRect = viewer.viewer.getBoundingClientRect();
+
+          expect(viewer.toolbar.className)
+            .to.not.include(`viewer-toolbar-navbar-${configuration.navbarPosition}`);
+
+          if (configuration.toolbarPosition === 'top') {
+            expect(toolbarRect.top).to.equal(viewerRect.top);
+            expect(navbarRect.bottom).to.equal(viewerRect.bottom);
+          } else {
+            expect(toolbarRect.bottom).to.equal(viewerRect.bottom);
+            expect(navbarRect.top).to.equal(viewerRect.top);
+          }
+          done();
+        },
+      });
+    });
   });
 });

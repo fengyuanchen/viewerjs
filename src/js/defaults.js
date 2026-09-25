@@ -15,6 +15,7 @@ export default {
   /**
    * Show the navbar.
     * @type {boolean | number | string | Object}
+    * @property {string} position - The position of the navbar: top, right, bottom, or left.
    */
   navbar: true,
 
@@ -33,6 +34,7 @@ export default {
   /**
    * Show the toolbar.
    * @type {boolean | number | Object}
+    * @property {string} position - The position of the toolbar: top, right, bottom, or left.
    */
   toolbar: true,
 

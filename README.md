@@ -173,7 +173,8 @@ Show the button on the top-right of the viewer.
   - `Object`: configure the navbar with the following properties:
     - `show` (`Boolean` or `Number`): specify the visibility of the navbar.
     - `size` (`String`): specify the thumbnail size: `small`, `medium`, or `large`.
-    - `visibleItemCount` (`Number`): specify the number of thumbnail items to render around the active item. The default is calculated from the container width and the width of one thumbnail item.
+    - `position` (`String`): specify the navbar position: `top`, `right`, `bottom` (default), or `left`.
+    - `visibleItemCount` (`Number`): specify the number of thumbnail items to render around the active item. The default is calculated from the container width and the width of one thumbnail item, or from the container height and the height of one thumbnail item for the `left` and `right` positions.
 
 Specify the visibility of the navbar.
 
@@ -183,8 +184,11 @@ When setting a size, thumbnails use a $9 / 16$ width-to-height ratio.
 navbar: {
   show: true,
   size: 'large',
+  position: 'bottom',
 }
 ```
+
+When positioned on the `left` or `right`, thumbnails are arranged vertically and use a $16 / 9$ width-to-height ratio.
 
 ### navigation
 
@@ -258,6 +262,7 @@ new Viewer(image, {
   - `{ key: String }`: customize the size of the button.
   - `{ key: Function }`: customize the click handler of the button.
   - `{ key: { show: Boolean | Number, size: String, click: Function }`: customize each property of the button.
+  - `{ position: String }`: specify the toolbar position: `top`, `right`, `bottom` (default), or `left`.
   - Available built-in keys: "zoomIn", "zoomOut", "oneToOne", "reset", "prev", "play", "next", "rotateLeft", "rotateRight", "flipHorizontal", "flipVertical".
   - Available built-in sizes: "small", "medium" (default) and "large".
 
@@ -282,6 +287,7 @@ new Viewer(image, {
     rotateRight: 4,
     flipHorizontal: 4,
     flipVertical: 4,
+    position: 'bottom',
   },
 });
 ```

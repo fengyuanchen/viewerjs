@@ -2,18 +2,19 @@
 
 ## Unreleased
 
-- Improve TypeScript declarations.
 - Require touch swipes to exceed half the viewer width before switching images, and restore shorter swipes to the centered position (#455).
+- Enhance the `toolbar` and `navbar` options to support positioning them at the top, right, bottom, or left of the viewer. The navbar displays thumbnails vertically when positioned on the left or right (#11).
 - Snap touch and gesture rotations to the nearest 90-degree multiple when the gesture ends, restoring zero-degree images after rotations within 45 degrees.
+- Improve TypeScript declarations.
 
 ## 1.14.0 (Sep 12, 2026)
 
 - Fix a `TypeError` when updating a modal viewer before it is shown (#670).
-- Add a new `playing` event that fires each time the image switches during playback (#500).
 - Enhance custom events (`show`, `shown`, `hide`, `hidden`, `view`, `viewed`, `rotate`, `rotated`, `scale`, `scaled`, `play`, `stop`) to include the original triggering event in `event.detail.originalEvent` (#593).
 - Add fallback to thumbnail when original image fails to load (#539).
 - Add a new `slideOnWheel` option to slide to the next or previous image by wheeling the mouse, with optional modifier key support (e.g. `ctrl`) (#528).
 - Enhance the `zoomOnWheel` option to support requiring a modifier key (e.g. `ctrl`) while wheeling to zoom (#528).
+- Add a new `playing` event that fires each time the image switches during playback (#500).
 
 ## 1.13.0 (Sep 6, 2026)
 

@@ -1,5 +1,6 @@
 declare namespace Viewer {
   export type Visibility = 0 | 1 | 2 | 3 | 4;
+  export type Position = 'top' | 'right' | 'bottom' | 'left';
   export type ToolbarButtonSize = 'small' | 'medium' | 'large';
   export type WheelModifierKey = 'ctrl' | 'shift' | 'alt' | 'meta' | (string & {});
   export type EventHandler<T extends Event = CustomEvent> = (event: T) => void;
@@ -28,6 +29,7 @@ declare namespace Viewer {
     rotateRight?: ToolbarOption;
     zoomIn?: ToolbarOption;
     zoomOut?: ToolbarOption;
+    position?: Position;
     [x: string]: ToolbarOption;
   }
 
@@ -39,6 +41,7 @@ declare namespace Viewer {
   export type NavigationOption = boolean | Visibility | NavigationButtonOptions | undefined;
 
   export interface NavbarOptions {
+    position?: Position;
     visibleItemCount?: number;
     show?: boolean | Visibility;
     size?: ToolbarButtonSize;

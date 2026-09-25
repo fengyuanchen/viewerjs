@@ -237,7 +237,6 @@ class Viewer {
     this.navigation = navigation;
     this.button = button;
     this.canvas = canvas;
-    this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
     this.magnifier = viewer.querySelector(`.${NAMESPACE}-magnifier`);
     this.magnifierImage = viewer.querySelector(`.${NAMESPACE}-magnifier-image`);
     this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
@@ -256,6 +255,9 @@ class Viewer {
     const navbarOptions = isPlainObject(options.navbar) ? options.navbar : {};
     let navbarShow = options.navbar;
     const navbarSize = !isUndefined(navbarOptions.size) ? navbarOptions.size : options.navbar;
+    const navbarPosition = ['top', 'right', 'bottom', 'left'].indexOf(navbarOptions.position) !== -1
+      ? navbarOptions.position
+      : 'bottom';
 
     if (isPlainObject(options.navbar)) {
       navbarShow = !isUndefined(navbarOptions.show) ? navbarOptions.show : true;
@@ -269,6 +271,33 @@ class Viewer {
 
     if (['small', 'medium', 'large'].indexOf(navbarSize) !== -1) {
       addClass(navbar, `${NAMESPACE}-${navbarSize}`);
+    }
+
+    const navbarIsVertical = navbarPosition === 'left' || navbarPosition === 'right';
+
+    this.isNavbarVertical = navbarIsVertical;
+    addClass(navbar, `${NAMESPACE}-navbar-${navbarPosition}`);
+
+    if (navbarShow) {
+      const target = navbarIsVertical ? navigation : title;
+      const targetName = navbarIsVertical ? 'navigation' : 'title';
+
+      addClass(target, `${NAMESPACE}-${targetName}-navbar-${navbarPosition}`);
+
+      if (navbarIsVertical) {
+        addClass(title, `${NAMESPACE}-title-navbar-${navbarPosition}`);
+      }
+
+      if (['small', 'large'].indexOf(navbarSize) !== -1) {
+        addClass(
+          target,
+          `${NAMESPACE}-${targetName}-navbar-${navbarIsVertical ? `${navbarPosition}-` : ''}${navbarSize}`,
+        );
+
+        if (navbarIsVertical) {
+          addClass(title, `${NAMESPACE}-title-navbar-${navbarPosition}-${navbarSize}`);
+        }
+      }
     }
 
     if (isPlainObject(options.navigation)) {
@@ -333,6 +362,9 @@ class Viewer {
     if (options.toolbar) {
       const list = document.createElement('ul');
       const custom = isPlainObject(options.toolbar);
+      const toolbarPosition = custom && ['top', 'right', 'bottom', 'left'].indexOf(options.toolbar.position) !== -1
+        ? options.toolbar.position
+        : 'bottom';
       const zoomButtons = BUTTONS.slice(0, 3);
       const rotateButtons = BUTTONS.slice(7, 9);
       const scaleButtons = BUTTONS.slice(9);
@@ -342,8 +374,23 @@ class Viewer {
       }
 
       toolbar.removeAttribute('aria-hidden');
+      addClass(toolbar, `${NAMESPACE}-toolbar-${toolbarPosition}`);
+
+      addClass(title, `${NAMESPACE}-title-toolbar-${toolbarPosition}`);
+
+      if (navbarShow && toolbarPosition === navbarPosition) {
+        addClass(toolbar, `${NAMESPACE}-toolbar-navbar-${navbarPosition}`);
+
+        if (['small', 'large'].indexOf(navbarSize) !== -1) {
+          addClass(toolbar, `${NAMESPACE}-toolbar-navbar-${navbarSize}`);
+        }
+      }
 
       forEach(custom ? options.toolbar : BUTTONS, (value, index) => {
+        if (index === 'position') {
+          return;
+        }
+
         const deep = custom && isPlainObject(value);
         const name = custom ? hyphenate(index) : value;
         const show = deep && !isUndefined(value.show) ? value.show : value;
@@ -390,14 +437,11 @@ class Viewer {
       });
 
       toolbar.appendChild(list);
+      if (toolbarPosition === 'left' || toolbarPosition === 'right') {
+        addClass(navigation, `${NAMESPACE}-navigation-toolbar-${toolbarPosition}`);
+      }
     } else {
       addClass(toolbar, CLASS_HIDE);
-    }
-
-    if (options.title || navbarShow || options.toolbar) {
-      this.footer.removeAttribute('aria-hidden');
-    } else {
-      addClass(this.footer, CLASS_HIDE);
     }
 
     if (!options.rotatable) {

@@ -71,6 +71,42 @@ describe('navbar (option)', () => {
     });
   });
 
+  ['top', 'right', 'bottom', 'left'].forEach((position) => {
+    it(`should support the ${position} position`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        navbar: {
+          position,
+        },
+
+        ready() {
+          expect(viewer.navbar.className).to.include(`viewer-navbar-${position}`);
+          done();
+        },
+      });
+    });
+  });
+
+  ['left', 'right'].forEach((position) => {
+    it(`should swap the thumbnail dimensions at the ${position} position`, (done) => {
+      const image = window.createImage();
+      const viewer = new Viewer(image, {
+        inline: true,
+        navbar: {
+          position,
+        },
+
+        ready() {
+          const item = viewer.list.firstElementChild;
+
+          expect(item.offsetWidth / item.offsetHeight).to.equal(5 / 3);
+          done();
+        },
+      });
+    });
+  });
+
   it('should hide navbar with object options', (done) => {
     const image = window.createImage();
     const viewer = new Viewer(image, {
