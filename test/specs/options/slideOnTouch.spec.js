@@ -30,6 +30,7 @@ describe('slideOnTouch (option)', () => {
           pageY: 0,
         }));
         expect(viewer.index).to.equal(0);
+        expect(viewer.image.classList.contains('viewer-transition')).to.be.false;
         viewer.image.dispatchEvent(window.createEvent('pointerup', {
           pointerId: 1,
           pointerType: 'touch',

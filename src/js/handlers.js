@@ -506,11 +506,7 @@ export default {
       action = ACTION_SWITCH;
     }
 
-    if (action === ACTION_MOVE
-      || action === ACTION_SWITCH
-      || action === ACTION_ZOOM
-      || action === ACTION_ROTATE
-      || action === ACTION_TRANSFORM) {
+    if (action) {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
@@ -540,6 +536,7 @@ export default {
     }
 
     this.change(event);
+    removeClass(this.image, CLASS_TRANSITION);
   },
 
   pointerup(event) {
@@ -577,17 +574,12 @@ export default {
 
     event.preventDefault();
 
-    if (action === ACTION_MOVE
-      || action === ACTION_ZOOM
-      || action === ACTION_ROTATE
-      || action === ACTION_TRANSFORM) {
-      const transition = action === ACTION_TRANSFORM
-        ? isTransitionEnabled(options, ACTION_ZOOM)
-          || isTransitionEnabled(options, ACTION_ROTATE)
-        : isTransitionEnabled(options, action);
+    const transition = action === ACTION_TRANSFORM
+      ? isTransitionEnabled(options, ACTION_ZOOM)
+        || isTransitionEnabled(options, ACTION_ROTATE)
+      : isTransitionEnabled(options, action);
 
-      toggleClass(this.image, CLASS_TRANSITION, transition);
-    }
+    toggleClass(this.image, CLASS_TRANSITION, transition);
 
     if (action === ACTION_SWITCH && this.switching) {
       const {

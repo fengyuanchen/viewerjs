@@ -30,6 +30,7 @@ describe('rotateOnTouch (option)', () => {
         pageY: 20,
       }));
       expect(viewer.imageData.rotate).to.equal(90);
+      expect(viewer.image.classList.contains('viewer-transition')).to.be.false;
       viewer.image.dispatchEvent(window.createEvent('pointerup', {
         pointerId: 1,
         pointerType: 'touch',
