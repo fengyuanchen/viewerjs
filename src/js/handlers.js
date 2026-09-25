@@ -14,7 +14,6 @@ import {
   EVENT_LOAD,
   EVENT_VIEWED,
   IS_TOUCH_DEVICE,
-  ROTATE_THRESHOLD,
 } from './constants';
 import {
   addClass,
@@ -457,6 +456,7 @@ export default {
   pointerdown(event) {
     const { options, pointers, imageData } = this;
     const { buttons, button } = event;
+    const isFirstPointer = Object.keys(pointers).length === 0;
 
     this.pointerMoved = false;
 
@@ -510,7 +510,9 @@ export default {
       removeClass(this.image, CLASS_TRANSITION);
     }
 
-    this.rotateThreshold = imageData.rotate === 0;
+    if (isFirstPointer) {
+      this.rotateThreshold = imageData.rotate === 0;
+    }
     this.switching = action === ACTION_SWITCH ? {
       x: imageData.x,
       y: imageData.y,
@@ -559,10 +561,13 @@ export default {
     }
 
     if (Object.keys(pointers).length === 0) {
-      if (this.rotateThreshold && this.imageData.rotate > -ROTATE_THRESHOLD
-        && this.imageData.rotate < ROTATE_THRESHOLD && this.imageData.rotate !== 0) {
-        this.actionEvent = event;
-        this.rotateTo(0);
+      if (this.rotateThreshold) {
+        const rotate = Math.round(this.imageData.rotate / 90) * 90;
+
+        if (rotate !== this.imageData.rotate) {
+          this.actionEvent = event;
+          this.rotateTo(rotate);
+        }
       }
 
       this.rotateThreshold = false;
@@ -800,6 +805,15 @@ export default {
       }
 
       case 'gestureend':
+        if (options.rotatable && options.rotateOnGesture) {
+          const rotate = Math.round(this.imageData.rotate / 90) * 90;
+
+          if (rotate !== this.imageData.rotate) {
+            this.actionEvent = event;
+            this.rotateTo(rotate);
+          }
+        }
+
         this.gesturing = false;
         this.gestureScale = 1;
         this.gestureRotation = 0;

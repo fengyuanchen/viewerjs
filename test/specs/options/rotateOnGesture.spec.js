@@ -62,6 +62,31 @@ describe('rotateOnGesture (option)', () => {
     viewer.show();
   });
 
+  it('should snap the final rotation to a 90-degree multiple', (done) => {
+    const image = window.createImage();
+    let viewer;
+
+    image.addEventListener('viewed', () => {
+      viewer.viewer.dispatchEvent(window.createEvent('gesturestart', {
+        rotation: 0,
+      }));
+      viewer.viewer.dispatchEvent(window.createEvent('gesturechange', {
+        rotation: 46,
+      }));
+      viewer.viewer.dispatchEvent(window.createEvent('gestureend'));
+    });
+
+    image.addEventListener('rotated', () => {
+      if (viewer.imageData.rotate === 90) {
+        viewer.hide(true);
+        done();
+      }
+    });
+
+    viewer = new Viewer(image);
+    viewer.show();
+  });
+
   it('should not rotate from a Safari gesture when disabled', (done) => {
     const image = window.createImage();
     let viewer;

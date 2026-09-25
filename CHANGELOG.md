@@ -4,7 +4,7 @@
 
 - Improve TypeScript declarations.
 - Require touch swipes to exceed half the viewer width before switching images, and restore shorter swipes to the centered position (#455).
-- Restore zero-degree images after touch rotations within 45 degrees.
+- Snap touch and gesture rotations to the nearest 90-degree multiple when the gesture ends, restoring zero-degree images after rotations within 45 degrees.
 
 ## 1.14.0 (Sep 12, 2026)
 
