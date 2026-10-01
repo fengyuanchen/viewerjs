@@ -9,7 +9,7 @@ declare namespace Viewer {
   export type ImageURLResolver = (this: Viewer, image: HTMLImageElement) => string;
   export type ZoomRatio = number | ((this: Viewer, image: HTMLImageElement, imageData: Record<string, any>) => number);
   export type ToolbarButtonClick = (this: Viewer, event: Event) => void;
-  export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | ToolbarButtonOptions | undefined;
+  export type ToolbarOption = boolean | Visibility | ToolbarButtonSize | ToolbarButtonOptions | Position | undefined;
 
   export interface ToolbarButtonOptions {
     click?: ToolbarButtonClick;

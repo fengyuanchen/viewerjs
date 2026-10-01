@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Include toolbar positions in the toolbar option type to satisfy TypeScript's index signature constraint (#671).
+
 ## 1.15.0 (Sep 25, 2026)
 
 - Require touch swipes to exceed half the viewer width before switching images, and restore shorter swipes to the centered position (#455).
