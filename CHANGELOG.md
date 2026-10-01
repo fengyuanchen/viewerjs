@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.15.2 (Oct 1, 2026)
+
+- Add unupdated dist files.
+
 ## 1.15.1 (Oct 1, 2026)
 
 - Include toolbar positions in the toolbar option type to satisfy TypeScript's index signature constraint (#671).
