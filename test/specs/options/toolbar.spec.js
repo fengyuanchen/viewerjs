@@ -48,12 +48,14 @@ describe('toolbar (option)', () => {
   it('should customize toolbar buttons', (done) => {
     const image = window.createImage();
     let clicked = false;
+    let clickContext;
     const viewer = new Viewer(image, {
       inline: true,
       toolbar: {
         next: {
           click() {
             clicked = true;
+            clickContext = this;
           },
           size: 'large',
         },
@@ -77,6 +79,7 @@ describe('toolbar (option)', () => {
         expect(zoomIn.className).to.include('viewer-small');
         next.click();
         expect(clicked).to.be.true;
+        expect(clickContext).to.equal(viewer);
         done();
       },
     });

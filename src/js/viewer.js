@@ -430,7 +430,7 @@ class Viewer {
         }
 
         if (isFunction(click)) {
-          addListener(item, EVENT_CLICK, click);
+          addListener(item, EVENT_CLICK, click.bind(this));
         }
 
         list.appendChild(item);
