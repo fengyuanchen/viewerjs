@@ -48,6 +48,34 @@ describe('update (method)', () => {
     });
   });
 
+  it('should preserve the current image when its source is updated', (done) => {
+    const imageList = window.createImageList();
+    let viewed;
+    const viewer = new Viewer(imageList, {
+      inline: true,
+
+      viewed() {
+        if (viewed) {
+          return;
+        }
+
+        viewed = true;
+
+        const { image, imageData } = viewer;
+        const originalImage = imageList.querySelector('img');
+
+        originalImage.src = '/base/docs/images/tibet-2.jpg';
+        viewer.update();
+
+        expect(viewer.image).to.equal(image);
+        expect(viewer.imageData).to.equal(imageData);
+        expect(viewer.index).to.equal(0);
+        viewer.hide(true);
+        done();
+      },
+    });
+  });
+
   it('should view the new image', (done) => {
     const container = window.createContainer();
     const image = window.createImage();

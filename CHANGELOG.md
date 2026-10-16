@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Preserve the active image state when updating its source in the background (#672).
+
 ## 1.15.2 (Oct 1, 2026)
 
 - Add unupdated dist files.

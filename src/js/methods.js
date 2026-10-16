@@ -1282,6 +1282,7 @@ export default {
    */
   update(updateOptions) {
     const { element, options, isImg } = this;
+    const activeImage = this.viewed ? this.images[this.index] : null;
 
     if (isPlainObject(updateOptions)) {
       assign(options, updateOptions);
@@ -1312,47 +1313,29 @@ export default {
     this.length = images.length;
 
     if (this.ready) {
-      const changedIndexes = [];
-
-      forEach(this.items, (item) => {
-        const img = item.querySelector('img');
-        const index = Number(getData(item, 'index'));
-        const image = images[index];
-
-        if (image && img) {
-          if (
-            image.src !== img.src
-
-            // Title changed (#408)
-            || image.alt !== img.alt
-          ) {
-            changedIndexes.push(index);
-          }
-        } else {
-          changedIndexes.push(index);
-        }
-      });
+      const activeIndex = activeImage ? images.indexOf(activeImage) : -1;
 
       setStyle(this.list, {
         width: 'auto',
       });
 
-      this.initList();
+      this.initList(activeIndex >= 0 ? activeIndex : this.index);
 
       if (this.isShown) {
         if (this.length) {
           if (this.viewed) {
-            const changedIndex = changedIndexes.indexOf(this.index);
-
-            if (changedIndex >= 0) {
+            if (activeIndex < 0) {
               this.viewed = false;
-              this.view(Math.max(Math.min(this.index - changedIndex, this.length - 1), 0));
+              this.view(Math.max(Math.min(this.index, this.length - 1), 0));
             } else {
+              this.index = activeIndex;
               const activeItem = this.getItem(this.index);
 
               // Reactivate the current viewing item after reset the list.
-              addClass(activeItem, CLASS_ACTIVE);
-              activeItem.setAttribute('aria-selected', true);
+              if (activeItem) {
+                addClass(activeItem, CLASS_ACTIVE);
+                activeItem.setAttribute('aria-selected', true);
+              }
             }
           }
         } else {
